@@ -1,81 +1,111 @@
-<script>
-  let allProducts = [];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OK Mobile - ร้านมือถือและซ่อมมือถือ</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <img src="https://github.com/Kitsada6365/my-apk-okmobile/raw/main/logo.jpg" 
+      </div>
+      <nav class="nav">
+        <a href="#"class="btn-หน้าแรก">หน้าแรก</a>
+        <a href="#"class="btn-สินค้า">สินค้า</a>
+        <a href="#"class="btn-บริการ">บริการ</a>
+        <a href="#"class="btn-ติดต่อเรา">ติดต่อเรา</a>
+        <a href="#" class="btn-line">LINE</a>
+        <a href="#"class="btn-Login">Login</a>
+      
+      </div>
+    </div>
+  </header>
 
-  function renderProducts(products) {
-    const container = document.getElementById('product-list');
-    container.innerHTML = '';
-    products.forEach(product => {
-      const card = document.createElement('div');
-      const outOfStock = product.จำนวนสินค้า == '0';
-      card.className = 'relative bg-white rounded-xl shadow-md overflow-hidden p-4 flex flex-col transition transform hover:-translate-y-1 hover:shadow-lg ' + (outOfStock ? 'out-of-stock' : '');
+  <!-- Hero Banner -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>ยินดีต้อนรับสู่ OK Mobile</h1>
+      <p>จำหน่ายมือถือ อุปกรณ์เสริม และรับซ่อมมือถือครบวงจร</p>
+      <a href="https://sites.google.com/view/okmobileu-thong/okmobile?fbclid=IwY2xjawGuZXVleHRuA2FlbQIxMAABHcfpRNLSLxLfer8DL4tW7kumBJT_lrcbjSw2uidbihXdRzVtSRfUOWzqkg_aem_nVQo5WL7FonpD4coRRh9Hg" class="btn-primary">เข้าสู่หน้าเว็บหลัก</a>
+    </div>
+  </section>
 
-      let priceSection = `<p class="text-blue-600 font-semibold mt-2 text-lg">฿${product.ราคา}</p>`;
-      if (product.ราคาปกติ && parseFloat(product.ราคาปกติ) > parseFloat(product.ราคา)) {
-        priceSection = `
-          <div class="mt-2">
-            <span class="text-red-500 font-bold text-lg">฿${product.ราคา}</span>
-            <span class="line-through text-gray-400 ml-2 text-sm">฿${product.ราคาปกติ}</span>
-          </div>`;
-      }
-
-      card.innerHTML = `
-        <div class="relative">
-          ${product.ราคาปกติ && parseFloat(product.ราคาปกติ) > parseFloat(product.ราคา) ? '<div class="badge-sale">ลดราคา</div>' : ''}
-          <img src="${product.รูปภาพ}" alt="${product.ชื่อสินค้า}" class="rounded-md mb-3 h-48 w-full object-cover">
+  <!-- Categories -->
+  <section class="categories">
+    <div class="container">
+      <h2>บริการของเรา</h2>
+      <div class="category-list">
+        <div class="category-item">
+          <img src="smartphones.jpg" alt="สมาร์ทโฟน">
+          <h3>สมาร์ทโฟน</h3>
         </div>
-        <h3 class="text-lg font-bold text-gray-800">${product.ชื่อสินค้า}</h3>
-        <p class="text-sm text-gray-600">${product.รายละเอียด}</p>
-        ${priceSection}
-        <p class="text-sm text-gray-500 mt-1">จำนวนสินค้า: ${product.จำนวนสินค้า}</p>
-        <a href="${product.ลิงก์ไลน์}" target="_blank" class="mt-auto bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center block mt-4">${outOfStock ? 'สินค้าหมด' : 'สั่งซื้อผ่านไลน์'}</a>
-      `;
+        <div class="category-item">
+          <img src="repairs.jpg" alt="ซ่อมมือถือ">
+          <h3>ซ่อมมือถือ</h3>
+        </div>
+        <div class="category-item">
+          <img src="accessories.jpg" alt="อุปกรณ์เสริม">
+          <h3>อุปกรณ์เสริม</h3>
+        </div>
+      </div>
+    </div>
+  </section>
 
-      container.appendChild(card);
-    });
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>© 2024 ร้านมือถือ OK Mobile. สงวนลิขสิทธิ์</p>
+      <div class="socials">
+        <a href="#">Facebook</a>
+        <a href="#">Instagram</a>
+        <a href="#">LINE</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+
+
+<!-- Hero Banner -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>ยินดีต้อนรับสู่ OK Mobile</h1>
+    <p>จำหน่ายมือถือ อุปกรณ์เสริม และรับซ่อมมือถือครบวงจร</p>
+    <a href="https://sites.google.com/view/okmobileu-thong/okmobile?fbclid=IwY2xjawGuZXVleHRuA2FlbQIxMAABHcfpRNLSLxLfer8DL4tW7kumBJT_lrcbjSw2uidbihXdRzVtSRfUOWzqkg_aem_nVQo5WL7FonpD4coRRh9Hg" class="btn-primary">เข้าสู่หน้าเว็บหลัก</a>
+  </div>
+</section>
+
+<!-- CSS -->
+<style>
+  .hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* ทำให้เต็มจอ */
+    background-color: #f5f5f5; /* สีพื้นหลังอ่อน */
+    text-align: center;
   }
 
-  fetch('https://opensheet.elk.sh/1MNmqRmiu4-8s1V9lI8oV1Gn5wb0jYqYs-xhkj-UZ0FM/Sheet1')
-    .then(res => res.json())
-    .then(data => {
-      allProducts = data;
-      renderProducts(data);
-
-      const brands = [...new Set(data.map(p => p.แบรนด์))].filter(Boolean);
-      const categories = [...new Set(data.map(p => p.หมวดหมู่))].filter(Boolean);
-
-      const brandFilter = document.getElementById('brandFilter');
-      brands.forEach(brand => {
-        const option = document.createElement('option');
-        option.value = brand;
-        option.textContent = brand;
-        brandFilter.appendChild(option);
-      });
-
-      const categoryFilter = document.getElementById('categoryFilter');
-      categories.forEach(cat => {
-        const option = document.createElement('option');
-        option.value = cat;
-        option.textContent = cat;
-        categoryFilter.appendChild(option);
-      });
-    });
-
-  document.getElementById('search').addEventListener('input', filterProducts);
-  document.getElementById('brandFilter').addEventListener('change', filterProducts);
-  document.getElementById('categoryFilter').addEventListener('change', filterProducts);
-
-  function filterProducts() {
-    const keyword = document.getElementById('search').value.toLowerCase();
-    const brand = document.getElementById('brandFilter').value;
-    const category = document.getElementById('categoryFilter').value;
-
-    const filtered = allProducts.filter(p => {
-      const matchKeyword = p.ชื่อสินค้า.toLowerCase().includes(keyword);
-      const matchBrand = !brand || p.แบรนด์ === brand;
-      const matchCategory = !category || p.หมวดหมู่ === category;
-      return matchKeyword && matchBrand && matchCategory;
-    });
-
-    renderProducts(filtered);
+  .hero-content {
+    max-width: 600px;
   }
-</script>
+
+  .btn-primary {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 18px;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+</style>
