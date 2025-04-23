@@ -110,31 +110,36 @@
       }
 
       function removeFromCart(index) {
-        cart.splice(index, 1);
-        localStorage.setItem('cart', JSON.stringify(cart));
-        updateCartDisplay();
-      }
+    cart.splice(index, 1);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartDisplay();
+}
 
-      async function loadProducts() {
-        const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/pub?output=csv");
-        const text = await res.text();
-        const rows = text.trim().split('\n').slice(1);
-        const productList = document.getElementById("product-list");
+async function loadProducts() {
+    const res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/pub?output=csv");
+    const text = await res.text();
+    const rows = text.trim().split('\n').slice(1);
+    const productList = document.getElementById("product-list");
 
-        rows.forEach(row => {
-          const cols = row.split(',');
-          const [name, price, image] = cols;
-          const item = document.createElement("div");
-          item.className = "bg-white p-4 rounded-2xl shadow hover:shadow-lg transition";
-          item.innerHTML = `
-            <img src="${image}" alt="${name}" class="rounded mb-3 w-full h-48 object-cover">
+    rows.forEach(row => {
+        const cols = row.split(',');
+        const [name, price, image] = cols;
+
+        // เช็คว่า image มีค่าเป็น URL ที่ใช้งานได้หรือไม่
+        const imageURL = image || 'default-image.jpg'; // ใช้รูปเริ่มต้นหากไม่มี URL ของภาพ
+
+        const item = document.createElement("div");
+        item.className = "bg-white p-4 rounded-2xl shadow hover:shadow-lg transition";
+        item.innerHTML = `
+            <img src="${imageURL}" alt="${name}" class="rounded mb-3 w-full h-48 object-cover" onerror="this.src='default-image.jpg'">
             <h4 class="text-lg font-bold">${name}</h4>
             <p class="text-secondary font-semibold">฿${price}</p>
             <button onclick="addToCart('${name}', '${price}')" class="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700">สั่งซื้อ</button>
-          `;
-          productList.appendChild(item);
-        });
-      }
+        `;
+        productList.appendChild(item);
+    });
+}
+
 
       loadProducts();
       updateCartDisplay();
