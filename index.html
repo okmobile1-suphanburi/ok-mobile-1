@@ -1,71 +1,129 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ร้านโอเค โมบาย</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OK Mobile - สินค้า</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .badge-sale {
+      position: absolute;
+      top: 0.5rem;
+      left: 0.5rem;
+      background-color: #ef4444;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 9999px;
+      font-weight: bold;
+    }
+    .out-of-stock {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-
-  <!-- Header -->
-  <header class="bg-white shadow p-4">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <img src="images/ok-mobile-logo.jpg" alt="OK Mobile Logo" class="h-12 w-auto">
-        <h1 class="text-xl font-bold text-blue-600">OK Mobile</h1>
-      </div>
-      <span class="text-sm text-gray-500">โทร. 094-661-3961</span>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 font-sans min-h-screen">
+  <div class="max-w-6xl mx-auto p-4">
+    <div class="text-center mb-6">
+      <img src="./304911277_523589943018955_4662022983414038097_n.jpg" alt="OK Mobile" class="w-40 mx-auto mb-2 drop-shadow-md rounded-full">
+      <h1 class="text-3xl font-bold text-blue-700">สินค้าโทรศัพท์มือถือ</h1>
     </div>
-  </header>
 
-  <!-- Section: สินค้า -->
-  <section class="max-w-6xl mx-auto p-4">
-    <h2 class="text-2xl font-semibold mb-4">สินค้าแนะนำ</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-
-      <!-- สินค้า 1 -->
-      <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-        <img src="https://images.samsung.com/th/smartphones/galaxy-a55-5g/images/galaxy-a55-5g_highlights_kv.jpg" alt="Galaxy A55" class="rounded-md mb-3">
-        <h3 class="text-lg font-semibold">Samsung Galaxy A55</h3>
-        <p class="text-gray-600">จอ AMOLED 6.6", กล้อง 50MP</p>
-        <p class="text-blue-600 font-bold mt-2">฿12,990</p>
-        <a href="https://line.me/ti/p/~0946613961" target="_blank" class="block mt-4 bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-lg font-medium">สั่งซื้อผ่านไลน์</a>
-      </div>
-
-      <!-- สินค้า 2 -->
-      <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-        <img src="https://store.ais.co.th/media/catalog/product/i/p/iphone_15_pro_max_blue_titanium_pdp_image_position-1a_th_1.jpg" alt="iPhone 15 Pro Max" class="rounded-md mb-3">
-        <h3 class="text-lg font-semibold">iPhone 15 Pro Max</h3>
-        <p class="text-gray-600">A17 Pro, กล้องซูม 5x</p>
-        <p class="text-blue-600 font-bold mt-2">฿48,900</p>
-        <a href="https://line.me/ti/p/~0946613961" target="_blank" class="block mt-4 bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-lg font-medium">สั่งซื้อผ่านไลน์</a>
-      </div>
-
-      <!-- สินค้า 3 -->
-      <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-        <img src="https://image.oppo.com/content/dam/oppo/common/mkt/v2-2/a78/navigation/A78-navigation-blue-v2.png" alt="OPPO A78" class="rounded-md mb-3">
-        <h3 class="text-lg font-semibold">OPPO A78</h3>
-        <p class="text-gray-600">จอ 6.4", RAM 8GB</p>
-        <p class="text-blue-600 font-bold mt-2">฿6,999</p>
-        <a href="https://line.me/ti/p/~0946613961" target="_blank" class="block mt-4 bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-lg font-medium">สั่งซื้อผ่านไลน์</a>
-      </div>
-      <!-- สินค้า 4 -->
-      <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
-        <img src="https://image.oppo.com/content/dam/oppo/common/mkt/v2-2/a78/navigation/A78-navigation-blue-v2.png" alt="OPPO A78" class="rounded-md mb-3">
-        <h3 class="text-lg font-semibold">OPPO A78</h3>
-        <p class="text-gray-600">จอ 6.4", RAM 8GB</p>
-        <p class="text-blue-600 font-bold mt-2">฿6,999</p>
-        <a href="https://line.me/ti/p/~0946613961" target="_blank" class="block mt-4 bg-green-500 hover:bg-green-600 text-white text-center py-2 rounded-lg font-medium">สั่งซื้อผ่านไลน์</a>
-
+    <!-- ฟิลเตอร์ -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+      <input type="text" id="search" placeholder="ค้นหาสินค้า..." class="w-full sm:w-1/3 p-2 border border-gray-300 rounded-lg shadow-sm">
+      <select id="brandFilter" class="w-full sm:w-1/4 p-2 border border-gray-300 rounded-lg shadow-sm">
+        <option value="">ทุกแบรนด์</option>
+      </select>
+      <select id="categoryFilter" class="w-full sm:w-1/4 p-2 border border-gray-300 rounded-lg shadow-sm">
+        <option value="">ทุกหมวดหมู่</option>
+      </select>
     </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="bg-white text-center text-sm text-gray-500 p-4 mt-8">
-    © 2025 OK Mobile U-Thong. All rights reserved.
-  </footer>
+    <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+  </div>
 
+  <script>
+    let allProducts = [];
+
+    function renderProducts(products) {
+      const container = document.getElementById('product-list');
+      container.innerHTML = '';
+      products.forEach(product => {
+        const card = document.createElement('div');
+        const outOfStock = product.จำนวนสินค้า == '0';
+        card.className = 'relative bg-white rounded-xl shadow-md overflow-hidden p-4 flex flex-col transition transform hover:-translate-y-1 hover:shadow-lg ' + (outOfStock ? 'out-of-stock' : '');
+
+        let priceSection = `<p class="text-blue-600 font-semibold mt-2 text-lg">฿${product.ราคา}</p>`;
+        if (product.ราคาปกติ && parseFloat(product.ราคาปกติ) > parseFloat(product.ราคา)) {
+          priceSection = `
+            <div class="mt-2">
+              <span class="text-red-500 font-bold text-lg">฿${product.ราคา}</span>
+              <span class="line-through text-gray-400 ml-2 text-sm">฿${product.ราคาปกติ}</span>
+            </div>`;
+        }
+
+        card.innerHTML = `
+          <div class="relative">
+            ${product.ราคาปกติ && parseFloat(product.ราคาปกติ) > parseFloat(product.ราคา) ? '<div class="badge-sale">ลดราคา</div>' : ''}
+            <img src="${product.รูปภาพ}" alt="${product.ชื่อสินค้า}" class="rounded-md mb-3 h-48 w-full object-cover">
+          </div>
+          <h3 class="text-lg font-bold text-gray-800">${product.ชื่อสินค้า}</h3>
+          <p class="text-sm text-gray-600">${product.รายละเอียด}</p>
+          ${priceSection}
+          <p class="text-sm text-gray-500 mt-1">จำนวนสินค้า: ${product.จำนวนสินค้า}</p>
+          <a href="${product.ลิงก์ไลน์}" target="_blank" class="mt-auto bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center block mt-4">${outOfStock ? 'สินค้าหมด' : 'สั่งซื้อผ่านไลน์'}</a>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    fetch('https://opensheet.elk.sh/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/Sheet1')
+      .then(res => res.json())
+      .then(data => {
+        allProducts = data;
+        renderProducts(data);
+
+        const brands = [...new Set(data.map(p => p.แบรนด์))].filter(Boolean);
+        const categories = [...new Set(data.map(p => p.หมวดหมู่))].filter(Boolean);
+
+        const brandFilter = document.getElementById('brandFilter');
+        brands.forEach(brand => {
+          const option = document.createElement('option');
+          option.value = brand;
+          option.textContent = brand;
+          brandFilter.appendChild(option);
+        });
+
+        const categoryFilter = document.getElementById('categoryFilter');
+        categories.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          categoryFilter.appendChild(option);
+        });
+      });
+
+    document.getElementById('search').addEventListener('input', filterProducts);
+    document.getElementById('brandFilter').addEventListener('change', filterProducts);
+    document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+
+    function filterProducts() {
+      const keyword = document.getElementById('search').value.toLowerCase();
+      const brand = document.getElementById('brandFilter').value;
+      const category = document.getElementById('categoryFilter').value;
+
+      const filtered = allProducts.filter(p => {
+        const matchKeyword = p.ชื่อสินค้า.toLowerCase().includes(keyword);
+        const matchBrand = !brand || p.แบรนด์ === brand;
+        const matchCategory = !category || p.หมวดหมู่ === category;
+        return matchKeyword && matchBrand && matchCategory;
+      });
+
+      renderProducts(filtered);
+    }
+  </script>
 </body>
 </html>
