@@ -51,8 +51,8 @@
       const container = document.getElementById('product-list');
       container.innerHTML = '';
       products.forEach(product => {
-        const card = document.createElement('div');
         const outOfStock = product.จำนวนสินค้า == '0';
+        const card = document.createElement('div');
         card.className = 'relative bg-white rounded-xl shadow-md overflow-hidden p-4 flex flex-col transition transform hover:-translate-y-1 hover:shadow-lg ' + (outOfStock ? 'out-of-stock' : '');
 
         let priceSection = `<p class="text-blue-600 font-semibold mt-2 text-lg">฿${product.ราคา}</p>`;
