@@ -1,129 +1,81 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OK Mobile - สินค้า</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .badge-sale {
-      position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      background-color: #ef4444;
-      color: white;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
-      border-radius: 9999px;
-      font-weight: bold;
-    }
-    .out-of-stock {
-      opacity: 0.6;
-      pointer-events: none;
-    }
-  </style>
-</head>
-<body class="bg-gradient-to-br from-blue-50 to-blue-100 font-sans min-h-screen">
-  <div class="max-w-6xl mx-auto p-4">
-    <div class="text-center mb-6">
-      <img src="./304911277_523589943018955_4662022983414038097_n.jpg" alt="OK Mobile" class="w-40 mx-auto mb-2 drop-shadow-md rounded-full">
-      <h1 class="text-3xl font-bold text-blue-700">สินค้าโทรศัพท์มือถือ</h1>
-    </div>
+<script>
+  let allProducts = [];
 
-    <!-- ฟิลเตอร์ -->
-    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-      <input type="text" id="search" placeholder="ค้นหาสินค้า..." class="w-full sm:w-1/3 p-2 border border-gray-300 rounded-lg shadow-sm">
-      <select id="brandFilter" class="w-full sm:w-1/4 p-2 border border-gray-300 rounded-lg shadow-sm">
-        <option value="">ทุกแบรนด์</option>
-      </select>
-      <select id="categoryFilter" class="w-full sm:w-1/4 p-2 border border-gray-300 rounded-lg shadow-sm">
-        <option value="">ทุกหมวดหมู่</option>
-      </select>
-    </div>
+  function renderProducts(products) {
+    const container = document.getElementById('product-list');
+    container.innerHTML = '';
+    products.forEach(product => {
+      const card = document.createElement('div');
+      const outOfStock = product.จำนวนสินค้า == '0';
+      card.className = 'relative bg-white rounded-xl shadow-md overflow-hidden p-4 flex flex-col transition transform hover:-translate-y-1 hover:shadow-lg ' + (outOfStock ? 'out-of-stock' : '');
 
-    <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
-  </div>
+      let priceSection = `<p class="text-blue-600 font-semibold mt-2 text-lg">฿${product.ราคา}</p>`;
+      if (product.ราคาปกติ && parseFloat(product.ราคาปกติ) > parseFloat(product.ราคา)) {
+        priceSection = `
+          <div class="mt-2">
+            <span class="text-red-500 font-bold text-lg">฿${product.ราคา}</span>
+            <span class="line-through text-gray-400 ml-2 text-sm">฿${product.ราคาปกติ}</span>
+          </div>`;
+      }
 
-  <script>
-    let allProducts = [];
+      card.innerHTML = `
+        <div class="relative">
+          ${product.ราคาปกติ && parseFloat(product.ราคาปกติ) > parseFloat(product.ราคา) ? '<div class="badge-sale">ลดราคา</div>' : ''}
+          <img src="${product.รูปภาพ}" alt="${product.ชื่อสินค้า}" class="rounded-md mb-3 h-48 w-full object-cover">
+        </div>
+        <h3 class="text-lg font-bold text-gray-800">${product.ชื่อสินค้า}</h3>
+        <p class="text-sm text-gray-600">${product.รายละเอียด}</p>
+        ${priceSection}
+        <p class="text-sm text-gray-500 mt-1">จำนวนสินค้า: ${product.จำนวนสินค้า}</p>
+        <a href="${product.ลิงก์ไลน์}" target="_blank" class="mt-auto bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center block mt-4">${outOfStock ? 'สินค้าหมด' : 'สั่งซื้อผ่านไลน์'}</a>
+      `;
 
-    function renderProducts(products) {
-      const container = document.getElementById('product-list');
-      container.innerHTML = '';
-      products.forEach(product => {
-        const outOfStock = product.จำนวนสินค้า == '0';
-        const card = document.createElement('div');
-        card.className = 'relative bg-white rounded-xl shadow-md overflow-hidden p-4 flex flex-col transition transform hover:-translate-y-1 hover:shadow-lg ' + (outOfStock ? 'out-of-stock' : '');
+      container.appendChild(card);
+    });
+  }
 
-        let priceSection = `<p class="text-blue-600 font-semibold mt-2 text-lg">฿${product.ราคา}</p>`;
-        if (product.ราคาปกติ && parseFloat(product.ราคาปกติ) > parseFloat(product.ราคา)) {
-          priceSection = `
-            <div class="mt-2">
-              <span class="text-red-500 font-bold text-lg">฿${product.ราคา}</span>
-              <span class="line-through text-gray-400 ml-2 text-sm">฿${product.ราคาปกติ}</span>
-            </div>`;
-        }
+  fetch('https://opensheet.elk.sh/1MNmqRmiu4-8s1V9lI8oV1Gn5wb0jYqYs-xhkj-UZ0FM/Sheet1')
+    .then(res => res.json())
+    .then(data => {
+      allProducts = data;
+      renderProducts(data);
 
-        card.innerHTML = `
-          <div class="relative">
-            ${product.ราคาปกติ && parseFloat(product.ราคาปกติ) > parseFloat(product.ราคา) ? '<div class="badge-sale">ลดราคา</div>' : ''}
-            <img src="${product.รูปภาพ}" alt="${product.ชื่อสินค้า}" class="rounded-md mb-3 h-48 w-full object-cover">
-          </div>
-          <h3 class="text-lg font-bold text-gray-800">${product.ชื่อสินค้า}</h3>
-          <p class="text-sm text-gray-600">${product.รายละเอียด}</p>
-          ${priceSection}
-          <p class="text-sm text-gray-500 mt-1">จำนวนสินค้า: ${product.จำนวนสินค้า}</p>
-          <a href="${product.ลิงก์ไลน์}" target="_blank" class="mt-auto bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-center block mt-4">${outOfStock ? 'สินค้าหมด' : 'สั่งซื้อผ่านไลน์'}</a>
-        `;
+      const brands = [...new Set(data.map(p => p.แบรนด์))].filter(Boolean);
+      const categories = [...new Set(data.map(p => p.หมวดหมู่))].filter(Boolean);
 
-        container.appendChild(card);
-      });
-    }
-
-    fetch('https://opensheet.elk.sh/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/Sheet1')
-      .then(res => res.json())
-      .then(data => {
-        allProducts = data;
-        renderProducts(data);
-
-        const brands = [...new Set(data.map(p => p.แบรนด์))].filter(Boolean);
-        const categories = [...new Set(data.map(p => p.หมวดหมู่))].filter(Boolean);
-
-        const brandFilter = document.getElementById('brandFilter');
-        brands.forEach(brand => {
-          const option = document.createElement('option');
-          option.value = brand;
-          option.textContent = brand;
-          brandFilter.appendChild(option);
-        });
-
-        const categoryFilter = document.getElementById('categoryFilter');
-        categories.forEach(cat => {
-          const option = document.createElement('option');
-          option.value = cat;
-          option.textContent = cat;
-          categoryFilter.appendChild(option);
-        });
+      const brandFilter = document.getElementById('brandFilter');
+      brands.forEach(brand => {
+        const option = document.createElement('option');
+        option.value = brand;
+        option.textContent = brand;
+        brandFilter.appendChild(option);
       });
 
-    document.getElementById('search').addEventListener('input', filterProducts);
-    document.getElementById('brandFilter').addEventListener('change', filterProducts);
-    document.getElementById('categoryFilter').addEventListener('change', filterProducts);
-
-    function filterProducts() {
-      const keyword = document.getElementById('search').value.toLowerCase();
-      const brand = document.getElementById('brandFilter').value;
-      const category = document.getElementById('categoryFilter').value;
-
-      const filtered = allProducts.filter(p => {
-        const matchKeyword = p.ชื่อสินค้า.toLowerCase().includes(keyword);
-        const matchBrand = !brand || p.แบรนด์ === brand;
-        const matchCategory = !category || p.หมวดหมู่ === category;
-        return matchKeyword && matchBrand && matchCategory;
+      const categoryFilter = document.getElementById('categoryFilter');
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        categoryFilter.appendChild(option);
       });
+    });
 
-      renderProducts(filtered);
-    }
-  </script>
-</body>
-</html>
+  document.getElementById('search').addEventListener('input', filterProducts);
+  document.getElementById('brandFilter').addEventListener('change', filterProducts);
+  document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+
+  function filterProducts() {
+    const keyword = document.getElementById('search').value.toLowerCase();
+    const brand = document.getElementById('brandFilter').value;
+    const category = document.getElementById('categoryFilter').value;
+
+    const filtered = allProducts.filter(p => {
+      const matchKeyword = p.ชื่อสินค้า.toLowerCase().includes(keyword);
+      const matchBrand = !brand || p.แบรนด์ === brand;
+      const matchCategory = !category || p.หมวดหมู่ === category;
+      return matchKeyword && matchBrand && matchCategory;
+    });
+
+    renderProducts(filtered);
+  }
+</script>
