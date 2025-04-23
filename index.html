@@ -125,13 +125,13 @@ async function loadProducts() {
         const cols = row.split(',');
         const [name, price, image] = cols;
 
-        // เช็คว่า image มีค่าเป็น URL ที่ใช้งานได้หรือไม่
-        const imageURL = image || 'default-image.jpg'; // ใช้รูปเริ่มต้นหากไม่มี URL ของภาพ
+        // แทนที่ URL รูปภาพจาก Google Sheets ด้วย URL จาก Imgur
+        const imageURL = image || 'https://i.imgur.com/Cy560I4.jpg'; // ใช้ URL รูปภาพจาก Imgur
 
         const item = document.createElement("div");
         item.className = "bg-white p-4 rounded-2xl shadow hover:shadow-lg transition";
         item.innerHTML = `
-            <img src="${imageURL}" alt="${name}" class="rounded mb-3 w-full h-48 object-cover" onerror="this.src='default-image.jpg'">
+            <img src="${imageURL}" alt="${name}" class="rounded mb-3 w-full h-48 object-cover" onerror="this.src='https://i.imgur.com/Cy560I4.jpg'">
             <h4 class="text-lg font-bold">${name}</h4>
             <p class="text-secondary font-semibold">฿${price}</p>
             <button onclick="addToCart('${name}', '${price}')" class="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700">สั่งซื้อ</button>
@@ -139,6 +139,7 @@ async function loadProducts() {
         productList.appendChild(item);
     });
 }
+
 
 
       loadProducts();
