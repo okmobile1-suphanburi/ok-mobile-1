@@ -1,165 +1,57 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>โอเค โมบาย | ร้านมือถือ</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary:   '#4f46e5',
-            secondary: '#ec4899',
-            accent:    '#06b6d4'
-          }
-        }
-      }
-    }
-  </script>
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<script>
+  async function loadProducts() {
+    const sheetId = '2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF';
+    // เพิ่ม gid=0&single=true
+    const csvUrl  = `https://docs.google.com/spreadsheets/d/e/${sheetId}/pub?gid=0&single=true&output=csv`;
 
-  <!-- Header -->
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <div class="flex items-center gap-2">
-      <img src="logo.png" alt="OK Mobile Logo" class="w-10 h-10 rounded-full" />
-      <h1 class="text-2xl font-bold text-primary">โอเค โมบาย</h1>
-    </div>
-    <nav class="flex items-center gap-6">
-      <ul class="flex gap-4 text-sm md:text-base">
-        <li><a href="#" class="hover:text-primary">หน้าแรก</a></li>
-        <li><a href="#products" class="hover:text-primary">สินค้า</a></li>
-        <li><a href="#warranty" class="hover:text-primary">เช็คประกัน</a></li>
-        <li><a href="#contact" class="hover:text-primary">ติดต่อ</a></li>
-      </ul>
-      <div class="relative">
-        <a href="#cart" class="text-primary">
-          🛒<span id="cart-count" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
-        </a>
-      </div>
-    </nav>
-  </header>
+    const res  = await fetch(csvUrl);
+    let text = await res.text();
 
-  <!-- Hero Section -->
-  <section class="bg-primary text-white py-10 text-center">
-    <h2 class="text-4xl font-bold mb-2">ร้านมือถือ โอเค โมบาย</h2>
-    <p class="text-lg">มือถือราคาดี พร้อมรับประกัน บริการด้วยใจ ❤️</p>
-  </section>
+    // ตัด BOM ออก ถ้ามี
+    text = text.replace(/^\uFEFF/, '');
 
-  <!-- Product Section -->
-  <section id="products" class="p-6 max-w-6xl mx-auto">
-    <h3 class="text-xl font-semibold mb-4">📱 สินค้าทั้งหมด</h3>
-    <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
-  </section>
+    const rows = text.trim().split('\n');
+    const header = rows.shift().split(',');
 
-  <!-- Cart Section -->
-  <section id="cart" class="p-6 max-w-4xl mx-auto bg-white rounded-xl shadow my-10">
-    <h3 class="text-xl font-semibold mb-4">🛒 ตะกร้าสินค้า</h3>
-    <div id="cart-items"></div>
-    <p class="mt-4 font-bold text-lg">รวมทั้งหมด: <span id="cart-total">0</span> บาท</p>
-  </section>
+    console.log('HEADER:', header);
 
-  <!-- Warranty Section -->
-  <section id="warranty" class="bg-white p-6 max-w-4xl mx-auto rounded-xl shadow my-10">
-    <h3 class="text-xl font-semibold mb-4">🔍 เช็คประกันสินค้า</h3>
-    <input type="text" placeholder="กรอก Serial Number หรือสแกน QR Code"
-           class="w-full p-3 border rounded-lg mb-4" />
-    <button class="bg-accent text-white px-4 py-2 rounded hover:bg-cyan-600">เช็คประกัน</button>
-  </section>
+    const idx = {
+      name:  header.indexOf('name'),
+      price: header.indexOf('price'),
+      image: header.indexOf('image')
+    };
+    console.log('INDEXES:', idx);
 
-  <!-- Contact Section -->
-  <footer id="contact" class="bg-gray-100 mt-12 p-4 text-center text-sm text-gray-600">
-    © 2025 โอเค โมบาย | โทร 094-661-3961 | LINE: @okmobile
-  </footer>
+    const productList = document.getElementById('product-list');
+    productList.innerHTML = '';
 
-  <script>
-    // ==== ฟังก์ชันจัดการตะกร้า ====
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    rows.forEach((line, i) => {
+      console.log(`ROW ${i}:`, line);
+      const cols  = line.split(',');
+      console.log(`COLS ${i}:`, cols);
+      const name  = cols[idx.name]?.trim()  || '–';
+      const price = cols[idx.price]?.trim() || '0';
+      const image = cols[idx.image]?.trim() || '';
 
-    function updateCartDisplay() {
-      const cartCount = document.getElementById('cart-count');
-      const cartItems = document.getElementById('cart-items');
-      const cartTotal = document.getElementById('cart-total');
-      cartCount.textContent = cart.length;
+      const card = document.createElement('div');
+      card.className = 'bg-white p-4 rounded-2xl shadow hover:shadow-lg transition';
+      card.innerHTML = `
+        <img src="${image}" alt="${name}"
+             class="rounded mb-3 w-full h-48 object-cover"
+             onerror="this.src='https://i.imgur.com/Cy560I4.jpg'">
+        <h3 class="text-lg font-bold">${name}</h3>
+        <p class="text-secondary font-semibold">฿${price}</p>
+        <button onclick="addToCart('${name}',${price})"
+                class="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700">
+          สั่งซื้อ
+        </button>
+      `;
+      productList.appendChild(card);
+    });
 
-      cartItems.innerHTML = '';
-      let total = 0;
-      cart.forEach((item, i) => {
-        const div = document.createElement('div');
-        div.className = 'flex justify-between items-center border-b py-2';
-        div.innerHTML = `
-          <div>
-            <p class="font-semibold">${item.name}</p>
-            <p class="text-sm text-secondary">฿${item.price}</p>
-          </div>
-          <button class="text-red-500" onclick="removeFromCart(${i})">ลบ</button>
-        `;
-        cartItems.appendChild(div);
-        total += parseFloat(item.price);
-      });
-      cartTotal.textContent = total.toLocaleString();
-    }
+    updateCartDisplay();
+  }
 
-    function addToCart(name, price) {
-      cart.push({ name, price });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartDisplay();
-    }
-
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartDisplay();
-    }
-
-    // ==== ฟังก์ชันดึงข้อมูลสินค้า ====
-    async function loadProducts() {
-      const sheetId = '2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF';
-      const csvUrl  = `https://docs.google.com/spreadsheets/d/e/${sheetId}/pub?output=csv`;
-
-      const res  = await fetch(csvUrl);
-      const text = await res.text();
-      const rows = text.trim().split('\n');
-      const header = rows.shift().split(',');
-
-      const idx = {
-        name:  header.indexOf('name'),
-        price: header.indexOf('price'),
-        image: header.indexOf('image')
-      };
-
-      const productList = document.getElementById('product-list');
-      productList.innerHTML = '';
-
-      rows.forEach(line => {
-        const cols  = line.split(',');
-        const name  = cols[idx.name].trim();
-        const price = cols[idx.price].trim();
-        const image = cols[idx.image].trim();
-
-        const card = document.createElement('div');
-        card.className = 'bg-white p-4 rounded-2xl shadow hover:shadow-lg transition';
-        card.innerHTML = `
-          <img src="${image}" alt="${name}"
-               class="rounded mb-3 w-full h-48 object-cover"
-               onerror="this.src='https://i.imgur.com/Cy560I4.jpg'">
-          <h3 class="text-lg font-bold">${name}</h3>
-          <p class="text-secondary font-semibold">฿${price}</p>
-          <button onclick="addToCart('${name}',${price})"
-                  class="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700">
-            สั่งซื้อ
-          </button>
-        `;
-        productList.appendChild(card);
-      });
-
-      updateCartDisplay();
-    }
-
-    // เรียกใช้งานเมื่อโหลดหน้า
-    loadProducts();
-  </script>
-</body>
-</html>
+  // เรียกเมื่อหน้าโหลด
+  loadProducts();
+</script>
