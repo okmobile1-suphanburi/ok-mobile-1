@@ -1,85 +1,66 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>โอเค โมบาย | ร้านมือถือ</title>
-  <!-- TailwindCSS จาก CDN -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OK Mobile - หน้าแรก</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Papa Parse สำหรับแปลง CSV เป็น JSON -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-white text-gray-800">
 
   <!-- Header -->
-  <header class="bg-white shadow p-6 text-center">
-    <h1 class="text-3xl font-bold text-primary">โอเค โมบาย</h1>
-    <p class="text-gray-600 mt-2">📱OK-MOBILE SHOP ONLINE</p>
+  <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white fixed top-0 w-full z-50 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <!-- โลโก้เล็ก -->
+        <img src="https://scontent.fkdt3-1.fna.fbcdn.net/v/t39.30808-1/304911277_523589943018955_4662022983414038097_n.jpg?stp=dst-jpg_s200x200_tt6&_nc_cat=102&ccb=1-7&_nc_sid=2d3e12&_nc_ohc=4RowazOJmjwQ7kNvwGKKbrc&_nc_oc=AdlcJp3450jcaZBFkZl5R7z31JlsYTeZj0t0cQzgpxZ3iLPPq4Z-EfQObiNFPwn03DM2_zff_McX_DlCow7LY6m0&_nc_zt=24&_nc_ht=scontent.fkdt3-1.fna&_nc_gid=XSyw1UryoBwgkDzYmJ9MBQ&oh=00_AfHFnNBPhVIZGPm5fFNlUzTYK8wCkXhnh7T01xaI57FH6A&oe=680FD314" alt="OK Mobile Logo" class="w-8 h-8">
+        <h1 class="text-2xl font-bold">OK-MOBILE</h1>
+      </div>
+      <nav class="hidden md:flex space-x-6 text-lg">
+        <a href="#" class="hover:underline">สินค้ามือ2</a>
+        <a href="warranty.html" class="hover:underline">เช็คประกันสินค้ามือ2</a>
+        <a href="#contact" class="hover:underline">สินค้าอื่นๆ</a>
+        <a href="#" class="hover:underline">สินค้าโปรโมชั่น</a>
+      </nav>
+    </div>
   </header>
 
-  <!-- ปุ่มเช็คประกัน -->
-  <div class="text-center my-4">
-    <a href="warranty.html" class="inline-block bg-primary text-white px-6 py-2 rounded-full shadow hover:bg-indigo-700 transition">
-      🔍 เช็คประกันสินค้า
-    </a>
-  </div>
-
-  <!-- Product Grid -->
-  <main class="p-6 max-w-6xl mx-auto">
-    <h2 class="text-2x1 font-semibold mb-6">สินค้าทั้งหมด</h2>
-    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <p id="loading" class="text-gray-500">กำลังโหลดสินค้า...</p>
+  <!-- Hero Section -->
+  <section class="h-screen flex items-center justify-center bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80')] text-white text-center px-4 pt-16">
+    <div class="bg-black bg-opacity-60 p-6 rounded-xl max-w-xl">
+      <h2 class="text-4xl md:text-5xl font-bold mb-4">ยินดีต้อนรับสู่</h2>
+      <h2 class="text-4xl md:text-5xl font-bold mb-4">OK Mobile</h2>
+      <p class="text-lg md:text-xl mb-6">ร้านโอเคโมบาย ตลาดอู่ทอง ซ่อม ขาย ครบจบในที่เดียว</p>
+      <a href="warranty.html" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full text-lg">กดเช็คประกันสินค้า มือ2</a>
     </div>
-  </main>
+  </section>
 
-  <script>
-    const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/pub?output=csv';
+  <!-- Features -->
+  <section class="py-16 bg-white text-center">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
+      <div>
+        <img src="https://img.icons8.com/?size=100&id=44769&format=png&color=000000" class="mx-auto mb-4" />
+        <h3 class="text-xl font-semibold">บริการซ่อม</h3>
+        <p class="text-gray-600">ซ่อมมือถือ รับประกันทุกเครื่อง</p>
+      </div>
+      <div>
+        <img src="https://img.icons8.com/color/96/000000/online-store.png" class="mx-auto mb-4" />
+        <h3 class="text-xl font-semibold">สินค้าคุณภาพ</h3>
+        <p class="text-gray-600">มือถือ ฟิล์ม เคส อุปกรณ์ครบในที่เดียว</p>
+      </div>
+      <div>
+        <img src="https://img.icons8.com/color/96/000000/technical-support.png" class="mx-auto mb-4" />
+        <h3 class="text-xl font-semibold">บริการหลังการขาย</h3>
+        <p class="text-gray-600">เช็คประกัน ตรวจสอบสถานะได้ตลอดเวลา</p>
+      </div>
+    </div>
+  </section>
 
-    Papa.parse(csvUrl, {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: function(results) {
-        const data = results.data;
-        const grid = document.getElementById('product-grid');
-        const loading = document.getElementById('loading');
-        loading?.remove();
-        grid.innerHTML = '';
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white p-6 text-center" id="contact">
+    <p>ติดต่อร้าน OK Mobile: 094-661-3961 | Line: @661qazoc</p>
+    <p class="mt-2">© 2023 OK Mobile</p>
+  </footer>
 
-        const formatPrice = (price) => Number(price).toLocaleString('th-TH');
-
-        data.forEach(item => {
-          const name  = item.name?.trim()  || 'ไม่มีชื่อ';
-          const price = item.price?.trim() || '0';
-          const image = item.image?.trim() || '';
-
-          const card = document.createElement('div');
-          card.className = 'bg-white p-4 rounded-2xl shadow hover:shadow-lg transition';
-          card.innerHTML = `
-            <img src="${image}" alt="รูปภาพของ ${name}"
-                 class="w-full h-80 object-cover rounded mb-4"
-                 onerror="this.src='https://i.imgur.com/Cy560I4.jpg'">
-            <h3 class="text-lg font-bold mb-1">${name}</h3>
-            <p class="text-secondary font-semibold">฿${formatPrice(price)}</p>
-          `;
-          grid.appendChild(card);
-        });
-      },
-      error: function(err) {
-        console.error('ไม่สามารถโหลดสินค้า:', err);
-        document.getElementById('product-grid').innerHTML = 
-          '<p class="text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
-      }
-    });
-  </script>
-
-  <style>
-    @layer utilities {
-      .text-primary { color: #4f46e5; }
-      .text-secondary { color: #ec4899; }
-      .bg-primary { background-color: #4f46e5; }
-      .bg-secondary { background-color: #ec4899; }
-    }
-  </style>
 </body>
 </html>
