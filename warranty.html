@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -5,43 +6,150 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>เช็คประกันสินค้า | OK Mobile</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 text-gray-800 font-sans">
-
-  <!-- Header -->
-  <header class="bg-white shadow p-6 text-center">
-    <h1 class="text-2xl font-bold text-primary">🔍 เช็คประกันสินค้า</h1>
-    <p class="text-gray-600 mt-2">กรอกหมายเลขสินค้าหรือสแกน QR Code เพื่อดูสถานะประกัน</p>
-  </header>
-
-  <!-- Content -->
-  <main class="p-6 max-w-xl mx-auto text-center">
-    <input type="text" placeholder="กรอก Serial Number / รหัสสินค้า" 
-           class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary mb-4">
-    <button class="bg-primary text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition">
-      ตรวจสอบประกัน
-    </button>
-
-    <!-- ตัวอย่างผลลัพธ์ mock -->
-    <div class="mt-6 p-4 bg-white rounded-xl shadow text-left">
-      <h2 class="text-lg font-bold mb-1">ชื่อสินค้า: ฟิล์มกระจก iPhone 13</h2>
-      <p>Serial: A123456789</p>
-      <p>วันที่ซื้อ: 1 มกราคม 2025</p>
-      <p>หมดประกัน: 1 มกราคม 2026</p>
-      <p class="text-green-600 font-semibold mt-2">สถานะ: ยังอยู่ในประกัน</p>
-    </div>
-  </main>
-
-  <!-- กลับหน้าแรก -->
-  <footer class="text-center mt-10 mb-6">
-    <a href="index.html" class="text-primary underline">← กลับหน้าหลัก</a>
-  </footer>
-
+  <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     @layer utilities {
       .text-primary { color: #4f46e5; }
       .bg-primary { background-color: #4f46e5; }
     }
   </style>
+</head>
+<body class="bg-gradient-to-b from-indigo-100 to-white min-h-screen text-gray-800 font-sans">
+
+  <!-- Header -->
+  <header class="bg-white shadow p-6 text-center sticky top-0 z-10">
+    <h1 class="text-3xl font-bold text-primary">🔍 เช็คประกันสินค้า</h1>
+    <p class="text-gray-600 mt-1">กรอก Serial Number เพื่อตรวจสอบข้อมูลสินค้า</p>
+  </header>
+
+  <!-- Warranty Check Box -->
+  <main class="max-w-md mx-auto mt-8 px-4">
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+      <label class="block mb-2 text-sm font-medium text-gray-700">Serial Number</label>
+      <div class="flex items-center border border-gray-300 rounded overflow-hidden">
+        <span class="px-3 text-gray-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+               viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 17v-6h13M6 17V5h13M3 17h.01" />
+          </svg>
+        </span>
+        <input id="sn-input" type="text"
+               class="w-full p-3 outline-none text-base"
+               placeholder="กรอก SN เช่น ABC12345" />
+      </div>
+      <button onclick="checkWarranty()"
+              class="mt-4 w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition">
+        ตรวจสอบตอนนี้
+      </button>
+
+      <!-- QR Code Scanner -->
+      <button id="qr-button" class="bg-primary text-white py-2 px-6 rounded-lg hover:bg-indigo-700 transition mt-4">📷 สแกน QR</button>
+      <div id="qr-reader" class="mt-4" style="width: 100%; height: 300px;"></div>
+
+      <div id="result" class="mt-6 text-center text-gray-700 text-sm"></div>
+
+      <!-- ประวัติการเช็ค -->
+      <div id="history" class="mt-8">
+        <h3 class="text-lg font-semibold">ประวัติการเช็ค</h3>
+        <ul id="history-list" class="list-disc pl-5 text-sm text-gray-700"></ul>
+      </div>
+
+      <!-- ดาวน์โหลด PDF -->
+      <button id="download-pdf" class="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-700 transition mt-4">💾 ดาวน์โหลดใบรับประกัน</button>
+    </div>
+  </main>
+
+  <!-- Script -->
+  <script>
+    let qrScanner;
+
+    document.getElementById('qr-button').addEventListener('click', function() {
+      qrScanner = new Html5QrcodeScanner("qr-reader", { fps: 10, qrbox: 250 });
+      qrScanner.render(onScanSuccess);
+    });
+
+    function onScanSuccess(decodedText, decodedResult) {
+      document.getElementById('sn-input').value = decodedText; // กรอก SN อัตโนมัติ
+      qrScanner.clear(); // หยุดการสแกน
+    }
+
+    function checkWarranty() {
+      const sn = document.getElementById('sn-input').value.trim();
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = "⏳ กำลังตรวจสอบข้อมูล...";
+
+      if (!sn) {
+        resultDiv.innerHTML = "<p class='text-red-500'>⚠️ กรุณากรอก Serial Number ก่อน</p>";
+        return;
+      }
+
+      const apiUrl = `https://script.google.com/macros/s/AKfycbx7yAKkvZIBgLWiH7OUq7oeZXKAQaBKQINuwVmdxKINWFCBBsywnxnvwutuOv3dkzAR/exec?sn=${encodeURIComponent(sn)}`;
+
+      fetch(apiUrl)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "ไม่พบข้อมูล") {
+            resultDiv.innerHTML = `<div class="text-red-500">❌ ไม่พบข้อมูลประกันสำหรับ SN นี้</div>`;
+          } else {
+            resultDiv.innerHTML = `
+              <div class="bg-indigo-50 border border-indigo-300 rounded-xl p-4 text-left shadow-md">
+                <p class="text-lg font-semibold text-primary mb-2">✅ พบข้อมูลประกันสินค้า</p>
+                <p><strong>📱 รุ่น:</strong> ${data.model || '-'}</p>
+                <p><strong>🗓 วันที่ซื้อ:</strong> ${data.purchase_date || '-'}</p>
+                <p><strong>⏰ หมดประกัน:</strong> ${data.expiry_date || '-'}</p>
+              </div>
+            `;
+          }
+
+          saveHistory(sn, data.status);
+        })
+        .catch(err => {
+          console.error(err);
+          resultDiv.innerHTML = `<p class="text-red-500">⚠️ ไม่สามารถเชื่อมต่อกับระบบได้</p>`;
+        });
+    }
+
+    function saveHistory(sn, result) {
+      let history = JSON.parse(localStorage.getItem('checkHistory')) || [];
+      const newEntry = { sn, result, date: new Date().toLocaleString() };
+      history.push(newEntry);
+      localStorage.setItem('checkHistory', JSON.stringify(history));
+
+      displayHistory();
+    }
+
+    function displayHistory() {
+      const history = JSON.parse(localStorage.getItem('checkHistory')) || [];
+      const historyList = document.getElementById('history-list');
+      historyList.innerHTML = '';
+
+      history.forEach(entry => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${entry.date} - SN: ${entry.sn} (${entry.result})`;
+        historyList.appendChild(listItem);
+      });
+    }
+
+    window.onload = displayHistory;
+
+    document.getElementById('download-pdf').addEventListener('click', function() {
+      const doc = new jsPDF();
+      const sn = document.getElementById('sn-input').value;
+      const result = document.getElementById('result').innerHTML;
+      const model = result.match(/รุ่น: ([^<]+)/)?.[1] || 'ไม่พบข้อมูล';
+      const purchaseDate = result.match(/วันที่ซื้อ: ([^<]+)/)?.[1] || 'ไม่พบข้อมูล';
+      const expiryDate = result.match(/หมดประกัน: ([^<]+)/)?.[1] || 'ไม่พบข้อมูล';
+
+      doc.text("ใบรับประกันสินค้า", 20, 20);
+      doc.text(`Serial Number: ${sn}`, 20, 30);
+      doc.text(`รุ่น: ${model}`, 20, 40);
+      doc.text(`วันที่ซื้อ: ${purchaseDate}`, 20, 50);
+      doc.text(`หมดประกัน: ${expiryDate}`, 20, 60);
+      doc.save("warranty.pdf");
+    });
+  </script>
+
 </body>
 </html>
