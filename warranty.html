@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>เช็คประกันสินค้า | OK Mobile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans">
+
+  <!-- Header -->
+  <header class="bg-white shadow p-6 text-center">
+    <h1 class="text-2xl font-bold text-primary">🔍 เช็คประกันสินค้า</h1>
+    <p class="text-gray-600 mt-2">กรอกหมายเลขสินค้าหรือสแกน QR Code เพื่อดูสถานะประกัน</p>
+  </header>
+
+  <!-- Content -->
+  <main class="p-6 max-w-xl mx-auto text-center">
+    <input type="text" placeholder="กรอก Serial Number / รหัสสินค้า" 
+           class="w-full p-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary mb-4">
+    <button class="bg-primary text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition">
+      ตรวจสอบประกัน
+    </button>
+
+    <!-- ตัวอย่างผลลัพธ์ mock -->
+    <div class="mt-6 p-4 bg-white rounded-xl shadow text-left">
+      <h2 class="text-lg font-bold mb-1">ชื่อสินค้า: ฟิล์มกระจก iPhone 13</h2>
+      <p>Serial: A123456789</p>
+      <p>วันที่ซื้อ: 1 มกราคม 2025</p>
+      <p>หมดประกัน: 1 มกราคม 2026</p>
+      <p class="text-green-600 font-semibold mt-2">สถานะ: ยังอยู่ในประกัน</p>
+    </div>
+  </main>
+
+  <!-- กลับหน้าแรก -->
+  <footer class="text-center mt-10 mb-6">
+    <a href="index.html" class="text-primary underline">← กลับหน้าหลัก</a>
+  </footer>
+
+  <style>
+    @layer utilities {
+      .text-primary { color: #4f46e5; }
+      .bg-primary { background-color: #4f46e5; }
+    }
+  </style>
+</body>
+</html>

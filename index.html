@@ -17,17 +17,24 @@
     <p class="text-gray-600 mt-2">📱 สินค้าคุณภาพ ราคาดี</p>
   </header>
 
+  <!-- ปุ่มเช็คประกัน -->
+  <div class="text-center my-4">
+    <a href="warranty.html" class="inline-block bg-primary text-white px-6 py-2 rounded-full shadow hover:bg-indigo-700 transition">
+      🔍 เช็คประกันสินค้า
+    </a>
+  </div>
+
   <!-- Product Grid -->
   <main class="p-6 max-w-6xl mx-auto">
     <h2 class="text-2xl font-semibold mb-6">สินค้าทั้งหมด</h2>
-    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <p id="loading" class="text-gray-500">กำลังโหลดสินค้า...</p>
+    </div>
   </main>
 
   <script>
-    // URL CSV ที่คุณให้มา
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/pub?output=csv';
 
-    // ใช้ PapaParse ดึงและแปลง CSV เป็น JSON
     Papa.parse(csvUrl, {
       download: true,
       header: true,
@@ -35,7 +42,11 @@
       complete: function(results) {
         const data = results.data;
         const grid = document.getElementById('product-grid');
+        const loading = document.getElementById('loading');
+        loading?.remove();
         grid.innerHTML = '';
+
+        const formatPrice = (price) => Number(price).toLocaleString('th-TH');
 
         data.forEach(item => {
           const name  = item.name?.trim()  || 'ไม่มีชื่อ';
@@ -45,11 +56,11 @@
           const card = document.createElement('div');
           card.className = 'bg-white p-4 rounded-2xl shadow hover:shadow-lg transition';
           card.innerHTML = `
-            <img src="${image}" alt="${name}"
+            <img src="${image}" alt="รูปภาพของ ${name}"
                  class="w-full h-48 object-cover rounded mb-4"
                  onerror="this.src='https://i.imgur.com/Cy560I4.jpg'">
             <h3 class="text-lg font-bold mb-1">${name}</h3>
-            <p class="text-secondary font-semibold">฿${price}</p>
+            <p class="text-secondary font-semibold">฿${formatPrice(price)}</p>
           `;
           grid.appendChild(card);
         });
@@ -63,7 +74,6 @@
   </script>
 
   <style>
-    /* กำหนดสี primary, secondary ใน Tailwind config */
     @layer utilities {
       .text-primary { color: #4f46e5; }
       .text-secondary { color: #ec4899; }
