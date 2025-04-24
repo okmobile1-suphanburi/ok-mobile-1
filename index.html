@@ -2,61 +2,51 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>โอเค โมบาย | ร้านมือถือ</title>
+  <!-- Tailwind จาก CDN สำหรับพัฒนา (warning แค่เตือน ไม่กระทบการรัน) -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary:   '#4f46e5',
-            secondary: '#ec4899',
-            accent:    '#06b6d4'
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Papa Parse แปลง CSV เป็น JSON -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"
+          integrity="sha512-+N1vgOxZOCzFzH9IosxWpZ2fK4Igo2YN7Ujwqz6T+8+c97HaHTJYmZyMW0mWSEiuraw2nRcBLnL8xNcmSREp2g=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans">
 
-  <!-- Header / Hero / Cart / Warranty / Footer เหมือนเดิม -->
+  <!-- Header / Hero / Cart / Warranty / Footer ย่อแล้ว -->
 
-  <!-- Product Section -->
+  <!-- ส่วนแสดงสินค้า -->
   <section id="products" class="p-6 max-w-6xl mx-auto">
     <h3 class="text-xl font-semibold mb-4">📱 สินค้าทั้งหมด</h3>
     <div id="product-list" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
   </section>
 
   <script>
-    // ตะกร้า (ย่อ)
-    let cart = JSON.parse(localStorage.getItem('cart')||'[]');
-    function updateCartDisplay(){ /* ... โค้ดเหมือนเดิม ... */ }
-    function addToCart(n,p){ /* ... */ }
-    function removeFromCart(i){ /* ... */ }
+    // 1) ลิงก์ CSV จาก Google Sheets (pubhtml → CSV)
+    const csvUrl = 
+      'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/pub?gid=0&single=true&output=csv';
 
-    // ดึง JSON Feed จาก Google Sheets
+    // 2) โหลดและแปลง CSV
     async function loadProducts() {
-      const sheetId = '1MNmqRmiu4-8s1V9lI8oV1Gn5wb0jYqYs-xhkj-UZ0FM';  // แก้เป็นของคุณ
-      const url = `https://spreadsheets.google.com/feeds/list/${sheetId}/od6/public/values?alt=json`;
+      const res = await fetch(csvUrl);
+      const csv = await res.text();
 
-      try {
-        const res  = await fetch(url);
-        const data = await res.json();
-        const entries = data.feed.entry;
-        const productList = document.getElementById('product-list');
-        productList.innerHTML = '';
+      // แปลง CSV → JSON array
+      const { data } = Papa.parse(csv, {
+        header: true,
+        skipEmptyLines: true
+      });
 
-        entries.forEach(e => {
-          // ดึงค่าชื่อ, ราคา, รูปจากฟิลด์ gsx$
-          const name  = e['gsx$name']?.$t  || 'ไม่มีชื่อ';
-          const price = e['gsx$price']?.$t || '0';
-          const image = e['gsx$image']?.$t || '';
+      const productList = document.getElementById('product-list');
+      productList.innerHTML = '';
 
-          const card = document.createElement('div');
-          card.className = 'bg-white p-4 rounded-2xl shadow hover:shadow-lg transition';
-          card.innerHTML = `
+      data.forEach(item => {
+        const name  = item.name?.trim()  || 'ไม่มีชื่อ';
+        const price = item.price?.trim() || '0';
+        const image = item.image?.trim() || '';
+
+        productList.innerHTML += `
+          <div class="bg-white p-4 rounded-2xl shadow hover:shadow-lg transition">
             <img src="${image}" alt="${name}"
                  class="rounded mb-3 w-full h-48 object-cover"
                  onerror="this.src='https://i.imgur.com/Cy560I4.jpg'">
@@ -66,16 +56,47 @@
                     class="mt-2 px-4 py-2 bg-primary text-white rounded hover:bg-indigo-700">
               สั่งซื้อ
             </button>
-          `;
-          productList.appendChild(card);
-        });
+          </div>`;
+      });
 
-        updateCartDisplay();
-      } catch(err) {
-        console.error('Fetch JSON Feed ล้มเหลว:', err);
-      }
+      updateCartDisplay();
     }
 
+    // ฟังก์ชันตะกร้าสินค้า (สั้น)
+    let cart = JSON.parse(localStorage.getItem('cart')||'[]');
+    function updateCartDisplay() {
+      const count = document.getElementById('cart-count');
+      const list  = document.getElementById('cart-items');
+      const tot   = document.getElementById('cart-total');
+      if (count) count.textContent = cart.length;
+      if (!list) return;
+      list.innerHTML = '';
+      let sum = 0;
+      cart.forEach((c,i) => {
+        sum += parseFloat(c.price);
+        list.innerHTML += `
+          <div class="flex justify-between items-center border-b py-2">
+            <div>
+              <p class="font-semibold">${c.name}</p>
+              <p class="text-sm text-secondary">฿${c.price}</p>
+            </div>
+            <button class="text-red-500" onclick="removeFromCart(${i})">ลบ</button>
+          </div>`;
+      });
+      if (tot) tot.textContent = sum.toLocaleString();
+    }
+    function addToCart(n,p) {
+      cart.push({name:n,price:p});
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartDisplay();
+    }
+    function removeFromCart(i) {
+      cart.splice(i,1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartDisplay();
+    }
+
+    // เรียกโหลดตอนเริ่ม
     window.addEventListener('DOMContentLoaded', () => {
       loadProducts();
       updateCartDisplay();
