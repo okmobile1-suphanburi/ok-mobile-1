@@ -11,10 +11,11 @@
   <!-- Header -->
   <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white fixed top-0 w-full z-50 shadow-lg">
     <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      
       <!-- โลโก้และชื่อ -->
       <div class="flex items-center space-x-2">
-        <img src="https://i.imgur.com/yXjXH0C.png" alt="logo" class="w-8 h-8">
-        <h1 class="text-2xl font-bold">OK Mobile</h1>
+        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full">
+        <h1 class="text-xl md:text-2xl font-bold">OK Mobile</h1>
       </div>
 
       <!-- เมนูสำหรับ Desktop -->
@@ -25,58 +26,64 @@
       </nav>
 
       <!-- ปุ่มเมนูมือถือ -->
-      <button class="md:hidden" onclick="toggleMenu()">
-        <svg class="w-6 h-6 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <button class="md:hidden focus:outline-none" onclick="toggleMenu()">
+        <svg class="w-8 h-8 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
       </button>
     </div>
 
     <!-- เมนูมือถือ -->
-    <div id="mobileMenu" class="md:hidden hidden px-4 pb-4 bg-indigo-500">
-      <a href="used.html" class="block py-2 hover:underline">สินค้ามือ2</a>
-      <a href="warranty.html" class="block py-2 hover:underline">เช็คประกัน</a>
-      <a href="others.html" class="block py-2 hover:underline">สินค้าอื่นๆ</a>
+    <div id="mobileMenu" class="hidden md:hidden flex flex-col px-4 pb-4 bg-indigo-500">
+      <a href="used.html" class="py-2 hover:underline">สินค้ามือ2</a>
+      <a href="warranty.html" class="py-2 hover:underline">เช็คประกัน</a>
+      <a href="others.html" class="py-2 hover:underline">สินค้าอื่นๆ</a>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="h-screen flex items-center justify-center bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80')] text-white text-center px-4 pt-16">
-    <div class="bg-black bg-opacity-60 p-6 rounded-xl max-w-xl">
-      <h2 class="text-4xl md:text-5xl font-bold mb-4">ยินดีต้อนรับสู่ OK Mobile</h2>
-      <p class="text-lg md:text-xl mb-6">ร้านมือถือคุณภาพ เช็คประกัน ซ่อม ขาย ครบจบในที่เดียว</p>
-      <a href="warranty.html" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full text-lg">เช็คประกันสินค้า</a>
+  <section class="pt-24 min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80')] text-white text-center px-4">
+    <div class="bg-black bg-opacity-70 p-6 rounded-xl w-full max-w-md">
+      <h2 class="text-3xl md:text-5xl font-bold mb-4">ยินดีต้อนรับสู่ OK Mobile</h2>
+      <p class="text-base md:text-xl mb-6">ร้านมือถือคุณภาพ เช็คประกัน ซ่อม ขาย ครบจบในที่เดียว</p>
+      <a href="warranty.html" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full text-lg w-full block">เช็คประกันสินค้า</a>
     </div>
   </section>
 
-  <!-- Features -->
+  <!-- Features Section -->
   <section class="py-16 bg-white text-center">
-    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 px-4">
-      <div>
-        <img src="https://img.icons8.com/color/96/000000/repair.png" class="mx-auto mb-4" />
-        <h3 class="text-xl font-semibold">บริการซ่อมด่วน</h3>
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 px-6">
+      
+      <div class="flex flex-col items-center">
+        <img src="https://img.icons8.com/?size=100&id=43630&format=png&color=000000" class="mb-4" />
+        <h3 class="text-xl font-semibold mb-2">บริการซ่อมด่วน</h3>
         <p class="text-gray-600">ซ่อมมือถือรวดเร็ว รับประกันทุกเครื่อง</p>
       </div>
-      <div>
-        <img src="https://img.icons8.com/color/96/000000/online-store.png" class="mx-auto mb-4" />
-        <h3 class="text-xl font-semibold">สินค้าคุณภาพ</h3>
+      
+      <div class="flex flex-col items-center">
+        <img src="https://img.icons8.com/color/96/000000/online-store.png" class="mb-4" />
+        <h3 class="text-xl font-semibold mb-2">สินค้าคุณภาพ</h3>
         <p class="text-gray-600">มือถือ ฟิล์ม เคส อุปกรณ์ครบในที่เดียว</p>
       </div>
-      <div>
-        <img src="https://img.icons8.com/color/96/000000/technical-support.png" class="mx-auto mb-4" />
-        <h3 class="text-xl font-semibold">บริการหลังการขาย</h3>
+      
+      <div class="flex flex-col items-center">
+        <img src="https://img.icons8.com/color/96/000000/technical-support.png" class="mb-4" />
+        <h3 class="text-xl font-semibold mb-2">บริการหลังการขาย</h3>
         <p class="text-gray-600">เช็คประกัน ตรวจสอบสถานะได้ตลอดเวลา</p>
       </div>
+
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 text-white p-6 text-center" id="contact">
-    <p>ติดต่อร้าน OK Mobile: 094-661-3961 | Line: @okmobile</p>
-    <p class="mt-2">© 2025 OK Mobile</p>
+  <footer class="bg-gray-800 text-white p-6 text-center">
+    <div class="max-w-6xl mx-auto">
+      <p>ติดต่อร้าน OK Mobile: 094-661-3961 | Line: @okmobile</p>
+      <p class="mt-2 text-sm">© 2025 OK Mobile</p>
+    </div>
   </footer>
 
-  <!-- Script เมนูมือถือ -->
+  <!-- Script toggle menu -->
   <script>
     function toggleMenu() {
       const menu = document.getElementById('mobileMenu');
