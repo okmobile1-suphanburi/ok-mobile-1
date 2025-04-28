@@ -4,12 +4,77 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OK Mobile U-Thong</title>
+  <style>
+    /* กำหนดพื้นหลังของหน้าเว็บ */
+    body {
+      background-image: url('https://images.samsung.com/is/image/samsung/assets/th/finance-plus/2025-01-23/Samsung_Finance_Microsite_Benner_Mobile_1440x810.jpg?$1440_N_JPG$');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      color: white;
+    }
+
+    /* จัดการตำแหน่งของข้อความและปุ่ม */
+    .content {
+      text-align: center;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 20px; /* เว้นระยะระหว่างข้อความและปุ่ม */
+    }
+
+    /* สไตล์ข้อความ "ยินดีต้อนรับ" */
+    .welcome-text {
+      color: #1E3A8A; /* น้ำเงิน */
+      font-size: 2.5rem;
+      font-weight: bold;
+      border: 2px solid #1E3A8A; /* ขอบน้ำเงิน */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      background-color: rgba(255, 255, 255, 0.7); /* พื้นหลังใสๆ */
+      display: inline-block;
+    }
+
+    /* กำหนดสไตล์ของปุ่ม */
+    .button {
+      display: inline-block;
+      position: relative;
+      background-color: #FF4500; /* สีที่สะดุดตาสำหรับปุ่ม */
+      color: white;
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    /* เปลี่ยนแปลงเมื่อผู้ใช้ hover */
+    .button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    }
+  </style>
 </head>
 <body>
 
-  <h1>แสดงหน้า Google Sites</h1>
-
-  <iframe src="https://sites.google.com/view/okmobileu-thong/%E0%B8%88%E0%B8%B2%E0%B8%A2%E0%B9%84%E0%B8%9F%E0%B9%81%E0%B8%99%E0%B8%99%E0%B8%8B%E0%B8%9E%E0%B8%A5%E0%B8%AA?authuser=0" width="100%" height="600px" frameborder="0"></iframe>
+  <!-- ส่วนเนื้อหาของเว็บไซต์ -->
+  <div class="content">
+    <h1 class="welcome-text">ยินดีต้อนรับสู่ OK Mobile U-Thong</h1>
+    <a href="https://sites.google.com/view/okmobileu-thong/%E0%B8%88%E0%B8%B2%E0%B8%A2%E0%B9%84%E0%B8%9F%E0%B9%81%E0%B8%99%E0%B8%99%E0%B8%8B%E0%B8%9E%E0%B8%A5%E0%B8%AA?authuser=0" target="_blank" class="button">
+      กดดู วิธีชำระเงิน 𝑺𝒂𝒎𝒔𝒖𝒏𝒈 𝑭𝒊𝒏𝒂𝒏𝒄𝒆 +
+    </a>
+  </div>
 
 </body>
 </html>
