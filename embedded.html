@@ -10,16 +10,39 @@
       background-image: url('https://images.samsung.com/is/image/samsung/assets/th/finance-plus/2025-01-23/Samsung_Finance_Microsite_Benner_Mobile_1440x810.jpg?$1440_N_JPG$');
       background-size: cover;  /* ปรับขนาดภาพให้พอดีกับขนาดหน้าจอ */
       background-position: center;  /* จัดให้ภาพอยู่กลางหน้าจอ */
-      background-attachment: fixed;  /* พื้นหลังไม่เลื่อนเมื่อเลื่อนหน้า */
+      background-attachment: scroll;  /* เปลี่ยนเป็น scroll สำหรับอุปกรณ์มือถือ */
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;  /* ให้เต็มความสูงของหน้าจอ */
       margin: 0;
       color: white;
+      position: relative;  /* ทำให้สามารถใช้ตำแหน่งของปุ่มได้ */
     }
 
-    /* จัดการตำแหน่งของข้อความและปุ่ม */
+    /* สไตล์ของปุ่มกลับหน้าแรก */
+    .back-button {
+      position: absolute;
+      top: 20px;  /* อยู่ห่างจากด้านบน 20px */
+      left: 20px;  /* อยู่ห่างจากด้านซ้าย 20px */
+      background-color: #1E3A8A;  /* สีพื้นหลังน้ำเงิน */
+      color: white;
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    /* เปลี่ยนแปลงเมื่อผู้ใช้ hover */
+    .back-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* จัดการตำแหน่งของข้อความและปุ่มหลัก */
     .content {
       text-align: center;
       z-index: 2;
@@ -43,7 +66,7 @@
       display: inline-block;
     }
 
-    /* กำหนดสไตล์ของปุ่ม */
+    /* กำหนดสไตล์ของปุ่มหลัก */
     .button {
       display: inline-block;
       position: relative;
@@ -67,6 +90,9 @@
   </style>
 </head>
 <body>
+
+  <!-- ปุ่มกลับหน้าแรก -->
+  <a href="index.html" class="back-button">กลับหน้าแรก</a>
 
   <!-- ส่วนเนื้อหาของเว็บไซต์ -->
   <div class="content">
