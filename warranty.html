@@ -3,32 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OK Mobile - ระบบแสดงข้อมูล</title>
+  <title>เช็คประกันสินค้า - OK Mobile</title>
   <style>
     body {
-      margin: 0;
       font-family: 'Arial', sans-serif;
+      background-color: #f0f8ff;
+      color: #333;
+      margin: 0;
+      padding: 0;
     }
     header {
-      background-color: #ff3b3f;
+      background-color: #4caf50;
       color: white;
-      padding: 1rem;
+      padding: 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 50px;
+    }
+    .input-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 500px;
+    }
+    input[type="text"] {
+      padding: 15px;
+      width: 100%;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 2px solid #4caf50;
+      font-size: 16px;
+      outline: none;
+    }
+    input[type="text"]:focus {
+      border-color: #2e7d32;
+    }
+    button {
+      padding: 15px 30px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+    button:hover {
+      background-color: #388e3c;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #333;
       text-align: center;
     }
-    iframe {
+    .result.success {
+      color: #388e3c;
+    }
+    .result.error {
+      color: #f44336;
+    }
+    .footer {
+      position: fixed;
+      bottom: 0;
       width: 100%;
-      height: 90vh;
-      border: none;
+      background-color: #4caf50;
+      color: white;
+      text-align: center;
+      padding: 10px 0;
+    }
+    
+    /* สไตล์ของปุ่มกลับหน้าแรก */
+    .back-button {
+      position: absolute;
+      top: 20px;  /* อยู่ห่างจากด้านบน 20px */
+      left: 20px;  /* อยู่ห่างจากด้านซ้าย 20px */
+      background-color: #1E3A8A;  /* สีพื้นหลังน้ำเงิน */
+      color: white;
+      padding: 10px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .back-button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>ระบบแสดงข้อมูลจาก Google Sheets</h1>
+    เช็คประกันสินค้า - OK Mobile
   </header>
 
-  <iframe src="https://script.google.com/macros/s/AKfycbx7yAKkvZIBgLWiH7OUq7oeZXKAQaBKQINuwVmdxKINWFCBBsywnxnvwutuOv3dkzAR/exec"></iframe>
+  <!-- ปุ่มกลับหน้าแรก -->
+  <a href="index.html" class="back-button">กลับหน้าแรก</a>
 
-</body>
-</html>
+  <div class="container">
+    <div class="input-container">
+      <label for="serialNumber">เช็คประกันเครื่องที่ซื้อจากร้านโอเคโมบาย เท่านั้น !!📱:</label>
+      <input type="text" id="serialNumber" placeholder="กรอกหมายเลข IMEI (กดเช็ค *#06#)">
+      <button onclick="checkWarranty()">เช็คประกัน</button>
+      <div id="result" class="result"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    ©OK-MOBILE2024 Ver.1.3 | หมายเหตุ:แจ้งปัญหาการใช้งานโทร.094-6613961
+  </div>
+
+  <script>
+    function checkWarranty() {
+  var serialNumber = document.getElementById("serialNumber").value;
+  var apiKey = "YOUR_API_KEY";  // ใส่ API Key ของคุณ
+  var spreadsheetId = "1Jaf3ifI-pJhDng9TQ0_0X4taa2rUfUscGBxocWW6s14";  // Spreadsheet ID
+  var range = "Sheet1!A2:F";  // ช่วงเซลล์ที่คุณต้องการดึงข้อมูล
+
+  var sheetURL = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+
+  fetch(sheetURL)
+    .then(response => response.json())
+    .then(data => {
+      var found = false;
+      data.values.forEach(row => {
+        var productSN = row[0];  // Serial Number อยู่ในคอลัมน์ A
+        if (productSN === serialNumber) {
+          found = true;
+          var model = row[1];  // ชื่อรุ่น อยู่ในคอลัมน์ B
+          var price = row[2];  // ราคาขาย อยู่ในคอลัมน์ C
+          var purchaseDate = row[3];  // วันที่ซื้อ อยู่ในคอลัมน์ D
+          var notes = row[4];  // หมายเหตุ อยู่ในคอลัมน์ E
+          
+          document.getElementById("result").innerHTML = `
+            <p><strong>ชื่อรุ่น:</strong> ${model}</p>
+            <p><strong>ราคาขาย:</strong> ${price}</p>
+            <p><strong>วันที่ซื้อ:</strong> ${purchaseDate}</p>
+            <p><strong>หมายเหตุ:</strong> ${notes}</p>
+          `;
+          document.getElementById("result").classList.remove('error');
+          document.getElementById("result").classList.add('success');
+        }
+      });
+
+      if (!found) {
+        document.getElementById("result").innerHTML = "ไม่พบข้อมูลประกันสำหรับหมายเลขนี้";
+        document.getElementById("result").classList.remove('success');
+        document.getElementById("result").classList.add('error');
+      }
+    })
+    .catch(error => {
+      console.error("Error fetching data: ", error);
+      document.getElementById("result").innerHTML = "เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล";
+      document.getElementById("result").classList.remove('success');
+      document.getElementById("result").classList.add('error');
+    });
+}
