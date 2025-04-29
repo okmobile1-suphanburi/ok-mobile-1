@@ -8,6 +8,11 @@
     html, body {
       height: 100%;
       margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
       font-family: 'Arial', sans-serif;
       background-color: #f0f8ff;
       color: #333;
@@ -31,12 +36,12 @@
     }
 
     .container {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 20px;
-      min-height: 80vh;
     }
 
     .input-container {
@@ -59,10 +64,13 @@
       outline: none;
     }
 
+    input[type="text"]:focus {
+      border-color: #2e7d32;
+    }
+
     button, .back-button {
       padding: 12px 24px;
-      margin-top: 10px;
-      margin-inline: 5px;
+      margin-top: 15px;
       background-color: #4caf50;
       color: white;
       border: none;
@@ -71,7 +79,6 @@
       cursor: pointer;
       transition: background-color 0.3s;
       text-decoration: none;
-      display: inline-block;
     }
 
     button:hover, .back-button:hover {
@@ -85,27 +92,20 @@
       text-align: center;
     }
 
-    .result.success { color: #388e3c; }
-    .result.error { color: #f44336; }
+    .result.success {
+      color: #388e3c;
+    }
+
+    .result.error {
+      color: #f44336;
+    }
 
     .footer {
       background-color: #4caf50;
       color: white;
       text-align: center;
       padding: 15px 0;
-    }
-
-    #history {
-      margin-top: 30px;
-      text-align: left;
-      font-size: 14px;
-    }
-
-    .btn-row {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      flex-shrink: 0;
     }
   </style>
 </head>
@@ -120,15 +120,10 @@
     <div class="input-container">
       <label for="serialNumber">เช็คประกันเครื่องที่ซื้อจากร้านโอเคโมบาย เท่านั้น !!📱:</label>
       <input type="text" id="serialNumber" placeholder="กรอกหมายเลข IMEI (กดเช็ค *#06#)">
-      
-      <div class="btn-row">
-        <button onclick="checkWarranty()">เช็คประกัน</button>
-        <button onclick="scanQRCode()">สแกน QR Code</button>
-        <a href="index.html" class="back-button">กลับหน้าแรก</a>
-      </div>
-
+      <button onclick="checkWarranty()">เช็คประกัน</button>
+      <button onclick="scanBarcode()">สแกนบาร์โค้ด</button>
+      <a href="index.html" class="back-button">กลับหน้าแรก</a>
       <div id="result" class="result"></div>
-      <div id="history"></div>
     </div>
   </div>
 
@@ -136,96 +131,99 @@
     ©OK-MOBILE2024 Ver.1.3 | หมายเหตุ: แจ้งปัญหาการใช้งาน โทร.094-6613961
   </div>
 
-  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-  <script>
-    const apiKey = "AIzaSyBCtEQL9aVLIFMVnTdAXhRnz3vm__3eQ1M";
-    const spreadsheetId = "1Jaf3ifI-pJhDng9TQ0_0X4taa2rUfUscGBxocWW6s14";
-    const range = "Sheet1!A2:F";
+  <!-- เพิ่ม QuaggaJS สำหรับการอ่านบาร์โค้ด -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 
-    function showResult(html, type) {
-      const result = document.getElementById("result");
-      result.innerHTML = html;
-      result.className = `result ${type}`;
-    }
+  <script>
+    var history = [];
 
     function checkWarranty() {
-      const sn = document.getElementById("serialNumber").value.trim();
-      if (!sn) {
-        showResult("กรุณากรอกหมายเลข IMEI", "error");
-        return;
-      }
+      var serialNumber = document.getElementById("serialNumber").value;
+      var apiKey = "AIzaSyBCtEQL9aVLIFMVnTdAXhRnz3vm__3eQ1M";  // ใส่ API Key ของคุณ
+      var spreadsheetId = "1Jaf3ifI-pJhDng9TQ0_0X4taa2rUfUscGBxocWW6s14";
+      var range = "Sheet1!A2:F";
+      var sheetURL = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
 
-      const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-      fetch(url)
-        .then(res => res.json())
+      fetch(sheetURL)
+        .then(response => response.json())
         .then(data => {
-          let found = false;
+          var found = false;
           data.values.forEach(row => {
-            if (row[0] === sn) {
+            var productSN = row[0];
+            if (productSN === serialNumber) {
               found = true;
-              showResult(`
-                <p><strong>ชื่อรุ่น:</strong> ${row[1]}</p>
-                <p><strong>ราคาขาย:</strong> ${row[2]}</p>
-                <p><strong>วันที่ซื้อ:</strong> ${row[3]}</p>
-                <p><strong>หมายเหตุ:</strong> ${row[4]}</p>
-              `, "success");
-              saveHistory(sn);
+              var model = row[1];
+              var price = row[2];
+              var purchaseDate = row[3];
+              var notes = row[4];
+
+              document.getElementById("result").innerHTML = `
+                <p><strong>ชื่อรุ่น:</strong> ${model}</p>
+                <p><strong>ราคาขาย:</strong> ${price}</p>
+                <p><strong>วันที่ซื้อ:</strong> ${purchaseDate}</p>
+                <p><strong>หมายเหตุ:</strong> ${notes}</p>
+              `;
+              document.getElementById("result").classList.remove('error');
+              document.getElementById("result").classList.add('success');
+              
+              // บันทึกประวัติ
+              history.push({serialNumber, model, price, purchaseDate, notes});
             }
           });
+
           if (!found) {
-            showResult("ไม่พบข้อมูลประกันสำหรับหมายเลขนี้", "error");
+            document.getElementById("result").innerHTML = "ไม่พบข้อมูลประกันสำหรับหมายเลขนี้";
+            document.getElementById("result").classList.remove('success');
+            document.getElementById("result").classList.add('error');
           }
         })
-        .catch(err => {
-          console.error(err);
-          showResult("เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล", "error");
+        .catch(error => {
+          console.error("Error fetching data: ", error);
+          document.getElementById("result").innerHTML = "เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล";
+          document.getElementById("result").classList.remove('success');
+          document.getElementById("result").classList.add('error');
         });
     }
 
-    function saveHistory(sn) {
-      let history = JSON.parse(localStorage.getItem("warrantyHistory")) || [];
-      if (!history.includes(sn)) {
-        history.unshift(sn);
-        localStorage.setItem("warrantyHistory", JSON.stringify(history.slice(0, 5)));
-        renderHistory();
-      }
-    }
+    function scanBarcode() {
+      const existingReader = document.getElementById("barcode-reader");
+      if (existingReader) existingReader.remove();
 
-    function renderHistory() {
-      const history = JSON.parse(localStorage.getItem("warrantyHistory")) || [];
-      const historyDiv = document.getElementById("history");
-      if (history.length > 0) {
-        historyDiv.innerHTML = `<h4>ประวัติการเช็คล่าสุด:</h4><ul>${history.map(sn => `<li>${sn}</li>`).join('')}</ul>`;
-      } else {
-        historyDiv.innerHTML = "";
-      }
-    }
+      const readerDiv = document.createElement("div");
+      readerDiv.id = "barcode-reader";
+      readerDiv.style = "width:100%;max-width:400px;margin:10px auto;";
+      document.querySelector(".input-container").appendChild(readerDiv);
 
-    function scanQRCode() {
-      const qrRegionId = "reader";
-      const qrDiv = document.createElement("div");
-      qrDiv.id = qrRegionId;
-      qrDiv.style = "width:300px;margin:10px auto;";
-      document.querySelector(".input-container").appendChild(qrDiv);
-
-      const html5QrCode = new Html5Qrcode(qrRegionId);
-      html5QrCode.start(
-        { facingMode: "environment" },
-        { fps: 10, qrbox: 250 },
-        qrCodeMessage => {
-          document.getElementById("serialNumber").value = qrCodeMessage;
-          html5QrCode.stop();
-          qrDiv.remove();
+      Quagga.init({
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: readerDiv,
+          constraints: {
+            facingMode: "environment"
+          }
         },
-        error => {}
-      ).catch(err => {
-        alert("ไม่สามารถเข้าถึงกล้องได้");
-        qrDiv.remove();
+        decoder: {
+          readers: ["code_128_reader", "ean_reader", "ean_8_reader", "upc_reader"]
+        }
+      }, function(err) {
+        if (err) {
+          console.error(err);
+          alert("ไม่สามารถเริ่มกล้องได้");
+          readerDiv.remove();
+          return;
+        }
+        Quagga.start();
+      });
+
+      Quagga.onDetected(result => {
+        const code = result.codeResult.code;
+        document.getElementById("serialNumber").value = code;
+        Quagga.stop();
+        document.getElementById("barcode-reader").remove();
       });
     }
-
-    // โหลดประวัติเมื่อเปิดหน้า
-    renderHistory();
   </script>
+
 </body>
 </html>
