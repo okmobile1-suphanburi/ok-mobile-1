@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แจ้งเลขบัญชี</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #3c14f0 0%, #b564f7 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .account-details {
+            background-color: #e0f7e0;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .account-details p {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .account-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .copy-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049;
+        }
+
+        .qr-code {
+            margin-top: 20px;
+        }
+
+        .qr-code img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        .download-button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .download-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>โอนเงิน กรุณาแจ้งทุกครั้ง<h1>
+            <h1>ชื่อบัญชี โอเค โมบาย เท่านั้น</h1>
+        
+        <div class="account-details">
+            <p>ธนาคาร กสิกรไทย:</p>
+            <p class="account-number" id="account-number">175-139-8588</p>
+            <button class="copy-button" onclick="copyAccountNumber()">กดคัดลอกเลขบัญชี</button>
+        </div>
+
+        <!-- แสดง QR Code -->
+        <div class="qr-code">
+            <p>หรือคุณสามารถสแกน QR Code ด้านล่างเพื่อโอนเงิน:</p>
+            <img src="https://lh6.googleusercontent.com/h8EOVFOlH2SsrvU04KcREdj05NIwp0HiZakfgDgtleoQD1T2mdusDjosOqbYVow-KIDc1qUgEbmsolsRTYynYf8" alt="QR Code สำหรับบัญชี" id="qr-code">
+        </div>
+
+        <!-- ปุ่มบันทึก QR Code -->
+        <button class="download-button" onclick="downloadQRCode()">บันทึก QR Code</button>
+        <p>แจ้งการโอนเงินได้ที่ Line: @661qazoc หรือโทร 094-6613961 ร้านโอเค โมบาย</p>
+    </div>
+
+    <script>
+        function copyAccountNumber() {
+            const accountNumber = document.getElementById('account-number').innerText;
+            const textarea = document.createElement('textarea');
+            textarea.value = accountNumber;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            alert('คัดลอกหมายเลขบัญชีแล้ว');
+        }
+
+        function downloadQRCode() {
+            const qrCodeImage = document.getElementById('qr-code').src;
+
+            // สร้างลิงก์ดาวน์โหลด
+            const link = document.createElement('a');
+            link.href = qrCodeImage;
+            link.download = 'qr-code.png';  // ตั้งชื่อไฟล์ที่ดาวน์โหลด
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
