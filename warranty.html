@@ -21,7 +21,7 @@
     header {
       background-color: #4caf50;
       color: white;
-      padding: 10px;
+      padding: 20px;
       text-align: center;
       font-size: 24px;
       font-weight: bold;
@@ -29,7 +29,12 @@
     }
 
     header img {
-      height: 40px;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+      border: 2px solid white;
       position: absolute;
       top: 10px;
       left: 10px;
@@ -127,16 +132,32 @@
   </div>
 
   <div class="footer">
-    ©OK-MOBILE2024 Ver.1.3 | หมายเหตุ: แจ้งปัญหาการใช้งาน โทร.094-6613961
+    ©OK-MOBILE2021 Ver.1.3 | หมายเหตุ: แจ้งปัญหาการใช้งาน โทร.094-6613961
   </div>
 
   <script>
     function checkWarranty() {
       var serialNumber = document.getElementById("serialNumber").value;
-      var apiKey = "AIzaSyBCtEQL9aVLIFMVnTdAXhRnz3vm__3eQ1M";  // ใส่ API Key ของคุณ
+      if (!serialNumber.trim()) {
+        document.getElementById("result").innerHTML = "กรุณากรอกหมายเลข IMEI ก่อนเช็คประกัน";
+        document.getElementById("result").classList.remove('success');
+        document.getElementById("result").classList.add('error');
+        return;
+      }
+
+      if (serialNumber.length !== 15 || isNaN(serialNumber)) {
+        document.getElementById("result").innerHTML = "หมายเลข IMEI ต้องเป็นตัวเลข 15 หลักเท่านั้น";
+        document.getElementById("result").classList.remove('success');
+        document.getElementById("result").classList.add('error');
+        return;
+      }
+
+      var apiKey = "AIzaSyBCtEQL9aVLIFMVnTdAXhRnz3vm__3eQ1M"; // ใส่ API Key ของคุณ
       var spreadsheetId = "1Jaf3ifI-pJhDng9TQ0_0X4taa2rUfUscGBxocWW6s14";
       var range = "Sheet1!A2:F";
       var sheetURL = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+
+      document.getElementById("result").innerHTML = "กำลังตรวจสอบข้อมูล... ⏳";
 
       fetch(sheetURL)
         .then(response => response.json())
