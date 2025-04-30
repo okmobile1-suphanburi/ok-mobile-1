@@ -29,16 +29,16 @@
 
     .logo-container {
       position: absolute;
-      top: 20px;
-      left: 20px;
+      top: 10px;
+      left: 10px;
       z-index: 2;
     }
 
     .logo {
-      width: 100px;
-      height: 100px;
-      max-width: 30vw;
-      max-height: 30vh;
+      width: 70px;
+      height: 70px;
+      max-width: 20vw;
+      max-height: 20vh;
       border-radius: 50%;
       object-fit: cover;
       border: 4px solid white;
@@ -63,6 +63,9 @@
       font-size: 18px;
       color: #333;
       margin: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .account-number {
@@ -110,6 +113,23 @@
       color: #444;
       font-size: 16px;
     }
+
+    .bank-logo {
+      width: 300px;  /* ปรับขนาดรูปโลโก้ให้ใหญ่ขึ้น */
+      height: auto;
+      margin-right: 10px;
+      display: inline-block;
+    }
+
+    .account-details p {
+      font-size: 18px;
+      color: #333;
+      margin: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
   </style>
 </head>
 <body>
@@ -123,7 +143,9 @@
     <h1>ชื่อบัญชี โอเคโมบาย เท่านั้น</h1>
 
     <div class="account-details">
-      <p>ธนาคาร กสิกรไทย:</p>
+      <p>
+        <img src="http://3.bp.blogspot.com/-JGtlQG7AKzw/Ucxz7E_sxiI/AAAAAAAAACs/6HQ0u_zuhcY/s1600/fm.png" alt="โลโก้ กสิกรไทย" class="bank-logo" />
+      </p>
       <p class="account-number" id="account-number">175-139-8588</p>
       <button class="copy-button" onclick="copyAccountNumber()">กดคัดลอกเลขบัญชี</button>
     </div>
