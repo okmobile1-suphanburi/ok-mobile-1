@@ -4,29 +4,36 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>โอเค โมบาย | ร้านมือถือ</title>
-  <!-- TailwindCSS จาก CDN -->
+  <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Papa Parse สำหรับแปลง CSV เป็น JSON -->
+  <!-- Papa Parse -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300 text-gray-800 font-sans">
 
   <!-- Header -->
-  <header class="bg-white shadow p-6 text-center">
-    <h1 class="text-3xl font-bold text-primary">โอเค โมบาย</h1>
-    <p class="text-gray-600 mt-2">📱OK-MOBILE SHOP ONLINE</p>
+  <header class="bg-gradient-to-r from-pink-300 via-red-300 to-yellow-300 shadow-lg p-6 text-center rounded-b-lg">
+    <h1 class="text-5xl font-extrabold text-white drop-shadow-2xl">
+      โอเค โมบาย
+    </h1>
+    <p class="text-gray-200 mt-2 text-lg font-medium drop-shadow-lg">
+      📱OK-MOBILE SHOP ONLINE
+    </p>
   </header>
 
-  <!-- ปุ่มเช็คประกัน -->
-  <div class="text-center my-4">
-    <a href="warranty.html" class="inline-block bg-primary text-white px-6 py-2 rounded-full shadow hover:bg-indigo-700 transition">
+  <!-- ปุ่มเช็คประกัน & กลับหน้าแรก -->
+  <div class="text-center my-4 flex justify-center space-x-4">
+    <a href="warranty.html" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-full shadow-lg hover:bg-blue-600 transition-transform transform hover:scale-105">
       🔍 เช็คประกันสินค้า
+    </a>
+    <a href="index.html" class="inline-block bg-gray-600 text-white px-6 py-2 rounded-full shadow-lg hover:bg-gray-500 transition-transform transform hover:scale-105">
+      ⬅️ กลับหน้าแรก
     </a>
   </div>
 
   <!-- Product Grid -->
   <main class="p-6 max-w-6xl mx-auto">
-    <h2 class="text-2x1 font-semibold mb-6">สินค้าทั้งหมด</h2>
+    <h2 class="text-3xl font-semibold text-white mb-6">สินค้าทั้งหมด</h2>
     <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <p id="loading" class="text-gray-500">กำลังโหลดสินค้า...</p>
     </div>
@@ -49,9 +56,10 @@
         const formatPrice = (price) => Number(price).toLocaleString('th-TH');
 
         data.forEach(item => {
-          const name  = item.name?.trim()  || 'ไม่มีชื่อ';
-          const price = item.price?.trim() || '0';
-          const image = item.image?.trim() || '';
+          const name     = item.name?.trim()     || 'ไม่มีชื่อ';
+          const price    = item.price?.trim()    || '0';
+          const image    = item.image?.trim()    || '';
+          const facebook = item.facebook?.trim() || '#';
 
           const card = document.createElement('div');
           card.className = 'bg-white p-4 rounded-2xl shadow hover:shadow-lg transition';
@@ -60,14 +68,23 @@
                  class="w-full h-80 object-cover rounded mb-4"
                  onerror="this.src='https://i.imgur.com/Cy560I4.jpg'">
             <h3 class="text-lg font-bold mb-1">${name}</h3>
-            <p class="text-secondary font-semibold">฿${formatPrice(price)}</p>
+            <p class="text-secondary font-semibold mb-2">฿${formatPrice(price)}</p>
+            <a href="${facebook}" target="_blank" rel="noopener noreferrer"
+               class="inline-block mt-2 bg-secondary text-white px-4 py-2 rounded-full text-sm hover:bg-pink-600 transition">
+               🔗 ดูรายละเอียดสินค้า
+            </a>
+            <!-- ปุ่มสั่งซื้อสินค้า -->
+            <a href="https://www.facebook.com/profile.php?id=61566120762780" target="_blank" rel="noopener noreferrer"
+               class="inline-block mt-2 bg-green-400 text-white px-4 py-2 rounded-full text-sm hover:bg-green-500 transition">
+               🛒 สั่งซื้อสินค้า
+            </a>
           `;
           grid.appendChild(card);
         });
       },
       error: function(err) {
         console.error('ไม่สามารถโหลดสินค้า:', err);
-        document.getElementById('product-grid').innerHTML = 
+        document.getElementById('product-grid').innerHTML =
           '<p class="text-red-500">เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้า</p>';
       }
     });
@@ -81,5 +98,6 @@
       .bg-secondary { background-color: #ec4899; }
     }
   </style>
+
 </body>
 </html>
