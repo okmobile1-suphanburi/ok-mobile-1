@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OK Mobile</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -17,7 +17,7 @@
         class="w-full h-auto rounded-xl shadow-lg mb-6 object-contain"
       >
       <h2 class="text-3xl font-bold mb-4">ยินดีต้อนรับสู่ OK Mobile</h2>
-      <p class="mb-6 text-gray-600 dark:text-gray-300">กรุณาอ่านข้อมูลด้านบนก่อนเข้าเว็บไซต์</p>
+      <p class="mb-6 text-gray-600 dark:text-gray-300">กรุณาอ่านข้อมูลด้านล่างก่อนเข้าเว็บไซต์</p>
       <button id="close-popup" class="bg-blue-600 text-white py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition">
         เริ่มใช้งาน
       </button>
@@ -26,15 +26,23 @@
 
   <!-- เนื้อหาหลักของเว็บไซต์ -->
   <div id="main-content" class="hidden p-6">
-    <h1 class="text-3xl font-bold mb-4">หน้าเว็บหลักของคุณ</h1>
-    <p>เนื้อหาเว็บไซต์จะอยู่ตรงนี้หลังจากปิด Pop-up แล้ว</p>
+    <h1 class="text-4xl font-bold mb-4">หน้าเว็บหลักของคุณ</h1>
+    <p>ยินดีต้อนรับ! ตอนนี้คุณสามารถใช้งานเว็บไซต์ได้แล้ว</p>
   </div>
 
+  <!-- สคริปต์ควบคุมการแสดงผล -->
   <script>
-    document.getElementById("close-popup").addEventListener("click", function () {
-      document.getElementById("popup").classList.add("hidden");
-      document.getElementById("main-content").classList.remove("hidden");
+    document.addEventListener("DOMContentLoaded", function () {
+      const closeBtn = document.getElementById("close-popup");
+      const popup = document.getElementById("popup");
+      const mainContent = document.getElementById("main-content");
+
+      closeBtn.addEventListener("click", function () {
+        popup.style.display = "none";       // ซ่อน Pop-up
+        mainContent.style.display = "block"; // แสดงเนื้อหาเว็บไซต์
+      });
     });
   </script>
+
 </body>
 </html>
