@@ -2,45 +2,134 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OK Mobile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OK Mobile - ตลาดอู่ทอง</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-white">
+<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-500">
 
-  <!-- Pop-up แจ้งเตือน -->
-  <div id="popup" class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl max-w-2xl w-full text-center shadow-2xl">
-      <img 
-        src="https://scontent.fkdt3-1.fna.fbcdn.net/v/t39.30808-6/461591777_8227152870717137_6520079400281455904_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=RXWKEgcVLK8Q7kNvwExMsjo&_nc_oc=AdnWyCEg6mtkiyQLfLFcWYPQvWzKAjrUG4uptjLvwEQ0rRtkHuBC3RfNWTW8-OiTNmHoaDah0WdHRmkLRBD6NRse&_nc_zt=23&_nc_ht=scontent.fkdt3-1.fna&_nc_gid=qBpRjLuWl_vqJRpERpwiQA&oh=00_AfIfQVgqZyJU6tYPoU8jLe3Iysd0BMfw5MkQXLoLG9HVaQ&oe=68273C26" 
-        alt="แจ้งเตือน"
-        class="w-full h-auto rounded-xl shadow-lg mb-6 object-contain"
-      >
-      <h2 class="text-3xl font-bold mb-4">ยินดีต้อนรับสู่ OK Mobile</h2>
-      <p class="mb-6 text-gray-600 dark:text-gray-300">กรุณาอ่านข้อมูลด้านล่างก่อนเข้าเว็บไซต์</p>
-      <button id="close-popup" class="bg-blue-600 text-white py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition">
-        เริ่มใช้งาน
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-gray-700 dark:to-gray-900 text-white fixed top-0 w-full z-50 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+      
+      <!-- โลโก้และชื่อ -->
+      <div class="flex items-center space-x-2">
+        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md">
+        <h1 class="text-2xl font-bold">OK Mobile อู่ทอง</h1>
+      </div>
+
+      <!-- ปุ่มแฮมเบอร์เกอร์ -->
+      <button id="menu-toggle" class="flex items-center space-x-2 block md:hidden p-2">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <span>กดเมนู</span>
+      </button>
+
+      <!-- เมนูปกติ (Desktop) -->
+      <nav class="hidden md:flex space-x-6 text-lg">
+        <a href="used.html" class="hover:underline">สินค้ามือ2</a>
+        <a href="warranty.html" class="hover:underline">เช็คประกัน</a>
+        <a href="others.html" class="hover:underline">สินค้าอื่นๆ</a>
+        <a href="transfer.html" class="hover:underline">แจ้งโอนเงิน</a>
+        <a href="embedded.html" class="hover:underline">ชำระเงินไฟแนนซ์</a>
+        <a href="map.html" class="hover:underline">แผนที่ร้าน</a>
+
+        <!-- ปุ่มเปลี่ยนโหมดกลางวัน/กลางคืน -->
+        <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40">
+          🌓
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- เมนูด้านซ้าย (Mobile Sidebar) -->
+  <div id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-300 dark:border-gray-700 transform -translate-x-full transition-transform duration-300 z-40">
+    <div class="p-4">
+      <div class="flex items-center space-x-2 mb-8">
+        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md">
+        <h1 class="text-xl font-bold">OK Mobile</h1>
+      </div>
+
+      <nav class="flex flex-col space-y-4 text-lg">
+        <a href="used.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">สินค้ามือ2</a>
+        <a href="warranty.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">เช็คประกัน</a>
+        <a href="others.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">สินค้าอื่นๆ</a>
+        <a href="transfer.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">แจ้งโอนเงิน</a>
+        <a href="embedded.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">ชำระเงินไฟแนนซ์</a>
+        <a href="map.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">แผนที่ร้าน</a>
+      </nav>
+
+      <!-- ปุ่มเปลี่ยนโหมดกลางวัน/กลางคืน ในเมนู -->
+      <button id="theme-toggle-sidebar" class="mt-8 w-full p-3 rounded bg-blue-500 hover:bg-blue-600 text-white text-center">
+        เปลี่ยนโหมดกลางวัน/กลางคืน
       </button>
     </div>
   </div>
 
-  <!-- เนื้อหาหลักของเว็บไซต์ -->
-  <div id="main-content" class="hidden p-6">
-    <h1 class="text-4xl font-bold mb-4">หน้าเว็บหลักของคุณ</h1>
-    <p>ยินดีต้อนรับ! ตอนนี้คุณสามารถใช้งานเว็บไซต์ได้แล้ว</p>
-  </div>
+  <!-- พื้นที่คลุมหลังเมนู -->
+  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
 
-  <!-- สคริปต์ควบคุมการแสดงผล -->
+  <!-- Hero Section -->
+  <section class="pt-24 min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80')] text-white text-center px-4">
+    <div class="bg-black bg-opacity-70 p-6 rounded-xl w-full max-w-md">
+      <h2 class="text-3xl md:text-5xl font-bold mb-4">ยินดีต้อนรับสู่ OK Mobile</h2>
+      <p class="text-base md:text-xl mb-6">ร้านมือถือ เช็คประกัน ซ่อม ขาย ครบจบในที่เดียว</p>
+      <a href="warranty.html" class="bg-blue-500 hover:bg-blue-600 transition transform hover:scale-105 text-white px-6 py-3 rounded-full text-lg w-full block">เช็คประกันสินค้า</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 dark:bg-gray-900 text-white p-6 text-center">
+    <div class="max-w-6xl mx-auto">
+      <p>ติดต่อร้าน:094-661-3961 | Line:@661qazoc</p>
+      <p class="mt-2 text-sm">© 2021 OK Mobile</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const closeBtn = document.getElementById("close-popup");
-      const popup = document.getElementById("popup");
-      const mainContent = document.getElementById("main-content");
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('overlay');
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleSidebar = document.getElementById('theme-toggle-sidebar');
+    const html = document.documentElement;
 
-      closeBtn.addEventListener("click", function () {
-        popup.style.display = "none";       // ซ่อน Pop-up
-        mainContent.style.display = "block"; // แสดงเนื้อหาเว็บไซต์
-      });
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    });
+
+    overlay.addEventListener('click', () => {
+      mobileMenu.classList.add('-translate-x-full');
+      overlay.classList.add('hidden');
+    });
+
+    const setTheme = (dark) => {
+      if (dark) {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    }
+
+    if (localStorage.getItem('theme') === 'dark') {
+      setTheme(true);
+    }
+
+    themeToggle.addEventListener('click', () => {
+      setTheme(!html.classList.contains('dark'));
+    });
+    themeToggleSidebar.addEventListener('click', () => {
+      setTheme(!html.classList.contains('dark'));
     });
   </script>
 
