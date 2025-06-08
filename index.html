@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OK Mobile - ตลาดอู่ทอง</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -10,6 +10,15 @@
       darkMode: 'class',
     }
   </script>
+  <style>
+    @keyframes ping {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.5); opacity: 0.5; }
+    }
+    .animate-ping {
+      animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+  </style>
 </head>
 <body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-500">
 
@@ -19,8 +28,11 @@
       
       <!-- โลโก้และชื่อ -->
       <div class="flex items-center space-x-2">
-        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md">
-        <h1 class="text-2xl font-bold">OK Mobile อู่ทอง</h1>
+        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md" />
+        <div>
+          <h1 class="text-2xl font-bold">OK Mobile อู่ทอง</h1>
+          <div id="store-status" class="text-sm mt-1 font-medium flex items-center">กำลังโหลดสถานะร้าน...</div>
+        </div>
       </div>
 
       <!-- ปุ่มแฮมเบอร์เกอร์ -->
@@ -32,14 +44,13 @@
       </button>
 
       <!-- เมนูปกติ (Desktop) -->
-      <nav class="hidden md:flex space-x-6 text-lg">
+      <nav class="hidden md:flex space-x-6 text-lg items-center">
         <a href="used.html" class="hover:underline">สินค้ามือ2</a>
         <a href="warranty.html" class="hover:underline">เช็คประกัน</a>
         <a href="others.html" class="hover:underline">สินค้าอื่นๆ</a>
         <a href="transfer.html" class="hover:underline">แจ้งโอนเงิน</a>
         <a href="embedded.html" class="hover:underline">ชำระเงินไฟแนนซ์</a>
         <a href="map.html" class="hover:underline">แผนที่ร้าน</a>
-
         <!-- ปุ่มเปลี่ยนโหมดกลางวัน/กลางคืน -->
         <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40">
           🌓
@@ -52,7 +63,7 @@
   <div id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-300 dark:border-gray-700 transform -translate-x-full transition-transform duration-300 z-40">
     <div class="p-4">
       <div class="flex items-center space-x-2 mb-8">
-        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md">
+        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md" />
         <h1 class="text-xl font-bold">OK Mobile</h1>
       </div>
 
@@ -65,7 +76,6 @@
         <a href="map.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">แผนที่ร้าน</a>
       </nav>
 
-      <!-- ปุ่มเปลี่ยนโหมดกลางวัน/กลางคืน ในเมนู -->
       <button id="theme-toggle-sidebar" class="mt-8 w-full p-3 rounded bg-blue-500 hover:bg-blue-600 text-white text-center">
         เปลี่ยนโหมดกลางวัน/กลางคืน
       </button>
@@ -87,7 +97,7 @@
   <!-- Footer -->
   <footer class="bg-gray-800 dark:bg-gray-900 text-white p-6 text-center">
     <div class="max-w-6xl mx-auto">
-      <p>ติดต่อร้าน:094-661-3961 | Line:@661qazoc</p>
+      <p>ติดต่อร้าน: 094-661-3961 | Line: @661qazoc</p>
       <p class="mt-2 text-sm">© 2021 OK Mobile</p>
     </div>
   </footer>
@@ -101,16 +111,19 @@
     const themeToggleSidebar = document.getElementById('theme-toggle-sidebar');
     const html = document.documentElement;
 
+    // Toggle mobile menu
     menuToggle.addEventListener('click', () => {
       mobileMenu.classList.toggle('-translate-x-full');
       overlay.classList.toggle('hidden');
     });
 
+    // Close mobile menu on overlay click
     overlay.addEventListener('click', () => {
       mobileMenu.classList.add('-translate-x-full');
       overlay.classList.add('hidden');
     });
 
+    // Theme toggle function
     const setTheme = (dark) => {
       if (dark) {
         html.classList.add('dark');
@@ -121,6 +134,7 @@
       }
     }
 
+    // Initialize theme on page load
     if (localStorage.getItem('theme') === 'dark') {
       setTheme(true);
     }
@@ -131,7 +145,45 @@
     themeToggleSidebar.addEventListener('click', () => {
       setTheme(!html.classList.contains('dark'));
     });
-  </script>
 
+    // Update store status
+    function updateStoreStatus() {
+      const statusEl = document.getElementById('store-status');
+      const now = new Date();
+      const day = now.getDay(); // 0 = Sunday, 1 = Monday ...
+      let openHour, closeHour;
+      if (day === 0) { // Sunday
+        openHour = 8;
+        closeHour = 17;
+      } else { // Monday-Saturday
+        openHour = 8;
+        closeHour = 20;
+      }
+
+      const openTime = new Date(now);
+      openTime.setHours(openHour, 0, 0, 0);
+      const closeTime = new Date(now);
+      closeTime.setHours(closeHour, 0, 0, 0);
+
+      const isOpen = now >= openTime && now < closeTime;
+
+      let message = '';
+      let dot = '';
+      if (isOpen) {
+        message = `ร้านเปิดแล้ว (วันนี้ ${openHour}:00 - ${closeHour}:00)`;
+        dot = `<span class="live-dot inline-block w-3 h-3 rounded-full mr-2 bg-green-400 animate-ping"></span>`;
+        statusEl.className = "text-sm mt-1 font-medium text-green-300 flex items-center";
+      } else {
+        message = `ร้านปิดแล้ว (วันนี้เปิด ${openHour}:00 - ${closeHour}:00)`;
+        dot = `<span class="live-dot inline-block w-3 h-3 rounded-full mr-2 bg-red-500"></span>`;
+        statusEl.className = "text-sm mt-1 font-medium text-red-400 flex items-center";
+      }
+
+      statusEl.innerHTML = dot + message;
+    }
+
+    updateStoreStatus();
+    setInterval(updateStoreStatus, 60000);
+  </script>
 </body>
 </html>
