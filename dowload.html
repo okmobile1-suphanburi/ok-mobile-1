@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ศูนย์รวมไฟล์ดาวน์โหลด</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .active-link {
+      text-decoration: underline;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Header -->
+  <header class="text-center py-10 bg-white shadow">
+    <h1 class="text-3xl sm:text-4xl font-bold">ศูนย์รวมไฟล์ดาวน์โหลด</h1>
+    <div class="w-24 h-1 bg-blue-500 mx-auto mt-2 rounded-full"></div>
+  </header>
+
+  <!-- Navbar -->
+  <nav id="navbar" class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white py-4 shadow-md">
+    <ul class="flex flex-wrap justify-center gap-4 text-lg font-medium">
+      <li><a href="#docs" class="nav-link hover:text-yellow-300 transition px-3 py-1 rounded">📑 เอกสาร</a></li>
+      <li><a href="#music" class="nav-link hover:text-yellow-300 transition px-3 py-1 rounded">🎵 เพลง</a></li>
+      <li><a href="#photos" class="nav-link hover:text-yellow-300 transition px-3 py-1 rounded">📷 รูปภาพ</a></li>
+      <li><a href="#apps" class="nav-link hover:text-yellow-300 transition px-3 py-1 rounded">🛠 โปรแกรม</a></li>
+    </ul>
+  </nav>
+
+  <!-- Content -->
+  <main class="max-w-6xl mx-auto py-10 px-4">
+
+    <!-- Docs -->
+    <h2 id="docs" class="text-2xl sm:text-3xl font-semibold mb-4 text-blue-600">📑 เอกสาร</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="ไฟล์ PDF" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">คู่มือการใช้งาน</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1TzUzz987qRq_ytq15vjDY0FRjajnbrYl" 
+           class="inline-block w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow"
+           download>
+          📥 ดาวน์โหลด
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="ไฟล์ Word" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">แบบฟอร์มรายงาน</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDWORD12345" 
+           class="inline-block w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow"
+           download>
+          📥 ดาวน์โหลด
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="ไฟล์ Excel" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">ไฟล์ตาราง Excel</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDEXCEL12345" 
+           class="inline-block w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow"
+           download>
+          📥 ดาวน์โหลด
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Music -->
+    <h2 id="music" class="text-2xl sm:text-3xl font-semibold mb-4 text-purple-600">🎵 เพลง / เสียง</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="เพลง" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">เพลงประกอบ</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDMUSIC1" 
+           class="inline-block w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow"
+           download>
+          🎶 ดาวน์โหลด
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="เสียงเอฟเฟกต์" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">เสียงเอฟเฟกต์</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDMUSIC2" 
+           class="inline-block w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow"
+           download>
+          🎶 ดาวน์โหลด
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Photos -->
+    <h2 id="photos" class="text-2xl sm:text-3xl font-semibold mb-4 text-red-600">📷 รูปภาพ</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="ภาพ1" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">ภาพตัวอย่าง 1</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDPHOTO1" 
+           class="inline-block w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow"
+           download>
+          🖼 ดาวน์โหลด
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="ภาพ2" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">ภาพตัวอย่าง 2</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDPHOTO2" 
+           class="inline-block w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow"
+           download>
+          🖼 ดาวน์โหลด
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Apps -->
+    <h2 id="apps" class="text-2xl sm:text-3xl font-semibold mb-4 text-orange-600">🛠 โปรแกรม</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="โปรแกรม1" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">โปรแกรมทดลอง 1</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDAPP1" 
+           class="inline-block w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg shadow"
+           download>
+          ⚙ ดาวน์โหลด
+        </a>
+      </div>
+
+      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
+        <img src="https://via.placeholder.com/150" alt="โปรแกรม2" class="mx-auto rounded-lg mb-3 w-full h-auto">
+        <h3 class="font-semibold mb-2">โปรแกรมทดลอง 2</h3>
+        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDAPP2" 
+           class="inline-block w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg shadow"
+           download>
+          ⚙ ดาวน์โหลด
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white text-center py-6 mt-10">
+    <p>© 2025 ศูนย์รวมไฟล์ดาวน์โหลด | พัฒนาโดย OK Mobile</p>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const sections = document.querySelectorAll("h2[id]");
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    window.addEventListener("scroll", () => {
+      let current = "";
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 150;
+        if (pageYOffset >= sectionTop) current = section.getAttribute("id");
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove("active-link");
+        if (link.getAttribute("href") === "#" + current) link.classList.add("active-link");
+      });
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener("click", function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute("href")).scrollIntoView({behavior: "smooth"});
+      });
+    });
+  </script>
+
+</body>
+</html>
