@@ -6,6 +6,7 @@
   <title>รับคูปอง OK Mobile</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-purple-200 via-pink-200 to-yellow-200 min-h-screen flex flex-col items-center p-4">
 
@@ -17,6 +18,7 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqMwRg9UE6Ha51MIikUI5cXAfhfufKbkun_eOdjKjT9E0QGOLWvFUHoUKaTPFnvtsI/exec";
     const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbQLWeunt6AJ2Fx4rOxDL6-pLIQVaLjodFOCFY-6ZdqbUW7pDpsom6AEWnLBPRbADfR0LHPTH7-M9u/pub?gid=0&single=true&output=csv";
 
+    // สร้าง device_id สำหรับแต่ละเครื่อง
     function getDeviceId() {
       let id = localStorage.getItem("device_id");
       if (!id) {
@@ -29,11 +31,12 @@
     async function loadCoupons() {
       const res = await fetch(SHEET_CSV_URL);
       const text = await res.text();
-      const rows = text.trim().split("\n").slice(1); // skip header
+      const parsed = Papa.parse(text, { header: true });
+      const rows = parsed.data;
       const container = document.getElementById("coupon-container");
 
       rows.forEach((row, index) => {
-        const [title, description, color, line_url] = row.split(",");
+        const { title, description, color, line_url } = row;
 
         const div = document.createElement("div");
         div.className = "bg-white shadow-2xl rounded-3xl p-6 text-center relative overflow-hidden";
@@ -42,7 +45,9 @@
           <h2 class="text-2xl font-bold mb-4" style="color:${color}">${title}</h2>
           <p class="mb-6 text-gray-700">${description}</p>
           <a href="${line_url}" target="_blank" class="block bg-green-500 text-white px-5 py-3 rounded-xl font-bold text-lg hover:bg-green-600 transition mb-3 add-line-btn">➕ เพิ่มเพื่อน LINE</a>
-          <button class="bg-[${color}] text-white px-5 py-3 rounded-xl font-bold text-lg hover:opacity-90 transition get-code-btn disabled:opacity-50 w-full" disabled>🎟️ รับคูปอง</button>
+          <button style="background-color:${color};"
+                  class="text-white px-5 py-3 rounded-xl font-bold text-lg hover:opacity-90 transition get-code-btn disabled:opacity-50 w-full"
+                  disabled>🎟️ รับคูปอง</button>
           <p class="mt-4 font-bold result" style="color:${color}"></p>
         `;
         container.appendChild(div);
@@ -55,10 +60,11 @@
       document.querySelectorAll(".add-line-btn").forEach((btn) => {
         const getCodeBtn = btn.nextElementSibling;
         btn.addEventListener("click", () => {
+          // ปลดล็อกปุ่มหลังเพิ่มเพื่อน
           setTimeout(() => {
             getCodeBtn.disabled = false;
             alert("✅ คุณได้เพิ่มเพื่อน LINE แล้ว กดรับคูปองได้เลย!");
-          }, 1500);
+          }, 500);
         });
       });
 
@@ -67,20 +73,25 @@
           const resultElem = btn.parentElement.querySelector(".result");
           const deviceId = getDeviceId();
 
-          const res = await fetch(`${SCRIPT_URL}?device_id=${deviceId}&coupon_id=${index}`);
-          const data = await res.json();
+          try {
+            const res = await fetch(`${SCRIPT_URL}?device_id=${deviceId}&coupon_id=${index}`);
+            const data = await res.json();
 
-          if (data.status === "ok") {
-            resultElem.textContent = "🎉 โค้ดของคุณ: " + data.code;
-            const color = btn.parentElement.querySelector("h2").style.color;
-            confetti({
-              particleCount: 100,
-              spread: 70,
-              origin: { y: 0.6 },
-              colors: [color, "#fff", "#ffd700"]
-            });
-          } else {
-            resultElem.textContent = "⚠️ " + data.message;
+            if (data.status === "ok") {
+              resultElem.textContent = "🎉 โค้ดของคุณ: " + data.code;
+              const color = btn.parentElement.querySelector("h2").style.color;
+              confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: [color, "#fff", "#ffd700"]
+              });
+            } else {
+              resultElem.textContent = "⚠️ " + data.message;
+            }
+          } catch (err) {
+            console.error(err);
+            resultElem.textContent = "⚠️ เกิดข้อผิดพลาด โปรดลองใหม่";
           }
         });
       });
