@@ -3,181 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ศูนย์รวมไฟล์ดาวน์โหลด</title>
+  <title>รับคูปอง OK Mobile</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .active-link {
-      text-decoration: underline;
-      font-weight: bold;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gradient-to-br from-purple-200 via-pink-200 to-yellow-200 min-h-screen flex flex-col items-center p-4">
 
-  <!-- Header -->
-  <header class="text-center py-10 bg-white shadow">
-    <h1 class="text-3xl sm:text-4xl font-bold">ศูนย์รวมไฟล์ดาวน์โหลด</h1>
-    <div class="w-24 h-1 bg-blue-500 mx-auto mt-2 rounded-full"></div>
-  </header>
+  <h1 class="text-4xl font-extrabold text-purple-700 my-6 text-center">🎁 คูปองโปรโมชั่น OK Mobile</h1>
 
-  <!-- Navbar -->
-  <nav id="navbar" class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white py-4 shadow-md">
-    <ul class="flex flex-wrap justify-center gap-4 text-lg font-medium">
-      <li><a href="#docs" class="nav-link hover:text-yellow-300 transition px-3 py-1 rounded">📑 เอกสาร</a></li>
-      <li><a href="#music" class="nav-link hover:text-yellow-300 transition px-3 py-1 rounded">🎵 เพลง</a></li>
-      <li><a href="#photos" class="nav-link hover:text-yellow-300 transition px-3 py-1 rounded">📷 รูปภาพ</a></li>
-      <li><a href="#apps" class="nav-link hover:text-yellow-300 transition px-3 py-1 rounded">🛠 โปรแกรม</a></li>
-    </ul>
-  </nav>
+  <div id="coupon-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-6xl w-full"></div>
 
-  <!-- Content -->
-  <main class="max-w-6xl mx-auto py-10 px-4">
-
-    <!-- Docs -->
-    <h2 id="docs" class="text-2xl sm:text-3xl font-semibold mb-4 text-blue-600">📑 เอกสาร</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="ไฟล์ PDF" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">คู่มือการใช้งาน</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1TzUzz987qRq_ytq15vjDY0FRjajnbrYl" 
-           class="inline-block w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow"
-           download>
-          📥 ดาวน์โหลด
-        </a>
-      </div>
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="ไฟล์ Word" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">แบบฟอร์มรายงาน</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDWORD12345" 
-           class="inline-block w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow"
-           download>
-          📥 ดาวน์โหลด
-        </a>
-      </div>
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="ไฟล์ Excel" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">ไฟล์ตาราง Excel</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDEXCEL12345" 
-           class="inline-block w-full px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg shadow"
-           download>
-          📥 ดาวน์โหลด
-        </a>
-      </div>
-
-    </div>
-
-    <!-- Music -->
-    <h2 id="music" class="text-2xl sm:text-3xl font-semibold mb-4 text-purple-600">🎵 เพลง / เสียง</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="เพลง" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">เพลงประกอบ</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDMUSIC1" 
-           class="inline-block w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow"
-           download>
-          🎶 ดาวน์โหลด
-        </a>
-      </div>
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="เสียงเอฟเฟกต์" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">เสียงเอฟเฟกต์</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDMUSIC2" 
-           class="inline-block w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow"
-           download>
-          🎶 ดาวน์โหลด
-        </a>
-      </div>
-
-    </div>
-
-    <!-- Photos -->
-    <h2 id="photos" class="text-2xl sm:text-3xl font-semibold mb-4 text-red-600">📷 รูปภาพ</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="ภาพ1" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">ภาพตัวอย่าง 1</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDPHOTO1" 
-           class="inline-block w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow"
-           download>
-          🖼 ดาวน์โหลด
-        </a>
-      </div>
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="ภาพ2" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">ภาพตัวอย่าง 2</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDPHOTO2" 
-           class="inline-block w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow"
-           download>
-          🖼 ดาวน์โหลด
-        </a>
-      </div>
-
-    </div>
-
-    <!-- Apps -->
-    <h2 id="apps" class="text-2xl sm:text-3xl font-semibold mb-4 text-orange-600">🛠 โปรแกรม</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-10">
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="โปรแกรม1" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">โปรแกรมทดลอง 1</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDAPP1" 
-           class="inline-block w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg shadow"
-           download>
-          ⚙ ดาวน์โหลด
-        </a>
-      </div>
-
-      <div class="bg-white shadow-md rounded-xl p-4 text-center hover:shadow-xl hover:-translate-y-1 transition">
-        <img src="https://via.placeholder.com/150" alt="โปรแกรม2" class="mx-auto rounded-lg mb-3 w-full h-auto">
-        <h3 class="font-semibold mb-2">โปรแกรมทดลอง 2</h3>
-        <a href="https://drive.google.com/uc?export=download&id=1FAKEFILEIDAPP2" 
-           class="inline-block w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg shadow"
-           download>
-          ⚙ ดาวน์โหลด
-        </a>
-      </div>
-
-    </div>
-
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-gray-800 text-white text-center py-6 mt-10">
-    <p>© 2025 ศูนย์รวมไฟล์ดาวน์โหลด | พัฒนาโดย OK Mobile</p>
-  </footer>
-
-  <!-- Script -->
   <script>
-    const sections = document.querySelectorAll("h2[id]");
-    const navLinks = document.querySelectorAll(".nav-link");
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqMwRg9UE6Ha51MIikUI5cXAfhfufKbkun_eOdjKjT9E0QGOLWvFUHoUKaTPFnvtsI/exec";
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbQLWeunt6AJ2Fx4rOxDL6-pLIQVaLjodFOCFY-6ZdqbUW7pDpsom6AEWnLBPRbADfR0LHPTH7-M9u/pub?gid=0&single=true&output=csv";
 
-    window.addEventListener("scroll", () => {
-      let current = "";
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop - 150;
-        if (pageYOffset >= sectionTop) current = section.getAttribute("id");
+    function getDeviceId() {
+      let id = localStorage.getItem("device_id");
+      if (!id) {
+        id = "dev-" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("device_id", id);
+      }
+      return id;
+    }
+
+    async function loadCoupons() {
+      const res = await fetch(SHEET_CSV_URL);
+      const text = await res.text();
+      const rows = text.trim().split("\n").slice(1); // skip header
+      const container = document.getElementById("coupon-container");
+
+      rows.forEach((row, index) => {
+        const [title, description, color, line_url] = row.split(",");
+
+        const div = document.createElement("div");
+        div.className = "bg-white shadow-2xl rounded-3xl p-6 text-center relative overflow-hidden";
+
+        div.innerHTML = `
+          <h2 class="text-2xl font-bold mb-4" style="color:${color}">${title}</h2>
+          <p class="mb-6 text-gray-700">${description}</p>
+          <a href="${line_url}" target="_blank" class="block bg-green-500 text-white px-5 py-3 rounded-xl font-bold text-lg hover:bg-green-600 transition mb-3 add-line-btn">➕ เพิ่มเพื่อน LINE</a>
+          <button class="bg-[${color}] text-white px-5 py-3 rounded-xl font-bold text-lg hover:opacity-90 transition get-code-btn disabled:opacity-50 w-full" disabled>🎟️ รับคูปอง</button>
+          <p class="mt-4 font-bold result" style="color:${color}"></p>
+        `;
+        container.appendChild(div);
       });
 
-      navLinks.forEach(link => {
-        link.classList.remove("active-link");
-        if (link.getAttribute("href") === "#" + current) link.classList.add("active-link");
-      });
-    });
+      setupButtons();
+    }
 
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener("click", function(e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute("href")).scrollIntoView({behavior: "smooth"});
+    function setupButtons() {
+      document.querySelectorAll(".add-line-btn").forEach((btn) => {
+        const getCodeBtn = btn.nextElementSibling;
+        btn.addEventListener("click", () => {
+          setTimeout(() => {
+            getCodeBtn.disabled = false;
+            alert("✅ คุณได้เพิ่มเพื่อน LINE แล้ว กดรับคูปองได้เลย!");
+          }, 1500);
+        });
       });
-    });
+
+      document.querySelectorAll(".get-code-btn").forEach((btn, index) => {
+        btn.addEventListener("click", async () => {
+          const resultElem = btn.parentElement.querySelector(".result");
+          const deviceId = getDeviceId();
+
+          const res = await fetch(`${SCRIPT_URL}?device_id=${deviceId}&coupon_id=${index}`);
+          const data = await res.json();
+
+          if (data.status === "ok") {
+            resultElem.textContent = "🎉 โค้ดของคุณ: " + data.code;
+            const color = btn.parentElement.querySelector("h2").style.color;
+            confetti({
+              particleCount: 100,
+              spread: 70,
+              origin: { y: 0.6 },
+              colors: [color, "#fff", "#ffd700"]
+            });
+          } else {
+            resultElem.textContent = "⚠️ " + data.message;
+          }
+        });
+      });
+    }
+
+    loadCoupons();
   </script>
 
 </body>
