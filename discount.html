@@ -1,21 +1,88 @@
-<button id="getCouponBtn">รับคูปอง</button>
-<div id="couponCode"></div>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รับคูปอง OK Mobile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-200 via-pink-200 to-yellow-200 min-h-screen flex flex-col items-center p-4">
 
-<script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz88gEDr3AeoJmHDgcwjabwk08NL5Nx5x1E8n6Ia3DohIv7V3fXrj-tbIzoLa7bSqG4/exec";
+  <h1 class="text-4xl font-extrabold text-purple-700 my-6 text-center">🎁 คูปองโปรโมชั่น OK Mobile</h1>
 
-  document.getElementById('getCouponBtn').addEventListener('click', async function() {
-    const deviceId = localStorage.getItem('device_id') || ("dev-" + Math.random().toString(36).substr(2,9));
-    localStorage.setItem('device_id', deviceId);
+  <div id="coupon-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-6xl w-full"></div>
 
-    const response = await fetch(`${SCRIPT_URL}?device_id=${deviceId}&coupon_id=0`);
-    const data = await response.json();
+  <script>
+    // ใส่ URL Web App ของคุณ
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz88gEDr3AeoJmHDgcwjabwk08NL5Nx5x1E8n6Ia3DohIv7V3fXrj-tbIzoLa7bSqG4/exec";
 
-    if(data.status === "ok") {
-      document.getElementById('couponCode').innerText = "โค้ดคูปองของคุณ: " + data.code;
-      alert("โค้ดของคุณ: " + data.code);
-    } else {
-      alert(data.message);
+    // คูปองตัวอย่าง (ต้องตรงกับ Google Sheet)
+    const coupons = [
+      { title: "ส่วนลดมือถือ", description: "ลดทันที 500 บาท", color: "#f43f5e", line_url: "https://line.me/ti/p/xxx" },
+      { title: "ฟิล์มกันรอยฟรี", description: "แถมฟรีเมื่อซื้อมือถือ", color: "#3b82f6", line_url: "https://line.me/ti/p/yyy" },
+      { title: "เคสมือถือฟรี", description: "แถมเคสเมื่อซื้อสินค้า", color: "#10b981", line_url: "https://line.me/ti/p/zzz" }
+    ];
+
+    function getDeviceId() {
+      let id = localStorage.getItem("device_id");
+      if (!id) {
+        id = "dev-" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("device_id", id);
+      }
+      return id;
     }
-  });
-</script>
+
+    const container = document.getElementById("coupon-container");
+
+    coupons.forEach((c, index) => {
+      const div = document.createElement("div");
+      div.className = "bg-white shadow-2xl rounded-3xl p-6 text-center relative overflow-hidden";
+      div.innerHTML = `
+        <h2 class="text-2xl font-bold mb-4" style="color:${c.color}">${c.title}</h2>
+        <p class="mb-6 text-gray-700">${c.description}</p>
+        <a href="${c.line_url}" target="_blank" class="block bg-green-500 text-white px-5 py-3 rounded-xl font-bold text-lg hover:bg-green-600 transition mb-3 add-line-btn">➕ เพิ่มเพื่อน LINE</a>
+        <button style="background-color:${c.color};"
+                class="text-white px-5 py-3 rounded-xl font-bold text-lg hover:opacity-90 transition get-code-btn disabled:opacity-50 w-full"
+                disabled>🎟️ รับคูปอง</button>
+        <p class="mt-4 font-bold result" style="color:${c.color}"></p>
+      `;
+      container.appendChild(div);
+    });
+
+    // ปลดล็อกปุ่มรับคูปองหลังเพิ่มเพื่อน LINE
+    document.querySelectorAll(".add-line-btn").forEach((btn) => {
+      const getCodeBtn = btn.nextElementSibling;
+      btn.addEventListener("click", () => {
+        setTimeout(() => {
+          getCodeBtn.disabled = false;
+          alert("✅ คุณได้เพิ่มเพื่อน LINE แล้ว กดรับคูปองได้เลย!");
+        }, 500);
+      });
+    });
+
+    // รับคูปองจาก Web App
+    document.querySelectorAll(".get-code-btn").forEach((btn, index) => {
+      btn.addEventListener("click", async () => {
+        const resultElem = btn.parentElement.querySelector(".result");
+        const deviceId = getDeviceId();
+
+        try {
+          const res = await fetch(`${SCRIPT_URL}?device_id=${deviceId}&coupon_id=${index}`);
+          const data = await res.json();
+
+          if (data.status === "ok") {
+            resultElem.textContent = "🎉 โค้ดของคุณ: " + data.code;
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: [btn.style.backgroundColor, "#fff", "#ffd700"] });
+          } else {
+            resultElem.textContent = "⚠️ " + data.message;
+          }
+        } catch (err) {
+          resultElem.textContent = "⚠️ เกิดข้อผิดพลาด โปรดลองใหม่";
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
