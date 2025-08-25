@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>รับคูปอง OK Mobile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-200 via-pink-200 to-yellow-200 min-h-screen flex flex-col items-center p-4">
+
+  <h1 class="text-4xl font-extrabold text-purple-700 my-6 text-center">🎁 คูปองโปรโมชั่น OK Mobile</h1>
+
+  <div id="coupon-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-6xl w-full"></div>
+
+  <!-- Toast แจ้งเตือน -->
+  <div id="toast" class="fixed bottom-4 right-4 bg-green-600 text-white px-4 py-2 rounded-lg shadow-xl hidden z-50"></div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqMwRg9UE6Ha51MIikUI5cXAfhfufKbkun_eOdjKjT9E0QGOLWvFUHoUKaTPFnvtsI/exec";
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSbQLWeunt6AJ2Fx4rOxDL6-pLIQVaLjodFOCFY-6ZdqbUW7pDpsom6AEWnLBPRbADfR0LHPTH7-M9u/pub?gid=0&single=true&output=csv";
+
+    function showToast(msg, color="bg-green-600") {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.className = `fixed bottom-4 right-4 text-white px-4 py-2 rounded-lg shadow-xl z-50 ${color}`;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 3000);
+    }
+
+    function getDeviceId() {
+      let id = localStorage.getItem("device_id");
+      if (!id) {
+        id = "dev-" + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem("device_id", id);
+      }
+      return id;
+    }
+
+    async function loadCoupons() {
+      const res = await fetch(SHEET_CSV_URL);
+      const text = await res.text();
+      const parsed = Papa.parse(text, { header: true });
+      const rows = parsed.data;
+      const container = document.getElementById("coupon-container");
+
+      const today = new Date();
+
+      rows.forEach((row, index) => {
+        if (!row.title || !row.line_url) return; // ข้ามแถวว่าง
+
+        const expiryDate = row.expiry_date ? new Date(row.expiry_date) : null;
+        const isExpired = expiryDate && expiryDate < today;
+
+        const div = document.createElement("div");
+        div.className = "bg-white shadow-2xl rounded-3xl p-6 text-center relative overflow-hidden";
+
+        div.innerHTML = `
+          <h2 class="text-2xl font-bold mb-4" style="color:${row.color}">${row.title}</h2>
+          <p class="mb-3 text-gray-700">${row.description}</p>
+          ${expiryDate ? `<p class="mb-3 text-sm text-gray-500">⏳ ใช้ได้ถึง: ${expiryDate.toLocaleDateString("th-TH")}</p>` : ""}
+          <a href="${row.line_url}" target="_blank" class="block bg-green-500 text-white px-5 py-3 rounded-xl font-bold text-lg hover:bg-green-600 transition mb-3 add-line-btn">➕ เพิ่มเพื่อน LINE</a>
+          <button style="background-color:${row.color};"
+                  class="text-white px-5 py-3 rounded-xl font-bold text-lg hover:opacity-90 transition get-code-btn disabled:opacity-50 w-full"
+                  ${isExpired ? "disabled" : "disabled"}>🎟️ รับคูปอง</button>
+          <p class="mt-4 font-bold result" style="color:${row.color}">${isExpired ? "⏰ คูปองนี้หมดอายุแล้ว" : ""}</p>
+        `;
+        container.appendChild(div);
+      });
+
+      setupButtons();
+    }
+
+    function setupButtons() {
+      const usedCoupons = JSON.parse(localStorage.getItem("used_coupons") || "[]");
+
+      document.querySelectorAll(".add-line-btn").forEach((btn, index) => {
+        const getCodeBtn = btn.nextElementSibling;
+        const resultElem = btn.parentElement.querySelector(".result");
+
+        // ถ้าเคยรับคูปองนี้แล้ว
+        if (usedCoupons.includes(index)) {
+          getCodeBtn.disabled = true;
+          resultElem.textContent = "🎟️ คุณรับคูปองนี้ไปแล้ว";
+          return;
+        }
+
+        // ถ้าหมดอายุแล้ว ข้าม
+        if (resultElem.textContent.includes("หมดอายุ")) return;
+
+        btn.addEventListener("click", () => {
+          setTimeout(() => {
+            getCodeBtn.disabled = false;
+            showToast("✅ คุณได้เพิ่มเพื่อน LINE แล้ว กดรับคูปองได้เลย!");
+          }, 500);
+        });
+      });
+
+      document.querySelectorAll(".get-code-btn").forEach((btn, index) => {
+        btn.addEventListener("click", async () => {
+          const resultElem = btn.parentElement.querySelector(".result");
+          if (resultElem.textContent.includes("หมดอายุ")) return;
+
+          const deviceId = getDeviceId();
+
+          try {
+            const res = await fetch(`${SCRIPT_URL}?device_id=${deviceId}&coupon_id=${index}`);
+            const data = await res.json();
+
+            if (data.status === "ok") {
+              resultElem.textContent = "🎉 โค้ดของคุณ: " + data.code;
+              const color = btn.parentElement.querySelector("h2").style.color;
+              confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: [color, "#fff", "#ffd700"]
+              });
+
+              // บันทึกว่าใช้แล้ว
+              const usedCoupons = JSON.parse(localStorage.getItem("used_coupons") || "[]");
+              usedCoupons.push(index);
+              localStorage.setItem("used_coupons", JSON.stringify(usedCoupons));
+              btn.disabled = true;
+
+            } else {
+              resultElem.textContent = "⚠️ " + data.message;
+              showToast("⚠️ " + data.message, "bg-red-600");
+            }
+          } catch (err) {
+            console.error(err);
+            resultElem.textContent = "⚠️ เกิดข้อผิดพลาด โปรดลองใหม่";
+            showToast("⚠️ เกิดข้อผิดพลาด โปรดลองใหม่", "bg-red-600");
+          }
+        });
+      });
+    }
+
+    loadCoupons();
+  </script>
+
+</body>
+</html>
