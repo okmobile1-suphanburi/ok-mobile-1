@@ -14,14 +14,12 @@
   <div id="coupon-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-6xl w-full"></div>
 
   <script>
-    // ใส่ URL Web App ของคุณ
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz88gEDr3AeoJmHDgcwjabwk08NL5Nx5x1E8n6Ia3DohIv7V3fXrj-tbIzoLa7bSqG4/exec";
 
-    // คูปองตัวอย่าง (ต้องตรงกับ Google Sheet)
     const coupons = [
-      { title: "ส่วนลดมือถือ", description: "ลดทันที 500 บาท", color: "#f43f5e", line_url: "https://line.me/ti/p/xxx" },
-      { title: "ฟิล์มกันรอยฟรี", description: "แถมฟรีเมื่อซื้อมือถือ", color: "#3b82f6", line_url: "https://line.me/ti/p/yyy" },
-      { title: "เคสมือถือฟรี", description: "แถมเคสเมื่อซื้อสินค้า", color: "#10b981", line_url: "https://line.me/ti/p/zzz" }
+      { title: "ส่วนลดมือถือ", description: "ลดทันที 500 บาท", color: "#f43f5e", line_url: "https://lin.ee/B63EGhv" },
+      { title: "ฟิล์มกันรอยฟรี", description: "แถมฟรีเมื่อซื้อมือถือ", color: "#3b82f6", line_url: "https://lin.ee/B63EGhv" },
+      { title: "เคสมือถือฟรี", description: "แถมเคสเมื่อซื้อสินค้า", color: "#10b981", line_url: "https://lin.ee/B63EGhv" }
     ];
 
     function getDeviceId() {
@@ -41,7 +39,11 @@
       div.innerHTML = `
         <h2 class="text-2xl font-bold mb-4" style="color:${c.color}">${c.title}</h2>
         <p class="mb-6 text-gray-700">${c.description}</p>
-        <a href="${c.line_url}" target="_blank" class="block bg-green-500 text-white px-5 py-3 rounded-xl font-bold text-lg hover:bg-green-600 transition mb-3 add-line-btn">➕ เพิ่มเพื่อน LINE</a>
+        <a href="#"
+           onclick="window.open('${c.line_url}','_blank'); return false;"
+           class="block bg-green-500 text-white px-5 py-3 rounded-xl font-bold text-lg hover:bg-green-600 transition mb-3 add-line-btn">
+           ➕ เพิ่มเพื่อน LINE
+        </a>
         <button style="background-color:${c.color};"
                 class="text-white px-5 py-3 rounded-xl font-bold text-lg hover:opacity-90 transition get-code-btn disabled:opacity-50 w-full"
                 disabled>🎟️ รับคูปอง</button>
@@ -50,7 +52,6 @@
       container.appendChild(div);
     });
 
-    // ปลดล็อกปุ่มรับคูปองหลังเพิ่มเพื่อน LINE
     document.querySelectorAll(".add-line-btn").forEach((btn) => {
       const getCodeBtn = btn.nextElementSibling;
       btn.addEventListener("click", () => {
@@ -61,7 +62,6 @@
       });
     });
 
-    // รับคูปองจาก Web App
     document.querySelectorAll(".get-code-btn").forEach((btn, index) => {
       btn.addEventListener("click", async () => {
         const resultElem = btn.parentElement.querySelector(".result");
