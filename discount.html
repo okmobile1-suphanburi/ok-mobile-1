@@ -13,7 +13,28 @@
 
   <div id="coupon-container" class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-6xl w-full"></div>
 
+  <!-- ปุ่มกลับหน้าแรกใต้คูปอง -->
+  <a href="index.html" id="backBtn"
+     class="mt-8 bg-white shadow-lg text-purple-700 px-6 py-3 rounded-full font-bold hover:bg-purple-100 transition flex items-center space-x-2 transform">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+    <span>หน้าแรก</span>
+  </a>
+
   <script>
+    // แอนิเมชันปุ่มกลับหน้าแรก
+    const backBtn = document.getElementById("backBtn");
+    backBtn.addEventListener("mousedown", () => {
+      backBtn.classList.add("scale-95", "bg-purple-200");
+    });
+    backBtn.addEventListener("mouseup", () => {
+      backBtn.classList.remove("scale-95", "bg-purple-200");
+    });
+    backBtn.addEventListener("mouseleave", () => {
+      backBtn.classList.remove("scale-95", "bg-purple-200");
+    });
+
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz88gEDr3AeoJmHDgcwjabwk08NL5Nx5x1E8n6Ia3DohIv7V3fXrj-tbIzoLa7bSqG4/exec";
 
     const coupons = [
@@ -32,65 +53,71 @@
 
     const container = document.getElementById("coupon-container");
 
-    coupons.forEach((c, index) => {
-      const div = document.createElement("div");
-      div.className = "bg-white shadow-2xl rounded-3xl p-6 text-center relative overflow-hidden";
-      div.innerHTML = `
-        <h2 class="text-2xl font-bold mb-4" style="color:${c.color}">${c.title}</h2>
-        <p class="mb-6 text-gray-700">${c.description}</p>
-        <a href="#"
-           onclick="window.open('${c.line_url}','_blank'); return false;"
-           class="block bg-green-500 text-white px-5 py-3 rounded-xl font-bold text-lg hover:bg-green-600 transition mb-3 add-line-btn">
-           ➕ เพิ่มเพื่อน LINE
-        </a>
-        <button style="background-color:${c.color};"
-                class="text-white px-5 py-3 rounded-xl font-bold text-lg hover:opacity-90 transition get-code-btn disabled:opacity-50 w-full"
-                disabled>🎟️ รับคูปอง</button>
-        <p class="mt-4 font-bold result" style="color:${c.color}"></p>
-      `;
-      container.appendChild(div);
-    });
-
-    document.querySelectorAll(".add-line-btn").forEach((btn) => {
-      const getCodeBtn = btn.nextElementSibling;
-      btn.addEventListener("click", () => {
-        setTimeout(() => {
-          getCodeBtn.disabled = false;
-          alert("✅ คุณได้เพิ่มเพื่อน LINE แล้ว กดรับคูปองได้เลย!");
-        }, 500);
+    function renderCoupons() {
+      container.innerHTML = "";
+      coupons.forEach((c, index) => {
+        const div = document.createElement("div");
+        div.className = "bg-white shadow-2xl rounded-3xl p-6 text-center relative overflow-hidden";
+        div.innerHTML = `
+          <h2 class="text-2xl font-bold mb-4" style="color:${c.color}">${c.title}</h2>
+          <p class="mb-6 text-gray-700">${c.description}</p>
+          <a href="#"
+             onclick="window.open('${c.line_url}','_blank'); return false;"
+             class="block bg-green-500 text-white px-5 py-3 rounded-xl font-bold text-lg hover:bg-green-600 transition mb-3 add-line-btn">
+             ➕ เพิ่มเพื่อน LINE
+          </a>
+          <button style="background-color:${c.color};"
+                  class="text-white px-5 py-3 rounded-xl font-bold text-lg hover:opacity-90 transition get-code-btn disabled:opacity-50 w-full"
+                  disabled>🎟️ รับคูปอง</button>
+          <p class="mt-4 font-bold result" style="color:${c.color}"></p>
+        `;
+        container.appendChild(div);
       });
-    });
 
-    document.querySelectorAll(".get-code-btn").forEach((btn, index) => {
-      btn.addEventListener("click", async () => {
-        const resultElem = btn.parentElement.querySelector(".result");
-        const deviceId = getDeviceId();
+      // ตั้ง event listener หลัง render
+      document.querySelectorAll(".add-line-btn").forEach((btn) => {
+        const getCodeBtn = btn.nextElementSibling;
+        btn.addEventListener("click", () => {
+          setTimeout(() => {
+            getCodeBtn.disabled = false;
+            alert("✅ คุณได้เพิ่มเพื่อน LINE แล้ว กดรับคูปองได้เลย!");
+          }, 500);
+        });
+      });
 
-        // ป้องกันกดซ้ำ + แสดงสถานะโหลด
-        btn.disabled = true;
-        const originalText = btn.textContent;
-        btn.textContent = "⏳ กำลังโหลด...";
+      document.querySelectorAll(".get-code-btn").forEach((btn, index) => {
+        btn.addEventListener("click", async () => {
+          const resultElem = btn.parentElement.querySelector(".result");
+          const deviceId = getDeviceId();
 
-        try {
-          const res = await fetch(`${SCRIPT_URL}?device_id=${deviceId}&coupon_id=${index}`);
-          const data = await res.json();
+          btn.disabled = true;
+          const originalText = btn.textContent;
+          btn.textContent = "⏳ กำลังโหลด...";
 
-          if (data.status === "ok") {
-            resultElem.textContent = "🎉 โค้ดของคุณ: " + data.code;
-            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: [btn.style.backgroundColor, "#fff", "#ffd700"] });
-            btn.textContent = "✅ รับแล้ว";
-          } else {
-            resultElem.textContent = "⚠️ " + data.message;
+          try {
+            const res = await fetch(`${SCRIPT_URL}?device_id=${deviceId}&coupon_id=${index}`);
+            const data = await res.json();
+
+            if (data.status === "ok") {
+              resultElem.textContent = "🎉 โค้ดของคุณ: " + data.code;
+              confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: [btn.style.backgroundColor, "#fff", "#ffd700"] });
+              btn.textContent = "✅ รับแล้ว";
+            } else {
+              resultElem.textContent = "⚠️ " + data.message;
+              btn.disabled = false;
+              btn.textContent = originalText;
+            }
+          } catch (err) {
+            resultElem.textContent = "⚠️ เกิดข้อผิดพลาด โปรดลองใหม่";
             btn.disabled = false;
             btn.textContent = originalText;
           }
-        } catch (err) {
-          resultElem.textContent = "⚠️ เกิดข้อผิดพลาด โปรดลองใหม่";
-          btn.disabled = false;
-          btn.textContent = originalText;
-        }
+        });
       });
-    });
+    }
+
+    // แสดงคูปองครั้งแรก
+    renderCoupons();
   </script>
 
 </body>
