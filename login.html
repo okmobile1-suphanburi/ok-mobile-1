@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OK Mobile - Login</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+body { background: linear-gradient(to right,#6a11cb,#2575fc); font-family:'Prompt',sans-serif; }
+.fade-in { animation: fadeIn 0.8s ease forwards; }
+@keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
+.spinner { border:3px solid #f3f3f3; border-top:3px solid #3498db; border-radius:50%; width:18px; height:18px; animation:spin 1s linear infinite; display:inline-block; vertical-align:middle; margin-right:5px;}
+@keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
+.btn-glow { transition:all 0.3s ease; }
+.btn-glow:hover { box-shadow:0 0 15px rgba(255,255,255,0.6); transform:translateY(-2px);}
+.check-icon { position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:1rem;}
+.error-msg { color:red; font-size:0.85rem; margin-top:-0.5rem; margin-bottom:0.5rem; }
+.success-msg { color:green; font-size:0.85rem; margin-top:-0.5rem; margin-bottom:0.5rem; }
+</style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+<div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md p-8 fade-in relative">
+
+  <!-- ปุ่มกลับหน้าแรกเด่นขึ้น -->
+  <button onclick="goHome()" 
+    class="absolute top-4 left-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
+    ← หน้าแรก
+  </button>
+
+  <div class="flex justify-center mb-6">
+    <img src="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/main/images/ok-mobile-logo.jpg" alt="OK Mobile Logo" class="w-24 h-24 rounded-full shadow-lg border-4 border-white object-contain">
+  </div>
+
+  <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">OK Mobile</h2>
+
+  <!-- Tabs -->
+  <div class="flex justify-center mb-6">
+    <button id="loginTab" class="px-4 py-2 font-semibold text-blue-600 border-b-2 border-blue-600">เข้าสู่ระบบ</button>
+    <button id="registerTab" class="px-4 py-2 font-semibold text-gray-500 hover:text-blue-600">สมัครสมาชิก</button>
+    <button id="forgotTab" class="px-4 py-2 font-semibold text-gray-500 hover:text-blue-600">ลืมรหัสผ่าน</button>
+  </div>
+
+  <!-- Login -->
+  <div id="form-login">
+    <input id="login-username" type="text" placeholder="ชื่อผู้ใช้" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 mb-3">
+    <input id="login-password" type="password" placeholder="รหัสผ่าน" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 mb-2">
+    <div id="login-msg" class="error-msg"></div>
+    <button id="btn-login" onclick="login(event)" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition btn-glow">เข้าสู่ระบบ</button>
+  </div>
+
+  <!-- Register -->
+  <div id="form-register" class="hidden relative">
+    <input id="reg-username" type="text" placeholder="ชื่อผู้ใช้" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 mb-3">
+    <input id="reg-password" type="password" placeholder="รหัสผ่าน" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 mb-3">
+    <div class="relative">
+      <input id="reg-phone" type="tel" placeholder="เบอร์โทร (10 หลัก)" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 mb-2 pr-10">
+      <span id="phoneCheck" class="check-icon"></span>
+    </div>
+    <div id="reg-msg" class="error-msg"></div>
+    <button id="btn-register" onclick="register(event)" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition btn-glow">สมัครสมาชิก</button>
+  </div>
+
+  <!-- Forgot Password -->
+  <div id="form-forgot" class="hidden fade-in">
+    <h3 class="text-lg font-semibold mb-3 text-gray-700">ลืมรหัสผ่าน</h3>
+    <input id="fp-phone" type="tel" placeholder="เบอร์โทร 10 หลัก" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 mb-2">
+    <div id="fp-msg" class="error-msg"></div>
+    <button onclick="requestReset()" class="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold hover:bg-yellow-600 btn-glow mb-2">ขอรหัสชั่วคราว</button>
+
+    <input id="fp-temp" type="text" placeholder="รหัสชั่วคราว" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 mb-2">
+    <input id="fp-newpass" type="password" placeholder="รหัสผ่านใหม่" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 mb-2">
+    <button onclick="resetPassword()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 btn-glow">ตั้งรหัสผ่านใหม่</button>
+  </div>
+
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwDTtJ0AGh7Ox276FrrUKHE_Gzbbe7WLqjkSyDy2HJcdjDQRvrR_FxQZK2xlM3WHnlT/exec";
+
+// ฟังก์ชันกลับหน้าแรก
+function goHome(){ window.location.href = "index.html"; }
+
+// Tabs
+const loginTab = document.getElementById("loginTab");
+const registerTab = document.getElementById("registerTab");
+const forgotTab = document.getElementById("forgotTab");
+const formLogin = document.getElementById("form-login");
+const formRegister = document.getElementById("form-register");
+const formForgot = document.getElementById("form-forgot");
+const loginMsg = document.getElementById("login-msg");
+const regMsg = document.getElementById("reg-msg");
+const fpMsg = document.getElementById("fp-msg");
+const phoneInput = document.getElementById("reg-phone");
+const phoneCheck = document.getElementById("phoneCheck");
+
+function showTab(tab){
+  formLogin.classList.add("hidden");
+  formRegister.classList.add("hidden");
+  formForgot.classList.add("hidden");
+  loginTab.classList.remove("text-blue-600","border-b-2","border-blue-600"); loginTab.classList.add("text-gray-500");
+  registerTab.classList.remove("text-blue-600","border-b-2","border-blue-600"); registerTab.classList.add("text-gray-500");
+  forgotTab.classList.remove("text-blue-600","border-b-2","border-blue-600"); forgotTab.classList.add("text-gray-500");
+
+  if(tab==="login"){ formLogin.classList.remove("hidden"); loginTab.classList.add("text-blue-600","border-b-2","border-blue-600"); }
+  else if(tab==="register"){ formRegister.classList.remove("hidden"); registerTab.classList.add("text-blue-600","border-b-2","border-blue-600"); }
+  else if(tab==="forgot"){ formForgot.classList.remove("hidden"); forgotTab.classList.add("text-blue-600","border-b-2","border-blue-600"); }
+
+  loginMsg.textContent=""; regMsg.textContent=""; fpMsg.textContent="";
+}
+
+loginTab.addEventListener("click", ()=>showTab("login"));
+registerTab.addEventListener("click", ()=>showTab("register"));
+forgotTab.addEventListener("click", ()=>showTab("forgot"));
+
+// Real-time phone check
+phoneInput.addEventListener("input", ()=>{
+  const regex = /^[0-9]{10}$/;
+  if(phoneInput.value==="") phoneCheck.textContent="";
+  else if(regex.test(phoneInput.value)){ phoneCheck.textContent="✔"; phoneCheck.style.color="green"; }
+  else{ phoneCheck.textContent="✖"; phoneCheck.style.color="red"; }
+});
+
+// Hash password
+function hashPassword(pass){ return CryptoJS.SHA256(pass).toString(); }
+
+// ----- Login -----
+async function login(e){
+  e.preventDefault();
+  const username = document.getElementById("login-username").value.trim();
+  const password = document.getElementById("login-password").value.trim();
+  if(!username || !password){ loginMsg.textContent="กรอกข้อมูลให้ครบ"; return; }
+
+  loginMsg.innerHTML = '<span class="spinner"></span>กำลังตรวจสอบ...';
+
+  try {
+    const res = await fetch(API_URL, {
+      method:"POST",
+      body: JSON.stringify({action:"login", username, password:hashPassword(password)})
+    });
+    const data = await res.json();
+    if(data.status==="success"){ 
+      loginMsg.className="success-msg"; 
+      loginMsg.textContent=data.message; 
+      // เด้งไปหน้าเว็บหลังล็อกอินสำเร็จ
+      setTimeout(()=>{ window.location.href="dashboard.html"; }, 1000);
+    }
+    else{ loginMsg.className="error-msg"; loginMsg.textContent=data.message; }
+  } catch(err){
+    loginMsg.className="error-msg"; loginMsg.textContent="เกิดข้อผิดพลาด";
+  }
+}
+
+// ----- Register -----
+async function register(e){
+  e.preventDefault();
+  const username = document.getElementById("reg-username").value.trim();
+  const password = document.getElementById("reg-password").value.trim();
+  const phone = document.getElementById("reg-phone").value.trim();
+  if(!username || !password || !phone){ regMsg.textContent="กรอกข้อมูลให้ครบ"; return; }
+
+  regMsg.innerHTML = '<span class="spinner"></span>กำลังสมัคร...';
+
+  try {
+    const res = await fetch(API_URL, {
+      method:"POST",
+      body: JSON.stringify({action:"register", username, password:hashPassword(password), phone})
+    });
+    const data = await res.json();
+    if(data.status==="success"){ 
+      regMsg.className="success-msg"; 
+      regMsg.textContent=data.message; 
+      setTimeout(()=>{ showTab("login"); }, 1000);
+    }
+    else{ regMsg.className="error-msg"; regMsg.textContent=data.message; }
+  } catch(err){
+    regMsg.className="error-msg"; regMsg.textContent="เกิดข้อผิดพลาด";
+  }
+}
+
+// ----- Request Reset Password -----
+async function requestReset(){
+  const phone = document.getElementById("fp-phone").value.trim();
+  fpMsg.textContent="กำลังสร้างรหัสชั่วคราว...";
+  fpMsg.className="error-msg";
+
+  if(!/^[0-9]{10}$/.test(phone)){ fpMsg.textContent="กรุณากรอกเบอร์โทร 10 หลัก"; return; }
+
+  try {
+    const res = await fetch(API_URL,{
+      method:"POST",
+      body: JSON.stringify({action:"requestReset", phone})
+    });
+    const data = await res.json();
+    if(data.status==="success"){ fpMsg.className="success-msg"; fpMsg.textContent="รหัสชั่วคราวของคุณคือ: "+data.tempCode; }
+    else{ fpMsg.className="error-msg"; fpMsg.textContent=data.message; }
+  } catch(err){ fpMsg.className="error-msg"; fpMsg.textContent="เกิดข้อผิดพลาด"; }
+}
+
+// ----- Reset Password -----
+async function resetPassword(){
+  const phone = document.getElementById("fp-phone").value.trim();
+  const tempCode = document.getElementById("fp-temp").value.trim();
+  const newPass = document.getElementById("fp-newpass").value.trim();
+  fpMsg.textContent="กำลังตั้งรหัสใหม่..."; fpMsg.className="error-msg";
+  if(!phone || !tempCode || !newPass){ fpMsg.textContent="กรอกข้อมูลให้ครบ"; return; }
+
+  try {
+    const res = await fetch(API_URL,{
+      method:"POST",
+      body: JSON.stringify({action:"resetPassword", phone, tempCode, newPassword:hashPassword(newPass)})
+    });
+    const data = await res.json();
+    if(data.status==="success"){ fpMsg.className="success-msg"; fpMsg.textContent="ตั้งรหัสผ่านใหม่สำเร็จ!"; }
+    else{ fpMsg.className="error-msg"; fpMsg.textContent=data.message; }
+  } catch(err){ fpMsg.className="error-msg"; fpMsg.textContent="เกิดข้อผิดพลาด"; }
+}
+</script>
+</body>
+</html>
