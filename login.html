@@ -144,7 +144,7 @@ async function login(e){
       loginMsg.className="success-msg"; 
       loginMsg.textContent=data.message; 
       // เด้งไปหน้าเว็บหลังล็อกอินสำเร็จ
-      setTimeout(()=>{ window.location.href="dashboard.html"; }, 1000);
+      setTimeout(()=>{ window.location.href="discount.html"; }, 1000);
     }
     else{ loginMsg.className="error-msg"; loginMsg.textContent=data.message; }
   } catch(err){
