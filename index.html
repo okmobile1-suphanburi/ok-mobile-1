@@ -18,6 +18,61 @@
     .animate-ping {
       animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
+
+    /* Floating Buttons */
+    .floating-icons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 9999;
+    }
+
+    .floating-icons a {
+      position: relative;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .floating-icons a:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+
+    .floating-icons a .tooltip {
+      visibility: hidden;
+      opacity: 0;
+      width: max-content;
+      background-color: rgba(0,0,0,0.8);
+      color: #fff;
+      text-align: center;
+      padding: 5px 10px;
+      border-radius: 6px;
+      position: absolute;
+      right: 110%;
+      top: 50%;
+      transform: translateY(-50%);
+      white-space: nowrap;
+      transition: opacity 0.2s;
+      font-size: 14px;
+    }
+
+    .floating-icons a:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    @media(min-width:768px){
+      .floating-icons a { width: 60px; height: 60px; }
+    }
   </style>
 </head>
 <body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-500">
@@ -82,28 +137,48 @@
     </div>
   </section>
 
-<!-- ✅ Popup กลางจอพร้อมรูปภาพขนาดใหญ่ -->
-<div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-600 text-white rounded-xl shadow-2xl z-50 opacity-0 pointer-events-none transition-opacity duration-500 w-[90%] max-w-lg overflow-hidden text-center">
-  <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" class="w-full h-auto object-cover" />
-  <div class="p-4 text-lg font-semibold">
-    ✅ ยินดีต้อนรับสู่เว็บไซต์ OK MOBILE!
+  <!-- ✅ Popup กลางจอพร้อมรูปภาพขนาดใหญ่ -->
+  <div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-600 text-white rounded-xl shadow-2xl z-50 opacity-0 pointer-events-none transition-opacity duration-500 w-[90%] max-w-lg overflow-hidden text-center">
+    <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" class="w-full h-auto object-cover" />
+    <div class="p-4 text-lg font-semibold">
+      ✅ ยินดีต้อนรับสู่เว็บไซต์ OK MOBILE!
+    </div>
   </div>
-</div>
 
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const popup = document.getElementById('popup-alert');
-    popup.classList.remove('opacity-0', 'pointer-events-none');
-    popup.classList.add('opacity-100');
+  <!-- ✅ Floating Buttons -->
+  <div class="floating-icons">
+    <!-- Facebook -->
+    <a href="https://www.facebook.com/profile.php?id=61566120762780&locale=th_TH" target="_blank" class="bg-blue-600">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
+        <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 
+        1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 
+        1.893-4.788 4.659-4.788 1.325 0 2.463.099 
+        2.794.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 
+        1.764v2.312h3.587l-.467 3.622h-3.12V24h6.116C23.403 
+        24 24 23.403 24 22.676V1.325C24 .597 23.403 0 22.675 0z"/>
+      </svg>
+      <span class="tooltip">Facebook</span>
+    </a>
 
-    setTimeout(() => {
-      popup.classList.remove('opacity-100');
-      popup.classList.add('opacity-0', 'pointer-events-none');
-    }, 5000); // ปิดอัตโนมัติใน 3 วินาที
-  });
-</script>
+    <!-- LINE (ไอคอนจริง) -->
+    <a href=" https://lin.ee/bQSzNzC" target="_blank" class="bg-green-500">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
+        <path d="M12 2C6.486 2 2 5.924 2 10.5c0 2.913 1.666 5.515 4.241 7.222l-1.247 4.156 4.304-2.51C11.44 20.604 11.718 20.5 12 20.5c5.514 0 10-3.924 10-8.5S17.514 2 12 2zm0 15c-.21 0-.42.045-.615.13l-1.65.96.466-1.55C9.503 16.38 9.252 16.5 9 16.5c-2.48 0-4.5-1.79-4.5-4s2.02-4 4.5-4 4.5 1.79 4.5 4-2.02 4-4.5 4z"/>
+      </svg>
+      <span class="tooltip">LINE</span>
+    </a>
 
-
+    <!-- โทร -->
+    <a href="tel:0946613961" class="bg-red-500">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-6 h-6">
+        <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 
+        1 0 011.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 1V20c0 
+        .55-.45 1-1 1C10.07 21 3 13.93 3 5c0-.55.45-1 1-1h3.5c.55 0 
+        1 .45 1 1 0 1.25.2 2.46.57 3.58.14.34.06.73-.24 1.01l-2.2 
+        2.2z"/>
+      </svg>
+      <span class="tooltip">โทร</span>
+    </a>
   </div>
 
   <!-- Footer -->
@@ -182,7 +257,6 @@
       statusEl.innerHTML = dot + message;
     }
 
-    // ✅ แสดง Popup อัตโนมัติ 5 วิ
     function showPopup() {
       const popup = document.getElementById('popup-alert');
       popup.classList.remove('hidden');
@@ -199,7 +273,6 @@
     }
 
     setInterval(updateStoreStatus, 60000);
-    
   </script>
 </body>
 </html>
