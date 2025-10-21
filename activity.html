@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบบันทึกการออมเงิน - คนละครึ่งพลัส (หลายคน)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        @font-face {
+            font-family: 'Sarabun';
+            src: url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+        }
+        
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+        
+        .receipt-paper {
+            width: 80mm;
+            background: white;
+            padding: 10mm;
+            font-size: 12px;
+            line-height: 1.4;
+            color: black;
+        }
+        
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .receipt-paper, .receipt-paper * {
+                visibility: visible;
+            }
+            .receipt-paper {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 80mm !important;
+                margin: 0;
+                padding: 5mm;
+                box-shadow: none;
+            }
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .member-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .member-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .member-card.active {
+            border: 2px solid #3B82F6;
+            background: linear-gradient(135deg, #EBF4FF 0%, #DBEAFE 100%);
+        }
+        
+        .backup-reminder {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-full bg-gray-50">
+    <header class="gradient-bg text-white py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold text-center">ระบบบันทึกการออมเงิน</h1>
+            <p class="text-center mt-2 text-blue-100">โครงการคนละครึ่งพลัส (หลายคน)</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- แจ้งเตือนสำรองข้อมูล -->
+        <div id="backupReminder" class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 backup-reminder" style="display: none;">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <span class="text-yellow-400 text-xl">⚠️</span>
+                </div>
+                <div class="ml-3 flex-1">
+                    <p class="text-sm text-yellow-700">
+                        <strong>แนะนำให้สำรองข้อมูล!</strong> คุณมีข้อมูลสมาชิก <span id="memberCount">0</span> คน 
+                        กรุณาสำรองข้อมูลเพื่อป้องกันการสูญหาย
+                    </p>
+                </div>
+                <div class="ml-3">
+                    <button onclick="exportData()" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">
+                        สำรองเลย
+                    </button>
+                    <button onclick="hideBackupReminder()" class="ml-2 text-yellow-700 hover:text-yellow-900 text-sm">
+                        ✕
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- จัดการสมาชิก -->
+        <div class="bg-white rounded-lg card-shadow p-6 mb-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-semibold text-gray-800">จัดการสมาชิก</h2>
+                <div class="flex gap-2 flex-wrap">
+                    <button onclick="exportData()" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 text-sm">
+                        📥 สำรองข้อมูล
+                    </button>
+                    <button onclick="showImportModal()" class="bg-orange-500 text-white px-4 py-2 rounded-md hover:bg-orange-600 transition duration-300 text-sm">
+                        📤 นำเข้าข้อมูล
+                    </button>
+                    <button onclick="showAddMemberModal()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                        + เพิ่มสมาชิกใหม่
+                    </button>
+                </div>
+            </div>
+            
+            <!-- ข้อมูลการสำรอง -->
+            <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm text-blue-800">
+                            <strong>การสำรองข้อมูลล่าสุด:</strong> <span id="lastBackupTime">ยังไม่เคยสำรอง</span>
+                        </p>
+                        <p class="text-xs text-blue-600 mt-1">
+                            💡 แนะนำให้สำรองข้อมูลทุกครั้งที่เพิ่มสมาชิกใหม่หรือมีการเปลี่ยนแปลงสำคัญ
+                        </p>
+                    </div>
+                    <button onclick="autoBackup()" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
+                        สำรองอัตโนมัติ
+                    </button>
+                </div>
+            </div>
+            
+            <!-- ค้นหาและจัดเรียง -->
+            <div class="mb-6 space-y-4">
+                <div class="flex flex-col md:flex-row gap-4">
+                    <div class="flex-1">
+                        <label for="searchMembers" class="block text-sm font-medium text-gray-700 mb-2">ค้นหาสมาชิก</label>
+                        <input type="text" id="searchMembers" placeholder="ค้นหาด้วยชื่อ, นามสกุล หรือเบอร์โทร..." 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               oninput="filterMembers()">
+                    </div>
+                    <div class="md:w-48">
+                        <label for="sortMembers" class="block text-sm font-medium text-gray-700 mb-2">เรียงตาม</label>
+                        <select id="sortMembers" onchange="filterMembers()" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="name">ชื่อ A-Z</option>
+                            <option value="progress">ความคืบหน้า</option>
+                            <option value="completed">ครบเป้าหมายก่อน</option>
+                            <option value="recent">เพิ่มล่าสุด</option>
+                            <option value="amount">ยอดออมสูงสุด</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- สถิติสมาชิก -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <p class="text-sm text-gray-600">สมาชิกทั้งหมด</p>
+                        <p class="text-xl font-bold text-blue-600" id="totalMembers">0</p>
+                    </div>
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <p class="text-sm text-gray-600">ครบเป้าหมาย</p>
+                        <p class="text-xl font-bold text-green-600" id="completedMembers">0</p>
+                    </div>
+                    <div class="bg-yellow-50 p-3 rounded-lg">
+                        <p class="text-sm text-gray-600">กำลังออม</p>
+                        <p class="text-xl font-bold text-yellow-600" id="activeMembers">0</p>
+                    </div>
+                    <div class="bg-purple-50 p-3 rounded-lg">
+                        <p class="text-sm text-gray-600">ยอดรวมทั้งหมด</p>
+                        <p class="text-lg font-bold text-purple-600" id="totalSavings">0</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="membersList" class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="text-center py-8 text-gray-500 col-span-full">
+                    ยังไม่มีสมาชิก กดปุ่ม "เพิ่มสมาชิกใหม่" เพื่อเริ่มต้น
+                </div>
+            </div>
+            
+            <!-- ข้อความเมื่อไม่พบผลการค้นหา -->
+            <div id="noResults" class="text-center py-8 text-gray-500 col-span-full" style="display: none;">
+                ไม่พบสมาชิกที่ตรงกับการค้นหา
+            </div>
+        </div>
+
+        <!-- สถานะการออม -->
+        <div class="bg-white rounded-lg card-shadow p-6 mb-8" id="savingsStatus" style="display: none;">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold text-gray-800">สถานะการออมเงิน</h2>
+                <div class="text-right">
+                    <span id="currentMemberName" class="text-lg font-medium text-blue-600"></span>
+                    <button onclick="deleteMember()" class="ml-4 text-red-500 hover:text-red-700 text-sm">
+                        🗑️ ลบสมาชิก
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    <p class="text-sm text-gray-600">ยอดออมปัจจุบัน</p>
+                    <p class="text-2xl font-bold text-blue-600" id="currentSavings">0</p>
+                    <p class="text-sm text-gray-500">บาท</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg text-center">
+                    <p class="text-sm text-gray-600">เป้าหมาย</p>
+                    <p class="text-2xl font-bold text-green-600" id="targetAmount">0</p>
+                    <p class="text-sm text-gray-500">บาท</p>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg text-center">
+                    <p class="text-sm text-gray-600">เหลืออีก</p>
+                    <p class="text-2xl font-bold text-purple-600" id="remainingAmount">0</p>
+                    <p class="text-sm text-gray-500">บาท</p>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="w-full bg-gray-200 rounded-full h-4 mb-4">
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-4 rounded-full progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+            <p class="text-center text-sm text-gray-600" id="progressText">0% ของเป้าหมาย</p>
+        </div>
+
+        <!-- ฟอร์มบันทึกข้อมูล -->
+        <div class="bg-white rounded-lg card-shadow p-6 mb-8" id="savingsForm" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">บันทึกการออมเงิน</h2>
+            <form id="addSavingForm" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="savingAmount" class="block text-sm font-medium text-gray-700 mb-2">จำนวนเงินที่ออม (บาท)</label>
+                        <input type="number" id="savingAmount" name="savingAmount" min="1" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="targetPrice" class="block text-sm font-medium text-gray-700 mb-2">ปรับเป้าหมาย (บาท)</label>
+                        <input type="number" id="targetPrice" name="targetPrice" min="1" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="scanDate" class="block text-sm font-medium text-gray-700 mb-2">วันที่รับสแกน</label>
+                        <input type="date" id="scanDate" name="scanDate" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="scanTime" class="block text-sm font-medium text-gray-700 mb-2">เวลาที่รับสแกน</label>
+                        <input type="time" id="scanTime" name="scanTime" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <button type="submit" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 px-6 rounded-md hover:from-blue-600 hover:to-purple-700 transition duration-300 font-medium">
+                    บันทึกการออม
+                </button>
+            </form>
+        </div>
+
+        <!-- ประวัติการออม -->
+        <div class="bg-white rounded-lg card-shadow p-6 mb-8" id="historySection" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">ประวัติการออมเงิน</h2>
+            <div id="savingsHistory" class="space-y-4">
+                <p class="text-gray-500 text-center py-8">ยังไม่มีข้อมูลการออมเงิน</p>
+            </div>
+        </div>
+
+        <!-- ปุ่มพิมพ์และแชร์ใบเสร็จ -->
+        <div class="text-center mb-8" id="printSection" style="display: none;">
+            <div class="space-y-4">
+                <!-- ปุ่มพิมพ์ -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">📄 พิมพ์ใบเสร็จ</h3>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button id="printLatestBtn" onclick="printLatestReceipt()" disabled 
+                                class="bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 transition duration-300 font-medium disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            📄 พิมพ์รายการล่าสุด
+                        </button>
+                        <button id="printAllBtn" onclick="printAllReceipt()" disabled 
+                                class="bg-green-500 text-white py-3 px-6 rounded-md hover:bg-green-600 transition duration-300 font-medium disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            📋 พิมพ์ประวัติทั้งหมด
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- ปุ่มแชร์ออนไลน์ -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 mb-3">🌐 แชร์ใบเสร็จออนไลน์</h3>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button id="shareLatestBtn" onclick="shareLatestReceipt()" disabled 
+                                class="bg-purple-500 text-white py-3 px-6 rounded-md hover:bg-purple-600 transition duration-300 font-medium disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            📱 แชร์รายการล่าสุด
+                        </button>
+                        <button id="shareAllBtn" onclick="shareAllReceipt()" disabled 
+                                class="bg-indigo-500 text-white py-3 px-6 rounded-md hover:bg-indigo-600 transition duration-300 font-medium disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            📊 แชร์ประวัติทั้งหมด
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-2">แชร์ใบเสร็จแบบข้อความผ่าน LINE, Facebook หรือ WhatsApp</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal นำเข้าข้อมูล -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold">นำเข้าข้อมูลสำรอง</h3>
+                <button onclick="hideImportModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="importFile" class="block text-sm font-medium text-gray-700 mb-2">เลือกไฟล์สำรองข้อมูล (.json)</label>
+                    <input type="file" id="importFile" accept=".json" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <p class="text-sm text-yellow-800">
+                        ⚠️ <strong>คำเตือน:</strong> การนำเข้าข้อมูลจะแทนที่ข้อมูลปัจจุบันทั้งหมด กรุณาสำรองข้อมูลปัจจุบันก่อน
+                    </p>
+                </div>
+                
+                <div class="flex gap-2">
+                    <button onclick="importData()" class="flex-1 bg-orange-500 text-white py-3 px-6 rounded-md hover:bg-orange-600 transition duration-300 font-medium">
+                        นำเข้าข้อมูล
+                    </button>
+                    <button onclick="hideImportModal()" class="flex-1 bg-gray-500 text-white py-3 px-6 rounded-md hover:bg-gray-600 transition duration-300 font-medium">
+                        ยกเลิก
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal เพิ่มสมาชิกใหม่ -->
+    <div id="addMemberModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold">เพิ่มสมาชิกใหม่</h3>
+                <button onclick="hideAddMemberModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            
+            <form id="newMemberForm" class="space-y-4">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="newFirstName" class="block text-sm font-medium text-gray-700 mb-2">ชื่อ</label>
+                        <input type="text" id="newFirstName" name="firstName" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="newLastName" class="block text-sm font-medium text-gray-700 mb-2">นามสกุล</label>
+                        <input type="text" id="newLastName" name="lastName" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="newPhoneNumber" class="block text-sm font-medium text-gray-700 mb-2">เบอร์โทรศัพท์</label>
+                    <input type="tel" id="newPhoneNumber" name="phoneNumber" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label for="newProductDetails" class="block text-sm font-medium text-gray-700 mb-2">รายละเอียดสินค้าที่ต้องการซื้อ</label>
+                    <textarea id="newProductDetails" name="productDetails" rows="3" required 
+                              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+                
+                <div>
+                    <label for="newTargetPrice" class="block text-sm font-medium text-gray-700 mb-2">ราคาเป้าหมาย (บาท)</label>
+                    <input type="number" id="newTargetPrice" name="targetPrice" min="1" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-500 text-white py-3 px-6 rounded-md hover:bg-blue-600 transition duration-300 font-medium">
+                    เพิ่มสมาชิก
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal แชร์ใบเสร็จ -->
+    <div id="shareModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold">แชร์ใบเสร็จออนไลน์</h3>
+                <button onclick="hideShareModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- ตัวอย่างใบเสร็จ -->
+                <div class="bg-gray-50 p-4 rounded-lg border max-h-60 overflow-y-auto">
+                    <div class="text-sm" id="sharePreview">
+                        <!-- ข้อมูลจะถูกเติมด้วย JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- ปุ่มดูใบเสร็จ -->
+                <div class="mb-4">
+                    <button onclick="openReceiptInNewTab()" class="w-full bg-blue-500 text-white py-3 px-4 rounded-md hover:bg-blue-600 transition duration-300 font-medium text-lg">
+                        📄 ดูใบเสร็จแบบ 80mm
+                    </button>
+                    <p class="text-sm text-gray-600 mt-2 text-center">กดเพื่อเปิดใบเสร็จในแท็บใหม่ พร้อมปุ่มพิมพ์</p>
+                </div>
+                
+                <!-- ปุ่มแชร์ -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="shareToLine()" class="bg-green-500 text-white py-3 px-4 rounded-md hover:bg-green-600 transition duration-300 font-medium">
+                        💬 แชร์ใน LINE
+                    </button>
+                    <button onclick="shareToFacebook()" class="bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition duration-300 font-medium">
+                        📘 แชร์ใน Facebook
+                    </button>
+                    <button onclick="copyReceiptText()" class="bg-gray-600 text-white py-3 px-4 rounded-md hover:bg-gray-700 transition duration-300 font-medium">
+                        📋 คัดลอกข้อความ
+                    </button>
+                    <button onclick="shareViaWhatsApp()" class="bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition duration-300 font-medium">
+                        📱 แชร์ใน WhatsApp
+                    </button>
+                </div>
+                
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        💡 <strong>เคล็ดลับ:</strong> ใบเสร็จจะถูกแชร์เป็นข้อความธรรมดาที่อ่านง่าย สามารถส่งให้เพื่อนหรือครอบครัวได้ทุกแอป
+                    </p>
+                </div>
+                
+                <button onclick="hideShareModal()" class="w-full bg-gray-500 text-white py-3 px-6 rounded-md hover:bg-gray-600 transition duration-300 font-medium">
+                    ปิด
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ใบเสร็จ (ซ่อนไว้สำหรับการพิมพ์) -->
+    <div id="receiptContent" class="receipt-paper" style="display: none;">
+        <div class="text-center mb-4">
+            <h3 class="font-bold text-lg">ใบเสร็จการออมเงิน</h3>
+            <p class="text-sm">โครงการคนละครึ่งพลัส</p>
+            <p class="text-xs">================================</p>
+        </div>
+        
+        <div id="receiptDetails" class="text-sm space-y-1">
+            <!-- ข้อมูลจะถูกเติมด้วย JavaScript -->
+        </div>
+        
+        <div class="text-center mt-4">
+            <p class="text-xs">================================</p>
+            <p class="text-xs">ขอบคุณที่ใช้บริการ</p>
+            <p class="text-xs" id="receiptDateTime"></p>
+        </div>
+    </div>
+
+    <script>
+        let allMembers = {};
+        let currentMemberId = null;
+
+        // โหลดข้อมูลจาก localStorage
+        function loadData() {
+            const saved = localStorage.getItem('allMembersData');
+            if (saved) {
+                allMembers = JSON.parse(saved);
+                displayMembers();
+                updateBackupInfo();
+            }
+        }
+
+        // บันทึกข้อมูลลง localStorage
+        function saveData() {
+            localStorage.setItem('allMembersData', JSON.stringify(allMembers));
+            updateBackupInfo();
+        }
+
+        // อัพเดทข้อมูลการสำรอง
+        function updateBackupInfo() {
+            const memberCount = Object.keys(allMembers).length;
+            const lastBackup = localStorage.getItem('lastBackupTime');
+            
+            document.getElementById('memberCount').textContent = memberCount;
+            
+            if (lastBackup) {
+                const backupDate = new Date(lastBackup);
+                document.getElementById('lastBackupTime').textContent = 
+                    backupDate.toLocaleDateString('th-TH') + ' ' + backupDate.toLocaleTimeString('th-TH');
+            }
+            
+            // แสดงแจ้งเตือนถ้ามีสมาชิกมากกว่า 3 คนและยังไม่เคยสำรอง
+            if (memberCount >= 3 && !lastBackup) {
+                document.getElementById('backupReminder').style.display = 'block';
+            }
+        }
+
+        // ซ่อนแจ้งเตือนสำรอง
+        function hideBackupReminder() {
+            document.getElementById('backupReminder').style.display = 'none';
+        }
+
+        // ส่งออกข้อมูล
+        function exportData() {
+            if (Object.keys(allMembers).length === 0) {
+                alert('ไม่มีข้อมูลให้สำรอง');
+                return;
+            }
+            
+            const dataToExport = {
+                version: '1.0',
+                exportDate: new Date().toISOString(),
+                totalMembers: Object.keys(allMembers).length,
+                data: allMembers
+            };
+            
+            const dataStr = JSON.stringify(dataToExport, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            
+            const now = new Date();
+            const dateStr = now.toISOString().split('T')[0];
+            const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-');
+            link.download = `สำรองข้อมูลการออม_${dateStr}_${timeStr}.json`;
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // บันทึกเวลาที่สำรอง
+            localStorage.setItem('lastBackupTime', new Date().toISOString());
+            updateBackupInfo();
+            hideBackupReminder();
+            
+            alert('✅ สำรองข้อมูลเรียบร้อยแล้ว!\n\nไฟล์ถูกดาวน์โหลดไปที่โฟลเดอร์ Downloads\nเก็บไฟล์นี้ไว้ในที่ปลอดภัย');
+        }
+
+        // สำรองอัตโนมัติ
+        function autoBackup() {
+            exportData();
+        }
+
+        // แสดง Modal นำเข้าข้อมูล
+        function showImportModal() {
+            document.getElementById('importModal').style.display = 'block';
+        }
+
+        // ซ่อน Modal นำเข้าข้อมูล
+        function hideImportModal() {
+            document.getElementById('importModal').style.display = 'none';
+            document.getElementById('importFile').value = '';
+        }
+
+        // นำเข้าข้อมูล
+        function importData() {
+            const fileInput = document.getElementById('importFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('กรุณาเลือกไฟล์ก่อน');
+                return;
+            }
+            
+            if (!file.name.endsWith('.json')) {
+                alert('กรุณาเลือกไฟล์ .json เท่านั้น');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    // ตรวจสอบรูปแบบข้อมูล
+                    if (!importedData.data || typeof importedData.data !== 'object') {
+                        throw new Error('รูปแบบไฟล์ไม่ถูกต้อง');
+                    }
+                    
+                    // ยืนยันการนำเข้า
+                    const confirmImport = confirm(
+                        `ต้องการนำเข้าข้อมูลหรือไม่?\n\n` +
+                        `ข้อมูลในไฟล์: ${importedData.totalMembers || Object.keys(importedData.data).length} สมาชิก\n` +
+                        `วันที่สำรอง: ${importedData.exportDate ? new Date(importedData.exportDate).toLocaleDateString('th-TH') : 'ไม่ระบุ'}\n\n` +
+                        `⚠️ ข้อมูลปัจจุบันจะถูกแทนที่ทั้งหมด`
+                    );
+                    
+                    if (confirmImport) {
+                        allMembers = importedData.data;
+                        currentMemberId = null;
+                        
+                        // ซ่อนส่วนต่างๆ
+                        document.getElementById('savingsStatus').style.display = 'none';
+                        document.getElementById('savingsForm').style.display = 'none';
+                        document.getElementById('historySection').style.display = 'none';
+                        document.getElementById('printSection').style.display = 'none';
+                        
+                        saveData();
+                        displayMembers();
+                        hideImportModal();
+                        
+                        alert(`✅ นำเข้าข้อมูลเรียบร้อยแล้ว!\n\nได้รับข้อมูลสมาชิก ${Object.keys(allMembers).length} คน`);
+                    }
+                    
+                } catch (error) {
+                    alert('❌ ไฟล์ไม่ถูกต้องหรือเสียหาย\n\nกรุณาตรวจสอบไฟล์และลองใหม่');
+                    console.error('Import error:', error);
+                }
+            };
+            
+            reader.readAsText(file);
+        }
+
+        // แสดงรายการสมาชิก
+        function displayMembers(filteredMembers = null) {
+            const membersList = document.getElementById('membersList');
+            const noResults = document.getElementById('noResults');
+            
+            // อัพเดทสถิติ
+            updateMemberStats();
+            
+            const membersToShow = filteredMembers || Object.entries(allMembers);
+            
+            if (Object.keys(allMembers).length === 0) {
+                membersList.innerHTML = '<div class="text-center py-8 text-gray-500 col-span-full">ยังไม่มีสมาชิก กดปุ่ม "เพิ่มสมาชิกใหม่" เพื่อเริ่มต้น</div>';
+                noResults.style.display = 'none';
+                return;
+            }
+            
+            if (membersToShow.length === 0) {
+                membersList.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            membersList.innerHTML = membersToShow.map(([id, member]) => {
+                const progress = member.targetAmount > 0 ? (member.currentSavings / member.targetAmount) * 100 : 0;
+                const isComplete = member.currentSavings >= member.targetAmount && member.targetAmount > 0;
+                
+                return `
+                    <div class="member-card border rounded-lg p-4 ${currentMemberId === id ? 'active' : ''}" onclick="selectMember('${id}')">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-medium text-gray-800">${member.personalInfo.firstName} ${member.personalInfo.lastName}</h4>
+                            ${isComplete ? '<span class="text-green-500 text-sm">✅ ครบแล้ว</span>' : ''}
+                        </div>
+                        <p class="text-sm text-gray-600 mb-2">${member.personalInfo.phoneNumber}</p>
+                        <div class="text-sm">
+                            <p class="text-gray-600">ออม: <span class="font-medium text-blue-600">${member.currentSavings.toLocaleString()}</span> / ${member.targetAmount.toLocaleString()} บาท</p>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: ${Math.min(100, progress)}%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">${Math.round(progress)}% ของเป้าหมาย</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // อัพเดทสถิติสมาชิก
+        function updateMemberStats() {
+            const totalMembers = Object.keys(allMembers).length;
+            let completedMembers = 0;
+            let totalSavings = 0;
+            
+            Object.values(allMembers).forEach(member => {
+                if (member.currentSavings >= member.targetAmount && member.targetAmount > 0) {
+                    completedMembers++;
+                }
+                totalSavings += member.currentSavings;
+            });
+            
+            const activeMembers = totalMembers - completedMembers;
+            
+            document.getElementById('totalMembers').textContent = totalMembers;
+            document.getElementById('completedMembers').textContent = completedMembers;
+            document.getElementById('activeMembers').textContent = activeMembers;
+            document.getElementById('totalSavings').textContent = totalSavings.toLocaleString();
+        }
+
+        // ค้นหาและจัดเรียงสมาชิก
+        function filterMembers() {
+            const searchTerm = document.getElementById('searchMembers').value.toLowerCase();
+            const sortBy = document.getElementById('sortMembers').value;
+            
+            let filtered = Object.entries(allMembers);
+            
+            // ค้นหา
+            if (searchTerm) {
+                filtered = filtered.filter(([id, member]) => {
+                    const fullName = `${member.personalInfo.firstName} ${member.personalInfo.lastName}`.toLowerCase();
+                    const phone = member.personalInfo.phoneNumber.toLowerCase();
+                    return fullName.includes(searchTerm) || phone.includes(searchTerm);
+                });
+            }
+            
+            // จัดเรียง
+            filtered.sort(([idA, memberA], [idB, memberB]) => {
+                switch (sortBy) {
+                    case 'name':
+                        const nameA = `${memberA.personalInfo.firstName} ${memberA.personalInfo.lastName}`;
+                        const nameB = `${memberB.personalInfo.firstName} ${memberB.personalInfo.lastName}`;
+                        return nameA.localeCompare(nameB, 'th');
+                    
+                    case 'progress':
+                        const progressA = memberA.targetAmount > 0 ? (memberA.currentSavings / memberA.targetAmount) : 0;
+                        const progressB = memberB.targetAmount > 0 ? (memberB.currentSavings / memberB.targetAmount) : 0;
+                        return progressB - progressA;
+                    
+                    case 'completed':
+                        const completeA = memberA.currentSavings >= memberA.targetAmount && memberA.targetAmount > 0;
+                        const completeB = memberB.currentSavings >= memberB.targetAmount && memberB.targetAmount > 0;
+                        if (completeA && !completeB) return -1;
+                        if (!completeA && completeB) return 1;
+                        return 0;
+                    
+                    case 'recent':
+                        return new Date(memberB.createdAt) - new Date(memberA.createdAt);
+                    
+                    case 'amount':
+                        return memberB.currentSavings - memberA.currentSavings;
+                    
+                    default:
+                        return 0;
+                }
+            });
+            
+            displayMembers(filtered);
+        }
+
+        // เลือกสมาชิก
+        function selectMember(memberId) {
+            currentMemberId = memberId;
+            displayMembers(); // อัพเดทการแสดงผล
+            updateCurrentMemberDisplay();
+            
+            // แสดงส่วนต่างๆ
+            document.getElementById('savingsStatus').style.display = 'block';
+            document.getElementById('savingsForm').style.display = 'block';
+            document.getElementById('historySection').style.display = 'block';
+            document.getElementById('printSection').style.display = 'block';
+        }
+
+        // อัพเดทการแสดงผลสมาชิกปัจจุบัน
+        function updateCurrentMemberDisplay() {
+            if (!currentMemberId || !allMembers[currentMemberId]) return;
+            
+            const member = allMembers[currentMemberId];
+            
+            document.getElementById('currentMemberName').textContent = 
+                `${member.personalInfo.firstName} ${member.personalInfo.lastName}`;
+            
+            document.getElementById('currentSavings').textContent = member.currentSavings.toLocaleString();
+            document.getElementById('targetAmount').textContent = member.targetAmount.toLocaleString();
+            
+            const remaining = Math.max(0, member.targetAmount - member.currentSavings);
+            document.getElementById('remainingAmount').textContent = remaining.toLocaleString();
+            
+            const progress = member.targetAmount > 0 ? (member.currentSavings / member.targetAmount) * 100 : 0;
+            document.getElementById('progressBar').style.width = Math.min(100, progress) + '%';
+            document.getElementById('progressText').textContent = Math.round(progress) + '% ของเป้าหมาย';
+            
+            // อัพเดทฟอร์ม
+            document.getElementById('targetPrice').value = member.targetAmount;
+            
+            // ปุ่มพิมพ์และแชร์
+            const printLatestBtn = document.getElementById('printLatestBtn');
+            const printAllBtn = document.getElementById('printAllBtn');
+            const shareLatestBtn = document.getElementById('shareLatestBtn');
+            const shareAllBtn = document.getElementById('shareAllBtn');
+            
+            if (member.currentSavings > 0) {
+                // เปิดใช้งานปุ่มพิมพ์
+                printLatestBtn.disabled = false;
+                printAllBtn.disabled = false;
+                shareLatestBtn.disabled = false;
+                shareAllBtn.disabled = false;
+                
+                printLatestBtn.classList.remove('bg-gray-400');
+                printLatestBtn.classList.add('bg-blue-500', 'hover:bg-blue-600');
+                
+                printAllBtn.classList.remove('bg-gray-400');
+                printAllBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+                
+                shareLatestBtn.classList.remove('bg-gray-400');
+                shareLatestBtn.classList.add('bg-purple-500', 'hover:bg-purple-600');
+                
+                shareAllBtn.classList.remove('bg-gray-400');
+                shareAllBtn.classList.add('bg-indigo-500', 'hover:bg-indigo-600');
+                
+                if (member.currentSavings >= member.targetAmount && member.targetAmount > 0) {
+                    printAllBtn.textContent = '📋 พิมพ์ประวัติทั้งหมด - ครบเป้าหมาย! 🎉';
+                    shareAllBtn.textContent = '📊 แชร์ประวัติทั้งหมด - ครบเป้าหมาย! 🎉';
+                } else {
+                    printAllBtn.textContent = '📋 พิมพ์ประวัติทั้งหมด';
+                    shareAllBtn.textContent = '📊 แชร์ประวัติทั้งหมด';
+                }
+            } else {
+                // ปิดใช้งานปุ่มพิมพ์และแชร์
+                printLatestBtn.disabled = true;
+                printAllBtn.disabled = true;
+                shareLatestBtn.disabled = true;
+                shareAllBtn.disabled = true;
+                
+                printLatestBtn.classList.add('bg-gray-400');
+                printLatestBtn.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                
+                printAllBtn.classList.add('bg-gray-400');
+                printAllBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                
+                shareLatestBtn.classList.add('bg-gray-400');
+                shareLatestBtn.classList.remove('bg-purple-500', 'hover:bg-purple-600');
+                
+                shareAllBtn.classList.add('bg-gray-400');
+                shareAllBtn.classList.remove('bg-indigo-500', 'hover:bg-indigo-600');
+                
+                printAllBtn.textContent = '📋 พิมพ์ประวัติทั้งหมด';
+                shareAllBtn.textContent = '📊 แชร์ประวัติทั้งหมด';
+            }
+            
+            displayHistory();
+        }
+
+        // แสดงประวัติการออม
+        function displayHistory() {
+            if (!currentMemberId || !allMembers[currentMemberId]) return;
+            
+            const member = allMembers[currentMemberId];
+            const historyContainer = document.getElementById('savingsHistory');
+            
+            if (member.history.length === 0) {
+                historyContainer.innerHTML = '<p class="text-gray-500 text-center py-8">ยังไม่มีข้อมูลการออมเงิน</p>';
+                return;
+            }
+            
+            historyContainer.innerHTML = member.history.map((record, index) => `
+                <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50 transition duration-200">
+                    <div class="flex justify-between items-start mb-2">
+                        <h4 class="font-medium text-gray-800">การออมครั้งที่ ${index + 1}</h4>
+                        <span class="text-lg font-bold text-green-600">+${record.amount.toLocaleString()} บาท</span>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-2 text-sm text-gray-600">
+                        <p><strong>วันที่:</strong> ${record.date}</p>
+                        <p><strong>เวลา:</strong> ${record.time}</p>
+                        <p><strong>ยอดรวม:</strong> ${record.totalAfter.toLocaleString()} บาท</p>
+                        <p><strong>เหลืออีก:</strong> ${Math.max(0, member.targetAmount - record.totalAfter).toLocaleString()} บาท</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // แสดง Modal เพิ่มสมาชิก
+        function showAddMemberModal() {
+            document.getElementById('addMemberModal').style.display = 'block';
+        }
+
+        // ซ่อน Modal เพิ่มสมาชิก
+        function hideAddMemberModal() {
+            document.getElementById('addMemberModal').style.display = 'none';
+            document.getElementById('newMemberForm').reset();
+        }
+
+        // ลบสมาชิก
+        function deleteMember() {
+            if (!currentMemberId) return;
+            
+            const member = allMembers[currentMemberId];
+            const confirmDelete = confirm(`ต้องการลบสมาชิก "${member.personalInfo.firstName} ${member.personalInfo.lastName}" หรือไม่?\n\nข้อมูลทั้งหมดจะถูกลบและไม่สามารถกู้คืนได้`);
+            
+            if (confirmDelete) {
+                delete allMembers[currentMemberId];
+                currentMemberId = null;
+                
+                // ซ่อนส่วนต่างๆ
+                document.getElementById('savingsStatus').style.display = 'none';
+                document.getElementById('savingsForm').style.display = 'none';
+                document.getElementById('historySection').style.display = 'none';
+                document.getElementById('printSection').style.display = 'none';
+                
+                saveData();
+                displayMembers();
+                
+                alert('ลบสมาชิกเรียบร้อยแล้ว');
+            }
+        }
+
+        // เพิ่มสมาชิกใหม่
+        document.getElementById('newMemberForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            // สร้าง ID ใหม่
+            const memberId = 'member_' + Date.now();
+            
+            // เพิ่มสมาชิกใหม่
+            allMembers[memberId] = {
+                personalInfo: {
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    phoneNumber: data.phoneNumber,
+                    productDetails: data.productDetails
+                },
+                targetAmount: parseInt(data.targetPrice),
+                currentSavings: 0,
+                history: [],
+                createdAt: new Date().toISOString()
+            };
+            
+            saveData();
+            displayMembers();
+            hideAddMemberModal();
+            
+            // เลือกสมาชิกใหม่ทันที
+            selectMember(memberId);
+            
+            alert(`เพิ่มสมาชิก "${data.firstName} ${data.lastName}" เรียบร้อยแล้ว`);
+        });
+
+        // บันทึกการออมเงิน
+        document.getElementById('addSavingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!currentMemberId) {
+                alert('กรุณาเลือกสมาชิกก่อน');
+                return;
+            }
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            
+            const member = allMembers[currentMemberId];
+            
+            // อัพเดทเป้าหมายถ้ามีการเปลี่ยนแปลง
+            if (data.targetPrice && parseInt(data.targetPrice) !== member.targetAmount) {
+                member.targetAmount = parseInt(data.targetPrice);
+            }
+            
+            // เพิ่มการออมใหม่
+            const savingAmount = parseInt(data.savingAmount);
+            member.currentSavings += savingAmount;
+            
+            // บันทึกประวัติ
+            member.history.push({
+                amount: savingAmount,
+                date: data.scanDate,
+                time: data.scanTime,
+                totalAfter: member.currentSavings,
+                timestamp: new Date().toISOString()
+            });
+            
+            saveData();
+            updateCurrentMemberDisplay();
+            displayMembers();
+            
+            // รีเซ็ตฟอร์ม
+            document.getElementById('savingAmount').value = '';
+            document.getElementById('scanDate').value = '';
+            document.getElementById('scanTime').value = '';
+            setCurrentDateTime();
+            
+            if (member.currentSavings >= member.targetAmount) {
+                alert('🎉 ยินดีด้วย! ออมเงินครบเป้าหมายแล้ว สามารถพิมพ์ใบเสร็จได้');
+            } else {
+                alert('✅ บันทึกการออมเรียบร้อยแล้ว');
+            }
+        });
+
+        // ฟังก์ชันพิมพ์รายการล่าสุด
+        function printLatestReceipt() {
+            if (!currentMemberId) return;
+            
+            const member = allMembers[currentMemberId];
+            if (member.history.length === 0) {
+                alert('ยังไม่มีการออมเงิน ไม่สามารถพิมพ์ใบเสร็จได้');
+                return;
+            }
+            
+            const latestRecord = member.history[member.history.length - 1];
+            const receiptDetails = document.getElementById('receiptDetails');
+            const now = new Date();
+            const recordDate = new Date(latestRecord.date).toLocaleDateString('th-TH');
+            const isComplete = member.currentSavings >= member.targetAmount && member.targetAmount > 0;
+            const remaining = Math.max(0, member.targetAmount - latestRecord.totalAfter);
+            
+            receiptDetails.innerHTML = `
+                <p><strong>ชื่อ-นามสกุล:</strong><br>${member.personalInfo.firstName} ${member.personalInfo.lastName}</p>
+                <p><strong>เบอร์โทร:</strong> ${member.personalInfo.phoneNumber}</p>
+                <p><strong>สินค้าที่ซื้อ:</strong><br>${member.personalInfo.productDetails}</p>
+                <p class="text-xs">--------------------------------</p>
+                <p><strong>รายการล่าสุด (ครั้งที่ ${member.history.length})</strong></p>
+                <p><strong>วันที่ออม:</strong> ${recordDate}</p>
+                <p><strong>เวลา:</strong> ${latestRecord.time}</p>
+                <p><strong>จำนวนที่ออม:</strong> ${latestRecord.amount.toLocaleString()} บาท</p>
+                <p class="text-xs">--------------------------------</p>
+                <p><strong>ยอดเป้าหมาย:</strong> ${member.targetAmount.toLocaleString()} บาท</p>
+                <p><strong>ยอดรวมหลังออม:</strong> ${latestRecord.totalAfter.toLocaleString()} บาท</p>
+                ${remaining > 0 ? `<p><strong>เหลืออีก:</strong> ${remaining.toLocaleString()} บาท</p>` : ''}
+                <p><strong>สถานะ:</strong> ${latestRecord.totalAfter >= member.targetAmount && member.targetAmount > 0 ? '✅ ครบเป้าหมายแล้ว' : '🔄 กำลังออมเงิน'}</p>
+            `;
+            
+            document.getElementById('receiptDateTime').textContent = 
+                `พิมพ์เมื่อ: ${now.toLocaleDateString('th-TH')} ${now.toLocaleTimeString('th-TH')}`;
+            
+            document.getElementById('receiptContent').style.display = 'block';
+            window.print();
+            document.getElementById('receiptContent').style.display = 'none';
+        }
+
+        // ฟังก์ชันพิมพ์ประวัติทั้งหมด
+        function printAllReceipt() {
+            if (!currentMemberId) return;
+            
+            const member = allMembers[currentMemberId];
+            if (member.currentSavings === 0) {
+                alert('ยังไม่มีการออมเงิน ไม่สามารถพิมพ์ใบเสร็จได้');
+                return;
+            }
+            
+            const receiptDetails = document.getElementById('receiptDetails');
+            const now = new Date();
+            const isComplete = member.currentSavings >= member.targetAmount && member.targetAmount > 0;
+            const remaining = Math.max(0, member.targetAmount - member.currentSavings);
+            const progress = member.targetAmount > 0 ? Math.round((member.currentSavings / member.targetAmount) * 100) : 0;
+            
+            // สร้างรายละเอียดการออมแต่ละครั้ง
+            let savingDetails = '';
+            if (member.history.length > 0) {
+                savingDetails = '<p class="text-xs">--- รายละเอียดการออม ---</p>';
+                member.history.forEach((record, index) => {
+                    const recordDate = new Date(record.date).toLocaleDateString('th-TH');
+                    savingDetails += `
+                        <p class="text-xs"><strong>ครั้งที่ ${index + 1}:</strong> ${recordDate}</p>
+                        <p class="text-xs">เวลา: ${record.time} | ออม: ${record.amount.toLocaleString()} บาท</p>
+                        <p class="text-xs">ยอดรวม: ${record.totalAfter.toLocaleString()} บาท</p>
+                        ${index < member.history.length - 1 ? '<p class="text-xs">- - - - - - - - - - - - - - - -</p>' : ''}
+                    `;
+                });
+            }
+            
+            receiptDetails.innerHTML = `
+                <p><strong>ชื่อ-นามสกุล:</strong><br>${member.personalInfo.firstName} ${member.personalInfo.lastName}</p>
+                <p><strong>เบอร์โทร:</strong> ${member.personalInfo.phoneNumber}</p>
+                <p><strong>สินค้าที่ซื้อ:</strong><br>${member.personalInfo.productDetails}</p>
+                <p class="text-xs">--------------------------------</p>
+                <p><strong>ยอดเป้าหมาย:</strong> ${member.targetAmount.toLocaleString()} บาท</p>
+                <p><strong>ยอดที่ออมได้:</strong> ${member.currentSavings.toLocaleString()} บาท</p>
+                <p><strong>จำนวนครั้งที่ออม:</strong> ${member.history.length} ครั้ง</p>
+                <p><strong>ความคืบหน้า:</strong> ${progress}%</p>
+                ${!isComplete ? `<p><strong>เหลืออีก:</strong> ${remaining.toLocaleString()} บาท</p>` : ''}
+                <p class="text-xs">--------------------------------</p>
+                ${savingDetails}
+                ${savingDetails ? '<p class="text-xs">--------------------------------</p>' : ''}
+                <p><strong>สถานะ:</strong> ${isComplete ? '✅ ครบเป้าหมายแล้ว' : '🔄 กำลังออมเงิน'}</p>
+            `;
+            
+            document.getElementById('receiptDateTime').textContent = 
+                `พิมพ์เมื่อ: ${now.toLocaleDateString('th-TH')} ${now.toLocaleTimeString('th-TH')}`;
+            
+            document.getElementById('receiptContent').style.display = 'block';
+            window.print();
+            document.getElementById('receiptContent').style.display = 'none';
+        }
+
+        // ตั้งค่าวันที่และเวลาปัจจุบัน
+        function setCurrentDateTime() {
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            const currentTime = now.toTimeString().slice(0, 5);
+            
+            document.getElementById('scanDate').value = today;
+            document.getElementById('scanTime').value = currentTime;
+        }
+
+        // ตัวแปรสำหรับเก็บข้อมูลใบเสร็จ
+        let currentReceiptData = null;
+        let currentReceiptUrl = '';
+
+        // ฟังก์ชันสร้างข้อความใบเสร็จแบบข้อความธรรมดา
+        function generateReceiptText(isLatest = true) {
+            if (!currentMemberId) return '';
+            
+            const member = allMembers[currentMemberId];
+            const now = new Date();
+            const isComplete = member.currentSavings >= member.targetAmount && member.targetAmount > 0;
+            
+            let receiptText = '';
+            receiptText += '🧾 ใบเสร็จการออมเงิน\n';
+            receiptText += '💰 โครงการคนละครึ่งพลัส\n';
+            receiptText += '================================\n\n';
+            
+            receiptText += '👤 ข้อมูลสมาชิก\n';
+            receiptText += `ชื่อ-นามสกุล: ${member.personalInfo.firstName} ${member.personalInfo.lastName}\n`;
+            receiptText += `📞 เบอร์โทร: ${member.personalInfo.phoneNumber}\n`;
+            receiptText += `🛍️ สินค้าที่ซื้อ: ${member.personalInfo.productDetails}\n\n`;
+            receiptText += '--------------------------------\n';
+            
+            if (isLatest && member.history.length > 0) {
+                const latestRecord = member.history[member.history.length - 1];
+                const recordDate = new Date(latestRecord.date).toLocaleDateString('th-TH');
+                const remaining = Math.max(0, member.targetAmount - latestRecord.totalAfter);
+                
+                receiptText += `📋 รายการล่าสุด (ครั้งที่ ${member.history.length})\n`;
+                receiptText += `📅 วันที่ออม: ${recordDate}\n`;
+                receiptText += `⏰ เวลา: ${latestRecord.time}\n`;
+                receiptText += `💵 จำนวนที่ออม: +${latestRecord.amount.toLocaleString()} บาท\n\n`;
+                receiptText += '--------------------------------\n';
+                receiptText += `🎯 ยอดเป้าหมาย: ${member.targetAmount.toLocaleString()} บาท\n`;
+                receiptText += `💰 ยอดรวมหลังออม: ${latestRecord.totalAfter.toLocaleString()} บาท\n`;
+                if (remaining > 0) {
+                    receiptText += `⏳ เหลืออีก: ${remaining.toLocaleString()} บาท\n`;
+                }
+            } else {
+                const remaining = Math.max(0, member.targetAmount - member.currentSavings);
+                const progress = member.targetAmount > 0 ? Math.round((member.currentSavings / member.targetAmount) * 100) : 0;
+                
+                receiptText += '📊 สรุปการออมทั้งหมด\n';
+                receiptText += `🎯 ยอดเป้าหมาย: ${member.targetAmount.toLocaleString()} บาท\n`;
+                receiptText += `💰 ยอดที่ออมได้: ${member.currentSavings.toLocaleString()} บาท\n`;
+                receiptText += `🔢 จำนวนครั้งที่ออม: ${member.history.length} ครั้ง\n`;
+                receiptText += `📈 ความคืบหน้า: ${progress}%\n`;
+                if (!isComplete) {
+                    receiptText += `⏳ เหลืออีก: ${remaining.toLocaleString()} บาท\n`;
+                }
+                
+                if (member.history.length > 0) {
+                    receiptText += '\n--- รายละเอียดการออม ---\n';
+                    member.history.forEach((record, index) => {
+                        const recordDate = new Date(record.date).toLocaleDateString('th-TH');
+                        receiptText += `${index + 1}. ${recordDate} | ${record.time}\n`;
+                        receiptText += `   ออม: ${record.amount.toLocaleString()} บาท | รวม: ${record.totalAfter.toLocaleString()} บาท\n`;
+                    });
+                }
+            }
+            
+            receiptText += '\n================================\n';
+            receiptText += `📊 สถานะ: ${isComplete ? '✅ ครบเป้าหมายแล้ว' : '🔄 กำลังออมเงิน'}\n\n`;
+            receiptText += '🙏 ขอบคุณที่ใช้บริการ\n';
+            receiptText += `📅 ${now.toLocaleDateString('th-TH')} ${now.toLocaleTimeString('th-TH')}\n`;
+            
+            return receiptText;
+        }
+
+        // ฟังก์ชันสร้างใบเสร็จ HTML สำหรับแสดงในแท็บใหม่
+        function generateReceiptHTML(isLatest = true) {
+            if (!currentMemberId) return '';
+            
+            const member = allMembers[currentMemberId];
+            const now = new Date();
+            const isComplete = member.currentSavings >= member.targetAmount && member.targetAmount > 0;
+            
+            let receiptHTML = `<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ใบเสร็จการออมเงิน - ${member.personalInfo.firstName} ${member.personalInfo.lastName}</title>
+    <style>
+        body {
+            font-family: 'Sarabun', 'Tahoma', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .receipt {
+            width: 80mm;
+            background: white;
+            padding: 10mm;
+            font-size: 12px;
+            line-height: 1.4;
+            color: black;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #333;
+            padding-bottom: 10px;
+        }
+        
+        .title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .section {
+            margin: 10px 0;
+            padding: 8px 0;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 3px 0;
+        }
+        
+        .amount {
+            font-weight: bold;
+            color: #2563eb;
+        }
+        
+        .status {
+            text-align: center;
+            padding: 8px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .status.complete {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .status.progress {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px dashed #333;
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .divider {
+            border-top: 1px dashed #ccc;
+            margin: 8px 0;
+        }
+        
+        .history-item {
+            background: #f8f9fa;
+            padding: 6px;
+            margin: 4px 0;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .receipt {
+                box-shadow: none;
+                border-radius: 0;
+                width: 80mm;
+                margin: 0;
+            }
+            .print-btn {
+                display: none;
+            }
+        }
+        
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .print-btn:hover {
+            background: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">🖨️ พิมพ์ใบเสร็จ</button>
+    
+    <div class="receipt">
+        <div class="header">
+            <div class="title">🧾 ใบเสร็จการออมเงิน</div>
+            <div class="subtitle">💰 โครงการคนละครึ่งพลัส</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">ข้อมูลสมาชิก</div>
+            <div class="info-row">
+                <span>👤 ชื่อ-นามสกุล:</span>
+            </div>
+            <div style="margin-left: 15px; font-weight: bold;">${member.personalInfo.firstName} ${member.personalInfo.lastName}</div>
+            
+            <div class="info-row">
+                <span>📞 เบอร์โทร:</span>
+                <span>${member.personalInfo.phoneNumber}</span>
+            </div>
+            
+            <div class="info-row">
+                <span>🛍️ สินค้าที่ซื้อ:</span>
+            </div>
+            <div style="margin-left: 15px; word-wrap: break-word;">${member.personalInfo.productDetails}</div>
+        </div>
+        
+        <div class="divider"></div>
+`;
+
+            if (isLatest && member.history.length > 0) {
+                const latestRecord = member.history[member.history.length - 1];
+                const recordDate = new Date(latestRecord.date).toLocaleDateString('th-TH');
+                const remaining = Math.max(0, member.targetAmount - latestRecord.totalAfter);
+                
+                receiptHTML += `
+        <div class="section">
+            <div class="section-title">📋 รายการล่าสุด (ครั้งที่ ${member.history.length})</div>
+            
+            <div class="info-row">
+                <span>📅 วันที่ออม:</span>
+                <span>${recordDate}</span>
+            </div>
+            
+            <div class="info-row">
+                <span>⏰ เวลา:</span>
+                <span>${latestRecord.time}</span>
+            </div>
+            
+            <div class="info-row">
+                <span>💵 จำนวนที่ออม:</span>
+                <span class="amount">+${latestRecord.amount.toLocaleString()} บาท</span>
+            </div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="info-row">
+                <span>🎯 ยอดเป้าหมาย:</span>
+                <span class="amount">${member.targetAmount.toLocaleString()} บาท</span>
+            </div>
+            
+            <div class="info-row">
+                <span>💰 ยอดรวมหลังออม:</span>
+                <span class="amount">${latestRecord.totalAfter.toLocaleString()} บาท</span>
+            </div>
+            
+            ${remaining > 0 ? `
+            <div class="info-row">
+                <span>⏳ เหลืออีก:</span>
+                <span class="amount">${remaining.toLocaleString()} บาท</span>
+            </div>
+            ` : ''}
+        </div>
+`;
+            } else {
+                const remaining = Math.max(0, member.targetAmount - member.currentSavings);
+                const progress = member.targetAmount > 0 ? Math.round((member.currentSavings / member.targetAmount) * 100) : 0;
+                
+                receiptHTML += `
+        <div class="section">
+            <div class="section-title">📊 สรุปการออมทั้งหมด</div>
+            
+            <div class="info-row">
+                <span>🎯 ยอดเป้าหมาย:</span>
+                <span class="amount">${member.targetAmount.toLocaleString()} บาท</span>
+            </div>
+            
+            <div class="info-row">
+                <span>💰 ยอดที่ออมได้:</span>
+                <span class="amount">${member.currentSavings.toLocaleString()} บาท</span>
+            </div>
+            
+            <div class="info-row">
+                <span>🔢 จำนวนครั้งที่ออม:</span>
+                <span>${member.history.length} ครั้ง</span>
+            </div>
+            
+            <div class="info-row">
+                <span>📈 ความคืบหน้า:</span>
+                <span class="amount">${progress}%</span>
+            </div>
+            
+            ${!isComplete ? `
+            <div class="info-row">
+                <span>⏳ เหลืออีก:</span>
+                <span class="amount">${remaining.toLocaleString()} บาท</span>
+            </div>
+            ` : ''}
+        </div>
+`;
+
+                if (member.history.length > 0) {
+                    receiptHTML += `
+        <div class="divider"></div>
+        
+        <div class="section">
+            <div class="section-title">📝 รายละเอียดการออม</div>
+`;
+                    member.history.forEach((record, index) => {
+                        const recordDate = new Date(record.date).toLocaleDateString('th-TH');
+                        receiptHTML += `
+            <div class="history-item">
+                <strong>${index + 1}.</strong> ${recordDate} | ${record.time}<br>
+                ออม: ${record.amount.toLocaleString()} บาท | รวม: ${record.totalAfter.toLocaleString()} บาท
+            </div>
+`;
+                    });
+                    receiptHTML += `
+        </div>
+`;
+                }
+            }
+
+            const statusClass = isComplete ? 'complete' : 'progress';
+            const statusText = isComplete ? '✅ ครบเป้าหมายแล้ว' : '🔄 กำลังออมเงิน';
+            
+            receiptHTML += `
+        <div class="status ${statusClass}">
+            📊 สถานะ: ${statusText}
+        </div>
+        
+        <div class="footer">
+            <div>🙏 ขอบคุณที่ใช้บริการ</div>
+            <div>📅 ${now.toLocaleDateString('th-TH')} ${now.toLocaleTimeString('th-TH')}</div>
+        </div>
+    </div>
+</body>
+</html>
+`;
+            
+            return receiptHTML;
+        }
+
+        // สร้างลิงก์ใบเสร็จ
+        function createReceiptLink(receiptHTML) {
+            const blob = new Blob([receiptHTML], { type: 'text/html' });
+            return URL.createObjectURL(blob);
+        }
+
+        // ฟังก์ชันสร้างข้อความสำหรับแชร์
+        function generateShareText(isLatest = true) {
+            return generateReceiptText(isLatest);
+        }
+
+        // แชร์รายการล่าสุด
+        function shareLatestReceipt() {
+            if (!currentMemberId) return;
+            
+            const member = allMembers[currentMemberId];
+            if (member.history.length === 0) {
+                alert('ยังไม่มีการออมเงิน ไม่สามารถแชร์ใบเสร็จได้');
+                return;
+            }
+            
+            // สร้างใบเสร็จ HTML และข้อความ
+            const receiptHTML = generateReceiptHTML(true);
+            currentReceiptUrl = createReceiptLink(receiptHTML);
+            currentReceiptData = { type: 'latest', isLatest: true };
+            
+            showShareModal();
+        }
+
+        // แชร์ประวัติทั้งหมด
+        function shareAllReceipt() {
+            if (!currentMemberId) return;
+            
+            const member = allMembers[currentMemberId];
+            if (member.currentSavings === 0) {
+                alert('ยังไม่มีการออมเงิน ไม่สามารถแชร์ใบเสร็จได้');
+                return;
+            }
+            
+            // สร้างใบเสร็จ HTML และข้อความ
+            const receiptHTML = generateReceiptHTML(false);
+            currentReceiptUrl = createReceiptLink(receiptHTML);
+            currentReceiptData = { type: 'all', isLatest: false };
+            
+            showShareModal();
+        }
+
+        // แสดง Modal แชร์
+        function showShareModal() {
+            const shareText = generateShareText(currentReceiptData.isLatest);
+            document.getElementById('sharePreview').innerHTML = shareText.replace(/\n/g, '<br>');
+            document.getElementById('shareModal').style.display = 'block';
+        }
+
+        // ซ่อน Modal แชร์
+        function hideShareModal() {
+            document.getElementById('shareModal').style.display = 'none';
+            // ล้างลิงก์เก่า
+            if (currentReceiptUrl) {
+                URL.revokeObjectURL(currentReceiptUrl);
+                currentReceiptUrl = '';
+            }
+        }
+
+        // แชร์ใน LINE
+        function shareToLine() {
+            const shareText = generateShareText(currentReceiptData.isLatest);
+            const encodedText = encodeURIComponent(shareText);
+            const lineUrl = `https://social-plugins.line.me/lineit/share?url=${encodedText}`;
+            window.open(lineUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // แชร์ใน Facebook
+        function shareToFacebook() {
+            const shareText = generateShareText(currentReceiptData.isLatest);
+            const encodedText = encodeURIComponent(shareText);
+            const facebookUrl = `https://www.facebook.com/sharer/sharer.php?quote=${encodedText}`;
+            window.open(facebookUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // แชร์ใน WhatsApp
+        function shareViaWhatsApp() {
+            const shareText = generateShareText(currentReceiptData.isLatest);
+            const encodedText = encodeURIComponent(shareText);
+            const whatsappUrl = `https://wa.me/?text=${encodedText}`;
+            window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // คัดลอกข้อความ
+        function copyReceiptText() {
+            const shareText = generateShareText(currentReceiptData.isLatest);
+            
+            navigator.clipboard.writeText(shareText).then(function() {
+                // แสดงข้อความยืนยัน
+                const originalText = event.target.textContent;
+                event.target.textContent = '✅ คัดลอกแล้ว!';
+                event.target.classList.add('bg-green-600');
+                event.target.classList.remove('bg-gray-600');
+                
+                setTimeout(() => {
+                    event.target.textContent = originalText;
+                    event.target.classList.remove('bg-green-600');
+                    event.target.classList.add('bg-gray-600');
+                }, 2000);
+            }).catch(function(err) {
+                // สำหรับเบราว์เซอร์ที่ไม่รองรับ clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = shareText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                alert('คัดลอกข้อความเรียบร้อยแล้ว!');
+            });
+        }
+
+        // เปิดใบเสร็จในแท็บใหม่
+        function openReceiptInNewTab() {
+            window.open(currentReceiptUrl, '_blank', 'noopener,noreferrer');
+        }
+
+        // ปิด Modal เมื่อคลิกนอกพื้นที่
+        window.onclick = function(event) {
+            const addModal = document.getElementById('addMemberModal');
+            const importModal = document.getElementById('importModal');
+            const shareModal = document.getElementById('shareModal');
+            
+            if (event.target === addModal) {
+                hideAddMemberModal();
+            }
+            if (event.target === importModal) {
+                hideImportModal();
+            }
+            if (event.target === shareModal) {
+                hideShareModal();
+            }
+        }
+
+        // เริ่มต้นระบบ
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setCurrentDateTime();
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9920b859a7b42705',t:'MTc2MTA0OTM0My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
