@@ -1,279 +1,393 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OK Mobile - ตลาดอู่ทอง</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-    }
-  </script>
-  <style>
-    @keyframes ping {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.5); opacity: 0.5; }
-    }
-    .animate-ping {
-      animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OK Mobile - ตลาดอู่ทอง</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            200: '#c7d2fe',
+                            300: '#a5b4fc',
+                            400: '#818cf8',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                            950: '#1e1b4b',
+                        },
+                        secondary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            950: '#082f49',
+                        },
+                        accent: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                            950: '#450a0a',
+                        },
+                        success: '#22c55e', // Green for success
+                        warning: '#facc15', // Yellow for warning
+                        error: '#ef4444',   // Red for error
+                        line_green: '#00B900', // LINE brand green
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        @keyframes ping {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+        .animate-ping {
+            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
 
-    /* Floating Buttons */
-    .floating-icons {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 9999;
-    }
+        /* 💡 Style สำหรับ Pop-up */
+        @keyframes wiggle {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            20%, 80% { transform: translate(-50%, -50%) rotate(-0.5deg); }
+            40%, 60% { transform: translate(-50%, -50%) rotate(0.5deg); }
+        }
 
-    .floating-icons a {
-      position: relative;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+        .popup-animated {
+            animation: wiggle 0.5s ease-in-out 3; 
+        }
 
-    .floating-icons a:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-    }
+        /* Floating Buttons */
+        .floating-icons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 9999;
+        }
 
-    .floating-icons a .tooltip {
-      visibility: hidden;
-      opacity: 0;
-      width: max-content;
-      background-color: rgba(0,0,0,0.8);
-      color: #fff;
-      text-align: center;
-      padding: 5px 10px;
-      border-radius: 6px;
-      position: absolute;
-      right: 110%;
-      top: 50%;
-      transform: translateY(-50%);
-      white-space: nowrap;
-      transition: opacity 0.2s;
-      font-size: 14px;
-    }
+        .floating-icons a {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
 
-    .floating-icons a:hover .tooltip {
-      visibility: visible;
-      opacity: 1;
-    }
+        .floating-icons a:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
 
-    @media(min-width:768px){
-      .floating-icons a { width: 60px; height: 60px; }
-    }
-  </style>
+        .floating-icons a .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            width: max-content;
+            background-color: rgba(0,0,0,0.8);
+            color: #fff;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            position: absolute;
+            right: 110%;
+            top: 50%;
+            transform: translateY(-50%);
+            white-space: nowrap;
+            transition: opacity 0.2s;
+            font-size: 14px;
+        }
+
+        .floating-icons a:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media(min-width:768px){
+            .floating-icons a { width: 60px; height: 60px; }
+        }
+    </style>
 </head>
-<body class="bg-white text-gray-800 dark:bg-gray-900 dark:text-white transition-colors duration-500">
+<body class="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-500">
 
-  <!-- Header -->
-  <header class="bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-gray-700 dark:to-gray-900 text-white fixed top-0 w-full z-50 shadow-lg">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-      <div class="flex items-center space-x-2">
-        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md" />
-        <div>
-          <h1 class="text-2xl font-bold">OK Mobile อู่ทอง</h1>
-          <div id="store-status" class="text-sm mt-1 font-medium flex items-center">กำลังโหลดสถานะร้าน...</div>
+    <header class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-gray-800 dark:to-gray-950 text-white fixed top-0 w-full z-50 shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md" />
+                <div>
+                    <h1 class="text-2xl font-bold">OK Mobile อู่ทอง</h1>
+                    <div id="store-status" class="text-sm mt-1 font-medium flex items-center">กำลังโหลดสถานะร้าน...</div>
+                </div>
+            </div>
+
+            <button id="menu-toggle" class="flex items-center space-x-2 block md:hidden p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+                <span>เมนู</span>
+            </button>
+
+            <nav class="hidden md:flex space-x-6 text-lg items-center">
+                
+                <a href="used.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
+                    สินค้ามือ2
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </a>
+                <a href="others.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
+                    สินค้าอื่นๆ
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </a>
+                <a href="transfer.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
+                    แจ้งโอนเงิน
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </a>
+                <a href="embedded.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
+                    ชำระเงินไฟแนนซ์
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </a>
+                <a href="map.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
+                    แผนที่ร้าน
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </a>
+                <a href="login.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
+                    เข้าสู่ระบบ
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </a>
+                <a href="activity.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
+                    คนละครึ่ง
+                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
+                </a>
+                
+                <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 text-lg transition-all duration-300 hover:shadow-lg hover:shadow-secondary-300/50">
+                    <span class="dark:hidden">☀️</span><span class="hidden dark:inline">🌙</span>
+                </button>
+            </nav>
         </div>
-      </div>
+    </header>
 
-      <button id="menu-toggle" class="flex items-center space-x-2 block md:hidden p-2">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-        <span>กดเมนู</span>
-      </button>
-
-      <nav class="hidden md:flex space-x-6 text-lg items-center">
-        <a href="used.html" class="hover:underline">สินค้ามือ2</a>
-        <a href="others.html" class="hover:underline">สินค้าอื่นๆ</a>
-        <a href="transfer.html" class="hover:underline">แจ้งโอนเงิน</a>
-        <a href="embedded.html" class="hover:underline">ชำระเงินไฟแนนซ์</a>
-        <a href="map.html" class="hover:underline">แผนที่ร้าน</a>
-        <a href="login.html"class="hover:underline">เข้าสู่ระบบ</a>
-        <a href="activity.html"class="hover:underline">คนละครึ่ง</a>
-        <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40">🌓</button>
-      </nav>
+    <div id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-gray-100 dark:bg-gray-800 shadow-lg border-r border-gray-200 dark:border-gray-700 transform -translate-x-full transition-transform duration-300 z-40">
+        <div class="p-4">
+            <div class="flex items-center space-x-2 mb-8 border-b pb-4 border-gray-200 dark:border-gray-700">
+                <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md" />
+                <h1 class="text-xl font-bold">OK Mobile</h1>
+            </div>
+            <nav class="flex flex-col space-y-4 text-lg">
+                <a href="used.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">สินค้ามือ2</a>
+                <a href="others.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">สินค้าอื่นๆ</a>
+                <a href="transfer.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">แจ้งโอนเงิน</a>
+                <a href="embedded.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">ชำระเงินไฟแนนซ์</a>
+                <a href="map.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">แผนที่ร้าน</a>
+                <a href="login.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">เข้าสู่ระบบ</a>
+                <a href="activity.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">คนละครึ่ง</a>
+            </nav>
+            <button id="theme-toggle-sidebar" class="mt-8 w-full p-3 rounded-lg bg-primary-500 hover:bg-primary-600 text-white text-center transition-colors duration-300 flex items-center justify-center space-x-2">
+                <span class="dark:hidden">เปลี่ยนโหมดกลางคืน 🌙</span>
+                <span class="hidden dark:inline">เปลี่ยนโหมดกลางวัน ☀️</span>
+            </button>
+        </div>
     </div>
-  </header>
 
-  <!-- เมนูด้านซ้าย (Mobile Sidebar) -->
-  <div id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg border-r border-gray-300 dark:border-gray-700 transform -translate-x-full transition-transform duration-300 z-40">
-    <div class="p-4">
-      <div class="flex items-center space-x-2 mb-8">
-        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md" />
-        <h1 class="text-xl font-bold">OK Mobile</h1>
-      </div>
-      <nav class="flex flex-col space-y-4 text-lg">
-        <a href="used.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">สินค้ามือ2</a>
-        <a href="others.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">สินค้าอื่นๆ</a>
-        <a href="transfer.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">แจ้งโอนเงิน</a>
-        <a href="embedded.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">ชำระเงินไฟแนนซ์</a>
-        <a href="map.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">แผนที่ร้าน</a>
-        <a href="login.html" class="border p-3 rounded hover:bg-gray-100 dark:hover:bg-gray-700">เข้าสู่ระบบ</a>
-      </nav>
-      <button id="theme-toggle-sidebar" class="mt-8 w-full p-3 rounded bg-blue-500 hover:bg-blue-600 text-white text-center">เปลี่ยนโหมดกลางวัน/กลางคืน</button>
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+
+    <section class="pt-24 min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80')] text-white text-center px-4">
+        <div class="bg-black bg-opacity-60 p-8 rounded-xl w-full max-w-lg backdrop-blur-sm shadow-2xl">
+            <h2 class="text-4xl md:text-6xl font-extrabold mb-4 text-white drop-shadow-lg">ยินดีต้อนรับสู่ OK Mobile</h2>
+            <p class="text-lg md:text-xl mb-8 text-gray-200">ร้านมือถือ เช็คประกัน ซ่อม ขาย ครบจบในที่เดียว</p>
+            <a href="warranty.html" class="bg-secondary-500 hover:bg-secondary-600 transition transform hover:scale-105 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg block max-w-xs mx-auto">เช็คประกันสินค้า</a>
+        </div>
+    </section>
+
+    <div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-teal-500 text-white rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] z-50 opacity-0 pointer-events-none transition-opacity duration-500 w-[90%] max-w-lg overflow-hidden text-center backdrop-blur-sm">
+        <div class="relative">
+            <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" class="w-full h-auto object-cover" />
+            
+            <button id="close-popup" class="absolute top-2 right-2 p-1 bg-black bg-opacity-40 rounded-full text-white hover:bg-opacity-60 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <div class="p-4 text-xl font-bold bg-teal-600">
+            🎉 ยินดีต้อนรับสู่ OK MOBILE! 🎉
+        </div>
+        <div class="p-2 text-sm bg-teal-500">
+            กรุณาเช็คสถานะร้านและบริการต่างๆ ผ่านเมนูด้านบน
+        </div>
     </div>
-  </div>
 
-  <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+    <div class="floating-icons">
+        <a href="https://www.facebook.com/profile.php?id=61566120762780&locale=th_TH" target="_blank" class="bg-blue-600 hover:bg-blue-700">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
+                <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.312h3.587l-.467 3.622h-3.12V24h6.116C23.403 24 24 23.403 24 22.676V1.325C24 .597 23.403 0 22.675 0z"/>
+            </svg>
+            <span class="tooltip">Facebook</span>
+        </a>
 
-  <!-- Hero Section -->
-  <section class="pt-24 min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80')] text-white text-center px-4">
-    <div class="bg-black bg-opacity-70 p-6 rounded-xl w-full max-w-md">
-      <h2 class="text-3xl md:text-5xl font-bold mb-4">ยินดีต้อนรับสู่ OK Mobile</h2>
-      <p class="text-base md:text-xl mb-6">ร้านมือถือ เช็คประกัน ซ่อม ขาย ครบจบในที่เดียว</p>
-      <a href="warranty.html" class="bg-blue-500 hover:bg-blue-600 transition transform hover:scale-105 text-white px-6 py-3 rounded-full text-lg w-full block">เช็คประกันสินค้า</a>
+        <a href="https://lin.ee/bQSzNzC" target="_blank" class="bg-line_green hover:bg-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
+                <path d="M11.95 2.05c-5.518 0-9.95 3.924-9.95 8.783 0 2.913 1.666 5.515 4.241 7.222l-1.247 4.156 4.304-2.51c.282.105.56.196.843.272.296.079.598.143.905.195 5.514 0 9.95-3.924 9.95-8.783S17.464 2.05 11.95 2.05zM17.152 17.05c-.21 0-.42.045-.615.13l-1.65.96.466-1.55c.203-.674.195-1.39-.026-2.05-.22-.66-.624-1.21-.05-1.71.575-.5 1.05-.59 1.6-.29.55.3 1.1.86 1.1 1.5c0 .7-.4 1.29-.9 1.5-.5.2-1.07.2-1.6-.01zm-5.2-2.9c-.21 0-.42.045-.615.13l-1.65.96.466-1.55c.203-.674.195-1.39-.026-2.05-.22-.66-.624-1.21-.05-1.71.575-.5 1.05-.59 1.6-.29.55.3 1.1.86 1.1 1.5 0 .7-.4 1.29-.9 1.5-.5.2-1.07.2-1.6-.01z"/>
+            </svg>
+            <span class="tooltip">LINE</span>
+        </a>
+
+        <a href="tel:0946613961" class="bg-primary-500 hover:bg-primary-600">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-6 h-6">
+                <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.07 21 3 13.93 3 5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.46.57 3.58.14.34.06.73-.24 1.01l-2.2 2.2z"/>
+            </svg>
+            <span class="tooltip">โทร</span>
+        </a>
     </div>
-  </section>
 
-  <!-- ✅ Popup กลางจอพร้อมรูปภาพขนาดใหญ่ -->
-  <div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-600 text-white rounded-xl shadow-2xl z-50 opacity-0 pointer-events-none transition-opacity duration-500 w-[90%] max-w-lg overflow-hidden text-center">
-    <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" class="w-full h-auto object-cover" />
-    <div class="p-4 text-lg font-semibold">
-      ✅ ยินดีต้อนรับสู่เว็บไซต์ OK MOBILE!
-    </div>
-  </div>
+    <footer class="bg-gray-800 dark:bg-gray-950 text-gray-200 p-6 text-center shadow-inner">
+        <div class="max-w-6xl mx-auto">
+            <p>ติดต่อร้าน: 094-661-3961 | Line: <a href="https://lin.ee/bQSzNzC" target="_blank" class="text-secondary-300 hover:underline">@661qazoc</a></p>
+            <p class="mt-2 text-sm">© 2021 OK Mobile</p>
+        </div>
+    </footer>
 
-  <!-- ✅ Floating Buttons -->
-  <div class="floating-icons">
-    <!-- Facebook -->
-    <a href="https://www.facebook.com/profile.php?id=61566120762780&locale=th_TH" target="_blank" class="bg-blue-600">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
-        <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 
-        1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 
-        1.893-4.788 4.659-4.788 1.325 0 2.463.099 
-        2.794.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 
-        1.764v2.312h3.587l-.467 3.622h-3.12V24h6.116C23.403 
-        24 24 23.403 24 22.676V1.325C24 .597 23.403 0 22.675 0z"/>
-      </svg>
-      <span class="tooltip">Facebook</span>
-    </a>
+    <script>
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('overlay');
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleSidebar = document.getElementById('theme-toggle-sidebar');
+        const html = document.documentElement;
 
-    <!-- LINE (ไอคอนจริง) -->
-    <a href=" https://lin.ee/bQSzNzC" target="_blank" class="bg-green-500">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
-        <path d="M12 2C6.486 2 2 5.924 2 10.5c0 2.913 1.666 5.515 4.241 7.222l-1.247 4.156 4.304-2.51C11.44 20.604 11.718 20.5 12 20.5c5.514 0 10-3.924 10-8.5S17.514 2 12 2zm0 15c-.21 0-.42.045-.615.13l-1.65.96.466-1.55C9.503 16.38 9.252 16.5 9 16.5c-2.48 0-4.5-1.79-4.5-4s2.02-4 4.5-4 4.5 1.79 4.5 4-2.02 4-4.5 4z"/>
-      </svg>
-      <span class="tooltip">LINE</span>
-    </a>
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        });
 
-    <!-- โทร -->
-    <a href="tel:0946613961" class="bg-red-500">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-6 h-6">
-        <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 
-        1 0 011.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 1V20c0 
-        .55-.45 1-1 1C10.07 21 3 13.93 3 5c0-.55.45-1 1-1h3.5c.55 0 
-        1 .45 1 1 0 1.25.2 2.46.57 3.58.14.34.06.73-.24 1.01l-2.2 
-        2.2z"/>
-      </svg>
-      <span class="tooltip">โทร</span>
-    </a>
-  </div>
+        overlay.addEventListener('click', () => {
+            mobileMenu.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        });
 
-  <!-- Footer -->
-  <footer class="bg-gray-800 dark:bg-gray-900 text-white p-6 text-center">
-    <div class="max-w-6xl mx-auto">
-      <p>ติดต่อร้าน: 094-661-3961 | Line: @661qazoc</p>
-      <p class="mt-2 text-sm">© 2021 OK Mobile</p>
-    </div>
-  </footer>
+        const setTheme = (dark) => {
+            if (dark) {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            }
+        }
 
-  <!-- Scripts -->
-  <script>
-    const menuToggle = document.getElementById('menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const overlay = document.getElementById('overlay');
-    const themeToggle = document.getElementById('theme-toggle');
-    const themeToggleSidebar = document.getElementById('theme-toggle-sidebar');
-    const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            setTheme(true);
+        } else if (savedTheme === 'light') {
+            setTheme(false);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setTheme(true); 
+        }
 
-    menuToggle.addEventListener('click', () => {
-      mobileMenu.classList.toggle('-translate-x-full');
-      overlay.classList.toggle('hidden');
-    });
+        themeToggle.addEventListener('click', () => {
+            setTheme(!html.classList.contains('dark'));
+        });
+        themeToggleSidebar.addEventListener('click', () => {
+            setTheme(!html.classList.contains('dark'));
+        });
 
-    overlay.addEventListener('click', () => {
-      mobileMenu.classList.add('-translate-x-full');
-      overlay.classList.add('hidden');
-    });
+        function updateStoreStatus() {
+            const statusEl = document.getElementById('store-status');
+            const now = new Date();
+            const day = now.getDay(); 
+            let openHour = 8; 
+            let closeHour = (day === 0 ? 17 : 20); 
 
-    const setTheme = (dark) => {
-      if (dark) {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        html.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      }
-    }
+            const openTime = new Date(now);
+            openTime.setHours(openHour, 0, 0, 0);
+            const closeTime = new Date(now);
+            closeTime.setHours(closeHour, 0, 0, 0);
 
-    if (localStorage.getItem('theme') === 'dark') {
-      setTheme(true);
-    }
+            const isOpen = now >= openTime && now < closeTime;
 
-    themeToggle.addEventListener('click', () => {
-      setTheme(!html.classList.contains('dark'));
-    });
-    themeToggleSidebar.addEventListener('click', () => {
-      setTheme(!html.classList.contains('dark'));
-    });
+            let message = '';
+            let dot = '';
+            if (isOpen) {
+                message = `ร้านเปิดแล้ว (วันนี้ ${openHour}:00 - ${closeHour}:00 น.)`;
+                dot = `<span class="live-dot inline-block w-3 h-3 rounded-full mr-2 bg-success animate-ping"></span>`;
+                statusEl.className = "text-sm mt-1 font-medium text-success flex items-center";
+            } else {
+                message = `ร้านปิดแล้ว (วันนี้เปิด ${openHour}:00 - ${closeHour}:00 น.)`;
+                dot = `<span class="live-dot inline-block w-3 h-3 rounded-full mr-2 bg-error"></span>`;
+                statusEl.className = "text-sm mt-1 font-medium text-error flex items-center";
+            }
 
-    function updateStoreStatus() {
-      const statusEl = document.getElementById('store-status');
-      const now = new Date();
-      const day = now.getDay();
-      let openHour = 8, closeHour = (day === 0 ? 17 : 20);
+            statusEl.innerHTML = dot + message;
+        }
 
-      const openTime = new Date(now);
-      openTime.setHours(openHour, 0, 0, 0);
-      const closeTime = new Date(now);
-      closeTime.setHours(closeHour, 0, 0, 0);
+        function showPopup() {
+            const popup = document.getElementById('popup-alert');
+            const closeButton = document.getElementById('close-popup');
+            
+            // แสดง Pop-up
+            popup.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+            popup.classList.add('opacity-100', 'popup-animated');
 
-      const isOpen = now >= openTime && now < closeTime;
+            // ลบ Animation ออกหลังจากเล่นจบ (เพื่อไม่ให้สั่นตลอดเวลา)
+            popup.addEventListener('animationend', function handler() {
+                popup.classList.remove('popup-animated');
+                popup.removeEventListener('animationend', handler);
+            });
 
-      let message = '';
-      let dot = '';
-      if (isOpen) {
-        message = `ร้านเปิดแล้ว (วันนี้ ${openHour}:00 - ${closeHour}:00)`;
-        dot = `<span class="live-dot inline-block w-3 h-3 rounded-full mr-2 bg-green-400 animate-ping"></span>`;
-        statusEl.className = "text-sm mt-1 font-medium text-green-300 flex items-center";
-      } else {
-        message = `ร้านปิดแล้ว (วันนี้เปิด ${openHour}:00 - ${closeHour}:00)`;
-        dot = `<span class="live-dot inline-block w-3 h-3 rounded-full mr-2 bg-red-500"></span>`;
-        statusEl.className = "text-sm mt-1 font-medium text-red-400 flex items-center";
-      }
+            // ตั้งเวลาปิด Pop-up อัตโนมัติหลังจาก 8 วินาที
+            const timeoutId = setTimeout(() => {
+                hidePopup();
+            }, 8000); 
 
-      statusEl.innerHTML = dot + message;
-    }
+            // Event Listener สำหรับปุ่มปิด (X)
+            closeButton.onclick = () => {
+                clearTimeout(timeoutId); 
+                hidePopup();
+            };
+        }
 
-    function showPopup() {
-      const popup = document.getElementById('popup-alert');
-      popup.classList.remove('hidden');
-      popup.classList.add('opacity-100');
-      setTimeout(() => {
-        popup.classList.add('opacity-0');
-        setTimeout(() => popup.classList.add('hidden'), 300);
-      }, 5000);
-    }
+        function hidePopup() {
+            const popup = document.getElementById('popup-alert');
+            popup.classList.add('opacity-0');
+            
+            // ซ่อน Pop-up หลังจาก fade out
+            setTimeout(() => {
+                popup.classList.add('hidden', 'pointer-events-none');
+            }, 500);
+        }
 
-    window.onload = function () {
-      updateStoreStatus();
-      showPopup();
-    }
+        window.onload = function () {
+            updateStoreStatus();
+            showPopup(); 
+        }
 
-    setInterval(updateStoreStatus, 60000);
-  </script>
+        setInterval(updateStoreStatus, 60000); 
+    </script>
 </body>
 </html>
