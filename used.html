@@ -31,12 +31,6 @@
         <p class="text-gray-100 mt-2 text-xl font-medium drop-shadow-lg">
             📱 OK-MOBILE SHOP ONLINE | สินค้าคุณภาพ ราคาเป็นกันเอง
         </p>
-
-        <!-- View Counter -->
-        <div class="absolute top-4 right-4 bg-white/30 backdrop-blur-sm p-2 px-4 rounded-full shadow-lg border border-white/50">
-            <span class="text-sm font-semibold text-white">ยอดผู้เข้าชม:</span>
-            <span id="view-count" class="text-lg font-extrabold text-yellow-100 ml-1">...</span>
-        </div>
     </header>
 
     <!-- Navigation & Search/Sort Section -->
@@ -85,12 +79,6 @@
     </footer>
 
     <script type="module">
-        // --- Firebase/Firestore Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, updateDoc, onSnapshot, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
         // --- Global Variables and Constants ---
         let allProducts = [];
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/pub?gid=715824064&output=csv';
@@ -98,15 +86,6 @@
         const loading = document.getElementById('loading');
         const searchInput = document.getElementById('product-search');
         const sortInput = document.getElementById('product-sort');
-        const viewCountElement = document.getElementById('view-count');
-
-        // Firestore setup variables
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-
-        let db;
-        let auth;
-        let isAuthReady = false;
 
         // Function to format price with Thai locale
         const formatPrice = (price) => Number(price).toLocaleString('th-TH');
@@ -195,89 +174,6 @@
             renderProducts(sorted);
         };
         
-        // --- View Counter Logic ---
-        const VIEWS_DOC_ID = 'product_page_views';
-
-        /**
-         * Increments the view counter in Firestore.
-         */
-        const updateViewCount = async () => {
-            if (!isAuthReady || !db) return;
-
-            const viewsRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_stats', VIEWS_DOC_ID);
-            
-            try {
-                // Attempt to increment the counter
-                await updateDoc(viewsRef, {
-                    count: increment(1)
-                });
-            } catch (error) {
-                // If the document doesn't exist, create it with count = 1
-                if (error.code === 'not-found' || error.message.includes('No document to update')) {
-                     await setDoc(viewsRef, { count: 1 }, { merge: true });
-                } else {
-                    console.error("Error updating view count:", error);
-                }
-            }
-        };
-
-        /**
-         * Sets up a real-time listener for the view count and updates the UI.
-         */
-        const setupViewCountListener = () => {
-             if (!isAuthReady || !db) return;
-
-            const viewsRef = doc(db, 'artifacts', appId, 'public', 'data', 'site_stats', VIEWS_DOC_ID);
-            
-            onSnapshot(viewsRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    const count = docSnap.data().count || 0;
-                    viewCountElement.textContent = count.toLocaleString();
-                } else {
-                    viewCountElement.textContent = '0';
-                }
-            }, (error) => {
-                console.error("Error listening to view count:", error);
-            });
-        };
-        
-        /**
-         * Initializes Firebase and authenticates.
-         */
-        const initializeFirebase = async () => {
-            if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
-                 console.error("Firebase config is missing.");
-                 viewCountElement.textContent = 'N/A';
-                 return;
-            }
-            
-            try {
-                // setLogLevel('debug'); // Uncomment for debugging
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                
-                isAuthReady = true;
-                
-                // Once authenticated, update and listen to the view counter
-                await updateViewCount();
-                setupViewCountListener();
-
-            } catch (error) {
-                console.error("Firebase initialization or authentication failed:", error);
-                viewCountElement.textContent = 'Error';
-            }
-        };
-
-
         // --- Main Initialization ---
         
         // 1. Initialize data loading (products)
@@ -313,8 +209,6 @@
             }
         });
 
-        // 2. Initialize Firebase for view counter
-        initializeFirebase();
     </script>
 
 </body>
