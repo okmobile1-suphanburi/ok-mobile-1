@@ -1,219 +1,231 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OK Mobile</title>
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OK Mobile | เช็คประกัน</title>
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Import Thai Font - Prompt */
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700&display=swap');
+        
+        /* Apply Prompt font globally and define primary colors */
+        body {
+            font-family: 'Prompt', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #333;
+        }
 
-    body {
-      display: flex;
-      flex-direction: column;
-      font-family: 'Arial', sans-serif;
-      background-color: #f0f8ff;
-      color: #333;
-    }
+        /* Custom Colors for Consistency with Product Page */
+        .bg-gradient-header {
+            background-image: linear-gradient(to right, var(--tw-gradient-stops));
+            --tw-gradient-from: #ec4899; /* pink-500 */
+            --tw-gradient-to: #ef4444; /* red-500 */
+            --tw-gradient-stops: var(--tw-gradient-from), #f59e0b, var(--tw-gradient-to); /* pink -> yellow -> red */
+        }
 
-    header {
-      background-color: #4caf50;
-      color: white;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      position: relative;
-    }
+        .bg-secondary { background-color: #ec4899; } /* pink */
 
-    header img {
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
-      border: 2px solid white;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-    }
-
-    .container {
-      flex: 1; /* ทำให้ container ดัน footer ลงล่าง */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-
-    .input-container {
-      background-color: #ffffff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-    }
-
-    input[type="text"] {
-      padding: 15px;
-      width: 100%;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: 2px solid #4caf50;
-      font-size: 16px;
-      outline: none;
-    }
-
-    input[type="text"]:focus {
-      border-color: #2e7d32;
-    }
-
-    button, .back-button {
-      padding: 12px 24px;
-      margin-top: 15px;
-      background-color: #4caf50;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      text-decoration: none;
-    }
-
-    button:hover, .back-button:hover {
-      background-color: #388e3c;
-    }
-
-    .result {
-      margin-top: 20px;
-      font-size: 18px;
-      color: #333;
-      text-align: center;
-    }
-
-    .result.success {
-      color: #388e3c;
-    }
-
-    .result.error {
-      color: #f44336;
-    }
-
-    .note {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #666;
-      text-align: left;
-      line-height: 1.6;
-    }
-
-    .footer {
-      background-color: #4caf50;
-      color: white;
-      text-align: center;
-      padding: 15px 0;
-      flex-shrink: 0;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" />
-    OK MOBILE
-  </header>
-
-  <div class="container">
-    <div class="input-container">
-      <label for="serialNumber">เช็คประกันเครื่อง มือ1 มือ2:</label>
-      <input type="text" id="serialNumber" placeholder="กรอกหมายเลข IMEI (กดเช็ค *#06#)">
-      <button onclick="checkWarranty()">เช็คประกัน</button>
-      <a href="index.html" class="back-button">กลับหน้าแรก</a>
-      <div id="result" class="result"></div>
-
-      <!-- ข้อความหมายเหตุ -->
-      <div class="note">
-        <p>*กรุณากรอกหมายเลข IMEI ให้ครบถ้วน 15 หลัก</p>
-        <p>*ระบบนี้ใช้ได้เฉพาะเครื่องที่ซื้อจากร้าน OK Mobile เท่านั้น</p>
-        <p>*หล่นแตก โดนน้ำ ไม่รับประกันทุกกรณี</p>
-        <p>*มือ2 รับประกัน 3 เดือน</p>
-        <p>*มือ1 รับประกัน 12 เดือน</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">
-    ©OK-MOBILE2021 Ver.1.3 |โทร.094-6613961
-  </div>
-
-  <script>
-    function checkWarranty() {
-      var serialNumber = document.getElementById("serialNumber").value;
-      if (!serialNumber.trim()) {
-        document.getElementById("result").innerHTML = "กรุณากรอกหมายเลข IMEI ก่อนเช็คประกัน";
-        document.getElementById("result").classList.remove('success');
-        document.getElementById("result").classList.add('error');
-        return;
-      }
-
-      if (serialNumber.length !== 15 || isNaN(serialNumber)) {
-        document.getElementById("result").innerHTML = "หมายเลข IMEI ต้องเป็นตัวเลข 15 หลักเท่านั้น";
-        document.getElementById("result").classList.remove('success');
-        document.getElementById("result").classList.add('error');
-        return;
-      }
-
-      var apiKey = "AIzaSyBCtEQL9aVLIFMVnTdAXhRnz3vm__3eQ1M";
-      var spreadsheetId = "1Jaf3ifI-pJhDng9TQ0_0X4taa2rUfUscGBxocWW6s14";
-      var range = "Sheet1!A2:F";
-      var sheetURL = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
-
-      document.getElementById("result").innerHTML = "กำลังตรวจสอบข้อมูล... ⏳";
-
-      fetch(sheetURL)
-        .then(response => response.json())
-        .then(data => {
-          var found = false;
-          data.values.forEach(row => {
-            var productSN = row[0];
-            if (productSN === serialNumber) {
-              found = true;
-              var model = row[1];
-              var price = row[2];
-              var purchaseDate = row[3];
-              var notes = row[4];
-
-              document.getElementById("result").innerHTML = `
-                <p><strong>ชื่อรุ่น:</strong> ${model}</p>
-                <p><strong>ราคาขาย:</strong> ${price}</p>
-                <p><strong>วันที่ซื้อ:</strong> ${purchaseDate}</p>
-                <p><strong>หมายเหตุ:</strong> ${notes}</p>
-              `;
-              document.getElementById("result").classList.remove('error');
-              document.getElementById("result").classList.add('success');
+        /* --- Animation Keyframes --- */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
             }
-          });
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-slideInUp {
+            animation: slideInUp 0.6s ease-out forwards;
+        }
 
-          if (!found) {
-            document.getElementById("result").innerHTML = "ไม่พบข้อมูลประกันสำหรับหมายเลขนี้";
-            document.getElementById("result").classList.remove('success');
-            document.getElementById("result").classList.add('error');
-          }
-        })
-        .catch(error => {
-          console.error("Error fetching data: ", error);
-          document.getElementById("result").innerHTML = "เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล";
-          document.getElementById("result").classList.remove('success');
-          document.getElementById("result").classList.add('error');
-        });
-    }
-  </script>
+        /* Button Press Effect (Active State) */
+        .btn-press:active {
+            transform: scale(0.98) translateY(1px);
+            box-shadow: none;
+        }
+
+        /* Enhanced Result Styling */
+        .result {
+            /* Ensure smooth transition for color/shadow changes */
+            transition: all 0.3s ease-in-out; 
+        }
+
+        .result.success {
+            background-color: #d1fae5; /* green-100 */
+            border: 2px solid #10b981; /* green-500 */
+            color: #065f46; /* green-700 */
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); /* Stronger shadow */
+        }
+
+        .result.error {
+            background-color: #fee2e2; /* red-100 */
+            border: 2px solid #f87171; /* red-400 */
+            color: #991b1b; /* red-800 */
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(248, 113, 113, 0.3); /* Stronger shadow */
+        }
+        
+        .result p {
+            margin: 5px 0;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header (Vibrant Gradient) -->
+    <header class="bg-gradient-header text-white p-6 text-center shadow-xl relative rounded-b-xl">
+        <div class="max-w-xl mx-auto flex items-center justify-center space-x-3">
+            <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="h-12 w-12 rounded-full object-cover shadow-lg border-2 border-white" />
+            <h1 class="text-3xl font-extrabold drop-shadow-lg tracking-wide">
+                OK MOBILE
+            </h1>
+        </div>
+        <p class="text-sm mt-1 opacity-90">ระบบตรวจสอบการรับประกันสินค้า</p>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="flex-grow flex flex-col items-center justify-center p-4">
+        <!-- Main Card with Slide-In Animation -->
+        <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border-t-4 border-secondary transition-all duration-500 animate-slideInUp">
+            
+            <h2 class="text-2xl font-bold mb-4 text-center text-gray-700">
+                🔍 เช็คประกันเครื่อง มือ1 มือ2
+            </h2>
+
+            <!-- Input Field -->
+            <label for="serialNumber" class="block text-left text-lg font-medium mb-2 text-pink-600">
+                หมายเลข IMEI:
+            </label>
+            <!-- Added stronger focus ring -->
+            <input type="text" id="serialNumber" placeholder="กรอกหมายเลข IMEI (กดเช็ค *#06#) 15 หลัก"
+                   class="p-4 w-full border-2 border-gray-300 rounded-xl text-lg mb-4 focus:ring-4 focus:ring-pink-500/50 outline-none transition duration-300 shadow-inner">
+            
+            <!-- Button Group -->
+            <div class="flex flex-col sm:flex-row gap-3 mt-4 justify-between">
+                <!-- Added btn-press class for active effect -->
+                <button onclick="checkWarranty()" class="flex-1 bg-secondary text-white py-3 rounded-xl text-lg font-semibold shadow-md hover:bg-pink-600 transition-transform transform hover:scale-[1.01] btn-press">
+                    เช็คประกัน
+                </button>
+                <!-- Added btn-press class for active effect -->
+                <a href="index.html" class="flex-1 text-center bg-gray-500 text-white py-3 rounded-xl text-lg font-semibold shadow-md hover:bg-gray-600 transition-transform transform hover:scale-[1.01] btn-press">
+                    กลับหน้าหลัก
+                </a>
+            </div>
+
+            <!-- Result Display -->
+            <div id="result" class="result text-center mt-6"></div>
+
+            <!-- ข้อความหมายเหตุ (Note Section) -->
+            <div class="note bg-gray-100 p-4 rounded-xl mt-6 border-l-4 border-indigo-400">
+                <p class="font-bold text-gray-600 mb-1">ข้อกำหนดการรับประกัน:</p>
+                <ul class="list-disc pl-5 text-gray-500 text-sm space-y-1">
+                    <li>กรุณากรอกหมายเลข IMEI ให้ครบถ้วน 15 หลัก</li>
+                    <li>ระบบนี้ใช้ได้เฉพาะเครื่องที่ซื้อจากร้าน OK Mobile เท่านั้น</li>
+                    <li>หล่นแตก โดนน้ำ ไม่รับประกันทุกกรณี</li>
+                    <li>มือ2 รับประกัน 3 เดือน</li>
+                    <li>มือ1 รับประกัน 12 เดือน</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-pink-500 text-white text-center p-4 rounded-t-xl shadow-inner mt-8">
+        <p class="text-sm">©OK-MOBILE2021 Ver.1.5 | โทร.094-6613961</p>
+    </footer>
+
+    <script>
+        function checkWarranty() {
+            var serialNumber = document.getElementById("serialNumber").value;
+            var resultElement = document.getElementById("result");
+
+            // Clear previous classes and content for smooth transition
+            resultElement.classList.remove('success', 'error');
+            resultElement.innerHTML = ''; // Clear content temporarily
+
+            if (!serialNumber.trim()) {
+                resultElement.innerHTML = "กรุณากรอกหมายเลข IMEI ก่อนเช็คประกัน";
+                resultElement.classList.add('error');
+                return;
+            }
+
+            if (serialNumber.length !== 15 || isNaN(serialNumber)) {
+                resultElement.innerHTML = "หมายเลข IMEI ต้องเป็นตัวเลข 15 หลักเท่านั้น";
+                resultElement.classList.add('error');
+                return;
+            }
+
+            // --- Google Sheets API Configuration ---
+            // The API key and Sheet ID are hardcoded here for demonstration. 
+            var apiKey = "AIzaSyBCtEQL9aVLIFMVnTdAXhRnz3vm__3eQ1M"; 
+            var spreadsheetId = "1Jaf3ifI-pJhDng9TQ0_0X4taa2rUfUscGBxocWW6s14";
+            var range = "Sheet1!A2:F";
+            var sheetURL = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+
+            // Updated loading indicator with spinning emoji
+            resultElement.innerHTML = "กำลังตรวจสอบข้อมูล... <span class='text-xl animate-spin text-pink-500'>⚙️</span>";
+
+            fetch(sheetURL)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.values || !Array.isArray(data.values)) {
+                        resultElement.innerHTML = "⚠️ ไม่พบข้อมูลในตารางประกัน";
+                        resultElement.classList.add('error');
+                        return;
+                    }
+
+                    var found = false;
+                    data.values.forEach(row => {
+                        var productSN = row[0] ? row[0].trim() : '';
+                        if (productSN === serialNumber) {
+                            found = true;
+                            
+                            var model = row[1] || '-';
+                            var price = row[2] || '-';
+                            var purchaseDate = row[3] || '-';
+                            var notes = row[4] || 'ไม่มีข้อมูลเพิ่มเติม';
+
+                            resultElement.innerHTML = `
+                                <p class="text-xl font-bold mb-3">✅ ข้อมูลประกันพบแล้ว</p>
+                                <p><strong>ชื่อรุ่น:</strong> ${model}</p>
+                                <p><strong>ราคาขาย:</strong> ${price}</p>
+                                <p><strong>วันที่ซื้อ:</strong> ${purchaseDate}</p>
+                                <p><strong>หมายเหตุ:</strong> ${notes}</p>
+                            `;
+                            resultElement.classList.add('success');
+                        }
+                    });
+
+                    if (!found) {
+                        resultElement.innerHTML = "❌ ไม่พบข้อมูลประกันสำหรับหมายเลขนี้";
+                        resultElement.classList.add('error');
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching data: ", error);
+                    resultElement.innerHTML = "⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล (โปรดตรวจสอบ Key/ID Google Sheet)";
+                    resultElement.classList.add('error');
+                });
+        }
+    </script>
 
 </body>
 </html>
