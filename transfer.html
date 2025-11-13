@@ -1,6 +1,436 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ OK MOBILE PAYMENT ZONE ⚡</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS สำหรับการออกแบบสไตล์ Vaporwave/Retrowave ที่มีลูกเล่น */
+        :root {
+            --bg-main: linear-gradient(135deg, #1f0022 0%, #30003b 100%); /* พื้นหลังม่วงเข้ม */
+            --card-bg: #2b003c; /* พื้นหลัง Card สีม่วงเข้มขึ้น */
+            --text-light: #fdfdff; /* ข้อความหลักสีขาว/เทาอ่อน */
+            --accent-pink: #ff00ff; /* สีเน้นชมพูสดใส */
+            --accent-blue: #00ffff; /* สีเน้นฟ้าสดใส */
+            --button-glow: #d800ff; /* สีปุ่มเรืองแสง */
+            --text-shadow-color: rgba(255, 0, 255, 0.7); /* เงาข้อความชมพู */
+            --kbank-green: #00a049; /* สีเขียว KBank */
+            --accent-neon: #64ffda; /* สีฟ้า-เขียว Neon */
+        }
+
+        body {
+            font-family: 'Kanit', sans-serif;
+            background: var(--bg-main);
+            padding: 20px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 550px; 
+            width: 90%;
+            background: var(--card-bg);
+            padding: 35px;
+            border-radius: 25px; 
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.7), 0 0 20px var(--accent-blue);
+            border: 2px solid var(--accent-pink); 
+            animation: fadeIn 1s ease-out; 
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            max-width: 90px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 15px var(--accent-pink)); 
+        }
+
+        h2 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1.8em;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--accent-pink); 
+            margin-bottom: 5px;
+        }
+
+        h3 {
+            border-left: 5px solid var(--accent-pink);
+            padding-left: 15px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-weight: 700;
+            font-size: 1.4em;
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+        }
+
+        .alert-mini {
+            color: var(--accent-blue);
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.1em;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        /* ส่วนข้อมูลบัญชี (Cyberpunk Card) */
+        .bank-card {
+            background: linear-gradient(135deg, #100018, #3a004b); 
+            padding: 30px;
+            border-radius: 18px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 0, 255, 0.3);
+            border: 1px solid var(--accent-pink);
+            position: relative;
+            overflow: hidden; 
+        }
+
+        .bank-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .bank-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white; 
+            padding: 5px;
+            filter: drop-shadow(0 0 8px var(--kbank-green));
+        }
+
+        .bank-name {
+            font-size: 1.2em;
+            font-weight: 800;
+            color: var(--text-light);
+            text-shadow: 0 0 5px var(--accent-blue);
+        }
+
+        .account-name-label {
+            font-weight: 400;
+            font-size: 0.9em;
+            margin-top: 15px;
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .account-name-value {
+            font-weight: 700;
+            font-size: 1.3em;
+            color: var(--accent-neon);
+            text-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
+        }
+
+        /* **ส่วนที่ปรับปรุง: เลขบัญชีให้อ่านง่าย ชัดเจน คมชัด** */
+        .account-number {
+            font-family: 'Kanit', sans-serif; 
+            font-size: 2.5em; /* ลดขนาดลงเล็กน้อย */
+            font-weight: 900; 
+            color: var(--kbank-green); /* สีเขียว KBank */
+            letter-spacing: 1px; 
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px 10px; 
+            border-radius: 12px; 
+            
+            background: #0d0014; /* พื้นหลังเข้มมาก */
+            border: 2px solid var(--kbank-green); /* เปลี่ยนเป็นสีเขียวคมชัด */
+            box-shadow: 0 0 10px rgba(0, 160, 73, 0.5); /* ลดความฟุ้ง */
+            text-shadow: none; /* ลบเงาฟุ้งออก */
+            
+            position: relative; 
+            overflow: hidden; 
+            transition: all 0.3s ease-out; 
+            cursor: pointer;
+            word-break: break-all;
+        }
+
+        .account-number:hover {
+            transform: scale(1.01); 
+            /* ลบ Glitch Animation ออกแล้ว */
+            box-shadow: 0 0 15px rgba(0, 160, 73, 0.8);
+        }
+        
+        /* ปุ่มคัดลอก */
+        .copy-btn {
+            background-color: var(--button-glow);
+            color: var(--card-bg); 
+            border: none;
+            padding: 16px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1em;
+            font-weight: 800;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5); 
+            box-shadow: 0 0 15px rgba(216, 0, 255, 0.7); 
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        .copy-btn:hover {
+            background-color: #ff00ff; 
+            box-shadow: 0 0 25px rgba(255, 0, 255, 1);
+            transform: translateY(-2px);
+        }
+        .copy-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* QR Code Section */
+        .qr-section {
+            text-align: center;
+            margin: 40px 0;
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 255, 0.3);
+            border: 1px solid var(--accent-blue);
+        }
+
+        .qr-section img {
+            max-width: 200px;
+            height: auto;
+            border: 8px solid white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px var(--accent-neon);
+            transition: transform 0.3s ease-out;
+            margin-bottom: 20px; /* เพิ่มระยะห่างกับปุ่ม */
+        }
+        .qr-section img:hover {
+            transform: scale(1.05); 
+        }
+
+        /* **ปุ่มบันทึก QR Code (Save QR Code Button)** */
+        .save-qr-btn {
+            background-color: var(--accent-neon);
+            color: #1f0022; 
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 800;
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+            box-shadow: 0 0 15px rgba(100, 255, 218, 0.7);
+            font-family: 'Kanit', sans-serif;
+            margin-top: 15px;
+        }
+        .save-qr-btn:hover {
+            background-color: #00e6b5;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 1);
+            transform: translateY(-1px);
+        }
+
+
+        /* รายการขั้นตอน */
+        .steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .steps li {
+            background: var(--card-bg);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s ease-out;
+        }
+        .steps li:hover {
+            transform: translateX(5px); 
+            background-color: #3b004d; 
+        }
+        
+        .steps li strong {
+            display: block;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            color: var(--accent-neon);
+            font-weight: 800;
+            text-shadow: 0 0 5px rgba(100, 255, 218, 0.5);
+        }
+
+        .link-text {
+            color: var(--accent-pink); 
+            font-weight: 700;
+            text-decoration: none;
+            text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+            transition: color 0.3s;
+        }
+        .link-text:hover {
+            color: var(--accent-blue);
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+        }
+
+        .back-home-button {
+            display: inline-block;
+            padding: 15px 35px;
+            background-color: var(--accent-blue);
+            color: var(--card-bg);
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 40px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        .back-home-button:hover {
+            background-color: var(--accent-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 1);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .container { padding: 20px; border-radius: 15px; }
+            h2 { font-size: 1.5em; }
+            h3 { font-size: 1.2em; }
+            .account-number { font-size: 2.0em; letter-spacing: 1px; }
+            .copy-btn { padding: 12px 20px; font-size: 1em; }
+            .qr-section img { max-width: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <div class="header">
+            <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo"> 
+            <h2>PAYMENT ZONE</h2>
+            <div class="alert-mini">
+                ✨โอนเงิน กรุณาแจ้งทุกครั้ง ✨
+            </div>
+        </div>
+
+        <h3>1. โอนผ่านเลขบัญชีธนาคาร</h3>
+
+        <div class="bank-card">
+            
+            <div class="bank-header">
+                <span class="bank-name">KASIKORN BANK ธนาคารกสิกรไทย</span>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kasikornbank_Logo.svg/240px-Kasikornbank_Logo.svg.png" alt="KBank Logo">
+            </div>
+
+            <span class="account-name-label">ACCOUNT NAME: ชื่อบัญชี</span>
+            <div class="account-name-value">โอเคโมบาย (OK MOBILE)</div>
+            
+            <span class="account-name-label" style="margin-top: 15px;">ACCOUNT NUMBER: เลขบัญชี</span>
+            <div class="account-number" id="accountNumber">
+                175-139-8588
+            </div>
+
+            <button class="copy-btn" onclick="copyAccount()">
+                ⚡ กดคัดลอกเลขบัญชี ⚡
+            </button>
+        </div>
+
+        <div class="qr-section">
+            <h3>2. สแกน QR Code ด้านล่างเพื่อโอนเงิน</h3>
+            <img src="https://i.imgur.com/uwkjbbf.jpeg" alt="PromptPay QR Code" id="qrCodeImage">
+            <p style="font-size: 0.9em; color: rgba(255, 255, 255, 0.7);">SCAN WITH ANY MOBILE BANKING APP</p>
+            <button class="save-qr-btn" onclick="saveQrCode()">
+                💾 บันทึก QR Code
+            </button>
+        </div>
+
+        <h3>3. แจ้งการโอนเงิน</h3>
+        
+        <ul class="steps">
+            <li>
+                <strong>🚀 ช่องทางการติดต่อเร็วสุด</strong>
+                กดแจ้งการโอนเงิน LINE ID: <a href="https://line.me/ti/p/@661qazoc" target="_blank" class="link-text">@661qazoc</a>
+                <br>📞 กดโทรหาร้านแจ้งโอนเงิน: <span class="link-text">094-6613961</span>
+            </li>
+            
+            
+        </ul>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="https://okmobile-suphanburi.com/" class="back-home-button">
+                ← กลับหน้าแรก
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        // ฟังก์ชัน JavaScript สำหรับการคัดลอกเลขบัญชี
+        function copyAccount() {
+            const accountNumber = document.getElementById('accountNumber').innerText.replace(/-/g, '').trim();
+            navigator.clipboard.writeText(accountNumber).then(() => {
+                const button = document.querySelector('.copy-btn');
+                button.innerText = '✅ COPIED! (SUCCESS)';
+                button.style.backgroundColor = '#27ae60'; 
+                button.style.boxShadow = '0 0 20px rgba(39, 174, 96, 0.8)';
+                setTimeout(() => {
+                    button.innerText = '⚡ กดคัดลอกเลขบัญชี ⚡';
+                    button.style.backgroundColor = 'var(--button-glow)';
+                    button.style.boxShadow = '0 0 15px var(--button-glow)';
+                }, 2000);
+            }).catch(err => {
+                alert('FAILED TO COPY. PLEASE MANUALLY COPY: ' + accountNumber);
+            });
+        }
+
+        // **ฟังก์ชัน JavaScript สำหรับบันทึก QR Code**
+        function saveQrCode() {
+            const qrImage = document.getElementById('qrCodeImage');
+            const imageURL = qrImage.src;
+            
+            // สร้างลิงก์ A เสมือนสำหรับสั่งดาวน์โหลด
+            const a = document.createElement('a');
+            a.href = imageURL;
+            a.download = 'OK_Mobile_PromptPay_QR.jpeg'; // กำหนดชื่อไฟล์
+            
+            // สั่งดาวน์โหลด
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // แจ้งเตือนเล็กน้อย
+            const button = document.querySelector('.save-qr-btn');
+            button.innerText = '✅ ดาวน์โหลดแล้ว!';
+            button.style.backgroundColor = '#27ae60';
+            button.style.boxShadow = '0 0 15px rgba(39, 174, 96, 0.7)';
+            setTimeout(() => {
+                button.innerText = '💾 บันทึก QR Code';
+                button.style.backgroundColor = 'var(--accent-neon)';
+                button.style.boxShadow = '0 0 15px rgba(100, 255, 218, 0.7)';
+            }, 1500);
+        }
+    </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="th">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>แจ้งเลขบัญชี</title>
