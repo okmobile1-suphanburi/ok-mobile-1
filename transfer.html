@@ -58,6 +58,8 @@
             max-width: 90px;
             margin-bottom: 15px;
             filter: drop-shadow(0 0 15px var(--accent-pink)); 
+            /* แก้ไข: เพิ่ม border-radius ให้เป็นวงกลม */
+            border-radius: 50%; 
         }
 
         h2 {
@@ -275,13 +277,17 @@
         }
 
         .link-text {
-            color: var(--accent-pink); 
+            /* *************************************** */
+            /* แก้ไข: เปลี่ยนสีเป็น Neon และลบเงาเบลอ */
+            color: var(--accent-neon); 
             font-weight: 700;
             text-decoration: none;
-            text-shadow: 0 0 5px rgba(255, 0, 255, 0.5);
+            text-shadow: none; /* ทำให้ตัวเลขเบอร์โทรคมชัด */
             transition: color 0.3s;
+            /* *************************************** */
         }
         .link-text:hover {
+            /* ปรับ Hover ให้เข้ากับ Neon */
             color: var(--accent-blue);
             text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
         }
