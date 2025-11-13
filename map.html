@@ -1,80 +1,337 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>แผนที่ร้าน OK Mobile</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-    }
-    header {
-      display: flex;
-      align-items: center;
-      padding: 10px 20px;
-      background-color: #f1f1f1;
-    }
-    header img {
-      height: 50px;
-      margin-right: 15px;
-      border-radius: 10px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 22px;
-    }
-    .button-container {
-      text-align: center;
-      margin: 15px 0;
-    }
-    .button-container a {
-      display: inline-block;
-      margin: 5px 10px;
-      padding: 12px 20px;
-      background-color: #007bff;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: background-color 0.3s;
-    }
-    .button-container a:hover {
-      background-color: #0056b3;
-    }
-    .map-container {
-      width: 100%;
-      height: 70vh;
-    }
-    iframe {
-      border: 0;
-      width: 100%;
-      height: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แผนที่ร้าน โอเค โมบาย ซ่อมมือถือ ตลาดอู่ทอง | Multi-Color Light Border</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        /* 1. กำหนดค่าพื้นฐานและโทนสี: แดงสดใส & พื้นหลังไล่สี */
+        :root {
+            --brand-color: #e74c3c; /* สีเน้นหลัก: แดงสดใส (Vibrant Red) */
+            --brand-color-dark: #c0392b; /* แดงเข้มสำหรับ Hover */
+            --text-color: #1a1a1a; /* สีข้อความ: ดำเข้มจัด (High Contrast) */
+            --bg-start: #f0f7ff; 
+            --bg-end: #ffffff; 
+            --detail-bg: #f7f9fb; 
+            --card-bg: #fff; 
+            --shadow-strong: 0 10px 30px rgba(0, 0, 0, 0.15); 
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(to bottom, var(--bg-start) 0%, var(--bg-end) 100%);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* 2. Card Design (Responsive) */
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            background-color: var(--card-bg);
+            border-radius: 20px; 
+            box-shadow: var(--shadow-strong); 
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.8s ease-out; 
+            position: relative;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row; 
+            }
+        }
+
+        /* 3. ส่วนแผนที่ (รูปภาพ) */
+        .map-section {
+            flex: 2; 
+            min-height: 400px; 
+            position: relative;
+            background-color: #e0e0e0;
+            border-radius: 20px 20px 0 0; 
+            overflow: hidden; 
+            z-index: 1;
+            padding: 4px; 
+        }
+        @media (min-width: 768px) {
+            .map-section {
+                border-radius: 20px 0 0 20px;
+            }
+        }
+        
+        .map-section img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            display: block;
+            position: relative;
+            z-index: 2; 
+            border-radius: 16px 16px 0 0; 
+        }
+        @media (min-width: 768px) {
+            .map-section img {
+                border-radius: 16px 0 0 16px; 
+            }
+        }
+
+
+        /* ✨ เอฟเฟกต์แสงวิ่งรอบรูปภาพ (หลายสีเข้ม) ✨ */
+        .map-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            /* Gradient สำหรับแสงที่หมุน - หลายสีเข้ม */
+            background: conic-gradient(
+                transparent 0%,
+                #673ab7 10%, /* ม่วงเข้ม */
+                transparent 20%,
+                #2196f3 30%, /* น้ำเงินเข้ม */
+                transparent 40%,
+                #4caf50 50%, /* เขียวเข้ม */
+                transparent 60%,
+                #ffc107 70%, /* ทอง */
+                transparent 80%,
+                #e74c3c 90%, /* แดง (สีแบรนด์เดิม) */
+                transparent 100%
+            );
+            animation: border-light 10s linear infinite; /* แอนิเมชันแสงวิ่ง */
+            z-index: 0; /* อยู่ด้านหลังรูปภาพ */
+            opacity: 0.8; /* **เพิ่มความเข้มของแสงให้เด่นชัดขึ้น** */
+            filter: brightness(1.2); /* เพิ่มความสว่างเล็กน้อย */
+        }
+
+        @keyframes border-light {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* 4. ส่วนข้อมูลร้านและปุ่ม CTA (ไม่มีการเปลี่ยนแปลงจากเดิม) */
+        .info-section {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        h1 {
+            font-weight: 700; 
+            color: var(--brand-color-dark); 
+            margin-bottom: 5px;
+            font-size: 2.2em; 
+            letter-spacing: 0.5px;
+        }
+
+        .status {
+            font-weight: 700; 
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px; 
+            display: inline-block;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+        .status.open { 
+            background-color: #2ecc71; 
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4);
+        }
+        .status.closed { 
+            background-color: #a33126; 
+            box-shadow: 0 4px 10px rgba(163, 49, 38, 0.4);
+        }
+        
+        .details {
+            margin-top: 20px;
+        }
+
+        .detail-card {
+            background-color: var(--detail-bg); 
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px; 
+            border-left: 5px solid var(--brand-color); 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); 
+            transition: transform 0.2s;
+        }
+        
+        .detail-card:hover {
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .details p {
+            margin: 0; 
+            line-height: 1.6;
+            font-size: 1.05em;
+            font-weight: 400; 
+        }
+        .details strong {
+            font-weight: 600; 
+        }
+        .details i {
+            color: var(--brand-color); 
+            margin-right: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 16px 25px; 
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600; 
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn i { margin-right: 10px; }
+
+        .btn-primary {
+            background-color: var(--brand-color);
+            color: white;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); 
+        }
+        .btn-primary:hover {
+            background-color: var(--brand-color-dark); 
+            transform: translateY(-3px) scale(1.02); 
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6);
+        }
+
+        .btn-secondary {
+            background-color: #f7f7f7;
+            color: var(--text-color); 
+            border: 2px solid #ccc; 
+        }
+        .btn-secondary:hover {
+            background-color: #e0e0e0; 
+            color: var(--brand-color-dark); 
+            transform: scale(0.98); 
+            border-color: var(--brand-color); 
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo">
-    <h1>แผนที่ร้าน OK Mobile</h1>
-  </header>
+<div class="container">
+    
+    <div class="map-section">
+        <img 
+            src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/okmobile-1.jpg?raw=true" 
+            alt="แผนที่ร้าน โอเค โมบาย ซ่อมมือถือ ตลาดอู่ทอง">
+    </div>
 
-  <div class="button-container">
-    <a href="index.html">🏠 กลับหน้าแรก</a>
-    <a href="tel:0946613961">📞 โทรหาร้าน</a>
-    <a href="https://www.google.com/maps/dir/?api=1&destination=14.3763668,99.898358" target="_blank">📍 นำทางด้วย Google Maps</a>
-  </div>
+    <div class="info-section">
+        <div>
+            <h1>โอเคโมบาย อู่ทอง</h1>
+            <p style="font-size: 1.2em; color: #7f8c8d; font-weight: 300;">ร้านมือถือตลาดอู่ทอง สุพรรณบุรี</p>
+            
+            <span class="status" id="store-status">
+                <i class="fas fa-question-circle"></i> กำลังตรวจสอบ...
+            </span>
+            
+            <div class="details">
+                <div class="detail-card">
+                    <p>
+                        <i class="fas fa-map-marker-alt"></i> 
+                        **ที่อยู่:** 190 อู่ทอง อำเภออู่ทอง สุพรรณบุรี 72160 ประเทศไทย
+                    </p>
+                </div>
+                
+                <div class="detail-card">
+                    <p>
+                        <i class="fas fa-clock"></i> 
+                        **เวลาทำการ:**
+                        <br>จ.-ส. 08:00 - 20:00 น.
+                        <br>อา. 08:00 - 18:00 น.
+                    </p>
+                </div>
+            </div>
+        </div>
 
-  <div class="map-container">
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d61937.50764095879!2d99.898358!3d14.3763668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x30e3b540438299e1%3A0xf0078256e456195d!2z4LmC4Lit4LmA4LiEIOC5guC4oeC4muC4suC4og!5e0!3m2!1sth!2sth!4v1714372089389!5m2!1sth!2sth" 
-      allowfullscreen="" 
-      loading="lazy" 
-      referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
-  </div>
+        <div class="btn-group">
+            <a href="https://maps.google.com/?cid=17295936203649325405&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNl" target="_blank" class="btn btn-primary">
+                <i class="fas fa-route"></i> นำทางด้วย Google Maps
+            </a>
+            
+            <a href="tel:+66946613961" class="btn btn-secondary">
+                <i class="fas fa-phone"></i> โทรหาร้าน (094-661-3961)
+            </a>
+            
+            <a href="index.html" class="btn btn-secondary">
+                <i class="fas fa-home"></i> กลับหน้าแรก
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // JavaScript สำหรับตรวจสอบสถานะร้านค้าและอัปเดตอัตโนมัติ 
+    function checkStoreStatus() {
+        const now = new Date();
+        const day = now.getDay(); 
+        const hour = now.getHours();
+        
+        let isOpen = false;
+        let statusText = "ปิดทำการ";
+        let iconClass = "fa-times-circle"; 
+        let statusClass = "closed";
+
+        if (day >= 1 && day <= 6) { // จันทร์ - เสาร์ (08:00 - 20:00)
+            if (hour >= 8 && hour < 20) {
+                isOpen = true;
+            }
+        } else if (day === 0) { // อาทิตย์ (08:00 - 18:00)
+            if (hour >= 8 && hour < 18) {
+                isOpen = true;
+            }
+        }
+
+        if (isOpen) {
+            statusText = "เปิดทำการ";
+            iconClass = "fa-check-circle"; 
+            statusClass = "open";
+        }
+
+        const statusSpan = document.getElementById('store-status');
+        statusSpan.classList.remove('open', 'closed'); 
+        statusSpan.classList.add(statusClass);
+        statusSpan.innerHTML = `<i class="fas ${iconClass}"></i> **${statusText}**`;
+    }
+
+    checkStoreStatus();
+    setInterval(checkStoreStatus, 60000); 
+</script>
 
 </body>
 </html>
