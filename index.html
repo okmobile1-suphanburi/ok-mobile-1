@@ -1,274 +1,265 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="th" class="scroll-smooth">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>OK Mobile - ตลาดอู่ทอง</title>
+    <title>OK Mobile - ตลาดอู่ทอง | มืออาชีพเรื่องมือถือ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
+                fontFamily: {
+                    sans: ['Prompt', 'sans-serif'],
+                },
                 extend: {
                     colors: {
+                        // ใช้โทนสี Slate เพื่อความรู้สึกสุขุม นุ่มลึก และเป็นทางการ (Primary)
                         primary: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            200: '#c7d2fe',
-                            300: '#a5b4fc',
-                            400: '#818cf8',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            800: '#3730a3',
-                            900: '#312e81',
-                            950: '#1e1b4b',
+                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1',
+                            400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155',
+                            800: '#1e293b', 900: '#0f172a', 950: '#020617',
                         },
-                        secondary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                            950: '#082f49',
-                        },
+                        // ใช้สี Amber (สีอำพัน/ทอง) เป็นสีเน้น เพื่อความรู้สึก Premium (Accent)
                         accent: {
-                            50: '#fef2f2',
-                            100: '#fee2e2',
-                            200: '#fecaca',
-                            300: '#fca5a5',
-                            400: '#f87171',
-                            500: '#ef4444',
-                            600: '#dc2626',
-                            700: '#b91c1c',
-                            800: '#991b1b',
-                            900: '#7f1d1d',
-                            950: '#450a0a',
+                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
+                            400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309',
+                            800: '#92400e', 900: '#78350f', 950: '#451a03',
                         },
-                        success: '#22c55e', // Green for success
-                        warning: '#facc15', // Yellow for warning
-                        error: '#ef4444',   // Red for error
-                        line_green: '#00B900', // LINE brand green
+                        success: '#10b981',
+                        error: '#ef4444',
+                        line_green: '#00B900',
                     },
+                    boxShadow: {
+                        'pro': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                    }
                 },
             },
         }
     </script>
     <style>
-        @keyframes ping {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.5); opacity: 0.5; }
+        /* ปรับปรุง Ping Animation ให้ดูนุ่มนวลขึ้น */
+        @keyframes ping-soft {
+            75%, 100% { transform: scale(1.8); opacity: 0; }
         }
-        .animate-ping {
-            animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
-
-        /* 💡 Style สำหรับ Pop-up */
-        @keyframes wiggle {
-            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-            20%, 80% { transform: translate(-50%, -50%) rotate(-0.5deg); }
-            40%, 60% { transform: translate(-50%, -50%) rotate(0.5deg); }
+        .animate-ping-soft {
+            animation: ping-soft 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
         }
 
-        .popup-animated {
-            animation: wiggle 0.5s ease-in-out 3; 
-        }
-
-        /* Floating Buttons */
-        .floating-icons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 9999;
-        }
-
-        .floating-icons a {
-            position: relative;
-            width: 50px;
+        /* --- สไตล์สำหรับปุ่มติดต่อที่รวมอยู่ใน Hero Section --- */
+        .hero-contact-icons a {
+            /* กำหนดขนาดและรูปลักษณ์ให้เข้ากับปุ่มหลัก */
+            width: 50px; 
             height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            position: relative;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-
-        .floating-icons a:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        .hero-contact-icons a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-
-        .floating-icons a .tooltip {
-            visibility: hidden;
-            opacity: 0;
-            width: max-content;
-            background-color: rgba(0,0,0,0.8);
-            color: #fff;
-            text-align: center;
-            padding: 5px 10px;
-            border-radius: 6px;
+        
+        /* ปรับตำแหน่ง Tooltip ให้อยู่ด้านล่างปุ่ม */
+        .hero-contact-icons .tooltip {
             position: absolute;
-            right: 110%;
-            top: 50%;
-            transform: translateY(-50%);
+            top: 100%; 
+            left: 50%;
+            transform: translateX(-50%) translateY(5px); 
+            background-color: #333;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
             white-space: nowrap;
-            transition: opacity 0.2s;
-            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 10;
         }
-
-        .floating-icons a:hover .tooltip {
-            visibility: visible;
+        .hero-contact-icons a:hover .tooltip {
             opacity: 1;
         }
-
-        @media(min-width:768px){
-            .floating-icons a { width: 60px; height: 60px; }
+        
+        /* Gradient Overlay สำหรับ Hero - ปรับให้เข้มขึ้นเล็กน้อยเพื่อให้ตัวอักษรเด่นขึ้นใน Dark Mode */
+        .hero-overlay {
+            background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4));
         }
     </style>
 </head>
-<body class="bg-white text-gray-800 dark:bg-gray-950 dark:text-gray-100 transition-colors duration-500">
+<body class="bg-primary-50 text-primary-900 dark:bg-primary-950 dark:text-primary-100 transition-colors duration-300 font-sans leading-relaxed">
 
-    <header class="bg-gradient-to-r from-primary-600 to-primary-800 dark:from-gray-800 dark:to-gray-950 text-white fixed top-0 w-full z-50 shadow-lg">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md" />
+    <header class="bg-white/90 dark:bg-primary-900/90 backdrop-blur-md fixed top-0 w-full z-50 border-b border-primary-200 dark:border-primary-800 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-11 h-11 object-cover rounded-full shadow-sm border-2 border-white dark:border-primary-800" />
                 <div>
-                    <h1 class="text-2xl font-bold">OK Mobile อู่ทอง</h1>
-                    <div id="store-status" class="text-sm mt-1 font-medium flex items-center">กำลังโหลดสถานะร้าน...</div>
+                    <h1 class="text-xl md:text-2xl font-bold tracking-tight text-primary-900 dark:text-white">OK Mobile <span class="text-accent-600 dark:text-accent-400">อู่ทอง</span></h1>
+                    <div id="store-status" class="text-sm mt-0.5 font-medium flex items-center text-primary-600 dark:text-primary-400">
+                        <span class="inline-block w-2 h-2 rounded-full bg-gray-400 mr-2"></span> กำลังโหลด...
+                    </div>
                 </div>
             </div>
 
-            <button id="menu-toggle" class="flex items-center space-x-2 block md:hidden p-2 rounded-lg hover:bg-white hover:bg-opacity-20 transition-colors">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button id="menu-toggle" class="md:hidden p-2 rounded-md text-primary-600 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors focus:outline-none">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                 </svg>
-                <span>เมนู</span>
             </button>
 
-            <nav class="hidden md:flex space-x-6 text-lg items-center">
+            <nav class="hidden md:flex items-center space-x-1">
+                <a href="used.html" class="px-3 py-2 rounded-md text-sm font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all">สินค้ามือ 2</a>
+                <a href="others.html" class="px-3 py-2 rounded-md text-sm font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all">สินค้าอื่นๆ</a>
+                <a href="transfer.html" class="px-3 py-2 rounded-md text-sm font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all">แจ้งโอนเงิน</a>
+                <a href="embedded.html" class="px-3 py-2 rounded-md text-sm font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all">ชำระไฟแนนซ์</a>
+                <a href="map.html" class="px-3 py-2 rounded-md text-sm font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all">แผนที่ร้าน</a>
                 
-                <a href="used.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
-                    สินค้ามือ2
-                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
-                </a>
-                <a href="others.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
-                    สินค้าอื่นๆ
-                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
-                </a>
-                <a href="transfer.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
-                    แจ้งโอนเงิน
-                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
-                </a>
-                <a href="embedded.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
-                    ชำระเงินไฟแนนซ์
-                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
-                </a>
-                <a href="map.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
-                    แผนที่ร้าน
-                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
-                </a>
-                <a href="login.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
+                <div class="h-6 w-px bg-primary-200 dark:bg-primary-700 mx-2"></div> 
+                <a href="login.html" class="px-3 py-2 rounded-md text-sm font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 transition-all flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4 mr-1"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 10h-12z" clip-rule="evenodd" /></svg>
                     เข้าสู่ระบบ
-                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
-                </a>
-                <a href="activity.html" class="group relative hover:text-secondary-100 transition-colors duration-300">
-                    คนละครึ่ง
-                    <span class="absolute bottom-0 left-0 w-full h-0.5 bg-secondary-300 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out"></span>
                 </a>
                 
-                <button id="theme-toggle" class="ml-4 p-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-40 text-lg transition-all duration-300 hover:shadow-lg hover:shadow-secondary-300/50">
-                    <span class="dark:hidden">☀️</span><span class="hidden dark:inline">🌙</span>
+                <button id="theme-toggle" class="ml-3 p-2 rounded-full bg-primary-100 dark:bg-primary-800 text-primary-600 dark:text-primary-300 hover:bg-accent-100 dark:hover:bg-accent-900/30 hover:text-accent-600 dark:hover:text-accent-400 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500">
+                    <span class="dark:hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
+                    </span>
+                    <span class="hidden dark:inline">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
+                    </span>
                 </button>
             </nav>
         </div>
     </header>
 
-    <div id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-gray-100 dark:bg-gray-800 shadow-lg border-r border-gray-200 dark:border-gray-700 transform -translate-x-full transition-transform duration-300 z-40">
-        <div class="p-4">
-            <div class="flex items-center space-x-2 mb-8 border-b pb-4 border-gray-200 dark:border-gray-700">
-                <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 object-cover rounded-full shadow-md" />
-                <h1 class="text-xl font-bold">OK Mobile</h1>
+    <div id="mobile-menu" class="fixed top-0 left-0 h-full w-72 bg-white dark:bg-primary-900 shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <div class="p-6 flex flex-col h-full">
+            <div class="flex items-center justify-between mb-8">
+                <div class="flex items-center space-x-3">
+                    <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 rounded-full shadow-sm" />
+                    <h2 class="text-xl font-bold text-primary-900 dark:text-white">เมนูหลัก</h2>
+                </div>
+                 <button id="close-mobile-menu" class="p-2 rounded-full text-primary-600 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
-            <nav class="flex flex-col space-y-4 text-lg">
-                <a href="used.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">สินค้ามือ2</a>
-                <a href="others.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">สินค้าอื่นๆ</a>
-                <a href="transfer.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">แจ้งโอนเงิน</a>
-                <a href="embedded.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">ชำระเงินไฟแนนซ์</a>
-                <a href="map.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">แผนที่ร้าน</a>
-                <a href="login.html" class="block p-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-primary-100 dark:hover:bg-gray-700 transition-colors">เข้าสู่ระบบ</a>
+            <nav class="flex-1 space-y-2">
+                <a href="used.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">📱</span> สินค้ามือ 2</a>
+                <a href="others.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">🛍️</span> สินค้าอื่นๆ</a>
+                <a href="transfer.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">💸</span> แจ้งโอนเงิน</a>
+                <a href="embedded.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">📃</span> ชำระเงินไฟแนนซ์</a>
+                <a href="map.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">🗺️</span> แผนที่ร้าน</a>
+                <div class="my-4 border-t border-primary-100 dark:border-primary-800"></div>
+                <a href="login.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">🔒</span> เข้าสู่ระบบ</a>
             </nav>
-            <button id="theme-toggle-sidebar" class="mt-8 w-full p-3 rounded-lg bg-primary-500 hover:bg-primary-600 text-white text-center transition-colors duration-300 flex items-center justify-center space-x-2">
-                <span class="dark:hidden">เปลี่ยนโหมดกลางคืน 🌙</span>
-                <span class="hidden dark:inline">เปลี่ยนโหมดกลางวัน ☀️</span>
+            <button id="theme-toggle-sidebar" class="mt-auto w-full py-3 px-4 rounded-lg border border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-800 flex items-center justify-center transition-colors">
+                <span class="dark:hidden flex items-center"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg> โหมดกลางคืน</span>
+                <span class="hidden dark:inline flex items-center"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg> โหมดกลางวัน</span>
             </button>
         </div>
     </div>
+    <div id="overlay" class="fixed inset-0 bg-primary-950 bg-opacity-50 backdrop-blur-sm hidden z-40 transition-opacity"></div>
 
-    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30"></div>
+    <section class="relative pt-24 min-h-[90vh] flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1556742049-0c63d7006cc4?auto=format&fit=crop&w=1920&q=80');">
+        <div class="absolute inset-0 hero-overlay"></div> 
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-left">
+            <div class="max-w-2xl">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 drop-shadow-sm">
+                    ร้านมือถือครบวงจร <br class="hidden md:block"> ที่คุณวางใจได้
+                </h1>
+                <p class="text-lg md:text-xl text-primary-100 mb-10 leading-relaxed max-w-xl">
+                    OK Mobile ตลาดอู่ทอง ศูนย์รวมบริการ ซ่อม-ขาย-แลกเปลี่ยน พร้อมบริการตรวจสอบประกันและชำระเงินไฟแนนซ์ สะดวก รวดเร็ว 
+                </p>
+                
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="warranty.html" class="inline-flex justify-center items-center px-6 md:px-8 py-3 md:py-4 border border-transparent text-base md:text-lg font-semibold rounded-lg text-primary-900 bg-accent-400 hover:bg-accent-500 transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-accent-600/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 dark:text-white dark:bg-accent-600 dark:hover:bg-accent-700">
+                        เช็คประกันสินค้า
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </a>
+                    
+                    <a href="map.html" class="inline-flex justify-center items-center px-6 md:px-8 py-3 md:py-4 border-2 border-white text-base md:text-lg font-semibold rounded-lg text-white hover:bg-white hover:text-primary-900 transition-all transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
+                        ดูแผนที่ร้าน
+                    </a>
 
-    <section class="pt-24 min-h-screen flex flex-col items-center justify-center bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=1400&q=80')] text-white text-center px-4">
-        <div class="bg-black bg-opacity-60 p-8 rounded-xl w-full max-w-lg backdrop-blur-sm shadow-2xl">
-            <h2 class="text-4xl md:text-6xl font-extrabold mb-4 text-white drop-shadow-lg">ยินดีต้อนรับสู่ OK Mobile</h2>
-            <p class="text-lg md:text-xl mb-8 text-gray-200">ร้านมือถือ เช็คประกัน ซ่อม ขาย ครบจบในที่เดียว</p>
-            <a href="warranty.html" class="bg-secondary-500 hover:bg-secondary-600 transition transform hover:scale-105 text-white px-8 py-4 rounded-full text-xl font-semibold shadow-lg block max-w-xs mx-auto">เช็คประกันสินค้า</a>
+                    <div class="hero-contact-icons flex space-x-3 mt-4 sm:mt-0">
+                        <a href="https://www.facebook.com/profile.php?id=61566120762780&locale=th_TH" target="_blank" class="bg-[#1877F2] hover:bg-[#0d65d9] text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.312h3.587l-.467 3.622h-3.12V24h6.116C23.403 24 24 23.403 24 22.676V1.325C24 .597 23.403 0 22.675 0z"/>
+                            </svg>
+                            <span class="tooltip">Facebook</span>
+                        </a>
+                
+                        <a href="https://lin.ee/bQSzNzC" target="_blank" class="bg-[#00B900] hover:bg-[#009900] text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                <path d="M11.95 2.05c-5.518 0-9.95 3.924-9.95 8.783 0 2.913 1.666 5.515 4.241 7.222l-1.247 4.156 4.304-2.51c.282.105.56.196.843.272.296.079.598.143.905.195 5.514 0 9.95-3.924 9.95-8.783S17.464 2.05 11.95 2.05zM17.152 17.05c-.21 0-.42.045-.615.13l-1.65.96.466-1.55c.203-.674.195-1.39-.026-2.05-.22-.66-.624-1.21-.05-1.71.575-.5 1.05-.59 1.6-.29.55.3 1.1.86 1.1 1.5c0 .7-.4 1.29-.9 1.5-.5.2-1.07.2-1.6-.01zm-5.2-2.9c-.21 0-.42.045-.615.13l-1.65.96.466-1.55c.203-.674.195-1.39-.026-2.05-.22-.66-.624-1.21-.05-1.71.575-.5 1.05-.59 1.6-.29.55.3 1.1.86 1.1 1.5 0 .7-.4 1.29-.9 1.5-.5.2-1.07.2-1.6-.01z"/>
+                            </svg>
+                            <span class="tooltip">LINE</span>
+                        </a>
+                
+                        <a href="tel:0946613961" class="bg-accent-600 hover:bg-accent-700 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
+                                <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.07 21 3 13.93 3 5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.46.57 3.58.14.34.06.73-.24 1.01l-2.2 2.2z"/>
+                            </svg>
+                            <span class="tooltip">โทร</span>
+                        </a>
+                    </div>
+                    
+                </div>
+                </div>
         </div>
     </section>
-
-    <div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-teal-500 text-white rounded-2xl shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)] z-50 opacity-0 pointer-events-none transition-opacity duration-500 w-[90%] max-w-lg overflow-hidden text-center backdrop-blur-sm">
+    <div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-primary-800 rounded-xl shadow-2xl z-50 opacity-0 pointer-events-none transition-all duration-500 w-[90%] max-w-md overflow-hidden border border-primary-100 dark:border-primary-700">
         <div class="relative">
-            <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" class="w-full h-auto object-cover" />
+            <div class="aspect-w-16 aspect-h-9 bg-primary-200 dark:bg-primary-700 skeleton-loader">
+                <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" class="object-cover w-full h-full" onload="this.parentElement.classList.remove('skeleton-loader')"/>
+            </div>
             
-            <button id="close-popup" class="absolute top-2 right-2 p-1 bg-black bg-opacity-40 rounded-full text-white hover:bg-opacity-60 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+            <button id="close-popup" class="absolute top-3 right-3 p-1.5 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors backdrop-blur-sm focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
         
-        <div class="p-4 text-xl font-bold bg-teal-600">
-            🎉 ยินดีต้อนรับสู่ OK MOBILE! 🎉
-        </div>
-        <div class="p-2 text-sm bg-teal-500">
-            กรุณาเช็คสถานะร้านและบริการต่างๆ ผ่านเมนูด้านบน
+        <div class="p-5 text-center">
+            <h3 class="text-xl font-bold text-primary-900 dark:text-white mb-2 flex justify-center items-center">
+                <span class="mr-2">🎉</span> ยินดีต้อนรับสู่ OK MOBILE
+            </h3>
+            <p class="text-primary-600 dark:text-primary-300 text-sm">
+                เช็คสถานะร้านและบริการต่างๆ ได้ที่เมนูด้านบน <br>เราพร้อมให้บริการคุณด้วยความเป็นมืออาชีพ
+            </p>
         </div>
     </div>
-
-    <div class="floating-icons">
-        <a href="https://www.facebook.com/profile.php?id=61566120762780&locale=th_TH" target="_blank" class="bg-blue-600 hover:bg-blue-700">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
-                <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.312h3.587l-.467 3.622h-3.12V24h6.116C23.403 24 24 23.403 24 22.676V1.325C24 .597 23.403 0 22.675 0z"/>
-            </svg>
-            <span class="tooltip">Facebook</span>
-        </a>
-
-        <a href="https://lin.ee/bQSzNzC" target="_blank" class="bg-line_green hover:bg-green-600">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-6 h-6">
-                <path d="M11.95 2.05c-5.518 0-9.95 3.924-9.95 8.783 0 2.913 1.666 5.515 4.241 7.222l-1.247 4.156 4.304-2.51c.282.105.56.196.843.272.296.079.598.143.905.195 5.514 0 9.95-3.924 9.95-8.783S17.464 2.05 11.95 2.05zM17.152 17.05c-.21 0-.42.045-.615.13l-1.65.96.466-1.55c.203-.674.195-1.39-.026-2.05-.22-.66-.624-1.21-.05-1.71.575-.5 1.05-.59 1.6-.29.55.3 1.1.86 1.1 1.5c0 .7-.4 1.29-.9 1.5-.5.2-1.07.2-1.6-.01zm-5.2-2.9c-.21 0-.42.045-.615.13l-1.65.96.466-1.55c.203-.674.195-1.39-.026-2.05-.22-.66-.624-1.21-.05-1.71.575-.5 1.05-.59 1.6-.29.55.3 1.1.86 1.1 1.5 0 .7-.4 1.29-.9 1.5-.5.2-1.07.2-1.6-.01z"/>
-            </svg>
-            <span class="tooltip">LINE</span>
-        </a>
-
-        <a href="tel:0946613961" class="bg-primary-500 hover:bg-primary-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" class="w-6 h-6">
-                <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.07 21 3 13.93 3 5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.46.57 3.58.14.34.06.73-.24 1.01l-2.2 2.2z"/>
-            </svg>
-            <span class="tooltip">โทร</span>
-        </a>
-    </div>
-
-    <footer class="bg-gray-800 dark:bg-gray-950 text-gray-200 p-6 text-center shadow-inner">
-        <div class="max-w-6xl mx-auto">
-            <p>ติดต่อร้าน: 094-661-3961 | Line: <a href="https://lin.ee/bQSzNzC" target="_blank" class="text-secondary-300 hover:underline">@661qazoc</a></p>
-            <p class="mt-2 text-sm">© 2021 OK Mobile</p>
+    
+    <footer class="bg-primary-900 dark:bg-black text-primary-400 py-10 border-t border-primary-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left grid grid-cols-1 sm:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4 flex items-center justify-center sm:justify-start"><img src="https://i.imgur.com/nvYSgCM.jpeg" alt="Logo" class="w-8 h-8 rounded-full mr-2 border border-primary-700"> OK Mobile</h3>
+                <p class="text-sm">ตลาดอู่ทอง จ.สุพรรณบุรี<br>ให้บริการซ่อมมือถือครบวงจร สะดวก รวดเร็ว</p>
+            </div>
+            <div class="text-center">
+                <h3 class="text-white text-lg font-bold mb-4">เมนูลัด</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="used.html" class="hover:text-accent-400 transition-colors">สินค้ามือ 2</a></li>
+                    <li><a href="warranty.html" class="hover:text-accent-400 transition-colors">เช็คประกัน</a></li>
+                    <li><a href="map.html" class="hover:text-accent-400 transition-colors">แผนที่ร้าน</a></li>
+                </ul>
+            </div>
+            <div class="text-center sm:text-right">
+                <h3 class="text-white text-lg font-bold mb-4">ติดต่อเรา</h3>
+                <p class="text-sm mb-2">โทร: <a href="tel:0946613961" class="hover:text-accent-400 transition-colors font-medium">094-661-3961</a></p>
+                <p class="text-sm">Line: <a href="https://lin.ee/bQSzNzC" target="_blank" class="text-line_green hover:underline font-medium">@661qazoc</a></p>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-8 border-t border-primary-800/50 text-center text-sm text-primary-500">
+            <p>© 2023 OK Mobile อู่ทอง. All rights reserved.</p>
         </div>
     </footer>
 
@@ -276,20 +267,30 @@
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
         const overlay = document.getElementById('overlay');
+        const closeMobileMenu = document.getElementById('close-mobile-menu'); 
         const themeToggle = document.getElementById('theme-toggle');
         const themeToggleSidebar = document.getElementById('theme-toggle-sidebar');
         const html = document.documentElement;
 
-        menuToggle.addEventListener('click', () => {
-            mobileMenu.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
-        });
+        // ฟังก์ชันเปิด-ปิดเมนูมือถือ
+        function toggleMenu() {
+            const isOpen = !mobileMenu.classList.contains('-translate-x-full');
+            if (isOpen) {
+                mobileMenu.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                overlay.classList.remove('opacity-100');
+            } else {
+                mobileMenu.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            }
+        }
 
-        overlay.addEventListener('click', () => {
-            mobileMenu.classList.add('-translate-x-full');
-            overlay.classList.add('hidden');
-        });
+        menuToggle.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+        closeMobileMenu.addEventListener('click', toggleMenu); 
 
+        // Theme Logic
         const setTheme = (dark) => {
             if (dark) {
                 html.classList.add('dark');
@@ -306,22 +307,19 @@
         } else if (savedTheme === 'light') {
             setTheme(false);
         } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setTheme(true); 
+            setTheme(true);
         }
 
-        themeToggle.addEventListener('click', () => {
-            setTheme(!html.classList.contains('dark'));
-        });
-        themeToggleSidebar.addEventListener('click', () => {
-            setTheme(!html.classList.contains('dark'));
-        });
+        themeToggle.addEventListener('click', () => setTheme(!html.classList.contains('dark')));
+        themeToggleSidebar.addEventListener('click', () => setTheme(!html.classList.contains('dark')));
 
+        // Store Status Logic
         function updateStoreStatus() {
             const statusEl = document.getElementById('store-status');
             const now = new Date();
-            const day = now.getDay(); 
-            let openHour = 8; 
-            let closeHour = (day === 0 ? 17 : 20); 
+            const day = now.getDay();
+            let openHour = 8;
+            let closeHour = (day === 0 ? 17 : 20); // ปิด 5 โมงเย็นวันอาทิตย์, ปิด 2 ทุ่มวันอื่นๆ
 
             const openTime = new Date(now);
             openTime.setHours(openHour, 0, 0, 0);
@@ -331,73 +329,78 @@
             const isOpen = now >= openTime && now < closeTime;
 
             let message = '';
-            let dot = '';
+            let dotClass = '';
+            let textClass = '';
+            let ringColor = isOpen ? 'success' : 'error';
+            
             if (isOpen) {
-                message = `ร้านเปิดแล้ว (วันนี้ ${openHour}:00 - ${closeHour}:00 น.)`;
-                dot = `<span class="live-dot inline-block w-3 h-3 rounded-full mr-2 bg-success animate-ping"></span>`;
-                statusEl.className = "text-sm mt-1 font-medium text-success flex items-center";
+                message = `ร้านเปิดอยู่ (${openHour}:00 - ${closeHour}:00 น.)`;
+                dotClass = `absolute inline-flex h-2.5 w-2.5 rounded-full opacity-75 animate-ping-soft bg-${ringColor}`; 
+                textClass = "text-sm mt-0.5 font-medium text-success flex items-center";
             } else {
-                message = `ร้านปิดแล้ว (วันนี้เปิด ${openHour}:00 - ${closeHour}:00 น.)`;
-                dot = `<span class="live-dot inline-block w-3 h-3 rounded-full mr-2 bg-error"></span>`;
-                statusEl.className = "text-sm mt-1 font-medium text-error flex items-center";
+                message = `ร้านปิดแล้ว (เปิดพรุ่งนี้ ${openHour}:00 น.)`;
+                dotClass = `absolute inline-flex h-2.5 w-2.5 rounded-full opacity-75 bg-${ringColor}`; 
+                textClass = "text-sm mt-0.5 font-medium text-error flex items-center";
             }
 
-            statusEl.innerHTML = dot + message;
+            statusEl.className = textClass;
+            statusEl.innerHTML = `<span class="relative flex h-2.5 w-2.5 mr-2">
+                <span class="${dotClass}"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-${ringColor}"></span>
+            </span> ` + message;
         }
 
+        // Pop-up Logic
         function showPopup() {
             const popup = document.getElementById('popup-alert');
             const closeButton = document.getElementById('close-popup');
             
-            // แสดง Pop-up
-            popup.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-            popup.classList.add('opacity-100', 'popup-animated');
+            // ใช้ setTimeout เพื่อให้เกิด transition หลังจากโหลดหน้าเว็บ
+            setTimeout(() => {
+                popup.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                popup.classList.add('opacity-100');
+            }, 1000); // 1 วินาทีหลังจากโหลด
 
-            // ลบ Animation ออกหลังจากเล่นจบ (เพื่อไม่ให้สั่นตลอดเวลา)
-            popup.addEventListener('animationend', function handler() {
-                popup.classList.remove('popup-animated');
-                popup.removeEventListener('animationend', handler);
-            });
-
-            // ตั้งเวลาปิด Pop-up อัตโนมัติหลังจาก 8 วินาที
             const timeoutId = setTimeout(() => {
                 hidePopup();
-            }, 8000); 
+            }, 8000);
 
-            // Event Listener สำหรับปุ่มปิด (X)
             closeButton.onclick = () => {
-                clearTimeout(timeoutId); 
+                clearTimeout(timeoutId);
                 hidePopup();
             };
         }
 
         function hidePopup() {
             const popup = document.getElementById('popup-alert');
-            popup.classList.add('opacity-0');
+            popup.classList.remove('opacity-100');
+            popup.classList.add('opacity-0', 'translate-y-4');
             
-            // ซ่อน Pop-up หลังจาก fade out
             setTimeout(() => {
-                popup.classList.add('hidden', 'pointer-events-none');
+                popup.classList.add('pointer-events-none');
+                popup.classList.remove('translate-y-4'); 
             }, 500);
         }
 
         window.onload = function () {
             updateStoreStatus();
+            // เรียกใช้ showPopup ทันที
             showPopup(); 
         }
 
-        setInterval(updateStoreStatus, 60000); 
+        setInterval(updateStoreStatus, 60000);
     </script>
+    
     <script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/691591f2f9fa8f19671f79d3/1j9u446sm';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+        s1.async=true;
+        s1.src='https://embed.tawk.to/691591f2f9fa8f19671f79d3/1j9u446sm';
+        s1.charset='UTF-8';
+        s1.setAttribute('crossorigin','*');
+        s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
 </body>
 </html>
