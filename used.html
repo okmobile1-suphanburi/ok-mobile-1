@@ -7,6 +7,198 @@
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Papa Parse -->
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700&display=swap');
+        .font-prompt {
+            font-family: 'Prompt', sans-serif;
+        }
+        @layer utilities {
+            .text-primary { color: #4f46e5; }
+            .text-secondary { color: #ec4899; }
+            .bg-primary { background-color: #4f46e5; }
+            .bg-secondary { background-color: #ec4899; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 text-gray-800 font-prompt min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 shadow-xl p-8 text-center rounded-b-3xl sticky top-0 z-10 relative">
+        <h1 class="text-6xl font-extrabold text-white drop-shadow-2xl tracking-wide">
+            โอเค โมบาย
+        </h1>
+        <p class="text-gray-100 mt-2 text-xl font-medium drop-shadow-lg">
+            📱 OK-MOBILE SHOP ONLINE | สินค้าคุณภาพ ราคาเป็นกันเอง
+        </p>
+    </header>
+
+    <!-- Navigation & Search/Sort Section -->
+    <div class="p-6 max-w-6xl mx-auto">
+        
+        <!-- ปุ่มเช็คประกัน & กลับหน้าแรก -->
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 my-6">
+            <a href="warranty.html" class="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-blue-700 transition-transform transform hover:scale-105 font-semibold text-lg">
+                🔍 เช็คประกันสินค้า
+            </a>
+            <a href="index.html" class="inline-flex items-center justify-center bg-gray-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-gray-700 transition-transform transform hover:scale-105 font-semibold text-lg">
+                🏠 กลับหน้าหลัก
+            </a>
+        </div>
+
+        <!-- Search Input & Sort Dropdown -->
+        <div class="flex flex-col md:flex-row gap-4 mb-8 mt-6 items-center">
+            <!-- Search Input -->
+            <input type="text" id="product-search" placeholder="ค้นหาสินค้า (เช่น iPhone, Samsung, Xiaomi)"
+                   class="w-full md:w-2/3 p-4 border-2 border-pink-400 rounded-xl shadow-inner text-lg focus:ring-4 focus:ring-pink-300 transition duration-300">
+            
+            <!-- Sort Dropdown -->
+            <select id="product-sort" class="w-full md:w-1/3 p-4 border-2 border-pink-400 rounded-xl shadow-inner text-lg bg-white appearance-none cursor-pointer focus:ring-4 focus:ring-pink-300 transition duration-300">
+                <option value="default">เรียงลำดับสินค้า (ค่าเริ่มต้น)</option>
+                <option value="price-asc">ราคา: น้อยไปมาก (↑)</option>
+                <option value="price-desc">ราคา: มากไปน้อย (↓)</option>
+            </select>
+        </div>
+
+        <!-- Product Grid Title -->
+        <h2 class="text-4xl font-bold text-gray-800 mb-6 border-b-4 border-pink-500 pb-2">
+            สินค้าทั้งหมดในร้าน
+        </h2>
+        
+        <!-- Product Grid -->
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <p id="loading" class="text-gray-500 text-center col-span-full py-10 text-xl animate-pulse">
+                กำลังโหลดสินค้า... กรุณารอสักครู่
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer for design completeness -->
+    <footer class="mt-12 p-6 bg-pink-500 text-white text-center rounded-t-3xl shadow-inner">
+        <p>© 2025 OK-MOBILE Shop Online. บริการด้วยใจ ใส่ใจทุกออเดอร์</p>
+    </footer>
+
+    <script type="module">
+        // --- Global Variables and Constants ---
+        let allProducts = [];
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/pub?gid=715824064&output=csv';
+        const grid = document.getElementById('product-grid');
+        const loading = document.getElementById('loading');
+        const searchInput = document.getElementById('product-search');
+        const sortInput = document.getElementById('product-sort');
+
+        // Function to format price with Thai locale
+        const formatPrice = (price) => Number(price).toLocaleString('th-TH');
+
+        // Function to render products onto the grid
+        const renderProducts = (products) => {
+            grid.innerHTML = ''; // Clear existing products
+
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="col-span-full text-center py-10">' +
+                                 '<p class="text-2xl text-red-500 font-semibold">⚠️ ไม่พบสินค้าที่คุณค้นหา</p>' +
+                                 '<p class="text-gray-500 mt-2">โปรดลองใช้คำค้นหาอื่น</p>' +
+                                 '</div>';
+                return;
+            }
+
+            products.forEach(item => {
+                const name = item.name?.trim() || 'ไม่มีชื่อสินค้า';
+                const price = item.price?.trim() || '0';
+                const image = item.image?.trim() || 'https://placehold.co/400x300/fecaca/9f1239?text=NO+IMAGE'; 
+                const facebook = item.facebook?.trim() || 'https://www.facebook.com/profile.php?id=61566120762780'; 
+                
+                // All items are assumed to be in stock
+                const buyButtonClass = 'w-full text-center bg-green-500 text-white px-4 py-3 rounded-full text-lg font-semibold hover:bg-green-600 transition shadow-md hover:shadow-lg';
+                const buyButtonText = '🛒 สั่งซื้อสินค้า';
+                const buyButtonHref = 'https://www.facebook.com/profile.php?id=61566120762780'; 
+                const buyButtonTarget = '_blank';
+
+
+                const card = document.createElement('div');
+                // Standard card styling
+                card.className = `bg-white p-6 rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 border border-gray-100 relative`;
+                
+                card.innerHTML = `
+                    <div class="h-64 mb-4 overflow-hidden rounded-xl relative">
+                        <img src="${image}" alt="รูปภาพของ ${name}"
+                            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                            onerror="this.src='https://placehold.co/400x300/fecaca/9f1239?text=NO+IMAGE'">
+                    </div>
+                    <h3 class="text-2xl font-bold mb-1 text-gray-900 truncate">${name}</h3>
+                    <p class="text-3xl font-extrabold mb-4 text-pink-600">
+                        <span class="text-2xl font-normal">฿</span>${formatPrice(price)}
+                    </p>
+                    <div class="flex flex-col space-y-3">
+                        <!-- ปุ่มดูรายละเอียด -->
+                        <a href="${facebook}" target="_blank" rel="noopener noreferrer"
+                            class="w-full text-center bg-secondary text-white px-4 py-3 rounded-full text-lg font-semibold hover:bg-pink-600 transition shadow-md hover:shadow-lg">
+                            🔗 ดูรายละเอียดสินค้า
+                        </a>
+                        <!-- ปุ่มสั่งซื้อสินค้า (Always active) -->
+                        <a href="${buyButtonHref}" target="${buyButtonTarget}" rel="noopener noreferrer"
+                            class="${buyButtonClass}">
+                            ${buyButtonText}
+                        </a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        };
+
+        // Function to filter and sort products based on user inputs 
+        const filterAndSortProducts = () => {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            const sortMethod = sortInput.value;
+            
+            // 1. Filter based on search term
+            const filtered = allProducts.filter(product => {
+                const name = product.name?.trim()?.toLowerCase() || '';
+                return name.includes(searchTerm);
+            });
+
+            // 2. Sort based on selection
+            let sorted = [...filtered]; 
+
+            if (sortMethod === 'price-asc') {
+                sorted.sort((a, b) => {
+                    return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
+                });
+            } else if (sortMethod === 'price-desc') {
+                sorted.sort((a, b) => {
+                    return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
+                });
+            }
+            
+            // 3. Render the final list
+            renderProducts(sorted);
+        };
+        
+        // --- Main Initialization ---
+        
+        // 1. Initialize data loading (products)
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            skipEmptyLines: true,
+            complete: function(results) {
+                // Remove loading indicator
+                loading?.remove(); 
+                
+                // Store all data and clean price string (remove commas) for reliable numerical sorting
+                allProducts = results.data
+                    .filter(item => item.name && item.price) 
+                    .map(item => ({
+                        ...item,
+                        // Clean up the price string before use<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>โอเค โมบาย | ร้านมือถือ</title>
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Papa Parse -->
     <script src="cdn.jsdelivr.net"></script>
     <style>
         @import url('fonts.googleapis.com');
@@ -146,5 +338,28 @@
         searchInput.addEventListener('input', handleFilter);
         sortInput.addEventListener('change', handleFilter);
     </script>
+</body>
+</html>
+
+                        price: item.price ? String(item.price).replace(/,/g, '') : '0' 
+                    })); 
+
+                filterAndSortProducts(); // Call the combined function to render initial state
+
+                // Attach listeners to trigger filtering and sorting
+                searchInput.addEventListener('keyup', filterAndSortProducts);
+                searchInput.addEventListener('change', filterAndSortProducts);
+                sortInput.addEventListener('change', filterAndSortProducts); 
+            },
+            error: function(err) {
+                console.error('ไม่สามารถโหลดสินค้า:', err);
+                grid.innerHTML = '<p class="text-3xl text-red-600 font-bold col-span-full text-center py-10">' + 
+                                 '❌ เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้าจาก Google Sheet' + 
+                                 '</p>';
+            }
+        });
+
+    </script>
+
 </body>
 </html>
