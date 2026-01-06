@@ -15,13 +15,11 @@
                 },
                 extend: {
                     colors: {
-                        // ใช้โทนสี Slate เพื่อความรู้สึกสุขุม นุ่มลึก และเป็นทางการ (Primary)
                         primary: {
                             50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1',
                             400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155',
                             800: '#1e293b', 900: '#0f172a', 950: '#020617',
                         },
-                        // ใช้สี Amber (สีอำพัน/ทอง) เป็นสีเน้น เพื่อความรู้สึก Premium (Accent)
                         accent: {
                             50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
                             400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309',
@@ -39,7 +37,6 @@
         }
     </script>
     <style>
-        /* ปรับปรุง Ping Animation ให้ดูนุ่มนวลขึ้น */
         @keyframes ping-soft {
             75%, 100% { transform: scale(1.8); opacity: 0; }
         }
@@ -47,9 +44,7 @@
             animation: ping-soft 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
         }
 
-        /* --- สไตล์สำหรับปุ่มติดต่อที่รวมอยู่ใน Hero Section --- */
         .hero-contact-icons a {
-            /* กำหนดขนาดและรูปลักษณ์ให้เข้ากับปุ่มหลัก */
             width: 50px; 
             height: 50px;
             display: flex;
@@ -65,7 +60,6 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         
-        /* ปรับตำแหน่ง Tooltip ให้อยู่ด้านล่างปุ่ม */
         .hero-contact-icons .tooltip {
             position: absolute;
             top: 100%; 
@@ -86,7 +80,6 @@
             opacity: 1;
         }
         
-        /* Gradient Overlay สำหรับ Hero - ปรับให้เข้มขึ้นเล็กน้อยเพื่อให้ตัวอักษรเด่นขึ้นใน Dark Mode */
         .hero-overlay {
             background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4));
         }
@@ -210,24 +203,22 @@
                             <span class="tooltip">โทร</span>
                         </a>
                     </div>
-                    
                 </div>
-                </div>
+            </div>
         </div>
     </section>
+
     <div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-primary-800 rounded-xl shadow-2xl z-50 opacity-0 pointer-events-none transition-all duration-500 w-[90%] max-w-md overflow-hidden border border-primary-100 dark:border-primary-700">
         <div class="relative">
-            <div class="aspect-w-16 aspect-h-9 bg-primary-200 dark:bg-primary-700 skeleton-loader">
-                <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" class="object-cover w-full h-full" onload="this.parentElement.classList.remove('skeleton-loader')"/>
+            <div class="aspect-w-16 aspect-h-9 bg-primary-200 dark:bg-primary-700">
+                <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" class="object-cover w-full h-full"/>
             </div>
-            
             <button id="close-popup" class="absolute top-3 right-3 p-1.5 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors backdrop-blur-sm focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
         </div>
-        
         <div class="p-5 text-center">
             <h3 class="text-xl font-bold text-primary-900 dark:text-white mb-2 flex justify-center items-center">
                 <span class="mr-2">🎉</span> ยินดีต้อนรับสู่ OK MOBILE
@@ -272,7 +263,6 @@
         const themeToggleSidebar = document.getElementById('theme-toggle-sidebar');
         const html = document.documentElement;
 
-        // ฟังก์ชันเปิด-ปิดเมนูมือถือ
         function toggleMenu() {
             const isOpen = !mobileMenu.classList.contains('-translate-x-full');
             if (isOpen) {
@@ -290,7 +280,6 @@
         overlay.addEventListener('click', toggleMenu);
         closeMobileMenu.addEventListener('click', toggleMenu); 
 
-        // Theme Logic
         const setTheme = (dark) => {
             if (dark) {
                 html.classList.add('dark');
@@ -313,13 +302,12 @@
         themeToggle.addEventListener('click', () => setTheme(!html.classList.contains('dark')));
         themeToggleSidebar.addEventListener('click', () => setTheme(!html.classList.contains('dark')));
 
-        // Store Status Logic
         function updateStoreStatus() {
             const statusEl = document.getElementById('store-status');
             const now = new Date();
             const day = now.getDay();
             let openHour = 8;
-            let closeHour = (day === 0 ? 17 : 20); // ปิด 5 โมงเย็นวันอาทิตย์, ปิด 2 ทุ่มวันอื่นๆ
+            let closeHour = (day === 0 ? 17 : 20); 
 
             const openTime = new Date(now);
             openTime.setHours(openHour, 0, 0, 0);
@@ -329,41 +317,32 @@
             const isOpen = now >= openTime && now < closeTime;
 
             let message = '';
-            let dotClass = '';
-            let textClass = '';
-            let ringColor = isOpen ? 'success' : 'error';
+            let dotColorClass = isOpen ? 'bg-emerald-500' : 'bg-red-500';
             
             if (isOpen) {
                 message = `ร้านเปิดอยู่ (${openHour}:00 - ${closeHour}:00 น.)`;
-                dotClass = `absolute inline-flex h-2.5 w-2.5 rounded-full opacity-75 animate-ping-soft bg-${ringColor}`; 
-                textClass = "text-sm mt-0.5 font-medium text-success flex items-center";
+                statusEl.className = "text-sm mt-0.5 font-medium text-emerald-600 dark:text-emerald-400 flex items-center";
             } else {
                 message = `ร้านปิดแล้ว (เปิดพรุ่งนี้ ${openHour}:00 น.)`;
-                dotClass = `absolute inline-flex h-2.5 w-2.5 rounded-full opacity-75 bg-${ringColor}`; 
-                textClass = "text-sm mt-0.5 font-medium text-error flex items-center";
+                statusEl.className = "text-sm mt-0.5 font-medium text-red-600 dark:text-red-400 flex items-center";
             }
 
-            statusEl.className = textClass;
             statusEl.innerHTML = `<span class="relative flex h-2.5 w-2.5 mr-2">
-                <span class="${dotClass}"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-${ringColor}"></span>
+                <span class="absolute inline-flex h-full w-full rounded-full opacity-75 ${isOpen ? 'animate-ping-soft' : ''} ${dotColorClass}"></span>
+                <span class="relative inline-flex rounded-full h-2.5 w-2.5 ${dotColorClass}"></span>
             </span> ` + message;
         }
 
-        // Pop-up Logic
         function showPopup() {
             const popup = document.getElementById('popup-alert');
             const closeButton = document.getElementById('close-popup');
             
-            // ใช้ setTimeout เพื่อให้เกิด transition หลังจากโหลดหน้าเว็บ
             setTimeout(() => {
-                popup.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                popup.classList.remove('opacity-0', 'pointer-events-none');
                 popup.classList.add('opacity-100');
-            }, 1000); // 1 วินาทีหลังจากโหลด
+            }, 1000);
 
-            const timeoutId = setTimeout(() => {
-                hidePopup();
-            }, 8000);
+            const timeoutId = setTimeout(hidePopup, 8000);
 
             closeButton.onclick = () => {
                 clearTimeout(timeoutId);
@@ -373,34 +352,16 @@
 
         function hidePopup() {
             const popup = document.getElementById('popup-alert');
-            popup.classList.remove('opacity-100');
-            popup.classList.add('opacity-0', 'translate-y-4');
-            
-            setTimeout(() => {
-                popup.classList.add('pointer-events-none');
-                popup.classList.remove('translate-y-4'); 
-            }, 500);
+            popup.classList.replace('opacity-100', 'opacity-0');
+            setTimeout(() => popup.classList.add('pointer-events-none'), 500);
         }
 
         window.onload = function () {
             updateStoreStatus();
-            // เรียกใช้ showPopup ทันที
             showPopup(); 
         }
 
         setInterval(updateStoreStatus, 60000);
-    </script>
-    
-    <script type="text/javascript">
-        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-        (function(){
-        var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-        s1.async=true;
-        s1.src='https://embed.tawk.to/691591f2f9fa8f19671f79d3/1j9u446sm';
-        s1.charset='UTF-8';
-        s1.setAttribute('crossorigin','*');
-        s0.parentNode.insertBefore(s1,s0);
-        })();
     </script>
 </body>
 </html>
