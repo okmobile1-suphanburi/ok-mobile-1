@@ -2,335 +2,297 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>แผนที่ร้าน โอเค โมบาย ซ่อมมือถือ ตลาดอู่ทอง | Multi-Color Light Border</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>โอเคโมบาย อู่ทอง | แผนที่และการติดต่อ</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* 1. กำหนดค่าพื้นฐานและโทนสี: แดงสดใส & พื้นหลังไล่สี */
         :root {
-            --brand-color: #e74c3c; /* สีเน้นหลัก: แดงสดใส (Vibrant Red) */
-            --brand-color-dark: #c0392b; /* แดงเข้มสำหรับ Hover */
-            --text-color: #1a1a1a; /* สีข้อความ: ดำเข้มจัด (High Contrast) */
-            --bg-start: #f0f7ff; 
-            --bg-end: #ffffff; 
-            --detail-bg: #f7f9fb; 
-            --card-bg: #fff; 
-            --shadow-strong: 0 10px 30px rgba(0, 0, 0, 0.15); 
+            --brand-red: #e74c3c;
+            --dark-navy: #0f172a;
+            --slate-gray: #64748b;
+            --bg-body: #f1f5f9;
+            --white: #ffffff;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Prompt', sans-serif;
-            background: linear-gradient(to bottom, var(--bg-start) 0%, var(--bg-end) 100%);
-            color: var(--text-color);
-            margin: 0;
+            background-color: var(--bg-body);
+            color: var(--dark-navy);
+            line-height: 1.5;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
+            /* รองรับ Safe Area สำหรับ iPhone รุ่นใหม่ */
+            padding: env(safe-area-inset-top) 15px env(safe-area-inset-bottom) 15px;
         }
 
-        /* 2. Card Design (Responsive) */
-        .container {
+        /* Container หลักที่ยืดหยุ่น */
+        .card-container {
             width: 100%;
-            max-width: 1000px;
-            background-color: var(--card-bg);
-            border-radius: 20px; 
-            box-shadow: var(--shadow-strong); 
+            max-width: 900px;
+            background: var(--white);
+            border-radius: 24px;
             overflow: hidden;
+            box-shadow: var(--shadow-lg);
             display: flex;
-            flex-direction: column;
-            animation: fadeIn 0.8s ease-out; 
-            position: relative;
+            flex-direction: column; /* มือถือ: เรียงแนวตั้ง */
+            margin: 20px 0;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+
         @media (min-width: 768px) {
-            .container {
-                flex-direction: row; 
+            .card-container {
+                flex-direction: row; /* แท็บเล็ต/คอม: เรียงแนวนอน */
+                min-height: 550px;
             }
         }
 
-        /* 3. ส่วนแผนที่ (รูปภาพ) */
-        .map-section {
-            flex: 2; 
-            min-height: 400px; 
+        /* ส่วนของภาพ (สัดส่วนต้องคงที่ทุกหน้าจอ) */
+        .image-side {
             position: relative;
-            background-color: #e0e0e0;
-            border-radius: 20px 20px 0 0; 
-            overflow: hidden; 
-            z-index: 1;
-            padding: 4px; 
+            flex: 1.1;
+            min-height: 250px;
+            background: #000;
         }
-        @media (min-width: 768px) {
-            .map-section {
-                border-radius: 20px 0 0 20px;
-            }
-        }
-        
-        .map-section img {
+
+        .image-side img {
             width: 100%;
             height: 100%;
-            object-fit: cover; 
+            object-fit: cover;
             display: block;
-            position: relative;
-            z-index: 2; 
-            border-radius: 16px 16px 0 0; 
-        }
-        @media (min-width: 768px) {
-            .map-section img {
-                border-radius: 16px 0 0 16px; 
-            }
         }
 
-
-        /* ✨ เอฟเฟกต์แสงวิ่งรอบรูปภาพ (หลายสีเข้ม) ✨ */
-        .map-section::after {
-            content: '';
+        /* ป้ายสถานะ เปิด/ปิด */
+        .status-badge {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            /* Gradient สำหรับแสงที่หมุน - หลายสีเข้ม */
-            background: conic-gradient(
-                transparent 0%,
-                #673ab7 10%, /* ม่วงเข้ม */
-                transparent 20%,
-                #2196f3 30%, /* น้ำเงินเข้ม */
-                transparent 40%,
-                #4caf50 50%, /* เขียวเข้ม */
-                transparent 60%,
-                #ffc107 70%, /* ทอง */
-                transparent 80%,
-                #e74c3c 90%, /* แดง (สีแบรนด์เดิม) */
-                transparent 100%
-            );
-            animation: border-light 10s linear infinite; /* แอนิเมชันแสงวิ่ง */
-            z-index: 0; /* อยู่ด้านหลังรูปภาพ */
-            opacity: 0.8; /* **เพิ่มความเข้มของแสงให้เด่นชัดขึ้น** */
-            filter: brightness(1.2); /* เพิ่มความสว่างเล็กน้อย */
-        }
-
-        @keyframes border-light {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        /* 4. ส่วนข้อมูลร้านและปุ่ม CTA (ไม่มีการเปลี่ยนแปลงจากเดิม) */
-        .info-section {
-            flex: 1;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        h1 {
-            font-weight: 700; 
-            color: var(--brand-color-dark); 
-            margin-bottom: 5px;
-            font-size: 2.2em; 
-            letter-spacing: 0.5px;
-        }
-
-        .status {
-            font-weight: 700; 
-            color: white;
-            padding: 8px 15px;
-            border-radius: 25px; 
-            display: inline-block;
-            margin-bottom: 25px;
-            text-transform: uppercase;
-        }
-        .status.open { 
-            background-color: #2ecc71; 
-            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.4);
-        }
-        .status.closed { 
-            background-color: #a33126; 
-            box-shadow: 0 4px 10px rgba(163, 49, 38, 0.4);
-        }
-        
-        .details {
-            margin-top: 20px;
-        }
-
-        .detail-card {
-            background-color: var(--detail-bg); 
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px; 
-            border-left: 5px solid var(--brand-color); 
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); 
-            transition: transform 0.2s;
-        }
-        
-        .detail-card:hover {
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .details p {
-            margin: 0; 
-            line-height: 1.6;
-            font-size: 1.05em;
-            font-weight: 400; 
-        }
-        .details strong {
-            font-weight: 600; 
-        }
-        .details i {
-            color: var(--brand-color); 
-            margin-right: 10px;
-        }
-
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .btn {
-            padding: 16px 25px; 
-            border: none;
-            border-radius: 10px;
-            font-size: 1.1em;
-            font-weight: 600; 
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            top: 15px;
+            left: 15px;
+            padding: 6px 14px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.95);
             display: flex;
             align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-sm);
+            z-index: 5;
+        }
+        .open { color: #10b981; }
+        .closed { color: var(--brand-red); }
+
+        /* ส่วนของเนื้อหา */
+        .content-side {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
         }
 
-        .btn i { margin-right: 10px; }
+        @media (min-width: 768px) {
+            .content-side { padding: 40px; }
+        }
+
+        .category-tag {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--brand-red);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .intro-text {
+            color: var(--slate-gray);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* รายละเอียดข้อมูลร้าน */
+        .info-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .icon-wrap {
+            width: 42px;
+            height: 42px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-red);
+            flex-shrink: 0;
+        }
+
+        .text-wrap h4 {
+            font-size: 13px;
+            color: var(--slate-gray);
+            font-weight: 500;
+        }
+
+        .text-wrap p {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        /* กลุ่มปุ่มกด (Responsive Grid) */
+        .btn-stack {
+            display: grid;
+            grid-template-columns: 1fr; /* มือถือ: แถวละ 1 ปุ่ม */
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        @media (min-width: 480px) {
+            .btn-stack {
+                grid-template-columns: 1fr 1fr; /* มือถือแนวนอน: แถวละ 2 ปุ่ม */
+            }
+            .btn-primary { grid-column: span 2; }
+        }
+
+        .btn {
+            padding: 14px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
 
         .btn-primary {
-            background-color: var(--brand-color);
+            background: var(--dark-navy);
             color: white;
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); 
-        }
-        .btn-primary:hover {
-            background-color: var(--brand-color-dark); 
-            transform: translateY(-3px) scale(1.02); 
-            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.6);
         }
 
         .btn-secondary {
-            background-color: #f7f7f7;
-            color: var(--text-color); 
-            border: 2px solid #ccc; 
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            color: var(--dark-navy);
         }
-        .btn-secondary:hover {
-            background-color: #e0e0e0; 
-            color: var(--brand-color-dark); 
-            transform: scale(0.98); 
-            border-color: var(--brand-color); 
+
+        .btn:active {
+            transform: scale(0.96); /* เอฟเฟกต์ตอนกดบนมือถือ */
+        }
+
+        .back-home {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .back-home a {
+            font-size: 13px;
+            color: var(--slate-gray);
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    
-    <div class="map-section">
-        <img 
-            src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/okmobile-1.jpg?raw=true" 
-            alt="แผนที่ร้าน โอเค โมบาย ซ่อมมือถือ ตลาดอู่ทอง">
+<div class="card-container">
+    <div class="image-side">
+        <div id="status-ui" class="status-badge">
+            <i class="fas fa-circle"></i> <span>กำลังตรวจสอบ...</span>
+        </div>
+        <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/okmobile-1.jpg?raw=true" alt="หน้าร้านโอเคโมบาย">
     </div>
 
-    <div class="info-section">
-        <div>
-            <h1>โอเคโมบาย อู่ทอง</h1>
-            <p style="font-size: 1.2em; color: #7f8c8d; font-weight: 300;">ร้านมือถือตลาดอู่ทอง สุพรรณบุรี</p>
-            
-            <span class="status" id="store-status">
-                <i class="fas fa-question-circle"></i> กำลังตรวจสอบ...
-            </span>
-            
-            <div class="details">
-                <div class="detail-card">
-                    <p>
-                        <i class="fas fa-map-marker-alt"></i> 
-                        **ที่อยู่:** 190 อู่ทอง อำเภออู่ทอง สุพรรณบุรี 72160 ประเทศไทย
-                    </p>
-                </div>
-                
-                <div class="detail-card">
-                    <p>
-                        <i class="fas fa-clock"></i> 
-                        **เวลาทำการ:**
-                        <br>จ.-ส. 08:00 - 20:00 น.
-                        <br>อา. 08:00 - 18:00 น.
-                    </p>
-                </div>
+    <div class="content-side">
+        <span class="category-tag">Trusted Repair Service</span>
+        <h1>โอเคโมบาย ตลาดอู่ทอง</h1>
+        <p class="intro-text">ซ่อมมือถือ ตรวจเช็คอาการ และจำหน่ายอุปกรณ์เสริม ตลาดอู่ทอง</p>
+
+        <div class="info-row">
+            <div class="icon-wrap"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="text-wrap">
+                <h4>สถานที่ตั้ง</h4>
+                <p>190 ตลาดอู่ทอง อ.อู่ทอง จ.สุพรรณบุรี</p>
             </div>
         </div>
 
-        <div class="btn-group">
-            <a href="https://maps.google.com/?cid=17295936203649325405&g_mp=CiVnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLkdldFBsYWNl" target="_blank" class="btn btn-primary">
-                <i class="fas fa-route"></i> นำทางด้วย Google Maps
+        <div class="info-row">
+            <div class="icon-wrap"><i class="fas fa-clock"></i></div>
+            <div class="text-wrap">
+                <h4>เวลาทำการวันนี้</h4>
+                <p id="time-display">08:00 - 20:00 น.</p>
+            </div>
+        </div>
+
+        <div class="btn-stack">
+            <a href="https://www.google.com/maps/search/?api=1&query=โอเคโมบาย+อู่ทอง" target="_blank" class="btn btn-primary">
+                <i class="fas fa-directions"></i> นำทางด้วย Google Maps
             </a>
-            
-            <a href="tel:+66946613961" class="btn btn-secondary">
-                <i class="fas fa-phone"></i> โทรหาร้าน (094-661-3961)
+            <a href="tel:0946613961" class="btn btn-secondary">
+                <i class="fas fa-phone-alt"></i> โทรสอบถาม
             </a>
-            
             <a href="index.html" class="btn btn-secondary">
-                <i class="fas fa-home"></i> กลับหน้าแรก
+                <i class="fas fa-home"></i> หน้าหลัก
             </a>
+        </div>
+        
+       
         </div>
     </div>
 </div>
 
 <script>
-    // JavaScript สำหรับตรวจสอบสถานะร้านค้าและอัปเดตอัตโนมัติ 
-    function checkStoreStatus() {
+    function refreshStatus() {
         const now = new Date();
         const day = now.getDay(); 
         const hour = now.getHours();
+        const badge = document.getElementById('status-ui');
+        const timeText = document.getElementById('time-display');
         
         let isOpen = false;
-        let statusText = "ปิดทำการ";
-        let iconClass = "fa-times-circle"; 
-        let statusClass = "closed";
+        let schedule = "08:00 - 20:00 น.";
 
-        if (day >= 1 && day <= 6) { // จันทร์ - เสาร์ (08:00 - 20:00)
-            if (hour >= 8 && hour < 20) {
-                isOpen = true;
-            }
-        } else if (day === 0) { // อาทิตย์ (08:00 - 18:00)
-            if (hour >= 8 && hour < 18) {
-                isOpen = true;
-            }
+        if (day === 0) { // วันอาทิตย์
+            schedule = "08:00 - 18:00 น.";
+            if (hour >= 8 && hour < 18) isOpen = true;
+        } else { // จันทร์ - เสาร์
+            if (hour >= 8 && hour < 20) isOpen = true;
         }
 
         if (isOpen) {
-            statusText = "เปิดทำการ";
-            iconClass = "fa-check-circle"; 
-            statusClass = "open";
+            badge.className = 'status-badge open';
+            badge.innerHTML = '<i class="fas fa-check-circle"></i> ขณะนี้ร้านเปิดทำการ';
+        } else {
+            badge.className = 'status-badge closed';
+            badge.innerHTML = '<i class="fas fa-moon"></i> ขณะนี้ร้านปิดทำการ';
         }
 
-        const statusSpan = document.getElementById('store-status');
-        statusSpan.classList.remove('open', 'closed'); 
-        statusSpan.classList.add(statusClass);
-        statusSpan.innerHTML = `<i class="fas ${iconClass}"></i> **${statusText}**`;
+        timeText.innerText = schedule;
     }
 
-    checkStoreStatus();
-    setInterval(checkStoreStatus, 60000); 
+    refreshStatus();
+    setInterval(refreshStatus, 30000); // อัปเดตทุก 30 วินาที
 </script>
 
 </body>
