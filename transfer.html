@@ -26,7 +26,7 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* เปลี่ยนจาก center เพื่อให้เลื่อนจอลงได้ในมือถือจอเล็ก */
+            align-items: flex-start;
             min-height: 100vh;
             padding: 15px;
         }
@@ -34,15 +34,14 @@
         .main-card {
             background: #ffffff;
             width: 100%;
-            max-width: 450px; /* คุมความกว้างสูงสุด */
+            max-width: 450px;
             border-radius: 28px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             padding: 25px 20px;
             border: 1px solid #f8fafc;
-            margin: auto; /* จัดกลาง */
+            margin: auto;
         }
 
-        /* Header */
         .header { text-align: center; margin-bottom: 25px; }
         .logo-wrapper {
             width: 65px; height: 65px;
@@ -99,14 +98,14 @@
         }
         .qr-box {
             display: inline-block;
-            padding: 10px;
+            padding: 20px; /* เพิ่ม Padding เพื่อให้ตอนแคปภาพไม่ติดขอบ */
             background: white;
             border: 1px solid #f1f5f9;
             border-radius: 15px;
             margin-bottom: 12px;
             position: relative;
         }
-        .qr-box img { width: 150px; height: 150px; max-width: 100%; display: block; }
+        .qr-box img { width: 180px; height: 180px; max-width: 100%; display: block; }
         .qr-box::before, .qr-box::after { content: ''; position: absolute; width: 20px; height: 20px; border: 3px solid var(--primary-blue); }
         .qr-box::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
         .qr-box::after { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
@@ -114,7 +113,7 @@
         .btn-shot {
             background: #00c853;
             color: white; border: none; width: 100%; padding: 12px;
-            border-radius: 12px; font-weight: 700; font-size: 13px; text-transform: uppercase;
+            border-radius: 12px; font-weight: 700; font-size: 13px; text-transform: uppercase; cursor: pointer;
         }
 
         /* Contact Dashboard */
@@ -132,7 +131,6 @@
         .contact-card.phone { background: linear-gradient(135deg, #007AFF 0%, #0056b3 100%); }
         .contact-card span { font-weight: 700; font-size: 13px; }
 
-        /* Home Button */
         .btn-home-hero {
             display: flex; align-items: center; justify-content: center; gap: 10px;
             background: var(--dark-btn); color: #fff; text-decoration: none;
@@ -140,19 +138,19 @@
             border-bottom: 4px solid #000;
         }
 
-        /* Mobile Specific Adjustment */
+        /* Utility Class สำหรับซ่อนตอนแคปภาพ */
+        .no-capture { }
+
         @media (max-width: 360px) {
             .main-card { padding: 20px 15px; }
             .number-text { font-size: 20px; }
-            .contact-dashboard { grid-template-columns: 1fr; } /* จอเล็กมากให้ปุ่มติดต่อเรียงแถวเดียว */
+            .contact-dashboard { grid-template-columns: 1fr; }
         }
-
-        .data-html2canvas-ignore {}
     </style>
 </head>
 <body>
 
-    <div class="main-card" id="capture-area">
+    <div class="main-card">
         <div class="header">
             <div class="logo-wrapper">
                 <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile">
@@ -171,19 +169,20 @@
             <div class="number-box">
                 <div class="number-text">175-139-8588</div>
             </div>
-            <button class="btn-copy data-html2canvas-ignore" onclick="copyAccount()">
+            <button class="btn-copy" onclick="copyAccount()">
                 <i class="far fa-copy"></i> กดคัดลอกเลขบัญชี
             </button>
         </div>
 
         <span class="label">สแกน QR Code</span>
         <div class="qr-section">
-            <div class="qr-box">
+            <div class="qr-box" id="qr-target">
                 <img src="https://i.imgur.com/uwkjbbf.jpeg" crossorigin="anonymous">
             </div>
-            <div class="data-html2canvas-ignore">
-                <button class="btn-shot" onclick="captureFull()">
-                    <i class="fas fa-camera"></i> กดแคปภาพ QR Code
+            
+            <div style="margin-top: 10px;">
+                <button class="btn-shot" onclick="captureQROnly()">
+                    <i class="fas fa-camera"></i> บันทึกภาพเฉพาะ QR Code
                 </button>
             </div>
         </div>
@@ -200,11 +199,9 @@
             </a>
         </div>
 
-        <div class="data-html2canvas-ignore">
-            <a href="https://okmobile-suphanburi.com/" class="btn-home-hero">
-                <i class="fas fa-house-chimney"></i> กลับสู่หน้าหลัก
-            </a>
-        </div>
+        <a href="https://okmobile-suphanburi.com/" class="btn-home-hero">
+            <i class="fas fa-house-chimney"></i> กลับสู่หน้าหลัก
+        </a>
     </div>
 
     <script>
@@ -221,25 +218,33 @@
             });
         }
 
-        function captureFull() {
-            const area = document.getElementById('capture-area');
+        // ฟังก์ชันใหม่: แคปเฉพาะ QR Code
+        function captureQROnly() {
+            const target = document.getElementById('qr-target');
             const btn = event.currentTarget;
-            btn.innerHTML = 'กำลังแคปภาพ...';
+            
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> กำลังบันทึก...';
 
-            html2canvas(area, {
-                scale: 2, /* ปรับลงเล็กน้อยเพื่อให้ไฟล์ไม่ใหญ่เกินไปสำหรับมือถือ */
+            html2canvas(target, {
+                scale: 3, // เพิ่มความละเอียดภาพเพื่อให้สแกนง่าย
                 backgroundColor: "#ffffff",
                 useCORS: true,
-                borderRadius: 28,
-                ignoreElements: (el) => el.classList.contains('data-html2canvas-ignore')
+                logging: false,
             }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'OK-Mobile-Payment.png';
-                link.href = canvas.toDataURL();
-                link.click();
-                btn.innerHTML = '✅ บันทึกสำเร็จ!';
+                try {
+                    const link = document.createElement('a');
+                    link.download = 'OK-Mobile-QR.png';
+                    link.href = canvas.toDataURL("image/png");
+                    link.click();
+                    
+                    btn.innerHTML = '✅ บันทึกสำเร็จ!';
+                } catch (err) {
+                    btn.innerHTML = '❌ พลาด! กรุณาแคปจอเอง';
+                    console.error("Capture Error:", err);
+                }
+                
                 setTimeout(() => {
-                    btn.innerHTML = '<i class="fas fa-camera"></i> กดแคปภาพ QR Code';
+                    btn.innerHTML = '<i class="fas fa-camera"></i> บันทึกภาพเฉพาะ QR Code';
                 }, 2000);
             });
         }
