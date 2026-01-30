@@ -32,6 +32,7 @@
             overflow-x: hidden;
         }
 
+        /* เอฟเฟกต์จุดประกายพื้นหลัง */
         body::before {
             content: "";
             position: fixed;
@@ -121,6 +122,7 @@
             filter: brightness(0.9);
         }
 
+        /* ปุ่มรีวิว สีทอง */
         .btn-review {
             background: var(--gold-gradient);
             color: var(--deep-navy) !important;
@@ -136,22 +138,31 @@
             animation: shine 3s infinite;
         }
 
+        /* ปุ่ม LINE สีเขียว */
         .btn-line { background: var(--line-gradient); color: white !important; }
 
+        /* ปุ่มโทรศัพท์ */
         .btn-secondary {
             background: rgba(255, 255, 255, 0.08);
             color: var(--white) !important;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* ปุ่มกลับหน้าหลักที่เพิ่มใหม่ */
+        /* ปุ่มกลับหน้าหลัก */
         .btn-home {
             background: transparent;
-            color: rgba(255, 255, 255, 0.6) !important;
+            color: rgba(255, 255, 255, 0.5) !important;
             border: 1px dashed rgba(255, 255, 255, 0.3);
             margin-top: 10px;
             font-size: 0.95rem;
             font-weight: 400;
+        }
+        
+        .btn-home:hover {
+            color: var(--white) !important;
+            border-style: solid;
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
         }
 
         @keyframes shine {
@@ -189,7 +200,7 @@
 
 <div class="review-card">
     <div class="logo-container">
-        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile">
+        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo">
     </div>
 
     <div style="color: var(--gold); font-size: 0.7rem; letter-spacing: 3px; font-weight: 400; margin-bottom: 5px;">PREMIUM SERVICE</div>
@@ -216,8 +227,8 @@
             <i class="fa-solid fa-phone-volume"></i> โทรสอบถามด่วน
         </a>
 
-        <a href="#" class="btn btn-home">
-            <i class="fa-solid fa-house"></i> กลับสู่หน้าหลัก
+        <a href="https://okmobile-suphanburi.com/" class="btn btn-home">
+            <i class="fa-solid fa-house"></i> กลับสู่หน้าหลักเว็บไซต์
         </a>
     </div>
 
