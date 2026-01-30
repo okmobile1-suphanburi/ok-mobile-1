@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>OK Mobile - ตลาดอู่ทอง | มืออาชีพเรื่องมือถือ</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="OK Mobile">
+    <link rel="apple-touch-icon" href="https://i.imgur.com/nvYSgCM.jpeg">
+
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -262,6 +270,19 @@
         </div>
     </footer>
 
+    <div id="install-banner" class="fixed bottom-6 left-4 right-4 bg-primary-900 text-white p-4 rounded-2xl shadow-2xl z-[70] flex items-center justify-between transform translate-y-48 transition-transform duration-500 border border-primary-700 md:hidden">
+        <div class="flex items-center">
+            <img src="https://i.imgur.com/nvYSgCM.jpeg" class="w-12 h-12 rounded-xl mr-3 border border-primary-700">
+            <div>
+                <p class="font-bold text-sm">ติดตั้งแอป OK Mobile</p>
+                <p class="text-xs text-primary-300">เข้าใช้งานง่ายจากหน้าจอโฮม</p>
+            </div>
+        </div>
+        <button id="install-button" class="bg-accent-500 hover:bg-accent-600 text-primary-900 px-5 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-95">
+            ติดตั้ง
+        </button>
+    </div>
+
     <script>
         const menuToggle = document.getElementById('menu-toggle');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -363,6 +384,29 @@
             popup.classList.replace('opacity-100', 'opacity-0');
             setTimeout(() => popup.classList.add('pointer-events-none'), 500);
         }
+
+        // เพิ่มสคริปต์สำหรับ PWA
+        let deferredPrompt;
+        const installBanner = document.getElementById('install-banner');
+        const installButton = document.getElementById('install-button');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // แสดงแบนเนอร์ติดตั้งบนมือถือ
+            if (window.innerWidth < 768) {
+                installBanner.classList.remove('translate-y-48');
+            }
+        });
+
+        installButton.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                installBanner.classList.add('translate-y-48');
+            }
+        });
 
         window.onload = function () {
             updateStoreStatus();
