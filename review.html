@@ -64,12 +64,11 @@
             animation: cardEntrance 0.8s ease-out;
         }
 
-        /* --- ปรับปรุงส่วน LOGO ให้พอดี --- */
         .logo-container {
             width: 120px; 
             height: 120px;
             margin: 0 auto 20px;
-            background: #fff; /* พื้นหลังขาวช่วยให้โลโก้เด่น */
+            background: #fff;
             border-radius: 50%;
             border: 3px solid var(--gold);
             display: flex;
@@ -77,13 +76,13 @@
             justify-content: center;
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
             animation: logoFloat 4s ease-in-out infinite;
-            overflow: hidden; /* ตัดส่วนเกินของรูป */
+            overflow: hidden;
         }
 
         .logo-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* ปรับให้รูปเต็มวงกลมพอดี */
+            object-fit: cover;
         }
 
         h1 {
@@ -117,7 +116,6 @@
             margin-bottom: 15px;
         }
 
-        /* เอฟเฟกต์ตอนกดปุ่ม */
         .btn:active {
             transform: scale(0.95);
             filter: brightness(0.9);
@@ -144,6 +142,16 @@
             background: rgba(255, 255, 255, 0.08);
             color: var(--white) !important;
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* ปุ่มกลับหน้าหลักที่เพิ่มใหม่ */
+        .btn-home {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.6) !important;
+            border: 1px dashed rgba(255, 255, 255, 0.3);
+            margin-top: 10px;
+            font-size: 0.95rem;
+            font-weight: 400;
         }
 
         @keyframes shine {
@@ -206,6 +214,10 @@
 
         <a href="tel:0946613961" class="btn btn-secondary">
             <i class="fa-solid fa-phone-volume"></i> โทรสอบถามด่วน
+        </a>
+
+        <a href="#" class="btn btn-home">
+            <i class="fa-solid fa-house"></i> กลับสู่หน้าหลัก
         </a>
     </div>
 
