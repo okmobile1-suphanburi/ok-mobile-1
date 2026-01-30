@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>OK Mobile U-Thong - Premium Service</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-gradient: linear-gradient(135deg, #fbf5b7 0%, #d4af37 50%, #a67c00 100%);
+            --deep-navy: #0f172a;
+            --white: #ffffff;
+            --line-green: #06c755;
+            --line-gradient: linear-gradient(135deg, #00E676 0%, #06c755 100%);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
+            font-family: 'Kanit', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(var(--gold) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.15;
+            animation: moveParticles 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes moveParticles {
+            from { background-position: 0 0; }
+            to { background-position: 100px 100px; }
+        }
+
+        .review-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 25px;
+            border-radius: 40px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5), 0 0 20px rgba(212, 175, 55, 0.1);
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            position: relative;
+            z-index: 1;
+            animation: cardEntrance 0.8s ease-out;
+        }
+
+        /* --- ปรับปรุงส่วน LOGO ให้พอดี --- */
+        .logo-container {
+            width: 120px; 
+            height: 120px;
+            margin: 0 auto 20px;
+            background: #fff; /* พื้นหลังขาวช่วยให้โลโก้เด่น */
+            border-radius: 50%;
+            border: 3px solid var(--gold);
+            display: flex;
+            align-items: center; 
+            justify-content: center;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            animation: logoFloat 4s ease-in-out infinite;
+            overflow: hidden; /* ตัดส่วนเกินของรูป */
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* ปรับให้รูปเต็มวงกลมพอดี */
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 7vw, 2.2rem);
+            font-weight: 800;
+            margin: 10px 0;
+            background: linear-gradient(to right, #fff, var(--gold), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shineText 3s linear infinite;
+        }
+
+        @keyframes shineText {
+            to { background-position: 200% center; }
+        }
+
+        .btn {
+            position: relative;
+            display: flex;
+            align-items: center; justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 18px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
+            overflow: hidden;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        /* เอฟเฟกต์ตอนกดปุ่ม */
+        .btn:active {
+            transform: scale(0.95);
+            filter: brightness(0.9);
+        }
+
+        .btn-review {
+            background: var(--gold-gradient);
+            color: var(--deep-navy) !important;
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-review::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shine 3s infinite;
+        }
+
+        .btn-line { background: var(--line-gradient); color: white !important; }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--white) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .stars i {
+            color: var(--gold);
+            font-size: 1.4rem;
+            margin: 0 2px;
+            filter: drop-shadow(0 0 8px var(--gold));
+        }
+
+        .footer {
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: var(--gold);
+            opacity: 0.8;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @keyframes cardEntrance {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="review-card">
+    <div class="logo-container">
+        <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile">
+    </div>
+
+    <div style="color: var(--gold); font-size: 0.7rem; letter-spacing: 3px; font-weight: 400; margin-bottom: 5px;">PREMIUM SERVICE</div>
+    <h1>โอเค โมบาย อู่ทอง</h1>
+    <div style="color: #f4e4bc; margin-bottom: 25px; font-weight: 300; font-size: 0.95rem;">ดูแลด้วยใจ ใส่ใจทุกบริการ</div>
+    
+    <div style="margin-bottom: 30px;">
+        <div class="stars">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+        </div>
+        <div style="font-size: 0.75rem; margin-top: 8px; color: var(--gold); letter-spacing: 1px;">BEST QUALITY SERVICE</div>
+    </div>
+
+    <div class="btn-group">
+        <a href="https://search.google.com/local/writereview?placeid=ChIJ4ZmCQ0C14zARXRlW5FaCB_A" target="_blank" class="btn btn-review">
+            <i class="fa-solid fa-crown"></i> รีวิวให้คะแนนร้าน
+        </a>
+
+        <a href="https://line.me/R/ti/p/@661qazoc?oat_content=url" class="btn btn-line">
+            <i class="fa-brands fa-line"></i> ปรึกษาผ่าน LINE
+        </a>
+
+        <a href="tel:0946613961" class="btn btn-secondary">
+            <i class="fa-solid fa-phone-volume"></i> โทรสอบถามด่วน
+        </a>
+    </div>
+
+    <div class="footer">
+        <i class="fa-solid fa-location-dot"></i> ตลาดอู่ทอง จ.สุพรรณบุรี
+    </div>
+</div>
+
+</body>
+</html>
