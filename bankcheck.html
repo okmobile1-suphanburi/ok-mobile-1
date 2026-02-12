@@ -36,6 +36,7 @@
             box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
         }
 
+        /* ลูกเล่นหัวข้อกะพริบ */
         h1 { color: #1e3a8a; font-size: 32px; margin: 0; animation: pulse 1.5s infinite; }
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -44,53 +45,26 @@
         }
         .sub-title { font-size: 18px; color: #4b5563; margin: 10px 0 25px 0; }
         
+        /* ปุ่มตรวจเช็ควิบวับมีแสงวิ่ง */
         .check-btn { 
-            position: relative;
-            background: linear-gradient(180deg, #ff8c00 0%, #ff4500 100%);
+            background: linear-gradient(90deg, #ff4500, #ff8c00, #ff4500);
+            background-size: 200% auto;
             color: white; 
             border: none; 
             width: 100%; 
             padding: 22px; 
             font-size: 26px; 
             font-weight: 800; 
-            border-radius: 25px; 
+            border-radius: 20px; 
             cursor: pointer; 
-            box-shadow: 0 10px 0 #b23000, 0 15px 30px rgba(255, 69, 0, 0.5); 
-            margin-bottom: 25px; 
-            overflow: hidden;
-            animation: button-bounce 1.5s infinite ease-in-out;
-            transition: all 0.1s;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            box-shadow: 0 8px 0 #b23000; 
+            margin-bottom: 20px; 
+            animation: shine 2s linear infinite;
         }
+        @keyframes shine { to { background-position: 200% center; } }
+        .check-btn:active { transform: translateY(4px); box-shadow: 0 4px 0 #b23000; }
 
-        @keyframes button-bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.04); }
-        }
-
-        .check-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -100%;
-            width: 50%;
-            height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
-            transform: rotate(30deg);
-            animation: light-sweep 3s infinite;
-        }
-
-        @keyframes light-sweep {
-            20% { left: 120%; }
-            100% { left: 120%; }
-        }
-
-        .check-btn:active { 
-            animation: none;
-            transform: translateY(6px); 
-            box-shadow: 0 4px 0 #b23000; 
-        }
-
+        /* ผลลัพธ์แบบเด้ง */
         #result-panel { display: none; margin-bottom: 25px; animation: bounceIn 0.5s; }
         @keyframes bounceIn {
             0% { transform: scale(0.3); opacity: 0; }
@@ -110,6 +84,7 @@
             margin-bottom: 15px; 
         }
 
+        /* ส่วนหมายเหตุ (เพิ่มเข้าไปแล้วครับ) */
         .note-box {
             background: #fff7ed;
             font-size: 13px;
@@ -149,7 +124,7 @@
     <div id="result-panel">
         <div id="status-box" class="result-box">
             <div id="status-title"></div>
-            <div id="os-label" style="font-size: 14px; font-weight:400; margin-top:10px; color: #333; white-space: pre-line;"></div>
+            <div id="os-label" style="font-size: 14px; font-weight:400; margin-top:10px; color: #333;"></div>
         </div>
         <button onclick="location.reload()" style="background:none; border:none; color:#1e40af; text-decoration:underline; margin-top:10px; cursor:pointer; font-weight:600;">🔄 ตรวจสอบใหม่</button>
     </div>
@@ -163,10 +138,10 @@
     </div>
 
     <div class="note-box">
-        <b>หมายเหตุสำคัญ:</b><br>
+        <b>หมายเหตุ:</b><br>
         * ข้อมูลอ้างอิงจากประกาศสมาคมธนาคารไทย<br>
-        * หากเปิดใน LINE ผลอาจคลาดเคลื่อน<br>
-        * <b>แนะนำคัดลอกลิงก์ไปเปิดใน Chrome/Safari</b>
+        * หากเปิดผ่านแอป LINE เวอร์ชั่นอาจคลาดเคลื่อนได้<br>
+        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome เพื่อความแม่นยำ
     </div>
 
     <div class="copy-section">
@@ -176,7 +151,7 @@
 
 <script>
     function runCheck() {
-        gtag('event', 'click_verify', { 'event_label': 'Ultimate Precision' });
+        gtag('event', 'click_verify', { 'event_label': 'Flashy With Note' });
         const ua = navigator.userAgent;
         const panel = document.getElementById('result-panel');
         const osLabel = document.getElementById('os-label');
@@ -188,56 +163,32 @@
         mainBtn.style.display = 'none';
 
         let version = 0;
-        let osName = "Unknown";
         let isPass = false;
 
-        // --- ระบบตรวจจับ Android (Deep Check) ---
         if (/Android/i.test(ua)) {
-            osName = "Android";
-            let match = ua.match(/Android\s+([0-9\.]+)/);
+            const match = ua.match(/Android\s([0-9\.]+)/);
             version = match ? parseFloat(match[1]) : 0;
-        } 
-        // --- ระบบตรวจจับ iOS (Deep Check) ---
-        else if (/iPhone|iPad|iPod/i.test(ua)) {
-            osName = "iOS";
-            let match = ua.match(/OS\s+([0-9_]+)/);
-            version = match ? parseFloat(match[1].replace(/_/g, '.')) : 0;
-        }
-        // --- ดักจับกรณี Desktop Mode (Chrome มักหลอกว่าเป็น Windows/Mac) ---
-        else if (/Macintosh|Windows|Linux/i.test(ua) && navigator.maxTouchPoints > 0) {
-            // ถ้ามี Touch Point แสดงว่าเป็นมือถือแต่เปิดโหมดคอมพิวเตอร์
-            if (ua.indexOf("Macintosh") > -1) {
-                osName = "iOS (Desktop Mode)";
-                version = 17.0; // สมมติว่าเป็นรุ่นใหม่เพราะเปิดโหมดนี้ได้
-            } else {
-                osName = "Android (Desktop Mode)";
-                version = 13.0; // สมมติว่าเป็นรุ่นใหม่
-            }
-        }
-
-        // เช็คเงื่อนไขผ่าน/ไม่ผ่าน
-        if (osName.includes("Android")) {
+            osLabel.innerText = "ตรวจพบ: Android รุ่น " + (version || "ไม่ระบุ");
             isPass = version >= 10;
-        } else if (osName.includes("iOS")) {
+        } 
+        else if (/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+            const match = ua.match(/OS\s([0-9_]+)/);
+            version = match ? parseFloat(match[1].replace(/_/g, '.')) : 0;
+            osLabel.innerText = "ตรวจพบ: iPhone (iOS) รุ่น " + (version || "ไม่ระบุ");
             isPass = version >= 14;
         }
 
-        // ปรุงแต่งข้อความแสดงผล
-        if (version > 0) {
-            osLabel.innerText = "ระบบตรวจพบ: " + osName + "\nเวอร์ชันปัจจุบัน: " + version;
-            if (isPass) {
-                box.className = "result-box pass";
-                title.innerText = "✅ ใช้ได้จ้า!";
-            } else {
-                box.className = "result-box fail";
-                title.innerText = "❌ ไม่ผ่านเกณฑ์";
-            }
-        } else {
-            // กรณีอ่านค่าไม่ได้เลย
+        if (isPass) {
+            box.className = "result-box pass";
+            title.innerText = "✅ ใช้ได้จ้า!";
+        } else if (version === 0) {
             box.className = "result-box";
             box.style.backgroundColor = "#f3f4f6";
             title.innerText = "❓ ตรวจไม่ได้";
-            osLabel.innerText = "บราวเซอร์ของท่านบล็อกข้อมูลระบบ\nกรุณาลองปิด 'โหมดเดสก์ท็อป' \nหรือลองเปิดใน Safari/Chrome";
+            osLabel.innerText = "แนะนำให้เปิดใน Chrome หรือ Safari";
+        } else {
+            box.className = "result-box fail";
+            title.innerText = "❌ ไม่ผ่านเกณฑ์";
         }
     }
 
