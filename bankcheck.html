@@ -16,7 +16,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>เช็คเครื่องแม่นยำ - OK Mobile</title>
+    <title>เช็คเวอร์ชั่นเครื่อง - OK Mobile</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Kanit', sans-serif; background-color: #1e40af; margin: 0; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -78,12 +78,13 @@
         .pass { background-color: #dcfce7; color: #15803d; border-color: #15803d; }
         .fail { background-color: #fee2e2; color: #b91c1c; border-color: #b91c1c; }
         
-        /* ปรับส่วนแสดงรุ่นเครื่องให้เด่นเป็นพิเศษ */
         #version-detail { 
             display: none; background: #1e3a8a; color: #fbbf24; padding: 15px; border-radius: 15px; 
             font-size: 18px; margin-bottom: 20px; font-weight: 800; border: 2px solid #fbbf24;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
+        /* เพิ่มสีพิเศษให้ตัวเลขเวอร์ชัน */
+        .v-num { color: #ffffff; text-decoration: underline; }
 
         .bank-info { background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 17px; border-left: 8px solid #1e40af; text-align: left; margin-bottom: 20px; }
 
@@ -127,7 +128,7 @@
         <b>หมายเหตุและความปลอดภัย:</b><br>
         * ระบบตรวจสอบเฉพาะเลขเวอร์ชันเพื่อแจ้งเตือนเท่านั้น<br>
         * <b>ไม่มีการเก็บข้อมูลส่วนตัวหรือเข้าถึงข้อมูลในเครื่อง 100%</b><br>
-        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome/Safari เพื่อความแม่นยำ
+        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome เท่านั้น เพื่อความแม่นยำ
     </div>
 
     <button class="copy-btn" onclick="copyURL()">🔗 คัดลอกลิงก์ไปเปิดใน Chrome</button>
@@ -145,7 +146,7 @@
 
 <script>
 async function getPreciseOS() {
-    gtag('event', 'click_verify', { 'event_label': 'Precise Check Highlight Result' });
+    gtag('event', 'click_verify', { 'event_label': 'Precise Check Separate Color' });
     const box = document.getElementById('status-box');
     const detail = document.getElementById('version-detail');
     const btn = document.getElementById('btn');
@@ -186,10 +187,10 @@ async function getPreciseOS() {
 
     if (cleanOS.includes("android")) {
         isPass = osVersion >= 10;
-        detail.innerText = "เครื่องของท่านคือ: Android เวอร์ชั่น " + osVersion;
+        detail.innerHTML = "เครื่องของท่านคือ: <span class='v-num'>Android เวอร์ชั่น " + osVersion + "</span>";
     } else if (cleanOS.includes("ios") || cleanOS.includes("mac") || cleanOS.includes("iphone")) {
         isPass = osVersion >= 14;
-        detail.innerText = "เครื่องของท่านคือ: iPhone/iPad (iOS) เวอร์ชั่น " + osVersion;
+        detail.innerHTML = "เครื่องของท่านคือ: <span class='v-num'>iPhone/iPad (iOS) เวอร์ชั่น " + osVersion + "</span>";
     } else {
         detail.innerText = "ไม่สามารถระบุรุ่นได้ชัดเจน กรุณาใช้ Chrome";
     }
