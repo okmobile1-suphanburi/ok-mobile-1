@@ -76,7 +76,6 @@
         
         .bank-info { background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 17px; border-left: 8px solid #1e40af; text-align: left; margin-bottom: 20px; }
 
-        /* ส่วนหมายเหตุและปุ่มคัดลอก */
         .note-box { background: #fff7ed; font-size: 14px; color: #9a3412; text-align: left; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffedd5; line-height: 1.5; }
         .copy-btn { background: #ffffff; color: #1e40af; border: 2px solid #1e40af; width: 100%; padding: 12px; font-size: 16px; font-weight: 700; border-radius: 12px; cursor: pointer; transition: 0.2s; }
         .copy-btn:active { background: #1e40af; color: white; }
@@ -100,10 +99,10 @@
     </div>
 
     <div class="note-box">
-        <b>หมายเหตุ:</b><br>
-        * ข้อมูลอ้างอิงจากประกาศสมาคมธนาคารไทย<br>
-        * หากเปิดผ่าน LINE ผลอาจคลาดเคลื่อน<br>
-        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome/Safari
+        <b>หมายเหตุและความปลอดภัย:</b><br>
+        * ระบบตรวจสอบเฉพาะเลขเวอร์ชันเพื่อแจ้งเตือนเท่านั้น<br>
+        * <b>ไม่มีการเก็บข้อมูลส่วนตัวหรือเข้าถึงข้อมูลในเครื่อง 100%</b><br>
+        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome เพื่อความแม่นยำ
     </div>
 
     <button class="copy-btn" onclick="copyURL()">🔗 คัดลอกลิงก์ไปเปิดใน Chrome</button>
@@ -111,7 +110,7 @@
 
 <script>
 async function getPreciseOS() {
-    gtag('event', 'click_verify', { 'event_label': 'Precise Check with Note' });
+    gtag('event', 'click_verify', { 'event_label': 'Precise Check with Safety Note' });
     const box = document.getElementById('status-box');
     const detail = document.getElementById('version-detail');
     const btn = document.getElementById('btn');
