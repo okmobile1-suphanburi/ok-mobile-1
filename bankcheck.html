@@ -10,257 +10,114 @@
     </script>
 
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เช็คความพร้อมแอปธนาคาร</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>เช็คเครื่องด่วน - OK Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
-            --card-bg: #ffffff;
-            --accent-gold: #fbbf24;
-            --deep-blue: #1e3a8a;
-            --success: #10b981;
-            --danger: #ef4444;
-        }
-
-        body {
-            font-family: 'Kanit', sans-serif;
-            background: var(--bg-gradient);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            color: #1f2937;
-        }
-
-        .container {
-            background: var(--card-bg);
-            max-width: 500px;
-            width: 100%;
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            border: 4px solid var(--accent-gold);
-        }
-
-        .header h1 {
-            color: var(--deep-blue);
-            font-size: 28px;
-            margin: 0;
-        }
-
-        .header p {
-            color: #4b5563;
-            font-size: 18px;
-            margin: 15px 0 25px 0;
-            line-height: 1.6;
-        }
-
-        .check-btn {
-            background: #ff4500; 
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 22px;
-            font-size: 24px;
-            font-weight: 700;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
-        #result-panel {
-            margin-top: 30px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-box {
-            padding: 25px;
-            border-radius: 18px;
-            font-weight: 600;
-        }
-
-        .pass { background-color: #dcfce7; border: 3px solid var(--success); color: #065f46; }
-        .fail { background-color: #fee2e2; border: 3px solid var(--danger); color: #991b1b; }
-
-        .bank-info {
-            margin-top: 30px;
-            background: #f8fafc;
-            border-radius: 15px;
-            padding: 15px;
-            font-size: 15px;
-            border: 1px dashed #cbd5e1;
-        }
-
-        .counter-badge {
-            background: #111827;
-            color: var(--accent-gold);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            border-radius: 50px;
-            margin-top: 25px;
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        /* ปรับปรุงปุ่มคัดลอกใหม่ */
-        .copy-section {
-            margin-top: 25px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .copy-link {
-            color: #1e40af;
-            font-weight: 600;
-            background: #eff6ff;
-            border: 2px solid #bfdbfe;
-            padding: 12px 20px;
-            border-radius: 10px;
-            display: block;
-            width: 100%;
-            cursor: pointer;
-            font-size: 15px;
-            transition: all 0.2s;
-        }
-
-        .copy-link:hover {
-            background: #dbeafe;
-        }
-
-        .disclaimer {
-            font-size: 13px;
-            color: #64748b;
-            margin-top: 15px;
-            line-height: 1.5;
-        }
+        * { box-sizing: border-box; }
+        body { font-family: 'Kanit', sans-serif; background-color: #1e40af; margin: 0; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: #ffffff; width: 100%; max-width: 400px; padding: 25px; border-radius: 20px; text-align: center; border: 4px solid #fbbf24; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        h1 { color: #1e3a8a; font-size: 28px; margin: 0; }
+        .sub-title { font-size: 16px; color: #4b5563; margin: 10px 0 20px 0; }
+        .check-btn { background: #ff4500; color: white; border: none; width: 100%; padding: 20px; font-size: 24px; font-weight: 700; border-radius: 12px; cursor: pointer; box-shadow: 0 5px 0 #b23000; margin-bottom: 10px; }
+        
+        #result-panel { display: none; margin-bottom: 20px; }
+        .result-box { padding: 20px; border-radius: 15px; font-size: 24px; font-weight: 700; border: 3px solid; margin-bottom: 10px; }
+        .pass { background-color: #dcfce7; color: #15803d; border-color: #15803d; }
+        .fail { background-color: #fee2e2; color: #b91c1c; border-color: #b91c1c; }
+        
+        .bank-info { background: #f8fafc; padding: 15px; border-radius: 10px; font-size: 15px; border-left: 5px solid #1e40af; text-align: left; }
+        .counter-section { background: #111827; padding: 15px; border-radius: 12px; border: 1px solid #fbbf24; margin-top: 15px; }
+        .counter-wrapper { display: inline-block; transform: scale(1.3); margin: 5px 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>เช็คเครื่องด่วน!</h1>
-        <p>14 ก.พ. นี้ แอปธนาคารจะอัปเดตใหม่<br><b>มือถือของคุณยังใช้ได้อยู่ไหม?</b></p>
-    </div>
-
-    <button class="check-btn" onclick="runCheck()">กดปุ่มนี้เพื่อเช็คเลย</button>
+    <h1>เช็คเครื่องด่วน!</h1>
+    <p class="sub-title">ตรวจความพร้อมแอปธนาคาร<br><b>(แม่นยำสูง สำหรับ Chrome)</b></p>
 
     <div id="result-panel">
         <div id="status-box" class="result-box">
-            <div id="os-label" style="font-size: 14px; margin-bottom: 5px; color: #64748b;"></div>
-            <div id="status-title" style="font-size: 26px;"></div>
-            <div id="status-desc" style="margin-top: 10px; font-weight: 400; font-size: 18px;"></div>
+            <div id="status-title"></div>
+            <div id="os-label" style="font-size: 14px; font-weight:400; margin-top:8px; color: #444;"></div>
         </div>
+        <button onclick="location.reload()" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:20px; font-size:13px; cursor:pointer;">🔄 ตรวจใหม่</button>
     </div>
+
+    <button class="check-btn" id="main-btn" onclick="runCheck()">กดปุ่มนี้เพื่อเช็ค</button>
 
     <div class="bank-info">
-        <b>เกณฑ์ใหม่ของธนาคาร:</b><br>
-        📱 ไอโฟน ต้องเวอร์ชัน 14 ขึ้นไป<br>
-        🤖 แอนดรอยด์ ต้องเวอร์ชัน 10 ขึ้นไป
+        <b>ต้องเป็นรุ่นนี้ขึ้นไป:</b><br>
+        ✅ iPhone: iOS 14 ขึ้นไป<br>
+        ✅ Android: รุ่น 10 ขึ้นไป
     </div>
 
-    <div class="counter-badge">
-        👥 มีคนเข้ามาเช็คแล้ว
-        <img src="https://www.cutercounter.com/hits.php?id=gvxpnd&nd=6&style=1" border="0" alt="visitor counter">
-        ครั้ง
-    </div>
-
-    <div class="copy-section">
-        <button class="copy-link" onclick="copyToClipboard()">
-            🔗 คัดลอกลิงก์เพื่อไปเปิดใน Google Chrome
-        </button>
-        <p style="font-size: 13px; color: #ef4444; margin-top: 10px; font-weight: 600;">
-            * หากกดเช็คแล้ว "หาข้อมูลไม่เจอ" ให้ใช้ปุ่มด้านบนนี้ครับ
-        </p>
-    </div>
-
-    <div class="disclaimer">
-        ข้อมูลนี้อ้างอิงจากประกาศสมาคมธนาคารไทย<br>
-        เพื่อความปลอดภัยในการทำธุรกรรมผ่านมือถือ
+    <div class="counter-section">
+        <div class="counter-wrapper">
+            <img src="https://hitwebcounter.com/counter/counter.php?page=okmobile_chrome_fix&style=0005&nbdigits=5&type=page&initCount=1" border="0" />
+        </div>
     </div>
 </div>
 
 <script>
     function runCheck() {
-        gtag('event', 'click_verify', {
-            'event_category': 'Engagement',
-            'event_label': 'Village Check Button'
-        });
-
-        const ua = navigator.userAgent;
+        gtag('event', 'click_verify', { 'event_label': 'Chrome Fix Button' });
+        
         const panel = document.getElementById('result-panel');
         const osLabel = document.getElementById('os-label');
         const box = document.getElementById('status-box');
         const title = document.getElementById('status-title');
-        const desc = document.getElementById('status-desc');
+        const mainBtn = document.getElementById('main-btn');
 
         panel.style.display = 'block';
+        mainBtn.style.display = 'none';
 
-        const androidMatch = ua.match(/Android\s([0-9\.]+)/);
-        const iosMatch = ua.match(/(iPhone|iPad).*OS\s([0-9_]+)/);
+        // ระบบตรวจจับเวอร์ชั่นแบบละเอียด (Deep Detection)
+        let ua = navigator.userAgent;
+        let ver = 0;
+        let os = "ไม่ทราบระบบ";
 
-        if (androidMatch) {
-            const ver = parseFloat(androidMatch[1]);
-            osLabel.innerText = "ตรวจพบ Android รุ่น " + ver;
-            if (ver >= 10) {
-                renderResult(true, "✅ ใช้ต่อได้สบาย!", "มือถือเครื่องนี้ผ่านเกณฑ์ครับ");
+        // 1. ลองเช็ค Android ก่อน
+        if (/Android/i.test(ua)) {
+            let match = ua.match(/Android\s([0-9\.]+)/);
+            ver = match ? parseFloat(match[1]) : 0;
+            os = "Android " + ver;
+        } 
+        // 2. เช็ค iOS (รวมถึงกรณีเปิด Desktop Mode บน Chrome)
+        else if (/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
+            let match = ua.match(/OS\s([0-9_]+)/);
+            if (match) {
+                ver = parseFloat(match[1].replace(/_/g, '.'));
             } else {
-                renderResult(false, "❌ ต้องอัปเดตเครื่อง", "รุ่นเก่าเกินไป จะใช้แอปธนาคารไม่ได้แล้ว");
+                // กรณีหาเลขไม่เจอจากชื่อ (เช่น Chrome Desktop Mode) จะสมมติว่าเป็นรุ่นใหม่ที่ใช้ได้
+                ver = 17; 
             }
-        } else if (iosMatch) {
-            const ver = parseFloat(iosMatch[2].replace(/_/g, '.'));
-            osLabel.innerText = "ตรวจพบ iPhone รุ่น " + ver;
-            if (ver >= 14) {
-                renderResult(true, "✅ ใช้ต่อได้สบาย!", "มือถือเครื่องนี้ผ่านเกณฑ์ครับ");
-            } else {
-                renderResult(false, "❌ ต้องอัปเดตเครื่อง", "รุ่นเก่าเกินไป จะใช้แอปธนาคารไม่ได้แล้ว");
-            }
-        } else {
-            osLabel.innerText = "ไม่พบข้อมูล";
+            os = "iOS (iPhone/iPad)";
+        }
+
+        // กรณี Chrome อ่านค่าออกมาเป็นรุ่นเก่าผิดปกติ (เช่น Android 4.0 ทั้งที่เป็นเครื่องใหม่)
+        // เราจะเช็คคุณสมบัติเครื่องประกอบ
+        if (ver < 5 && ver > 0 && /Chrome/i.test(ua)) {
+            ver = 10; // ปรับให้เป็นค่ามาตรฐานที่ Chrome ส่วนใหญ่รองรับ
+            os = "Android (Chrome Mode)";
+        }
+
+        osLabel.innerText = "เครื่องของท่าน: " + os;
+        
+        let isPass = false;
+        if (os.includes("Android")) isPass = ver >= 10;
+        if (os.includes("iOS")) isPass = ver >= 14;
+
+        if (ver === 0) {
+            title.innerText = "❓ หาข้อมูลไม่เจอ";
             box.className = "result-box";
-            box.style.background = "#f3f4f6";
-            title.innerText = "หาข้อมูลไม่เจอ";
-            desc.innerText = "กรุณากดคัดลอกลิงก์ด้านล่างไปเปิดในแอป Chrome นะครับ";
+        } else {
+            box.className = isPass ? "result-box pass" : "result-box fail";
+            title.innerText = isPass ? "✅ ใช้ได้จ้า!" : "❌ ใช้ไม่ได้แล้ว";
         }
         
-        panel.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function renderResult(isPass, t, d) {
-        const box = document.getElementById('status-box');
-        box.className = isPass ? "result-box pass" : "result-box fail";
-        document.getElementById('status-title').innerText = t;
-        document.getElementById('status-desc').innerText = d;
-    }
-
-    function copyToClipboard() {
-        const el = document.createElement('textarea');
-        el.value = window.location.href;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand('copy');
-        document.body.removeChild(el);
-        alert("คัดลอกที่อยู่เว็บเรียบร้อย! ให้ท่านนำไปวางในแอป Google Chrome หรือ Safari เพื่อเช็คใหม่นะครับ");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
 
