@@ -11,115 +11,231 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>เช็คเครื่องแม่นยำ - OK Mobile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap" rel="stylesheet">
+    <title>เช็คเครื่องด่วน - OK Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Kanit', sans-serif; background-color: #1e40af; margin: 0; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background: #ffffff; width: 100%; max-width: 420px; padding: 30px 20px; border-radius: 25px; text-align: center; border: 5px solid #fbbf24; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
-        h1 { color: #1e3a8a; font-size: 30px; margin: 0; }
-        .check-btn { background: #ff4500; color: white; border: none; width: 100%; padding: 22px; font-size: 26px; font-weight: 700; border-radius: 18px; cursor: pointer; box-shadow: 0 6px 0 #b23000; margin: 25px 0; }
-        .result-box { padding: 25px; border-radius: 20px; font-size: 32px; font-weight: 700; border: 4px solid; display: none; margin-bottom: 20px; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); 
+            margin: 0; 
+            padding: 15px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .container { 
+            background: #ffffff; 
+            width: 100%; 
+            max-width: 400px; 
+            padding: 35px 25px; 
+            border-radius: 30px; 
+            text-align: center; 
+            border: 6px solid #fbbf24; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5); 
+        }
+
+        /* ลูกเล่นหัวข้อกะพริบ */
+        h1 { color: #1e3a8a; font-size: 32px; margin: 0; animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); color: #ff4500; }
+            100% { transform: scale(1); }
+        }
+        .sub-title { font-size: 18px; color: #4b5563; margin: 10px 0 25px 0; }
+        
+        /* --- ปุ่มตรวจเช็คเวอร์ชัน เด้งดึ๋งสะดุดตา --- */
+        .check-btn { 
+            position: relative;
+            background: linear-gradient(180deg, #ff8c00 0%, #ff4500 100%);
+            color: white; 
+            border: none; 
+            width: 100%; 
+            padding: 22px; 
+            font-size: 26px; 
+            font-weight: 800; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            box-shadow: 0 10px 0 #b23000, 0 15px 25px rgba(255, 69, 0, 0.4); 
+            margin-bottom: 25px; 
+            overflow: hidden;
+            /* แอนิเมชันเด้งเยลลี่ */
+            animation: jelly 2s infinite, shine-btn 3s infinite;
+            transition: all 0.1s;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* แอนิเมชันเด้งดึ๋ง */
+        @keyframes jelly {
+            0%, 100% { transform: scale(1, 1); }
+            25% { transform: scale(0.95, 1.05); }
+            50% { transform: scale(1.05, 0.95); }
+            75% { transform: scale(0.98, 1.02); }
+        }
+
+        /* แอนิเมชันแสงวิ่งวนบนปุ่ม */
+        .check-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 40%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: rotate(30deg);
+            animation: light-slide 3s infinite;
+        }
+
+        @keyframes light-slide {
+            0% { left: -60%; }
+            20% { left: 120%; }
+            100% { left: 120%; }
+        }
+
+        /* เวลากดให้ปุ่มยุบและหยุดเด้ง */
+        .check-btn:active { 
+            animation: none;
+            transform: translateY(6px) scale(0.98); 
+            box-shadow: 0 4px 0 #b23000, 0 5px 10px rgba(0,0,0,0.2); 
+        }
+
+        /* ผลลัพธ์แบบเด้ง */
+        #result-panel { display: none; margin-bottom: 25px; animation: bounceIn 0.5s; }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .result-box { padding: 25px; border-radius: 20px; font-size: 30px; font-weight: 800; border: 5px solid; }
         .pass { background-color: #dcfce7; color: #15803d; border-color: #15803d; }
         .fail { background-color: #fee2e2; color: #b91c1c; border-color: #b91c1c; }
-        .bank-info { background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 17px; border-left: 8px solid #1e40af; text-align: left; margin-bottom: 20px; }
-        
-        /* กล่องตัวนับแบบใหม่ ชัวร์กว่าเดิม */
-        .counter-section { 
-            background: #000; 
-            padding: 20px; 
+
+        .bank-info { 
+            background: #f1f5f9; 
+            padding: 15px; 
             border-radius: 15px; 
-            border: 2px solid #fbbf24; 
-            color: #fff;
-            margin-top: 10px;
+            font-size: 17px; 
+            border-left: 10px solid #1e40af; 
+            text-align: left; 
+            margin-bottom: 15px; 
         }
-        .counter-wrapper {
-            display: inline-block;
-            margin: 15px 0;
-            /* ขยายขนาดรูปตัวเลขให้ใหญ่ขึ้นอ่านง่าย */
-            transform: scale(1.6);
+
+        .note-box {
+            background: #fff7ed;
+            font-size: 13px;
+            color: #9a3412;
+            text-align: left;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ffedd5;
+            line-height: 1.5;
+        }
+
+        .copy-section {
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .copy-btn {
+            background: #ffffff;
+            color: #1e40af;
+            border: 2px solid #1e40af;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>ตรวจเวอร์ชั่นเครื่อง</h1>
-    <p style="font-size: 18px; color: #4b5563;">เพื่อใช้งานแอปธนาคาร</p>
+    <h1>เช็คเครื่องด่วน!</h1>
+    <p class="sub-title">14 ก.พ. นี้ แอปธนาคารจะอัปเดตใหม่<br><b>มือถือท่านยังใช้ได้ไหม?</b></p>
 
-    <div id="status-box" class="result-box"></div>
-    <div id="version-detail" style="font-size: 16px; margin-bottom: 20px; color: #1e3a8a; font-weight: bold;"></div>
-
-    <button class="check-btn" id="btn" onclick="getPreciseOS()">กดเพื่อเช็คเครื่อง</button>
-
-    <div class="bank-info">
-        <b>รุ่นที่ต้องมี:</b><br>
-        • iPhone: iOS 14.0 ขึ้นไป<br>
-        • Android: เวอร์ชั่น 10 ขึ้นไป
+    <div id="result-panel">
+        <div id="status-box" class="result-box">
+            <div id="status-title"></div>
+            <div id="os-label" style="font-size: 14px; font-weight:400; margin-top:10px; color: #333;"></div>
+        </div>
+        <button onclick="location.reload()" style="background:none; border:none; color:#1e40af; text-decoration:underline; margin-top:10px; cursor:pointer; font-weight:600;">🔄 ตรวจสอบใหม่</button>
     </div>
 
-    <div class="counter-section">
-        <span style="font-size: 14px; opacity: 0.8;">จำนวนครั้งที่มีคนเช็คแล้ว</span>
-        <div class="counter-wrapper">
-            <img src="https://counter1.fc2.com/counter_img.php?id=39641258&main=1" border="0" alt="visitor counter">
-        </div>
-        <span style="display:block; font-size: 14px; color: #fbbf24;">ครั้ง</span>
+    <button class="check-btn" id="main-btn" onclick="runCheck()">กดเพื่อเช็คเลย</button>
+
+    <div class="bank-info">
+        <b>สเปคขั้นต่ำที่ผ่านเกณฑ์:</b><br>
+        ✅ iPhone: iOS 14 ขึ้นไป<br>
+        ✅ Android: เวอร์ชั่น 10 ขึ้นไป
+    </div>
+
+    <div class="note-box">
+        <b>หมายเหตุ:</b><br>
+        * ข้อมูลอ้างอิงจากประกาศสมาคมธนาคารไทย<br>
+        * หากเปิดผ่านแอป LINE เวอร์ชั่นอาจคลาดเคลื่อนได้<br>
+        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome เพื่อความแม่นยำ
+    </div>
+
+    <div class="copy-section">
+        <button class="copy-btn" onclick="copyURL()">🔗 คัดลอกลิงก์ไปเปิดใน Chrome</button>
     </div>
 </div>
 
 <script>
-async function getPreciseOS() {
-    gtag('event', 'click_verify', { 'event_label': 'Precise Check' });
-    const box = document.getElementById('status-box');
-    const detail = document.getElementById('version-detail');
-    const btn = document.getElementById('btn');
+    function runCheck() {
+        gtag('event', 'click_verify', { 'event_label': 'Jelly Button Version' });
+        const ua = navigator.userAgent;
+        const panel = document.getElementById('result-panel');
+        const osLabel = document.getElementById('os-label');
+        const box = document.getElementById('status-box');
+        const title = document.getElementById('status-title');
+        const mainBtn = document.getElementById('main-btn');
 
-    let osName = "Unknown";
-    let osVersion = 0;
-    const ua = navigator.userAgent;
+        panel.style.display = 'block';
+        mainBtn.style.display = 'none';
 
-    // ระบบตรวจเช็คแบบแม่นยำสูง
-    if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
-        try {
-            const hints = await navigator.userAgentData.getHighEntropyValues(['platformVersion', 'platform']);
-            osName = hints.platform;
-            osVersion = parseFloat(hints.platformVersion);
-        } catch(e) {}
-    } 
+        let version = 0;
+        let isPass = false;
 
-    if (osVersion === 0) {
         if (/Android/i.test(ua)) {
-            osName = "Android";
             const match = ua.match(/Android\s([0-9\.]+)/);
-            osVersion = match ? parseFloat(match[1]) : 0;
-        } else if (/iPhone|iPad|iPod/i.test(ua)) {
-            osName = "iOS";
+            version = match ? parseFloat(match[1]) : 0;
+            osLabel.innerText = "ตรวจพบ: Android รุ่น " + (version || "ไม่ระบุ");
+            isPass = version >= 10;
+        } 
+        else if (/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) {
             const match = ua.match(/OS\s([0-9_]+)/);
-            osVersion = match ? parseFloat(match[1].replace(/_/g, '.')) : 0;
+            version = match ? parseFloat(match[1].replace(/_/g, '.')) : 0;
+            osLabel.innerText = "ตรวจพบ: iPhone (iOS) รุ่น " + (version || "ไม่ระบุ");
+            isPass = version >= 14;
+        }
+
+        if (isPass) {
+            box.className = "result-box pass";
+            title.innerText = "✅ ใช้ได้จ้า!";
+        } else if (version === 0) {
+            box.className = "result-box";
+            box.style.backgroundColor = "#f3f4f6";
+            title.innerText = "❓ ตรวจไม่ได้";
+            osLabel.innerText = "แนะนำให้เปิดใน Chrome หรือ Safari";
+        } else {
+            box.className = "result-box fail";
+            title.innerText = "❌ ไม่ผ่านเกณฑ์";
         }
     }
 
-    btn.style.display = 'none';
-    box.style.display = 'block';
-    
-    let isPass = false;
-    if (osName.toLowerCase().includes("android")) {
-        isPass = osVersion >= 10;
-        detail.innerText = "เครื่องของท่าน: Android " + osVersion;
-    } else if (osName.toLowerCase().includes("ios")) {
-        isPass = osVersion >= 14;
-        detail.innerText = "เครื่องของท่าน: iPhone " + osVersion;
-    } else {
-        detail.innerText = "ตรวจไม่พบข้อมูลรุ่นมือถือ";
+    function copyURL() {
+        const dummy = document.createElement('input');
+        document.body.appendChild(dummy);
+        dummy.value = window.location.href;
+        dummy.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+        alert("คัดลอกลิงก์แล้ว! นำไปวางใน Chrome นะครับ");
     }
-
-    if (isPass) {
-        box.className = "result-box pass";
-        box.innerHTML = "✅ ใช้ได้จ้า!";
-    } else {
-        box.className = "result-box fail";
-        box.innerHTML = "❌ ใช้ไม่ได้แล้ว";
-    }
-}
 </script>
 
 </body>
