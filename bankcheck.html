@@ -23,21 +23,20 @@
         .fail { background-color: #fee2e2; color: #b91c1c; border-color: #b91c1c; }
         .bank-info { background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 17px; border-left: 8px solid #1e40af; text-align: left; margin-bottom: 20px; }
         
-        /* สไตล์ตัวนับใหม่ อ่านง่าย ไม่โดนบล็อก */
+        /* กล่องตัวนับแบบใหม่ ชัวร์กว่าเดิม */
         .counter-section { 
             background: #000; 
             padding: 20px; 
             border-radius: 15px; 
             border: 2px solid #fbbf24; 
             color: #fff;
+            margin-top: 10px;
         }
-        .count-number {
-            font-size: 40px;
-            color: #fbbf24;
-            font-weight: bold;
-            letter-spacing: 2px;
-            display: block;
-            margin: 10px 0;
+        .counter-wrapper {
+            display: inline-block;
+            margin: 15px 0;
+            /* ขยายขนาดรูปตัวเลขให้ใหญ่ขึ้นอ่านง่าย */
+            transform: scale(1.6);
         }
     </style>
 </head>
@@ -59,31 +58,15 @@
     </div>
 
     <div class="counter-section">
-        <span style="font-size: 14px; opacity: 0.8;">คนเข้ามาเช็คแล้วทั้งหมด</span>
-        <span class="count-number" id="visitor-count">...</span>
-        <span style="font-size: 14px;">ครั้ง</span>
+        <span style="font-size: 14px; opacity: 0.8;">จำนวนครั้งที่มีคนเช็คแล้ว</span>
+        <div class="counter-wrapper">
+            <img src="https://counter1.fc2.com/counter_img.php?id=39641258&main=1" border="0" alt="visitor counter">
+        </div>
+        <span style="display:block; font-size: 14px; color: #fbbf24;">ครั้ง</span>
     </div>
 </div>
 
 <script>
-// ระบบนับจำนวนแบบไม่พึ่งรูปภาพ
-function updateCounter() {
-    const countEl = document.getElementById('visitor-count');
-    // ใช้บริการนับฟรีที่เสถียร (CountAPI-like)
-    fetch('https://api.countapi.xyz/hit/okmobile-check-v2/visits')
-    .then(res => res.json())
-    .then(data => {
-        countEl.innerText = data.value.toLocaleString();
-    })
-    .catch(() => {
-        // กรณี API หลักมีปัญหา ให้ใช้ตัวเลขสุ่มจำลองที่ดูสมเหตุสมผล (เพื่อความสวยงามของหน้าเว็บ)
-        countEl.innerText = "1,248"; 
-    });
-}
-
-// เรียกใช้งานตัวนับทันทีที่เปิดหน้า
-updateCounter();
-
 async function getPreciseOS() {
     gtag('event', 'click_verify', { 'event_label': 'Precise Check' });
     const box = document.getElementById('status-box');
@@ -92,8 +75,9 @@ async function getPreciseOS() {
 
     let osName = "Unknown";
     let osVersion = 0;
+    const ua = navigator.userAgent;
 
-    // เช็ค High Entropy Hints (Chrome แม่นยำ)
+    // ระบบตรวจเช็คแบบแม่นยำสูง
     if (navigator.userAgentData && navigator.userAgentData.getHighEntropyValues) {
         try {
             const hints = await navigator.userAgentData.getHighEntropyValues(['platformVersion', 'platform']);
@@ -102,9 +86,7 @@ async function getPreciseOS() {
         } catch(e) {}
     } 
 
-    // เช็ค User Agent (Safari/LINE/แอปอื่น)
     if (osVersion === 0) {
-        const ua = navigator.userAgent;
         if (/Android/i.test(ua)) {
             osName = "Android";
             const match = ua.match(/Android\s([0-9\.]+)/);
@@ -125,9 +107,9 @@ async function getPreciseOS() {
         detail.innerText = "เครื่องของท่าน: Android " + osVersion;
     } else if (osName.toLowerCase().includes("ios")) {
         isPass = osVersion >= 14;
-        detail.innerText = "เครื่องของท่าน: iPhone (iOS) " + osVersion;
+        detail.innerText = "เครื่องของท่าน: iPhone " + osVersion;
     } else {
-        detail.innerText = "ตรวจไม่พบข้อมูลเบราว์เซอร์";
+        detail.innerText = "ตรวจไม่พบข้อมูลรุ่นมือถือ";
     }
 
     if (isPass) {
