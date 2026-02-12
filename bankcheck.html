@@ -200,13 +200,15 @@ window.onload = function() {
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     const isFacebook = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
     const isLine = (ua.indexOf("Line") > -1);
-    const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua) && !/CriOS/.test(ua); // เช็คว่าเป็น Safari แท้
+    const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua) && !/CriOS/.test(ua);
     const isAndroid = /Android/i.test(ua);
-    const isChrome = /Chrome|CriOS/.test(ua); // เช็คว่าเป็น Chrome หรือไม่
+    
+    // ตรวจจับเบราว์เซอร์จากค่ายมือถือ (OPPO, Xiaomi, Vivo) ที่มักปลอมตัวว่าเป็น Chrome
+    const isOtherBrowser = /HeyTapBrowser|MiuiBrowser|VivoBrowser/i.test(ua);
+    const isChrome = /Chrome|CriOS/.test(ua) && !isOtherBrowser; 
     
     const mainBtn = document.getElementById('btn');
 
-    // ถ้าเป็น FB, LINE, Safari หรือ Android ที่ไม่ใช่ Chrome ให้แสดงปุ่มกระโดด
     if (isFacebook || isLine || isSafari || (isAndroid && !isChrome)) {
         mainBtn.innerHTML = "🚀 เปิดใน Chrome เพื่อเริ่มเช็ค<br><small>(เพื่อความแม่นยำ 100%)</small>";
         mainBtn.classList.add('jump-chrome');
