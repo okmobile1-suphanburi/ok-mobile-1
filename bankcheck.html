@@ -89,6 +89,28 @@
         }
         .recheck-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #166534; }
 
+        /* ปุ่มใหม่: อัพเดทซอฟต์แวร์ สีแดงนีออนสะดุดตา */
+        .update-software-btn {
+            display: none;
+            background: linear-gradient(180deg, #ff0000 0%, #d20000 100%);
+            color: white;
+            border: 3px solid #ffffff;
+            width: 100%;
+            padding: 16px;
+            font-size: 24px;
+            font-weight: 800;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 15px rgba(255, 0, 0, 0.4);
+            animation: pulse-red 1s infinite;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(255, 0, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
         .result-box { padding: 25px; border-radius: 20px; font-size: 32px; font-weight: 700; border: 4px solid; display: none; margin-bottom: 20px; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         
@@ -106,7 +128,6 @@
 
         .note-box { background: #fff7ed; font-size: 14px; color: #9a3412; text-align: left; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffedd5; line-height: 1.5; }
         
-        /* ปรับปุ่มคัดลอกให้ดูเป็นปุ่มแอคชั่นมากขึ้น */
         .copy-btn { 
             background: #1e40af; color: white; border: 2px solid #fbbf24; width: 100%; padding: 14px; 
             font-size: 18px; font-weight: 700; border-radius: 15px; cursor: pointer; transition: 0.2s; 
@@ -132,13 +153,15 @@
 <body>
 
 <div class="container">
-    <h1>ตรวจเวอร์ชั่นเครื่อง</h1>
-    <p style="font-size: 18px; color: #4b5563;">สำหรับใช้แอปธนาคาร (14 ก.พ. 69)</p>
+    <h1>ตรวจสอบเวอร์ชั่นเครื่อง</h1>
+    <p style="font-size: 18px; color: #4b5563;">รองรับการใช้แอปธนาคาร (14 ก.พ. 69)</p>
 
     <div id="status-box" class="result-box"></div>
     <div id="version-detail"></div>
     
     <button id="recheck-btn" class="recheck-btn" onclick="resetCheck()">🔄 เช็คอีกครั้ง</button>
+
+    <button id="update-soft-btn" class="update-software-btn" onclick="openUpdateSettings()">🚀 กดอัปเดตซอฟต์แวร์</button>
 
     <button class="check-btn" id="btn" onclick="getPreciseOS()">กดเพื่อเช็คเครื่อง</button>
 
@@ -175,6 +198,7 @@ async function getPreciseOS() {
     const detail = document.getElementById('version-detail');
     const btn = document.getElementById('btn');
     const reBtn = document.getElementById('recheck-btn');
+    const upBtn = document.getElementById('update-soft-btn');
 
     let osName = "Unknown";
     let osVersion = 0;
@@ -224,9 +248,31 @@ async function getPreciseOS() {
     if (isPass) {
         box.className = "result-box pass";
         box.innerHTML = "✅ ใช้ได้จ้า!";
+        upBtn.style.display = 'none';
     } else {
         box.className = "result-box fail";
         box.innerHTML = "❌ ใช้ไม่ได้แล้ว";
+        upBtn.style.display = 'block';
+    }
+}
+
+function openUpdateSettings() {
+    const ua = navigator.userAgent;
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+        // iPhone เปิดหน้าตรงได้
+        window.location.href = "App-prefs:General&path=SOFTWARE_UPDATE_LINK";
+    } else if (/Android/i.test(ua)) {
+        // Android ใช้ระบบช่วยคัดลอกคำค้นหาแล้วเปิด Settings
+        const dummy = document.createElement('input');
+        document.body.appendChild(dummy);
+        dummy.value = "อัปเดตซอฟต์แวร์";
+        dummy.select();
+        document.execCommand('copy');
+        document.body.removeChild(dummy);
+        
+        alert("🤖 สำหรับ Android:\n1. ระบบคัดลอกคำว่า 'อัปเดตซอฟต์แวร์' ให้แล้ว\n2. กรุณาเข้า 'การตั้งค่า' (Settings)\n3. กดช่องค้นหาด้านบนแล้ว 'วาง' เพื่ออัปเดตทันทีครับ");
+    } else {
+        alert("กรุณาตรวจสอบการอัปเดตในเมนูตั้งค่าของอุปกรณ์ครับ");
     }
 }
 
@@ -234,13 +280,12 @@ function resetCheck() {
     document.getElementById('status-box').style.display = 'none';
     document.getElementById('version-detail').style.display = 'none';
     document.getElementById('recheck-btn').style.display = 'none';
+    document.getElementById('update-soft-btn').style.display = 'none';
     document.getElementById('btn').style.display = 'block';
 }
 
 function copyAndOpenChrome() {
     const url = window.location.href;
-    
-    // 1. คัดลอกลิงก์
     const dummy = document.createElement('input');
     document.body.appendChild(dummy);
     dummy.value = url;
@@ -248,20 +293,13 @@ function copyAndOpenChrome() {
     document.execCommand('copy');
     document.body.removeChild(dummy);
 
-    // 2. พยายามเปิด Chrome
     const cleanUrl = url.replace(/^https?:\/\//, '');
-    
     if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        // สำหรับ iOS
         window.location.href = "googlechrome://" + cleanUrl;
     } else if (/Android/i.test(navigator.userAgent)) {
-        // สำหรับ Android
         window.location.href = "intent://" + cleanUrl + "#Intent;scheme=https;package=com.android.chrome;end";
-    } else {
-        alert("คัดลอกลิงก์แล้ว! กรุณาวางใน Chrome");
     }
     
-    // แสดงข้อความบอกสถานะ
     setTimeout(() => {
         alert("คัดลอกลิงก์แล้ว! หากระบบไม่เปิด Chrome ให้โดยอัตโนมัติ กรุณานำไปวางเองใน Chrome นะครับ");
     }, 500);
@@ -269,11 +307,7 @@ function copyAndOpenChrome() {
 
 function toggleManual() {
     const content = document.getElementById('manual-content');
-    if (content.style.display === 'block') {
-        content.style.display = 'none';
-    } else {
-        content.style.display = 'block';
-    }
+    content.style.display = (content.style.display === 'block') ? 'none' : 'block';
 }
 </script>
 
