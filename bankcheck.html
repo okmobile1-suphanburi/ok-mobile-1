@@ -72,7 +72,6 @@
             box-shadow: 0 4px 0 #b23000, 0 5px 10px rgba(0,0,0,0.2); 
         }
 
-        /* ปุ่มเช็คอีกครั้ง - สไตล์ใหม่สะดุดตา */
         .recheck-btn {
             display: none;
             background: #22c55e;
@@ -106,8 +105,14 @@
         .bank-info { background: #f1f5f9; padding: 15px; border-radius: 12px; font-size: 17px; border-left: 8px solid #1e40af; text-align: left; margin-bottom: 20px; }
 
         .note-box { background: #fff7ed; font-size: 14px; color: #9a3412; text-align: left; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #ffedd5; line-height: 1.5; }
-        .copy-btn { background: #ffffff; color: #1e40af; border: 2px solid #1e40af; width: 100%; padding: 12px; font-size: 16px; font-weight: 700; border-radius: 12px; cursor: pointer; transition: 0.2s; margin-bottom: 10px; }
-        .copy-btn:active { background: #1e40af; color: white; }
+        
+        /* ปรับปุ่มคัดลอกให้ดูเป็นปุ่มแอคชั่นมากขึ้น */
+        .copy-btn { 
+            background: #1e40af; color: white; border: 2px solid #fbbf24; width: 100%; padding: 14px; 
+            font-size: 18px; font-weight: 700; border-radius: 15px; cursor: pointer; transition: 0.2s; 
+            margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .copy-btn:active { background: #fbbf24; color: #1e40af; transform: scale(0.98); }
 
         .manual-section { margin-top: 15px; }
         .manual-btn { 
@@ -146,11 +151,11 @@
     <div class="note-box">
         <b>หมายเหตุและความปลอดภัย:</b><br>
         * ระบบตรวจสอบเฉพาะเลขเวอร์ชันเพื่อแจ้งเตือนเท่านั้น<br>
-        * <b>ไม่มีการเก็บข้อมูลส่วนตัวหรือเข้าถึงข้อมูลในเครื่อง 100%</b><br>
-        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome เท่านั้น เพื่อความแม่นยำ
+        * <b>ไม่มีการเก็บข้อมูลส่วนตัว 100%</b><br>
+        * แนะนำเปิดใน Chrome เท่านั้น เพื่อความแม่นยำที่สุด
     </div>
 
-    <button class="copy-btn" onclick="copyURL()">🔗 คัดลอกลิงก์ไปเปิดใน Chrome</button>
+    <button class="copy-btn" onclick="copyAndOpenChrome()">🔗 คัดลอกและเปิดใน Chrome ทันที</button>
 
     <div class="manual-section">
         <button class="manual-btn" onclick="toggleManual()">❓ วิธีเช็คเวอร์ชันในเครื่องด้วยตนเอง</button>
@@ -232,14 +237,34 @@ function resetCheck() {
     document.getElementById('btn').style.display = 'block';
 }
 
-function copyURL() {
+function copyAndOpenChrome() {
+    const url = window.location.href;
+    
+    // 1. คัดลอกลิงก์
     const dummy = document.createElement('input');
     document.body.appendChild(dummy);
-    dummy.value = window.location.href;
+    dummy.value = url;
     dummy.select();
     document.execCommand('copy');
     document.body.removeChild(dummy);
-    alert("คัดลอกลิงก์เรียบร้อยแล้ว!");
+
+    // 2. พยายามเปิด Chrome
+    const cleanUrl = url.replace(/^https?:\/\//, '');
+    
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        // สำหรับ iOS
+        window.location.href = "googlechrome://" + cleanUrl;
+    } else if (/Android/i.test(navigator.userAgent)) {
+        // สำหรับ Android
+        window.location.href = "intent://" + cleanUrl + "#Intent;scheme=https;package=com.android.chrome;end";
+    } else {
+        alert("คัดลอกลิงก์แล้ว! กรุณาวางใน Chrome");
+    }
+    
+    // แสดงข้อความบอกสถานะ
+    setTimeout(() => {
+        alert("คัดลอกลิงก์แล้ว! หากระบบไม่เปิด Chrome ให้โดยอัตโนมัติ กรุณานำไปวางเองใน Chrome นะครับ");
+    }, 500);
 }
 
 function toggleManual() {
