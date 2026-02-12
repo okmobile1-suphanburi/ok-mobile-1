@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <meta property="og:title" content="เช็คเครื่องด่วน! มือถือคุณยังใช้แอปธนาคารได้ไหม?">
+    <meta property="og:description" content="ตรวจสอบเวอร์ชั่น Android/iOS เพื่อเตรียมรับมือการอัปเดตแอปธนาคาร 14 ก.พ. นี้">
+    <meta property="og:image" content="https://scontent.fbkk31-2.fna.fbcdn.net/v/t39.30808-6/629806317_122204734832537358_5192401617251277217_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=833d8c&_nc_ohc=LbOu9z9NgpQQ7kNvwG121zA&_nc_oc=AdlH1WO03PA9XseD4ouFxEaIkwd1_FXsGEog8BXPiRIL61xo2jhXW_M_xi4hS0cNtBaX3wNygQbcnk2dGmNdWqg3&_nc_zt=23&_nc_ht=scontent.fbkk31-2.fna&_nc_gid=chOv2OE1H5uGaiVUZS_Pyg&oh=00_AfuiAo-f6DFDumZMgvHKfBix9m_QZD8hIsO8FT3eI9WaUQ&oe=69934542">
+    <meta property="og:type" content="website">
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WT79LK89W"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -18,7 +23,6 @@
         .container { background: #ffffff; width: 100%; max-width: 420px; padding: 30px 20px; border-radius: 25px; text-align: center; border: 5px solid #fbbf24; box-shadow: 0 15px 35px rgba(0,0,0,0.4); }
         h1 { color: #1e3a8a; font-size: 30px; margin: 0; }
         
-        /* --- ปุ่มตรวจเช็คเวอร์ชัน แบบเด้งๆ สะดุดตา --- */
         .check-btn { 
             position: relative;
             background: linear-gradient(180deg, #ff8c00 0%, #ff4500 100%);
@@ -102,7 +106,7 @@
         <b>หมายเหตุและความปลอดภัย:</b><br>
         * ระบบตรวจสอบเฉพาะเลขเวอร์ชันเพื่อแจ้งเตือนเท่านั้น<br>
         * <b>ไม่มีการเก็บข้อมูลส่วนตัวหรือเข้าถึงข้อมูลในเครื่อง 100%</b><br>
-        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome เพื่อความแม่นยำ
+        * แนะนำคัดลอกลิงก์ไปเปิดใน Chrome เท่านั้น เพื่อความแม่นยำ
     </div>
 
     <button class="copy-btn" onclick="copyURL()">🔗 คัดลอกลิงก์ไปเปิดใน Chrome</button>
@@ -110,7 +114,7 @@
 
 <script>
 async function getPreciseOS() {
-    gtag('event', 'click_verify', { 'event_label': 'Precise Check with Safety Note' });
+    gtag('event', 'click_verify', { 'event_label': 'Precise Check with OG Image Link' });
     const box = document.getElementById('status-box');
     const detail = document.getElementById('version-detail');
     const btn = document.getElementById('btn');
