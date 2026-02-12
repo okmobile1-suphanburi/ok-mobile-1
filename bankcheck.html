@@ -42,7 +42,6 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
         }
 
-        /* สีพิเศษสำหรับปุ่มกระโดดไป Chrome */
         .jump-chrome {
             background: linear-gradient(180deg, #4285F4 0%, #34A853 100%) !important;
             box-shadow: 0 10px 0 #1e3a8a, 0 15px 25px rgba(66, 133, 244, 0.4) !important;
@@ -197,27 +196,27 @@
 </div>
 
 <script>
-// ตรวจสอบทันทีที่โหลดหน้าเว็บว่าเปิดจาก FB/LINE หรือไม่
 window.onload = function() {
     const ua = navigator.userAgent || navigator.vendor || window.opera;
     const isFacebook = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
     const isLine = (ua.indexOf("Line") > -1);
+    const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua) && !/CriOS/.test(ua); // เช็คว่าเป็น Safari แท้
+    const isAndroid = /Android/i.test(ua);
+    const isChrome = /Chrome|CriOS/.test(ua); // เช็คว่าเป็น Chrome หรือไม่
+    
     const mainBtn = document.getElementById('btn');
 
-    if (isFacebook || isLine) {
-        // เปลี่ยนหน้าตาปุ่มให้เป็นสไตล์ Chrome
+    // ถ้าเป็น FB, LINE, Safari หรือ Android ที่ไม่ใช่ Chrome ให้แสดงปุ่มกระโดด
+    if (isFacebook || isLine || isSafari || (isAndroid && !isChrome)) {
         mainBtn.innerHTML = "🚀 เปิดใน Chrome เพื่อเริ่มเช็ค<br><small>(เพื่อความแม่นยำ 100%)</small>";
         mainBtn.classList.add('jump-chrome');
         mainBtn.style.fontSize = "22px";
-        
-        // เปลี่ยนหน้าที่ปุ่มให้เป็นการเปิด Chrome แทนการเช็คทันที
         mainBtn.onclick = function() {
             copyAndOpenChrome();
         };
         
-        // แจ้งเตือนผู้ใช้เล็กน้อย
         setTimeout(() => {
-            alert("ตรวจพบว่าคุณเปิดผ่าน Facebook/Line\nกรุณากดปุ่มเพื่อเปิดใน Chrome\nจะทำให้เช็คเวอร์ชันได้แม่นยำที่สุดครับ");
+            alert("เพื่อความแม่นยำสูงสุดในการเช็คเวอร์ชัน\nกรุณากดปุ่มเพื่อเปิดใน Chrome ครับ");
         }, 500);
     }
 };
@@ -304,7 +303,7 @@ function openUpdateSettings() {
 }
 
 function resetCheck() {
-    location.reload(); // โหลดหน้าใหม่เพื่อให้ระบบ Detect FB/LINE ทำงานใหม่ด้วย
+    location.reload();
 }
 
 function copyAndOpenChrome() {
