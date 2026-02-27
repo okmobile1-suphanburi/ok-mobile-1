@@ -73,7 +73,7 @@
     </div>
 
     <script>
-        // --- ⚠️ URL ของคุณ ---
+        // --- ⚠️ URL Apps Script ของคุณ ---
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwKtXLTfVrukejkqGKP0rc5ZkEHFDg3DtRYgeCw5SppibMhe6HF6GCH1YbVjQ23uozD/exec';
         const ADMIN_PASS = '1234'; 
 
@@ -90,7 +90,7 @@
 
         function closeModal() { document.getElementById('formModal').classList.add('hidden'); }
 
-        // Preview & Resize Image
+        // Preview รูปภาพก่อนส่ง
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const preview = document.getElementById('previewArea');
             preview.innerHTML = '';
@@ -106,6 +106,7 @@
             });
         });
 
+        // ฟังก์ชันลดขนาดรูปภาพ (ลดเหลือ 0.5 เพื่อให้ประหยัดเนื้อที่คอลัมน์ G)
         async function resizeImage(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -121,28 +122,21 @@
                         canvas.height = img.height * scaleSize;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.7)); // ปรับคุณภาพเป็น 0.7 เพื่อประหยัดพื้นที่คอลัมน์ G
+                        resolve(canvas.toDataURL('image/jpeg', 0.5)); 
                     };
                 };
             });
         }
 
-        // Submit Form
+        // ส่งข้อมูล (POST)
         document.getElementById('travelForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const overlay = document.getElementById('loadingOverlay');
             const rowId = document.getElementById('rowId').value;
-            
             overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "กำลังประมวลผลรูปภาพ...";
+            document.getElementById('loadingText').innerText = "กำลังอัปโหลดข้อมูลและรูปภาพ...";
 
             const files = document.getElementById('fileInput').files;
-            if (!rowId && files.length === 0) {
-                alert("กรุณาเลือกรูปภาพอย่างน้อย 1 รูป");
-                overlay.style.display = 'none';
-                return;
-            }
-
             const imagesBase64 = [];
             for (let file of Array.from(files).slice(0, 5)) {
                 const resized = await resizeImage(file);
@@ -165,7 +159,7 @@
                     mode: 'no-cors',
                     body: JSON.stringify(payload)
                 });
-                alert('สำเร็จ!');
+                alert('บันทึกสำเร็จ!');
                 location.reload();
             } catch (err) {
                 alert('เกิดข้อผิดพลาด');
@@ -173,40 +167,42 @@
             }
         });
 
-        // Load Data - แก้ไขเพื่อดึงข้อมูลจาก Property "images" ที่ GS ส่งมาให้ (คอลัมน์ G)
+        // โหลดข้อมูลมาแสดงผล (GET)
         async function loadData() {
             const grid = document.getElementById('travelGrid');
             const overlay = document.getElementById('loadingOverlay');
             overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "กำลังโหลดข้อมูลจาก Google Sheets...";
+            document.getElementById('loadingText').innerText = "กำลังดึงข้อมูลล่าสุด...";
 
             try {
                 const res = await fetch(WEB_APP_URL);
                 const data = await res.json();
                 
                 if (!data || data.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">ไม่มีข้อมูลที่เที่ยวในขณะนี้</div>';
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">ยังไม่มีข้อมูลในระบบ</div>';
                     return;
                 }
 
                 grid.innerHTML = data.map((item) => {
-                    // ดึงข้อมูลรูปภาพ (ซึ่ง GS ส่งมาจาก Index 6/คอลัมน์ G แล้ว)
-                    const imgList = item.images ? item.images.toString().split(',').filter(url => url.trim().startsWith('data:image')) : [];
+                    // ดึงข้อมูลรูปภาพจากคอลัมน์ G (ตรวจสอบว่าเป็น Base64 ที่ถูกต้อง)
+                    let rawImages = item.images ? String(item.images).split(',') : [];
+                    let imgList = rawImages.map(s => s.trim()).filter(s => s.startsWith('data:image'));
+                    
                     const mainImg = imgList[0] || 'https://via.placeholder.com/400x300?text=No+Image';
                     
                     const thumbnailsHTML = imgList.slice(1, 5).map(url => `
                         <div class="flex-1 px-1">
-                            <img src="${url.trim()}" class="thumb-img" onclick="window.open('${url.trim()}', '_blank')">
+                            <img src="${url}" class="thumb-img" onerror="this.src='https://via.placeholder.com/100?text=Error'" onclick="window.open('${url}', '_blank')">
                         </div>
                     `).join('');
 
                     return `
                         <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col group relative border border-gray-100">
                             <div class="relative overflow-hidden">
-                                <img src="${mainImg.trim()}" class="card-img" onclick="window.open('${mainImg.trim()}', '_blank')">
+                                <img src="${mainImg}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Error'" onclick="window.open('${mainImg}', '_blank')">
                                 <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                                    <button onclick="editPost('${item.row}', '${item.name}', '${item.province}', '${item.category}', '${item.description.replace(/'/g, "\\'")}')" class="bg-blue-500 text-white p-2 rounded-lg shadow"><i class="fas fa-edit"></i></button>
-                                    <button onclick="deletePost('${item.row}')" class="bg-red-500 text-white p-2 rounded-lg shadow"><i class="fas fa-trash"></i></button>
+                                    <button onclick="editPost('${item.row}', '${item.name}', '${item.province}', '${item.category}', '${item.description}')" class="bg-blue-500 text-white p-2 rounded-lg"><i class="fas fa-edit"></i></button>
+                                    <button onclick="deletePost('${item.row}')" class="bg-red-500 text-white p-2 rounded-lg"><i class="fas fa-trash"></i></button>
                                 </div>
                             </div>
                             ${imgList.length > 1 ? `<div class="flex p-2 bg-gray-50 border-b">${thumbnailsHTML}</div>` : ''}
@@ -215,23 +211,23 @@
                                     <h3 class="text-xl font-bold text-gray-800 line-clamp-1">${item.name}</h3>
                                     <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-1 rounded-full font-bold uppercase">${item.category}</span>
                                 </div>
-                                <p class="text-gray-400 text-xs mb-3"><i class="fas fa-map-marker-alt mr-1 text-red-400"></i> ${item.province}</p>
+                                <p class="text-gray-400 text-xs mb-3"><i class="fas fa-map-marker-alt mr-1"></i> ${item.province}</p>
                                 <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed">${item.description || 'ไม่มีรายละเอียด'}</p>
                             </div>
                         </div>
                     `;
                 }).join('');
             } catch (err) {
-                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-400">ไม่สามารถโหลดข้อมูลได้ (ตรวจสอบการ Deploy ของคุณ)</div>';
+                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-400">ไม่สามารถเชื่อมต่อฐานข้อมูลได้</div>';
             } finally {
                 overlay.style.display = 'none';
             }
         }
 
         async function deletePost(row) {
-            const pass = prompt("รหัสผ่านแอดมิน:");
-            if (pass !== ADMIN_PASS) return alert("ผิด!");
-            if (confirm("ลบไหม?")) {
+            const pass = prompt("รหัสแอดมิน:");
+            if (pass !== ADMIN_PASS) return alert("รหัสไม่ถูกต้อง");
+            if (confirm("ลบโพสต์นี้ใช่หรือไม่?")) {
                 const overlay = document.getElementById('loadingOverlay');
                 overlay.style.display = 'flex';
                 await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', row: row }) });
@@ -247,7 +243,7 @@
             document.getElementById('province').value = prov;
             document.getElementById('category').value = cat;
             document.getElementById('description').value = desc;
-            document.getElementById('photoSection').classList.add('hidden');
+            document.getElementById('photoSection').classList.add('hidden'); // ซ่อนส่วนเลือกรูปตอนแก้
         }
 
         window.onload = loadData;
