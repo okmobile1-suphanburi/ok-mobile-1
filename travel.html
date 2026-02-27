@@ -80,7 +80,7 @@
 
     <script>
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwKtXLTfVrukejkGKP0rc5ZkEHFDg3DtRYgeCw5SppibMhe6HF6GCH1YbVjQ23uozD/exec';
-        const ADMIN_PASS = '1234'; // เปลี่ยนรหัสผ่านตรงนี้
+        const ADMIN_PASS = '1234'; 
 
         function openModal(isEdit = false) { 
             document.getElementById('formModal').classList.remove('hidden'); 
@@ -93,7 +93,6 @@
         }
         function closeModal() { document.getElementById('formModal').classList.add('hidden'); }
 
-        // ระบบพรีวิวรูปภาพ
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const preview = document.getElementById('previewArea');
             preview.innerHTML = '';
@@ -109,7 +108,6 @@
             });
         });
 
-        // ส่งข้อมูล (POST / EDIT)
         document.getElementById('travelForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const overlay = document.getElementById('loadingOverlay');
@@ -162,7 +160,6 @@
             }
         });
 
-        // ฟังก์ชันแก้ไข
         function editPost(row, name, province, cat, desc) {
             openModal(true);
             document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูล (ไม่สามารถเปลี่ยนรูปได้)';
@@ -174,7 +171,6 @@
             document.getElementById('photoSection').classList.add('hidden');
         }
 
-        // ฟังก์ชันลบ
         async function deletePost(row) {
             const pass = prompt("กรุณาใส่รหัสผ่านแอดมินเพื่อลบ:");
             if (pass !== ADMIN_PASS) return alert("รหัสผ่านไม่ถูกต้อง!");
@@ -194,36 +190,35 @@
             }
         }
 
-        // ระบบดึงข้อมูล (GET) - แก้ไขส่วนการแสดงรูปภาพให้ครบและขนาดพอดี
+        // ส่วนที่แก้ไขตามคำขอ: loadData แบบยืดหยุ่นสูง
         async function loadData() {
+            const grid = document.getElementById('travelGrid');
             try {
                 const res = await fetch(WEB_APP_URL);
                 const data = await res.json();
-                const grid = document.getElementById('travelGrid');
                 
                 if (!data || data.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400"><p>ยังไม่มีข้อมูล</p></div>';
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400"><p>ยังไม่มีข้อมูลในระบบ</p></div>';
                     return;
                 }
 
-                grid.innerHTML = data.map((item) => {
-                    const imgList = item.images ? item.images.split(',') : [];
-                    const mainImg = imgList[0] || 'https://via.placeholder.com/400x300';
-                    const realRow = item.row || ''; 
+                grid.innerHTML = data.map((item, index) => {
+                    const imgList = item.images ? item.images.toString().split(',') : [];
+                    const mainImg = imgList[0] || 'https://via.placeholder.com/400x300?text=No+Image';
+                    const realRow = item.row || (data.length - index + 1); 
                     
-                    // สร้าง HTML สำหรับรูปย่อย
                     const thumbnailsHTML = imgList.slice(1, 5).map(url => `
                         <div class="flex-1 px-1">
-                            <img src="${url}" class="thumb-img" onclick="window.open('${url}', '_blank')">
+                            <img src="${url.trim()}" class="thumb-img" onerror="this.src='https://via.placeholder.com/100'" onclick="window.open('${url.trim()}', '_blank')">
                         </div>
                     `).join('');
 
                     return `
                         <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 flex flex-col relative group">
                             <div class="relative">
-                                <img src="${mainImg}" class="card-img" onclick="window.open('${mainImg}', '_blank')">
+                                <img src="${mainImg.trim()}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300'" onclick="window.open('${mainImg.trim()}', '_blank')">
                                 <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                                    <button onclick="editPost('${realRow}', '${item.name}', '${item.province}', '${item.category}', '${item.description}')" class="bg-blue-500 text-white p-2 rounded-lg text-xs shadow-lg"><i class="fas fa-edit"></i></button>
+                                    <button onclick="editPost('${realRow}', '${item.name || ""}', '${item.province || ""}', '${item.category || ""}', '${item.description || ""}')" class="bg-blue-500 text-white p-2 rounded-lg text-xs shadow-lg"><i class="fas fa-edit"></i></button>
                                     <button onclick="deletePost('${realRow}')" class="bg-red-500 text-white p-2 rounded-lg text-xs shadow-lg"><i class="fas fa-trash"></i></button>
                                 </div>
                             </div>
@@ -232,17 +227,18 @@
 
                             <div class="p-5 flex-grow">
                                 <div class="flex justify-between items-start">
-                                    <h3 class="text-xl font-bold text-gray-800 line-clamp-1">${item.name}</h3>
-                                    <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-1 rounded-full font-bold">${item.category}</span>
+                                    <h3 class="text-xl font-bold text-gray-800 line-clamp-1">${item.name || 'ไม่ระบุชื่อ'}</h3>
+                                    <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-1 rounded-full font-bold">${item.category || 'ทั่วไป'}</span>
                                 </div>
-                                <p class="text-gray-400 text-xs mt-1"><i class="fas fa-map-marker-alt"></i> ${item.province}</p>
+                                <p class="text-gray-400 text-xs mt-1"><i class="fas fa-map-marker-alt"></i> ${item.province || '-'}</p>
                                 <p class="text-gray-500 text-sm mt-3 line-clamp-2">${item.description || 'ไม่มีรายละเอียด'}</p>
                             </div>
                         </div>
                     `;
                 }).join('');
             } catch (err) {
-                console.error(err);
+                console.error("Fetch Error:", err);
+                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-500"><p>ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่</p></div>';
             }
         }
 
