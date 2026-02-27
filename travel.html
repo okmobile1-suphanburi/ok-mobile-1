@@ -93,7 +93,6 @@
 
         function closeModal() { document.getElementById('formModal').classList.add('hidden'); }
 
-        // Preview Images
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const preview = document.getElementById('previewArea');
             preview.innerHTML = '';
@@ -109,13 +108,14 @@
             });
         });
 
-        // Submit Form
+        // --- ส่วนที่แก้ไขให้พร้อมใช้งานบันทึกข้อมูลลง Sheet ---
         document.getElementById('travelForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const overlay = document.getElementById('loadingOverlay');
             const rowId = document.getElementById('rowId').value;
             
             overlay.style.display = 'flex';
+            document.getElementById('loadingText').innerText = "กำลังประมวลผลรูปภาพและบันทึก...";
 
             const imagesBase64 = [];
             const files = document.getElementById('fileInput').files;
@@ -126,14 +126,17 @@
                 return;
             }
 
-            for (let file of Array.from(files).slice(0, 5)) {
-                const reader = new FileReader();
-                const promise = new Promise(resolve => {
+            // ใช้ Promise.all เพื่อรออ่านไฟล์รูปภาพทั้งหมดให้เสร็จก่อนส่ง
+            const filePromises = Array.from(files).slice(0, 5).map(file => {
+                return new Promise(resolve => {
+                    const reader = new FileReader();
                     reader.onload = () => resolve(reader.result);
                     reader.readAsDataURL(file);
                 });
-                imagesBase64.push(await promise);
-            }
+            });
+            
+            const results = await Promise.all(filePromises);
+            imagesBase64.push(...results);
 
             const payload = {
                 action: rowId ? 'edit' : 'add',
@@ -148,18 +151,23 @@
             try {
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
+                    mode: 'no-cors', // จำเป็นสำหรับ Apps Script
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                alert('ดำเนินการสำเร็จ!');
-                location.reload();
+                
+                // เนื่องจาก no-cors จะไม่รู้ผลลัพธ์จาก server ให้รอ 1.5 วิแล้ว refresh
+                setTimeout(() => {
+                    alert('บันทึกข้อมูลสำเร็จ!');
+                    location.reload();
+                }, 1500);
             } catch (err) {
-                alert('เกิดข้อผิดพลาด');
+                console.error(err);
+                alert('เกิดข้อผิดพลาดในการบันทึก');
                 overlay.style.display = 'none';
             }
         });
 
-        // Load Data from Google Sheets
         async function loadData() {
             const grid = document.getElementById('travelGrid');
             try {
@@ -172,7 +180,7 @@
                 }
 
                 grid.innerHTML = data.map((item) => {
-                    const imgList = item.images ? item.images.toString().split(',') : [];
+                    const imgList = item.images ? item.images.toString().split(' , ') : [];
                     const mainImg = imgList[0] || 'https://via.placeholder.com/400x300?text=No+Image';
                     
                     const thumbnailsHTML = imgList.slice(1, 5).map(url => `
@@ -186,7 +194,7 @@
                             <div class="relative">
                                 <img src="${mainImg.trim()}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300'" onclick="window.open('${mainImg.trim()}', '_blank')">
                                 <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                                    <button onclick="editPost('${item.row}', '${item.name}', '${item.province}', '${item.category}', '${item.description}')" class="bg-blue-500 text-white p-2 rounded-lg text-xs shadow-lg"><i class="fas fa-edit"></i></button>
+                                    <button onclick="editPost('${item.row}', '${item.name.replace(/'/g, "\\'")}', '${item.province}', '${item.category}', '${item.description.replace(/'/g, "\\'")}')" class="bg-blue-500 text-white p-2 rounded-lg text-xs shadow-lg"><i class="fas fa-edit"></i></button>
                                     <button onclick="deletePost('${item.row}')" class="bg-red-500 text-white p-2 rounded-lg text-xs shadow-lg"><i class="fas fa-trash"></i></button>
                                 </div>
                             </div>
@@ -203,7 +211,7 @@
                     `;
                 }).join('');
             } catch (err) {
-                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-500"><p>ไม่สามารถโหลดข้อมูลได้ (ตรวจสอบ doGet และการ Deploy)</p></div>';
+                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-500"><p>ไม่สามารถโหลดข้อมูลได้ (ตรวจสอบการ Deploy หรือข้อมูลใน Sheet)</p></div>';
             }
         }
 
@@ -229,7 +237,7 @@
                     mode: 'no-cors',
                     body: JSON.stringify({ action: 'delete', row: row })
                 });
-                location.reload();
+                setTimeout(() => location.reload(), 1000);
             } catch (err) {
                 alert('เกิดข้อผิดพลาด');
                 document.getElementById('loadingOverlay').style.display = 'none';
