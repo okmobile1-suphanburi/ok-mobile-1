@@ -73,7 +73,7 @@
     </div>
 
     <script>
-        // --- ⚠️ สำคัญ: ตรวจสอบ URL ของคุณให้ถูกต้อง ---
+        // --- ⚠️ URL ของคุณ ---
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwKtXLTfVrukejkqGKP0rc5ZkEHFDg3DtRYgeCw5SppibMhe6HF6GCH1YbVjQ23uozD/exec';
         const ADMIN_PASS = '1234'; 
 
@@ -121,7 +121,7 @@
                         canvas.height = img.height * scaleSize;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.8));
+                        resolve(canvas.toDataURL('image/jpeg', 0.7)); // ปรับคุณภาพเป็น 0.7 เพื่อประหยัดพื้นที่คอลัมน์ G
                     };
                 };
             });
@@ -134,7 +134,7 @@
             const rowId = document.getElementById('rowId').value;
             
             overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "กำลังประมวลผลรูปภาพและส่งข้อมูล...";
+            document.getElementById('loadingText').innerText = "กำลังประมวลผลรูปภาพ...";
 
             const files = document.getElementById('fileInput').files;
             if (!rowId && files.length === 0) {
@@ -160,26 +160,25 @@
             };
 
             try {
-                const response = await fetch(WEB_APP_URL, {
+                await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     body: JSON.stringify(payload)
                 });
-                alert('บันทึกเรียบร้อย!');
+                alert('สำเร็จ!');
                 location.reload();
             } catch (err) {
-                console.error(err);
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                alert('เกิดข้อผิดพลาด');
                 overlay.style.display = 'none';
             }
         });
 
-        // Load Data
+        // Load Data - แก้ไขเพื่อดึงข้อมูลจาก Property "images" ที่ GS ส่งมาให้ (คอลัมน์ G)
         async function loadData() {
             const grid = document.getElementById('travelGrid');
             const overlay = document.getElementById('loadingOverlay');
             overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "กำลังโหลดข้อมูล...";
+            document.getElementById('loadingText').innerText = "กำลังโหลดข้อมูลจาก Google Sheets...";
 
             try {
                 const res = await fetch(WEB_APP_URL);
@@ -191,8 +190,8 @@
                 }
 
                 grid.innerHTML = data.map((item) => {
-                    // ปรับการดึงรูปภาพ: ตัดช่องว่างและแยกด้วยเครื่องหมาย ,
-                    const imgList = item.images ? item.images.toString().split(',').filter(url => url.trim() !== "") : [];
+                    // ดึงข้อมูลรูปภาพ (ซึ่ง GS ส่งมาจาก Index 6/คอลัมน์ G แล้ว)
+                    const imgList = item.images ? item.images.toString().split(',').filter(url => url.trim().startsWith('data:image')) : [];
                     const mainImg = imgList[0] || 'https://via.placeholder.com/400x300?text=No+Image';
                     
                     const thumbnailsHTML = imgList.slice(1, 5).map(url => `
@@ -206,7 +205,7 @@
                             <div class="relative overflow-hidden">
                                 <img src="${mainImg.trim()}" class="card-img" onclick="window.open('${mainImg.trim()}', '_blank')">
                                 <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                                    <button onclick="editPost('${item.row}', '${item.name}', '${item.province}', '${item.category}', '${item.description.replace(/\n/g, ' ')}')" class="bg-blue-500 text-white p-2 rounded-lg shadow"><i class="fas fa-edit"></i></button>
+                                    <button onclick="editPost('${item.row}', '${item.name}', '${item.province}', '${item.category}', '${item.description.replace(/'/g, "\\'")}')" class="bg-blue-500 text-white p-2 rounded-lg shadow"><i class="fas fa-edit"></i></button>
                                     <button onclick="deletePost('${item.row}')" class="bg-red-500 text-white p-2 rounded-lg shadow"><i class="fas fa-trash"></i></button>
                                 </div>
                             </div>
@@ -223,20 +222,18 @@
                     `;
                 }).join('');
             } catch (err) {
-                console.error(err);
-                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-400">ขออภัย ไม่สามารถโหลดข้อมูลได้</div>';
+                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-400">ไม่สามารถโหลดข้อมูลได้ (ตรวจสอบการ Deploy ของคุณ)</div>';
             } finally {
                 overlay.style.display = 'none';
             }
         }
 
         async function deletePost(row) {
-            const pass = prompt("กรุณาใส่รหัสผ่านแอดมินเพื่อลบ:");
-            if (pass !== ADMIN_PASS) return alert("รหัสผ่านไม่ถูกต้อง!");
-            if (confirm("คุณต้องการลบข้อมูลนี้ใช่หรือไม่?")) {
+            const pass = prompt("รหัสผ่านแอดมิน:");
+            if (pass !== ADMIN_PASS) return alert("ผิด!");
+            if (confirm("ลบไหม?")) {
                 const overlay = document.getElementById('loadingOverlay');
                 overlay.style.display = 'flex';
-                document.getElementById('loadingText').innerText = "กำลังลบข้อมูล...";
                 await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', row: row }) });
                 location.reload();
             }
@@ -250,7 +247,7 @@
             document.getElementById('province').value = prov;
             document.getElementById('category').value = cat;
             document.getElementById('description').value = desc;
-            document.getElementById('photoSection').classList.add('hidden'); // ซ่อนส่วนเลือกรูปตอนแก้ไข
+            document.getElementById('photoSection').classList.add('hidden');
         }
 
         window.onload = loadData;
