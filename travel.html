@@ -9,12 +9,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
         body { font-family: 'Kanit', sans-serif; background-color: #f3f4f6; }
-        .img-preview { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 2px solid #fff; shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .img-preview { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 2px solid #eee; }
         .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; color: white; flex-direction: column; }
-        .card-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; cursor: pointer; transition: 0.3s; }
-        .card-img:hover { opacity: 0.9; }
-        .thumb-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; transition: 0.2s; }
-        .thumb-img:hover { border-color: #2563eb; transform: scale(1.1); }
+        .card-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; cursor: pointer; transition: 0.3s; background-color: #ddd; }
+        .thumb-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
+        .thumb-img:hover { border-color: #2563eb; transform: scale(1.05); }
     </style>
 </head>
 <body>
@@ -51,7 +50,7 @@
                 
                 <div class="grid grid-cols-2 gap-3">
                     <input type="text" id="province" required placeholder="จังหวัด" class="w-full border-2 rounded-xl p-3 outline-none">
-                    <select id="category" class="w-full border-2 rounded-xl p-3 outline-none">
+                    <select id="category" class="w-full border-2 rounded-xl p-3 outline-none text-gray-600">
                         <option value="ที่เที่ยว">ที่เที่ยว</option>
                         <option value="ที่พัก">ที่พัก</option>
                         <option value="ร้านอาหาร">ร้านอาหาร</option>
@@ -74,7 +73,7 @@
     </div>
 
     <script>
-        // --- ส่วนที่ต้องแก้ไข URL ---
+        // --- ⚠️ สำคัญ: ตรวจสอบ URL ของคุณให้ถูกต้อง ---
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwKtXLTfVrukejkqGKP0rc5ZkEHFDg3DtRYgeCw5SppibMhe6HF6GCH1YbVjQ23uozD/exec';
         const ADMIN_PASS = '1234'; 
 
@@ -107,7 +106,6 @@
             });
         });
 
-        // ฟังก์ชันช่วยย่อขนาดรูปภาพก่อนส่ง
         async function resizeImage(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -140,7 +138,7 @@
 
             const files = document.getElementById('fileInput').files;
             if (!rowId && files.length === 0) {
-                alert("กรุณาเลือกรูปภาพ");
+                alert("กรุณาเลือกรูปภาพอย่างน้อย 1 รูป");
                 overlay.style.display = 'none';
                 return;
             }
@@ -162,7 +160,7 @@
             };
 
             try {
-                await fetch(WEB_APP_URL, {
+                const response = await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     body: JSON.stringify(payload)
@@ -170,7 +168,8 @@
                 alert('บันทึกเรียบร้อย!');
                 location.reload();
             } catch (err) {
-                alert('เกิดข้อผิดพลาด');
+                console.error(err);
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
                 overlay.style.display = 'none';
             }
         });
@@ -178,18 +177,23 @@
         // Load Data
         async function loadData() {
             const grid = document.getElementById('travelGrid');
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex';
+            document.getElementById('loadingText').innerText = "กำลังโหลดข้อมูล...";
+
             try {
                 const res = await fetch(WEB_APP_URL);
                 const data = await res.json();
                 
                 if (!data || data.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">ไม่มีข้อมูล</div>';
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">ไม่มีข้อมูลที่เที่ยวในขณะนี้</div>';
                     return;
                 }
 
                 grid.innerHTML = data.map((item) => {
-                    const imgList = item.images ? item.images.split(',') : [];
-                    const mainImg = imgList[0] || 'https://via.placeholder.com/400x300';
+                    // ปรับการดึงรูปภาพ: ตัดช่องว่างและแยกด้วยเครื่องหมาย ,
+                    const imgList = item.images ? item.images.toString().split(',').filter(url => url.trim() !== "") : [];
+                    const mainImg = imgList[0] || 'https://via.placeholder.com/400x300?text=No+Image';
                     
                     const thumbnailsHTML = imgList.slice(1, 5).map(url => `
                         <div class="flex-1 px-1">
@@ -198,36 +202,41 @@
                     `).join('');
 
                     return `
-                        <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col group relative">
+                        <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col group relative border border-gray-100">
                             <div class="relative overflow-hidden">
                                 <img src="${mainImg.trim()}" class="card-img" onclick="window.open('${mainImg.trim()}', '_blank')">
                                 <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                                    <button onclick="editPost('${item.row}', '${item.name}', '${item.province}', '${item.category}', '${item.description}')" class="bg-blue-500 text-white p-2 rounded-lg"><i class="fas fa-edit"></i></button>
-                                    <button onclick="deletePost('${item.row}')" class="bg-red-500 text-white p-2 rounded-lg"><i class="fas fa-trash"></i></button>
+                                    <button onclick="editPost('${item.row}', '${item.name}', '${item.province}', '${item.category}', '${item.description.replace(/\n/g, ' ')}')" class="bg-blue-500 text-white p-2 rounded-lg shadow"><i class="fas fa-edit"></i></button>
+                                    <button onclick="deletePost('${item.row}')" class="bg-red-500 text-white p-2 rounded-lg shadow"><i class="fas fa-trash"></i></button>
                                 </div>
                             </div>
                             ${imgList.length > 1 ? `<div class="flex p-2 bg-gray-50 border-b">${thumbnailsHTML}</div>` : ''}
                             <div class="p-5 flex-grow">
                                 <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-xl font-bold line-clamp-1">${item.name}</h3>
-                                    <span class="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full font-bold">${item.category}</span>
+                                    <h3 class="text-xl font-bold text-gray-800 line-clamp-1">${item.name}</h3>
+                                    <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-1 rounded-full font-bold uppercase">${item.category}</span>
                                 </div>
-                                <p class="text-gray-400 text-xs mb-3"><i class="fas fa-map-marker-alt mr-1"></i> ${item.province}</p>
-                                <p class="text-gray-600 text-sm line-clamp-2">${item.description}</p>
+                                <p class="text-gray-400 text-xs mb-3"><i class="fas fa-map-marker-alt mr-1 text-red-400"></i> ${item.province}</p>
+                                <p class="text-gray-600 text-sm line-clamp-2 leading-relaxed">${item.description || 'ไม่มีรายละเอียด'}</p>
                             </div>
                         </div>
                     `;
                 }).join('');
             } catch (err) {
-                grid.innerHTML = '<p class="text-red-500 text-center col-span-full">ไม่สามารถโหลดข้อมูลได้</p>';
+                console.error(err);
+                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-400">ขออภัย ไม่สามารถโหลดข้อมูลได้</div>';
+            } finally {
+                overlay.style.display = 'none';
             }
         }
 
         async function deletePost(row) {
-            const pass = prompt("รหัสแอดมิน:");
-            if (pass !== ADMIN_PASS) return alert("ผิดรหัส!");
-            if (confirm("ลบแน่ใจ?")) {
-                document.getElementById('loadingOverlay').style.display = 'flex';
+            const pass = prompt("กรุณาใส่รหัสผ่านแอดมินเพื่อลบ:");
+            if (pass !== ADMIN_PASS) return alert("รหัสผ่านไม่ถูกต้อง!");
+            if (confirm("คุณต้องการลบข้อมูลนี้ใช่หรือไม่?")) {
+                const overlay = document.getElementById('loadingOverlay');
+                overlay.style.display = 'flex';
+                document.getElementById('loadingText').innerText = "กำลังลบข้อมูล...";
                 await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ action: 'delete', row: row }) });
                 location.reload();
             }
@@ -241,7 +250,7 @@
             document.getElementById('province').value = prov;
             document.getElementById('category').value = cat;
             document.getElementById('description').value = desc;
-            document.getElementById('photoSection').classList.add('hidden'); // ปิดรูปตอนแก้เพื่อความง่าย
+            document.getElementById('photoSection').classList.add('hidden'); // ซ่อนส่วนเลือกรูปตอนแก้ไข
         }
 
         window.onload = loadData;
