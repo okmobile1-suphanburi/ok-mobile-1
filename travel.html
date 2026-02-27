@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelShare - แชร์ที่เที่ยวเข้า Google Drive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
+        body { font-family: 'Kanit', sans-serif; background-color: #f3f4f6; }
+        .img-preview { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; }
+        .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; color: white; flex-direction: column; text-align: center; }
+        .card-img { width: 100%; height: 220px; object-fit: cover; background-color: #e5e7eb; }
+    </style>
+</head>
+<body>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-400 mb-4"></div>
+        <p id="loadingText" class="text-xl font-bold">กำลังดำเนินการ...</p>
+    </div>
+
+    <nav class="bg-blue-600 text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold cursor-pointer" onclick="location.reload()">
+                <i class="fas fa-map-marked-alt text-yellow-300"></i> TravelShare
+            </h1>
+            <button onclick="openModal()" class="bg-yellow-400 text-blue-900 px-6 py-2 rounded-full font-bold hover:bg-yellow-300 transition shadow-md">
+                + แชร์พิกัดใหม่
+            </button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto my-8 px-4">
+        <div id="travelGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="col-span-full text-center py-20 text-gray-400">
+                <i class="fas fa-sync fa-spin text-3xl mb-4"></i>
+                <p>กำลังดึงข้อมูลจาก Google...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="formModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center p-4 z-[100]">
+        <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative overflow-y-auto max-h-[90vh]">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl">&times;</button>
+            <h3 class="text-2xl font-bold mb-6 text-blue-600">แบ่งปันที่เที่ยว/ที่พัก</h3>
+            
+            <form id="travelForm" class="space-y-4">
+                <input type="text" id="placeName" required placeholder="ชื่อสถานที่" class="w-full border-2 rounded-xl p-3 outline-none focus:border-blue-500">
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="text" id="province" required placeholder="จังหวัด" class="w-full border-2 rounded-xl p-3">
+                    <select id="category" class="w-full border-2 rounded-xl p-3">
+                        <option value="ที่เที่ยว">ที่เที่ยว</option>
+                        <option value="ที่พัก">ที่พัก</option>
+                        <option value="ร้านอาหาร">ร้านอาหาร</option>
+                    </select>
+                </div>
+
+                <div class="border-2 border-dashed border-gray-300 p-4 rounded-xl bg-gray-50 text-center">
+                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase">เลือกรูปจากเครื่อง (สูงสุด 5 รูป)</p>
+                    <input type="file" id="fileInput" accept="image/*" multiple class="w-full text-sm cursor-pointer">
+                    <div id="previewArea" class="flex gap-2 mt-4 flex-wrap justify-center"></div>
+                </div>
+
+                <textarea id="description" rows="3" placeholder="เล่าความประทับใจ..." class="w-full border-2 rounded-xl p-3"></textarea>
+
+                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg">
+                    อัปโหลดไปที่ Google Drive
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // *** เชื่อมต่อกับ URL ของคุณ ***
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwKtXLTfVrukejkqGKP0rc5ZkEHFDg3DtRYgeCw5SppibMhe6HF6GCH1YbVjQ23uozD/exec';
+
+        function openModal() { document.getElementById('formModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('formModal').classList.add('hidden'); }
+
+        // ระบบพรีวิวรูปภาพ
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const preview = document.getElementById('previewArea');
+            preview.innerHTML = '';
+            Array.from(e.target.files).slice(0, 5).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (ex) => {
+                    const img = document.createElement('img');
+                    img.src = ex.target.result;
+                    img.className = 'img-preview shadow-sm border-2 border-white';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // ระบบส่งข้อมูล (POST)
+        document.getElementById('travelForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            
+            overlay.style.display = 'flex';
+            loadingText.innerText = "กำลังประมวลผลรูปภาพ...";
+
+            const files = document.getElementById('fileInput').files;
+            if (files.length === 0) {
+                alert("กรุณาเลือกรูปภาพอย่างน้อย 1 รูป");
+                overlay.style.display = 'none';
+                return;
+            }
+
+            const imagesBase64 = [];
+            for (let file of Array.from(files).slice(0, 5)) {
+                const reader = new FileReader();
+                const promise = new Promise(resolve => {
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(file);
+                });
+                imagesBase64.push(await promise);
+            }
+
+            loadingText.innerText = "กำลังอัปโหลดเข้า Google Drive...\n(อาจใช้เวลาสักครู่ตามขนาดรูป)";
+
+            const payload = {
+                name: document.getElementById('placeName').value,
+                province: document.getElementById('province').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                images: imagesBase64
+            };
+
+            try {
+                // ส่งแบบ no-cors เพื่อความง่ายในการเชื่อมต่อกับ Google
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(payload)
+                });
+                
+                overlay.style.display = 'none';
+                alert('สำเร็จ! ข้อมูลของคุณถูกบันทึกลง Google Sheet และรูปอยู่ใน Drive แล้ว');
+                location.reload();
+            } catch (err) {
+                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาตรวจสอบการ Deploy');
+                overlay.style.display = 'none';
+            }
+        });
+
+        // ระบบดึงข้อมูลมาแสดงผล (GET)
+        async function loadData() {
+            try {
+                const res = await fetch(WEB_APP_URL);
+                const data = await res.json();
+                const grid = document.getElementById('travelGrid');
+                
+                if (!data || data.length === 0) {
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400"><i class="fas fa-folder-open text-5xl mb-4"></i><p>ยังไม่มีใครแชร์ข้อมูล เริ่มเป็นคนแรกเลย!</p></div>';
+                    return;
+                }
+
+                grid.innerHTML = data.map(item => {
+                    const imgList = item.images ? item.images.split(',') : [];
+                    const mainImg = imgList[0] || 'https://via.placeholder.com/400x300?text=No+Image';
+                    return `
+                        <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all border border-gray-100 flex flex-col">
+                            <div class="relative">
+                                <img src="${mainImg}" class="card-img" alt="${item.name}">
+                                <div class="absolute top-3 left-3">
+                                    <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase">${item.category}</span>
+                                </div>
+                            </div>
+                            <div class="p-5 flex-grow">
+                                <div class="flex justify-between items-center mb-1">
+                                    <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
+                                    <span class="text-gray-400 text-xs"><i class="fas fa-map-marker-alt"></i> ${item.province}</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mt-2 line-clamp-3 leading-relaxed">${item.description || 'ไม่มีรายละเอียด'}</p>
+                                ${imgList.length > 1 ? `<div class="mt-4 flex gap-1 items-center text-blue-500 text-xs font-bold"><i class="fas fa-images"></i> ดูรูปเพิ่มเติมอีก ${imgList.length-1} รูป</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (err) {
+                document.getElementById('travelGrid').innerHTML = '<div class="col-span-full text-center py-10 text-red-400 font-bold">ไม่สามารถดึงข้อมูลได้ (อย่าลืมเพิ่มฟังก์ชัน doGet ใน Apps Script และกด Deploy รุ่นใหม่)</div>';
+            }
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
