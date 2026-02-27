@@ -3,100 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelShare - ระบบแชร์พิกัดที่เที่ยว</title>
+    <title>TravelShare - ระบบแชร์พิกัด</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
         body { font-family: 'Kanit', sans-serif; background-color: #f3f4f6; }
-        .img-preview { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; border: 2px solid #eee; }
         .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; color: white; flex-direction: column; }
-        .card-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; cursor: pointer; transition: 0.3s; background-color: #ddd; }
-        .thumb-img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; cursor: pointer; }
-        .thumb-img:hover { border-color: #2563eb; transform: scale(1.05); }
+        .card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; background-color: #ddd; }
     </style>
 </head>
 <body>
 
     <div id="loadingOverlay" class="loading-overlay">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-yellow-400 mb-4"></div>
-        <p id="loadingText" class="text-xl font-bold">กำลังประมวลผล...</p>
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-yellow-400 mb-4"></div>
+        <p>กำลังประมวลผล...</p>
     </div>
 
     <nav class="bg-blue-600 text-white p-4 sticky top-0 z-50 shadow-md">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold cursor-pointer" onclick="location.reload()">
-                <i class="fas fa-map-marked-alt text-yellow-300 mr-2"></i>TravelShare
-            </h1>
-            <button onclick="openModal()" class="bg-yellow-400 text-blue-900 px-6 py-2 rounded-full font-bold hover:bg-yellow-300 transition shadow-md">
-                + เพิ่มที่เที่ยวใหม่
+            <h1 class="text-xl font-bold" onclick="location.reload()" style="cursor:pointer">TravelShare</h1>
+            <button onclick="document.getElementById('formModal').classList.remove('hidden')" class="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full font-bold text-sm">
+                + เพิ่มที่เที่ยว
             </button>
         </div>
     </nav>
 
-    <main class="container mx-auto my-8 px-4">
-        <div id="travelGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    <main class="container mx-auto my-6 px-4">
+        <div id="travelGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
     </main>
 
     <div id="formModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center p-4 z-[100]">
-        <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative overflow-y-auto max-h-[90vh]">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl">&times;</button>
-            <h3 id="modalTitle" class="text-2xl font-bold mb-6 text-blue-600">แชร์พิกัดใหม่</h3>
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-blue-600">แชร์พิกัดใหม่</h3>
+                <button onclick="document.getElementById('formModal').classList.add('hidden')" class="text-gray-400 text-2xl">&times;</button>
+            </div>
+            
             <form id="travelForm" class="space-y-4">
-                <input type="hidden" id="rowId">
-                <input type="text" id="placeName" required placeholder="ชื่อสถานที่" class="w-full border-2 rounded-xl p-3 focus:border-blue-500 outline-none">
-                <div class="grid grid-cols-2 gap-3">
-                    <input type="text" id="province" required placeholder="จังหวัด" class="w-full border-2 rounded-xl p-3 outline-none">
-                    <select id="category" class="w-full border-2 rounded-xl p-3 outline-none text-gray-600">
-                        <option value="ที่เที่ยว">ที่เที่ยว</option>
-                        <option value="ที่พัก">ที่พัก</option>
-                        <option value="ร้านอาหาร">ร้านอาหาร</option>
-                    </select>
+                <input type="text" id="placeName" required placeholder="ชื่อสถานที่" class="w-full border p-3 rounded-xl outline-none focus:border-blue-500">
+                <input type="text" id="province" required placeholder="จังหวัด" class="w-full border p-3 rounded-xl">
+                <select id="category" class="w-full border p-3 rounded-xl">
+                    <option value="ที่เที่ยว">ที่เที่ยว</option>
+                    <option value="ที่พัก">ที่พัก</option>
+                    <option value="ร้านอาหาร">ร้านอาหาร</option>
+                </select>
+                <div class="border-2 border-dashed p-4 rounded-xl text-center bg-gray-50">
+                    <p class="text-xs text-gray-500 mb-2">เลือกรูปภาพ (แนะนำ 1 รูปเพื่อความเร็ว)</p>
+                    <input type="file" id="fileInput" accept="image/*" class="w-full text-sm">
                 </div>
-                <div id="photoSection" class="border-2 border-dashed border-gray-300 p-4 rounded-xl bg-gray-50 text-center">
-                    <p class="text-xs font-bold text-blue-600 mb-2 uppercase">เลือกรูปภาพ (สูงสุด 5 รูป)</p>
-                    <input type="file" id="fileInput" accept="image/*" multiple class="w-full text-sm">
-                    <div id="previewArea" class="flex gap-2 mt-4 flex-wrap justify-center"></div>
-                </div>
-                <textarea id="description" rows="3" placeholder="เล่ารายละเอียด..." class="w-full border-2 rounded-xl p-3 outline-none"></textarea>
-                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 shadow-lg transition">บันทึกข้อมูล</button>
+                <textarea id="description" placeholder="รายละเอียดเล็กน้อย..." class="w-full border p-3 rounded-xl"></textarea>
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">บันทึกข้อมูล</button>
             </form>
         </div>
     </div>
 
     <script>
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwKtXLTfVrukejkqGKP0rc5ZkEHFDg3DtRYgeCw5SppibMhe6HF6GCH1YbVjQ23uozD/exec';
-        const ADMIN_PASS = '1234'; 
 
-        function openModal(isEdit = false) { 
-            document.getElementById('formModal').classList.remove('hidden'); 
-            if(!isEdit) {
-                document.getElementById('travelForm').reset();
-                document.getElementById('rowId').value = '';
-                document.getElementById('previewArea').innerHTML = '';
-                document.getElementById('modalTitle').innerText = 'แชร์พิกัดใหม่';
-                document.getElementById('photoSection').classList.remove('hidden');
-            }
-        }
-
-        function closeModal() { document.getElementById('formModal').classList.add('hidden'); }
-
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const preview = document.getElementById('previewArea');
-            preview.innerHTML = '';
-            Array.from(e.target.files).slice(0, 5).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (ex) => {
-                    const img = document.createElement('img');
-                    img.src = ex.target.result;
-                    img.className = 'img-preview shadow-sm';
-                    preview.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
-        // ฟังก์ชันสำคัญ: บีบอัดรูปภาพให้เล็กลงมากเพื่อให้เก็บใน Google Sheet ได้
+        // 1. ฟังก์ชันย่อรูปภาพ (สำคัญที่สุด)
         async function resizeImage(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
@@ -106,133 +71,79 @@
                     img.src = event.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 600; // ลดขนาดความกว้างลงอีก
-                        const scaleSize = MAX_WIDTH / img.width;
+                        const MAX_WIDTH = 400; // จิ๋วแต่แจ๋ว
+                        const scale = MAX_WIDTH / img.width;
                         canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scaleSize;
+                        canvas.height = img.height * scale;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.4)); // ลดคุณภาพเหลือ 0.4
+                        resolve(canvas.toDataURL('image/jpeg', 0.4)); // บีบอัดเหลือ 40%
                     };
                 };
             });
         }
 
+        // 2. บันทึกข้อมูล
         document.getElementById('travelForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const overlay = document.getElementById('loadingOverlay');
-            const rowId = document.getElementById('rowId').value;
-            overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "กำลังย่อขนาดรูปและอัปโหลด...";
-
-            const files = document.getElementById('fileInput').files;
-            const imagesBase64 = [];
-            for (let file of Array.from(files).slice(0, 5)) {
-                const resized = await resizeImage(file);
-                imagesBase64.push(resized);
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            const file = document.getElementById('fileInput').files[0];
+            let imgBase64 = "";
+            if (file) {
+                imgBase64 = await resizeImage(file);
             }
 
             const payload = {
-                action: rowId ? 'edit' : 'add',
-                row: rowId,
+                action: 'add',
                 name: document.getElementById('placeName').value,
                 province: document.getElementById('province').value,
                 category: document.getElementById('category').value,
                 description: document.getElementById('description').value,
-                images: imagesBase64
+                images: [imgBase64]
             };
 
             try {
-                // เปลี่ยนเป็นการส่งแบบปกติเพื่อให้มั่นใจว่าข้อมูลถึง Google Sheets
-                const response = await fetch(WEB_APP_URL, {
+                await fetch(WEB_APP_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     body: JSON.stringify(payload)
                 });
-                alert('บันทึกสำเร็จ!');
+                alert('บันทึกเรียบร้อย!');
                 location.reload();
             } catch (err) {
-                // no-cors mode อาจทำให้ fetch มองว่าล้มเหลวทั้งที่สำเร็จ ให้ลอง reload ดู
                 setTimeout(() => location.reload(), 2000);
             }
         });
 
+        // 3. โหลดข้อมูลมาแสดง
         async function loadData() {
             const grid = document.getElementById('travelGrid');
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.style.display = 'flex';
-            document.getElementById('loadingText').innerText = "กำลังดึงรูปภาพจากฐานข้อมูล...";
-
             try {
                 const res = await fetch(WEB_APP_URL);
                 const data = await res.json();
                 
                 if (!data || data.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400">ยังไม่มีข้อมูล</div>';
+                    grid.innerHTML = '<p class="col-span-full text-center text-gray-400 py-10">ยังไม่มีข้อมูล</p>';
                     return;
                 }
 
-                grid.innerHTML = data.map((item) => {
-                    let rawData = item.images ? String(item.images) : "";
-                    let imgList = rawData.split(',').map(s => s.trim()).filter(s => s.startsWith('data:image'));
-                    const mainImg = imgList.length > 0 ? imgList[0] : 'https://via.placeholder.com/400x300?text=No+Image';
-                    
-                    const thumbnailsHTML = imgList.slice(1, 5).map(url => `
-                        <div class="flex-1 px-1">
-                            <img src="${url}" class="thumb-img" onerror="this.src='https://via.placeholder.com/150?text=Error'">
-                        </div>
-                    `).join('');
-
-                    const safeName = item.name.replace(/'/g, "\\'");
-                    const safeDesc = (item.description || '').replace(/'/g, "\\'").replace(/\n/g, " ");
-
-                    return `
-                        <div class="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col group border border-gray-100 transition hover:shadow-xl">
-                            <div class="relative overflow-hidden">
-                                <img src="${mainImg}" class="card-img" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Error'">
-                                <div class="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition">
-                                    <button onclick="editPost('${item.row}', '${safeName}', '${item.province}', '${item.category}', '${safeDesc}')" class="bg-blue-500 text-white p-2 rounded-lg shadow"><i class="fas fa-edit"></i></button>
-                                    <button onclick="deletePost('${item.row}')" class="bg-red-500 text-white p-2 rounded-lg shadow"><i class="fas fa-trash"></i></button>
-                                </div>
+                grid.innerHTML = data.reverse().map(item => `
+                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 transition hover:shadow-md">
+                        <img src="${item.images.split(',')[0] || 'https://via.placeholder.com/400x225?text=No+Image'}" class="card-img" onerror="this.src='https://via.placeholder.com/400x225?text=Error'">
+                        <div class="p-4">
+                            <div class="flex justify-between items-start mb-1">
+                                <h3 class="font-bold text-lg">${item.name}</h3>
+                                <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-1 rounded-full font-bold">${item.category}</span>
                             </div>
-                            ${imgList.length > 1 ? `<div class="flex p-2 bg-gray-50 border-b">${thumbnailsHTML}</div>` : ''}
-                            <div class="p-5 flex-grow">
-                                <div class="flex justify-between items-start mb-2">
-                                    <h3 class="text-xl font-bold text-gray-800 line-clamp-1">${item.name}</h3>
-                                    <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-1 rounded-full font-bold uppercase">${item.category}</span>
-                                </div>
-                                <p class="text-gray-400 text-xs mb-3"><i class="fas fa-map-marker-alt mr-1"></i> ${item.province}</p>
-                                <p class="text-gray-600 text-sm line-clamp-2">${item.description || 'ไม่มีรายละเอียด'}</p>
-                            </div>
+                            <p class="text-gray-400 text-xs mb-2"><i class="fas fa-map-marker-alt"></i> ${item.province}</p>
+                            <p class="text-gray-600 text-sm line-clamp-2">${item.description || '-'}</p>
                         </div>
-                    `;
-                }).join('');
+                    </div>
+                `).join('');
             } catch (err) {
-                grid.innerHTML = '<div class="col-span-full text-center py-20 text-red-400">เกิดข้อผิดพลาดในการโหลดข้อมูล</div>';
-            } finally {
-                overlay.style.display = 'none';
+                grid.innerHTML = '<p class="text-center text-red-400">โหลดข้อมูลไม่สำเร็จ</p>';
             }
-        }
-
-        async function deletePost(row) {
-            const pass = prompt("รหัสแอดมิน:");
-            if (pass !== ADMIN_PASS) return alert("รหัสไม่ถูกต้อง");
-            if (confirm("ลบโพสต์นี้ใช่หรือไม่?")) {
-                const overlay = document.getElementById('loadingOverlay');
-                overlay.style.display = 'flex';
-                await fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', row: row }) });
-                location.reload();
-            }
-        }
-
-        function editPost(row, name, prov, cat, desc) {
-            openModal(true);
-            document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูล';
-            document.getElementById('rowId').value = row;
-            document.getElementById('placeName').value = name;
-            document.getElementById('province').value = prov;
-            document.getElementById('category').value = cat;
-            document.getElementById('description').value = desc;
-            document.getElementById('photoSection').classList.add('hidden');
         }
 
         window.onload = loadData;
