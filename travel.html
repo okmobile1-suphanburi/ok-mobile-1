@@ -44,10 +44,10 @@
     <div id="formModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center p-4 z-[100]">
         <div class="bg-white rounded-2xl w-full max-w-lg p-6 shadow-2xl relative overflow-y-auto max-h-[90vh]">
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl">&times;</button>
-            <h3 class="text-2xl font-bold mb-6 text-blue-600">แบ่งปันที่เที่ยว/ที่พัก</h3>
+            <h3 id="modalTitle" class="text-2xl font-bold mb-6 text-blue-600">แบ่งปันที่เที่ยว/ที่พัก</h3>
             
             <form id="travelForm" class="space-y-4">
-                <input type="text" id="placeName" required placeholder="ชื่อสถานที่" class="w-full border-2 rounded-xl p-3 outline-none focus:border-blue-500">
+                <input type="hidden" id="rowId"> <input type="text" id="placeName" required placeholder="ชื่อสถานที่" class="w-full border-2 rounded-xl p-3 outline-none focus:border-blue-500">
                 
                 <div class="grid grid-cols-2 gap-3">
                     <input type="text" id="province" required placeholder="จังหวัด" class="w-full border-2 rounded-xl p-3">
@@ -58,7 +58,8 @@
                     </select>
                 </div>
 
-                <div class="border-2 border-dashed border-gray-300 p-4 rounded-xl bg-gray-50 text-center">
+                <div id="photoSection" class="border-2 border-dashed border-gray-300 p-4 rounded-xl bg-gray-50 text-center">
+                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase text-blue-600">การแก้ไขข้อมูลจะไม่สามารถเปลี่ยนรูปภาพได้ในเวอร์ชันนี้</p>
                     <p class="text-xs font-bold text-gray-500 mb-2 uppercase">เลือกรูปจากเครื่อง (สูงสุด 5 รูป)</p>
                     <input type="file" id="fileInput" accept="image/*" multiple class="w-full text-sm cursor-pointer">
                     <div id="previewArea" class="flex gap-2 mt-4 flex-wrap justify-center"></div>
@@ -67,17 +68,25 @@
                 <textarea id="description" rows="3" placeholder="เล่าความประทับใจ..." class="w-full border-2 rounded-xl p-3"></textarea>
 
                 <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition shadow-lg">
-                    อัปโหลดไปที่ Google Drive
+                    บันทึกข้อมูล
                 </button>
             </form>
         </div>
     </div>
 
     <script>
-        // *** เชื่อมต่อกับ URL ของคุณ ***
         const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwKtXLTfVrukejkqGKP0rc5ZkEHFDg3DtRYgeCw5SppibMhe6HF6GCH1YbVjQ23uozD/exec';
+        const ADMIN_PASS = '1234'; // เปลี่ยนรหัสผ่านตรงนี้
 
-        function openModal() { document.getElementById('formModal').classList.remove('hidden'); }
+        function openModal(isEdit = false) { 
+            document.getElementById('formModal').classList.remove('hidden'); 
+            if(!isEdit) {
+                document.getElementById('travelForm').reset();
+                document.getElementById('rowId').value = '';
+                document.getElementById('modalTitle').innerText = 'แบ่งปันที่เที่ยว/ที่พัก';
+                document.getElementById('photoSection').classList.remove('hidden');
+            }
+        }
         function closeModal() { document.getElementById('formModal').classList.add('hidden'); }
 
         // ระบบพรีวิวรูปภาพ
@@ -96,23 +105,25 @@
             });
         });
 
-        // ระบบส่งข้อมูล (POST)
+        // ส่งข้อมูล (POST / EDIT)
         document.getElementById('travelForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const overlay = document.getElementById('loadingOverlay');
             const loadingText = document.getElementById('loadingText');
+            const rowId = document.getElementById('rowId').value;
             
             overlay.style.display = 'flex';
-            loadingText.innerText = "กำลังประมวลผลรูปภาพ...";
+            loadingText.innerText = "กำลังประมวลผลข้อมูล...";
 
+            const imagesBase64 = [];
             const files = document.getElementById('fileInput').files;
-            if (files.length === 0) {
+            
+            if (!rowId && files.length === 0) {
                 alert("กรุณาเลือกรูปภาพอย่างน้อย 1 รูป");
                 overlay.style.display = 'none';
                 return;
             }
 
-            const imagesBase64 = [];
             for (let file of Array.from(files).slice(0, 5)) {
                 const reader = new FileReader();
                 const promise = new Promise(resolve => {
@@ -122,9 +133,9 @@
                 imagesBase64.push(await promise);
             }
 
-            loadingText.innerText = "กำลังอัปโหลดเข้า Google Drive...\n(อาจใช้เวลาสักครู่ตามขนาดรูป)";
-
             const payload = {
+                action: rowId ? 'edit' : 'add',
+                row: rowId,
                 name: document.getElementById('placeName').value,
                 province: document.getElementById('province').value,
                 category: document.getElementById('category').value,
@@ -133,21 +144,54 @@
             };
 
             try {
-                // ส่งแบบ no-cors เพื่อความง่ายในการเชื่อมต่อกับ Google
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     body: JSON.stringify(payload)
                 });
                 
-                overlay.style.display = 'none';
-                alert('สำเร็จ! ข้อมูลของคุณถูกบันทึกลง Google Sheet และรูปอยู่ใน Drive แล้ว');
+                alert('ดำเนินการสำเร็จ!');
                 location.reload();
             } catch (err) {
-                alert('เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาตรวจสอบการ Deploy');
+                alert('เกิดข้อผิดพลาด');
                 overlay.style.display = 'none';
             }
         });
+
+        // ฟังก์ชันแก้ไข
+        function editPost(row, name, province, cat, desc) {
+            openModal(true);
+            document.getElementById('modalTitle').innerText = 'แก้ไขข้อมูล (ไม่สามารถเปลี่ยนรูปได้)';
+            document.getElementById('rowId').value = row;
+            document.getElementById('placeName').value = name;
+            document.getElementById('province').value = province;
+            document.getElementById('category').value = cat;
+            document.getElementById('description').value = desc;
+            document.getElementById('photoSection').classList.add('hidden'); // ปิดส่วนรูปภาพตอนแก้ไขเพื่อลดความซับซ้อน
+        }
+
+        // ฟังก์ชันลบ (เฉพาะแอดมิน)
+        async function deletePost(row) {
+            const pass = prompt("กรุณาใส่รหัสผ่านแอดมินเพื่อลบ:");
+            if (pass !== ADMIN_PASS) return alert("รหัสผ่านไม่ถูกต้อง!");
+
+            if (!confirm("ยืนยันการลบข้อมูลนี้?")) return;
+
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('loadingText').innerText = "กำลังลบข้อมูล...";
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ action: 'delete', row: row })
+                });
+                location.reload();
+            } catch (err) {
+                alert('เกิดข้อผิดพลาด');
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        }
 
         // ระบบดึงข้อมูลมาแสดงผล (GET)
         async function loadData() {
@@ -157,34 +201,34 @@
                 const grid = document.getElementById('travelGrid');
                 
                 if (!data || data.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400"><i class="fas fa-folder-open text-5xl mb-4"></i><p>ยังไม่มีใครแชร์ข้อมูล เริ่มเป็นคนแรกเลย!</p></div>';
+                    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400"><p>ยังไม่มีข้อมูล</p></div>';
                     return;
                 }
 
-                grid.innerHTML = data.map(item => {
+                grid.innerHTML = data.map((item, index) => {
                     const imgList = item.images ? item.images.split(',') : [];
-                    const mainImg = imgList[0] || 'https://via.placeholder.com/400x300?text=No+Image';
+                    const mainImg = imgList[0] || 'https://via.placeholder.com/400x300';
+                    const realRow = data.length - index + 1; // อ้างอิงแถวใน Google Sheet
+                    
                     return `
-                        <div class="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all border border-gray-100 flex flex-col">
+                        <div class="bg-white rounded-2xl shadow-md overflow-hidden border border-gray-100 flex flex-col relative group">
                             <div class="relative">
-                                <img src="${mainImg}" class="card-img" alt="${item.name}">
-                                <div class="absolute top-3 left-3">
-                                    <span class="bg-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase">${item.category}</span>
+                                <img src="${mainImg}" class="card-img">
+                                <div class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                                    <button onclick="editPost('${realRow}', '${item.name}', '${item.province}', '${item.category}', '${item.description}')" class="bg-blue-500 text-white p-2 rounded-lg text-xs shadow-lg"><i class="fas fa-edit"></i> แก้ไข</button>
+                                    <button onclick="deletePost('${realRow}')" class="bg-red-500 text-white p-2 rounded-lg text-xs shadow-lg"><i class="fas fa-trash"></i> ลบ</button>
                                 </div>
                             </div>
                             <div class="p-5 flex-grow">
-                                <div class="flex justify-between items-center mb-1">
-                                    <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
-                                    <span class="text-gray-400 text-xs"><i class="fas fa-map-marker-alt"></i> ${item.province}</span>
-                                </div>
-                                <p class="text-gray-500 text-sm mt-2 line-clamp-3 leading-relaxed">${item.description || 'ไม่มีรายละเอียด'}</p>
-                                ${imgList.length > 1 ? `<div class="mt-4 flex gap-1 items-center text-blue-500 text-xs font-bold"><i class="fas fa-images"></i> ดูรูปเพิ่มเติมอีก ${imgList.length-1} รูป</div>` : ''}
+                                <h3 class="text-xl font-bold text-gray-800">${item.name}</h3>
+                                <p class="text-gray-400 text-xs">${item.province} | ${item.category}</p>
+                                <p class="text-gray-500 text-sm mt-2 line-clamp-3">${item.description}</p>
                             </div>
                         </div>
                     `;
                 }).join('');
             } catch (err) {
-                document.getElementById('travelGrid').innerHTML = '<div class="col-span-full text-center py-10 text-red-400 font-bold">ไม่สามารถดึงข้อมูลได้ (อย่าลืมเพิ่มฟังก์ชัน doGet ใน Apps Script และกด Deploy รุ่นใหม่)</div>';
+                console.error(err);
             }
         }
 
