@@ -10,7 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
         body { font-family: 'Kanit', sans-serif; background-color: #f3f4f6; }
         .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; color: white; flex-direction: column; }
-        .card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; background-color: #ddd; }
+        .card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; background-color: #eee; }
     </style>
 </head>
 <body>
@@ -30,7 +30,8 @@
     </nav>
 
     <main class="container mx-auto my-6 px-4">
-        <div id="travelGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="travelGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            </div>
     </main>
 
     <div id="formModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center p-4 z-[100]">
@@ -49,76 +50,46 @@
                     <option value="ร้านอาหาร">ร้านอาหาร</option>
                 </select>
                 <div class="border-2 border-dashed p-4 rounded-xl text-center bg-gray-50">
-                    <p class="text-xs text-gray-500 mb-2">เลือกรูปภาพ (แนะนำ 1 รูปเพื่อความเร็ว)</p>
+                    <p class="text-xs text-gray-500 mb-2">เลือกรูปภาพ</p>
                     <input type="file" id="fileInput" accept="image/*" class="w-full text-sm">
                 </div>
-                <textarea id="description" placeholder="รายละเอียดเล็กน้อย..." class="w-full border p-3 rounded-xl"></textarea>
+                <textarea id="description" placeholder="รายละเอียด..." class="w-full border p-3 rounded-xl"></textarea>
                 <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">บันทึกข้อมูล</button>
             </form>
         </div>
     </div>
 
     <script>
-        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwKtXLTfVrukejkqGKP0rc5ZkEHFDg3DtRYgeCw5SppibMhe6HF6GCH1YbVjQ23uozD/exec';
+        // *** ใส่ URL ของคุณที่นี่ ***
+        const WEB_APP_URL = 'ใส่_URL_ที่ได้จากการ_DEPLOY_ตรงนี้';
 
-        // 1. ฟังก์ชันย่อรูปภาพ (สำคัญที่สุด)
+        // 1. ย่อรูปภาพก่อนส่ง
         async function resizeImage(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
-                reader.onload = (event) => {
+                reader.onload = (e) => {
                     const img = new Image();
-                    img.src = event.target.result;
+                    img.src = e.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 400; // จิ๋วแต่แจ๋ว
+                        const MAX_WIDTH = 400; 
                         const scale = MAX_WIDTH / img.width;
                         canvas.width = MAX_WIDTH;
                         canvas.height = img.height * scale;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.4)); // บีบอัดเหลือ 40%
+                        resolve(canvas.toDataURL('image/jpeg', 0.5)); // คุณภาพ 50%
                     };
                 };
             });
         }
 
-        // 2. บันทึกข้อมูล
-        document.getElementById('travelForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            
-            const file = document.getElementById('fileInput').files[0];
-            let imgBase64 = "";
-            if (file) {
-                imgBase64 = await resizeImage(file);
-            }
-
-            const payload = {
-                action: 'add',
-                name: document.getElementById('placeName').value,
-                province: document.getElementById('province').value,
-                category: document.getElementById('category').value,
-                description: document.getElementById('description').value,
-                images: [imgBase64]
-            };
-
-            try {
-                await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(payload)
-                });
-                alert('บันทึกเรียบร้อย!');
-                location.reload();
-            } catch (err) {
-                setTimeout(() => location.reload(), 2000);
-            }
-        });
-
-        // 3. โหลดข้อมูลมาแสดง
+        // 2. โหลดข้อมูลมาแสดง
         async function loadData() {
             const grid = document.getElementById('travelGrid');
+            grid.innerHTML = '<p class="col-span-full text-center py-10">กำลังโหลดพิกัด...</p>';
+            
             try {
                 const res = await fetch(WEB_APP_URL);
                 const data = await res.json();
@@ -128,9 +99,13 @@
                     return;
                 }
 
-                grid.innerHTML = data.reverse().map(item => `
+                grid.innerHTML = data.reverse().map(item => {
+                    // ดึงรูปภาพรูปแรก ถ้าไม่มีให้ใช้ Placeholder
+                    const imgUrl = item.images ? item.images.split(',')[0] : 'https://via.placeholder.com/400x225?text=No+Image';
+                    
+                    return `
                     <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 transition hover:shadow-md">
-                        <img src="${item.images.split(',')[0] || 'https://via.placeholder.com/400x225?text=No+Image'}" class="card-img" onerror="this.src='https://via.placeholder.com/400x225?text=Error'">
+                        <img src="${imgUrl}" class="card-img" onerror="this.src='https://via.placeholder.com/400x225?text=Error'">
                         <div class="p-4">
                             <div class="flex justify-between items-start mb-1">
                                 <h3 class="font-bold text-lg">${item.name}</h3>
@@ -138,11 +113,67 @@
                             </div>
                             <p class="text-gray-400 text-xs mb-2"><i class="fas fa-map-marker-alt"></i> ${item.province}</p>
                             <p class="text-gray-600 text-sm line-clamp-2">${item.description || '-'}</p>
+                            <div class="mt-4 flex justify-end">
+                                <button onclick="deletePlace(${item.row})" class="text-red-400 hover:text-red-600 text-xs">
+                                    <i class="fas fa-trash"></i> ลบพิกัด
+                                </button>
+                            </div>
                         </div>
                     </div>
-                `).join('');
+                    `;
+                }).join('');
             } catch (err) {
-                grid.innerHTML = '<p class="text-center text-red-400">โหลดข้อมูลไม่สำเร็จ</p>';
+                grid.innerHTML = '<p class="text-center text-red-400">โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่</p>';
+            }
+        }
+
+        // 3. บันทึกข้อมูล
+        document.getElementById('travelForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            const file = document.getElementById('fileInput').files[0];
+            let imgBase64 = "";
+            if (file) imgBase64 = await resizeImage(file);
+
+            const payload = {
+                action: 'add',
+                name: document.getElementById('placeName').value,
+                province: document.getElementById('province').value,
+                category: document.getElementById('category').value,
+                description: document.getElementById('description').value,
+                images: imgBase64 ? [imgBase64] : []
+            };
+
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(payload)
+                });
+                alert('บันทึกพิกัดเรียบร้อย!');
+                location.reload();
+            } catch (err) {
+                alert('เกิดข้อผิดพลาดในการบันทึก');
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        });
+
+        // 4. ลบข้อมูล
+        async function deletePlace(row) {
+            if(!confirm('คุณต้องการลบพิกัดนี้ใช่หรือไม่?')) return;
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
+            try {
+                await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ action: 'delete', row: row })
+                });
+                setTimeout(() => location.reload(), 1000);
+            } catch (err) {
+                alert('ไม่สามารถลบข้อมูลได้');
+                document.getElementById('loadingOverlay').style.display = 'none';
             }
         }
 
