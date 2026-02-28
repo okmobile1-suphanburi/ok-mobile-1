@@ -3,76 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Travel Pro - ระบบแก้ไขข้อมูลและรูปภาพ</title>
+  <title>Travel Pro - Complete Edition</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Kanit', sans-serif; background: #f1f5f9; }
     .gradient-header { background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%); }
-    .post-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 1.5rem; overflow: hidden; }
+    .post-card { transition: all 0.3s ease; border-radius: 1.5rem; overflow: hidden; cursor: pointer; }
     .post-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
-    .heart-btn:active { transform: scale(1.4); }
-    .edit-mode-active { border: 3px solid #10b981 !important; background-color: #f0fdf4 !important; }
+    
+    /* สไตล์ตอนแก้ไข (Edit Mode) */
+    .edit-mode-active { 
+      border: 4px solid #f59e0b !important; 
+      background-color: #fffbeb !important; 
+      box-shadow: 0 0 30px rgba(245, 158, 11, 0.4) !important;
+      transform: scale(1.02);
+    }
+    .edit-shake { animation: shake 0.4s ease-in-out 2; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    .filter-active { background-color: #3b82f6 !important; color: white !important; border-color: #3b82f6 !important; }
+    .modal-open { overflow: hidden; }
   </style>
 </head>
 <body class="min-h-screen pb-20">
 
   <header class="gradient-header text-white py-12 shadow-2xl text-center mb-10">
     <h1 class="text-4xl font-bold tracking-widest">🌍 TRAVEL PRO COMMUNITY</h1>
-    <p class="mt-2 opacity-80">แก้ไขได้ทุกอย่าง... แม้กระทั่งรูปภาพ!</p>
+    <p class="mt-2 opacity-80">ค้นหาที่เที่ยว ที่พัก และแชร์ประสบการณ์ของคุณ</p>
   </header>
 
   <div class="container mx-auto px-4 max-w-7xl">
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       
       <div class="lg:col-span-1">
-        <div id="formContainer" class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100 sticky top-5 transition-all">
+        <div id="formContainer" class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100 sticky top-5 transition-all duration-500">
           <h2 id="formTitle" class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">✍️ สร้างโพสต์ใหม่</h2>
           <form id="travelForm" class="space-y-4">
             <select id="category" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
-                <option value="ภูเขา">⛰️ ภูเขา / ป่าไม้</option>
-                <option value="ทะเล">🌊 ทะเล / เกาะ</option>
-                <option value="คาเฟ่">☕ คาเฟ่ / ร้านอาหาร</option>
-                <option value="วัด">🙏 วัด / วัฒนธรรม</option>
+                <option value="" disabled selected>📍 เลือกจังหวัด</option>
+                <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option><option value="เชียงใหม่">เชียงใหม่</option><option value="ภูเก็ต">ภูเก็ต</option><option value="ชลบุรี">ชลบุรี</option><option value="กระบี่">กระบี่</option>
+                <option value="กาญจนบุรี">กาญจนบุรี</option><option value="ขอนแก่น">ขอนแก่น</option><option value="นครราชสีมา">นครราชสีมา</option>
+                </select>
+            <select id="placeType" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <option value="ที่เที่ยว">🏞️ ที่เที่ยว</option>
+                <option value="ที่พัก">🏨 ที่พัก</option>
+                <option value="คาเฟ่/ร้านอาหาร">☕ คาเฟ่/ร้านอาหาร</option>
+                <option value="อื่นๆ">✨ อื่นๆ</option>
             </select>
             <input type="text" id="placeName" placeholder="ชื่อสถานที่" required class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500">
+            <input type="url" id="mapUrl" placeholder="🔗 ลิงก์ Google Maps (ถ้ามี)" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
             <textarea id="description" rows="3" placeholder="เล่าเรื่องราวที่นี่..." class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             <input type="text" id="userName" placeholder="ชื่อเล่นของคุณ" required class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500">
-            
-            <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100">
-                <label class="block text-[10px] font-bold text-blue-500 uppercase mb-1 ml-1 text-center">รหัส PIN 4 หลัก (เพื่อแก้ไข/ลบ)</label>
-                <input type="password" id="userPin" maxlength="4" placeholder="••••" required 
-                       class="w-full px-4 py-2 rounded-xl border-none text-center text-xl tracking-[1em] font-bold focus:ring-2 focus:ring-blue-400">
+            <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100 text-center">
+                <label class="block text-[10px] font-bold text-blue-500 uppercase mb-1">รหัส PIN 4 หลัก (เพื่อแก้ไข/ลบ)</label>
+                <input type="password" id="userPin" maxlength="4" placeholder="••••" required class="w-full px-4 py-2 rounded-xl border-none text-center text-xl tracking-[1em] font-bold focus:ring-2 focus:ring-blue-400">
             </div>
-
             <div class="p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center">
                 <input type="file" id="photo" accept="image/*" class="hidden">
-                <label for="photo" id="fileLabel" class="cursor-pointer text-xs text-gray-500 font-medium italic">📷 คลิกเพื่อเลือกรูปภาพ (หรือรูปใหม่)</label>
+                <label for="photo" id="fileLabel" class="cursor-pointer text-xs text-gray-500 font-medium italic">📷 คลิกเพื่อเลือกรูปภาพ</label>
             </div>
-
             <button type="button" onclick="handleUpload()" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">โพสต์เลย 🚀</button>
-            <button type="button" id="btnCancel" onclick="cancelEdit()" class="hidden w-full text-gray-400 text-sm font-medium mt-2 hover:text-red-500 transition-colors">ยกเลิกการแก้ไข</button>
+            <button type="button" id="btnCancel" onclick="cancelEdit()" class="hidden w-full text-gray-500 text-sm font-medium mt-2 hover:text-red-500 transition-colors">ยกเลิกการแก้ไข</button>
           </form>
-          <div id="loader" class="hidden mt-4 text-center text-blue-600 animate-bounce text-sm font-bold">กำลังประมวลผล...</div>
+          <div id="loader" class="hidden mt-4 text-center text-blue-600 animate-bounce text-sm font-bold">กำลังส่งข้อมูล...</div>
         </div>
       </div>
 
       <div class="lg:col-span-3">
-        <div id="postContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        
+        <div class="mb-8 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 items-center">
+            <div class="relative w-full md:w-1/3">
+                <span class="absolute left-4 top-3 text-gray-400">🔍</span>
+                <input type="text" id="searchInput" oninput="filterPosts()" placeholder="ค้นหาจังหวัด หรือชื่อสถานที่..." class="w-full pl-10 pr-4 py-2.5 rounded-2xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-400 text-sm">
             </div>
-      </div>
+            <div class="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+                <button onclick="setFilterType('ทั้งหมด')" class="filter-btn filter-active whitespace-nowrap px-5 py-2 rounded-full border text-xs font-bold transition-all">ทั้งหมด</button>
+                <button onclick="setFilterType('ที่เที่ยว')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full border bg-white text-gray-500 text-xs font-bold transition-all">🏞️ ที่เที่ยว</button>
+                <button onclick="setFilterType('ที่พัก')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full border bg-white text-gray-500 text-xs font-bold transition-all">🏨 ที่พัก</button>
+                <button onclick="setFilterType('คาเฟ่/ร้านอาหาร')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full border bg-white text-gray-500 text-xs font-bold transition-all">☕ คาเฟ่</button>
+            </div>
+        </div>
 
+        <div id="postContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
+        <div id="noResults" class="hidden text-center py-20 text-gray-400 italic text-lg">😔 ไม่พบข้อมูลที่ต้องการ...</div>
+      </div>
     </div>
   </div>
 
-  <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnOhkuabchx0o78XH9pC9AO77m6NaXfOEg_ZTwGfYaSlqO4lAjw7GgOM9NeFahvsnV/exec";
-    const ADMIN_PASS = "1234";
+  <div id="detailModal" class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden relative shadow-2xl flex flex-col md:flex-row">
+          <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-10 h-10 rounded-full z-20 hover:bg-black transition-all">✕</button>
+          <div id="modalImages" class="md:w-1/2 bg-gray-100 p-2 overflow-y-auto h-[300px] md:h-auto border-r flex flex-col gap-2"></div>
+          <div class="md:w-1/2 p-8 overflow-y-auto flex flex-col justify-between h-[400px] md:h-auto">
+              <div>
+                  <div class="flex gap-2 mb-4">
+                      <span id="modalProvince" class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold"></span>
+                      <span id="modalType" class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold"></span>
+                  </div>
+                  <h2 id="modalTitle" class="text-3xl font-bold text-gray-800 mb-4 leading-tight"></h2>
+                  <p id="modalDesc" class="text-gray-600 leading-relaxed whitespace-pre-wrap text-base"></p>
+              </div>
+              <div class="border-t pt-6 mt-6">
+                  <p id="modalUser" class="text-sm text-gray-400 mb-4 font-semibold italic"></p>
+                  <div id="modalMapBtn"></div>
+              </div>
+          </div>
+      </div>
+  </div>
 
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnOhkuabchx0o78XH9pC9AO77m6NaXfOEg_ZTwGfYaSlqO4lAjw7GgOM9NeFahvsnV/exec"; // *** อย่าลืมเปลี่ยนเป็น URL ของคุณ ***
+    const ADMIN_PASS = "1234";
     let isEditMode = false;
     let currentEditId = null;
+    let allPosts = [];
+    let currentFilterType = "ทั้งหมด";
+
+    function formatDate(dateString) {
+      if (!dateString) return "ไม่ระบุวันที่";
+      const date = new Date(dateString);
+      return date.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
 
     function getImgUrl(rawUrl) {
+      if(!rawUrl) return 'https://via.placeholder.com/400x300';
       const fileId = rawUrl.split('id=')[1]?.split('&')[0] || rawUrl.split('/d/')[1]?.split('/')[0];
       return fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w800` : 'https://via.placeholder.com/400x300';
     }
@@ -81,63 +140,162 @@
       const container = document.getElementById('postContainer');
       try {
         const response = await fetch(`${WEB_APP_URL}?action=getPosts`);
-        const posts = await response.json();
-        container.innerHTML = ''; 
-        posts.forEach((post) => {
-          container.innerHTML += `
-            <div class="post-card bg-white relative border border-gray-100 flex flex-col text-left">
-              <span class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold shadow-sm z-10 text-blue-600">#${post.category}</span>
-              <div class="h-56 bg-gray-100 overflow-hidden">
-                <img src="${getImgUrl(post.imageUrl)}" class="w-full h-full object-contain">
-              </div>
-              <div class="p-5 flex-grow">
-                <div class="flex justify-between items-start mb-2">
-                    <h4 class="font-bold text-xl text-gray-800">${post.placeName}</h4>
-                    <button onclick="likePost('${post.rowId}')" class="heart-btn text-red-500">❤️ <span class="text-sm text-gray-500">${post.likes}</span></button>
-                </div>
-                <p class="text-gray-500 text-sm mb-4 line-clamp-2">${post.description}</p>
-                <div class="flex items-center justify-between border-t pt-4 mt-auto">
-                  <span class="text-[10px] font-semibold text-gray-400">👤 ${post.userName}</span>
-                  <div class="flex gap-3">
-                      <button onclick="editPost('${post.rowId}', '${post.placeName}', '${post.description}', '${post.userName}', '${post.category}')" class="text-blue-500 text-[10px] font-bold">แก้ไข</button>
-                      <button onclick="deletePost('${post.rowId}')" class="text-red-400 text-[10px] font-bold">ลบ</button>
-                  </div>
-                </div>
-              </div>
-            </div>`;
-        });
-      } catch (e) { container.innerHTML = "โหลดข้อมูลไม่สำเร็จ"; }
+        allPosts = await response.json();
+        renderPosts(allPosts);
+      } catch (e) { container.innerHTML = "โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่"; }
     }
 
-    // เข้าสู่โหมดแก้ไข
-    async function editPost(id, name, desc, user, cate) {
-        const pin = prompt("🔐 ยืนยัน PIN 4 หลักเพื่อทำการแก้ไข:");
-        if (!pin) return;
+    function renderPosts(posts) {
+      const container = document.getElementById('postContainer');
+      const noResults = document.getElementById('noResults');
+      container.innerHTML = ''; 
+      if (posts.length === 0) { noResults.classList.remove('hidden'); return; }
+      noResults.classList.add('hidden');
 
+      posts.forEach((post) => {
+        const firstImg = post.imageUrl.split(',')[0];
+        container.innerHTML += `
+          <div class="post-card bg-white relative border border-gray-100 flex flex-col text-left" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&apos;")})'>
+            <div class="absolute top-3 left-3 flex gap-1 z-10">
+              <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold shadow-sm text-blue-600">🏠 ${post.category}</span>
+              <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-bold shadow-sm">${post.placeType || 'ที่เที่ยว'}</span>
+            </div>
+            <div class="h-56 bg-gray-100 overflow-hidden">
+              <img src="${getImgUrl(firstImg)}" class="w-full h-full object-contain">
+            </div>
+            <div class="p-5 flex-grow">
+              <div class="flex justify-between items-start mb-2">
+                  <h4 class="font-bold text-xl text-gray-800">${post.placeName}</h4>
+                  <button onclick="event.stopPropagation(); likePost('${post.rowId}')" class="heart-btn text-red-500">❤️ <span class="text-sm text-gray-500">${post.likes}</span></button>
+              </div>
+              <p class="text-gray-500 text-sm mb-4 line-clamp-2">${post.description}</p>
+              
+              <div class="flex items-center justify-between border-t pt-4">
+                <div class="flex flex-col">
+                  <span class="text-[10px] font-semibold text-gray-400">👤 ${post.userName}</span>
+                  <span class="text-[9px] text-gray-300">📅 ${formatDate(post.date)}</span>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="event.stopPropagation(); editPost('${post.rowId}', '${post.placeName}', '${post.description}', '${post.userName}', '${post.category}', '${post.mapUrl || ''}', '${post.placeType || 'ที่เที่ยว'}')" class="text-blue-500 text-[10px] font-bold">แก้ไข</button>
+                    <button onclick="event.stopPropagation(); deletePost('${post.rowId}')" class="text-red-400 text-[10px] font-bold">ลบ</button>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+
+    function setFilterType(type) {
+        currentFilterType = type;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            if (btn.innerText.includes(type)) btn.classList.add('filter-active');
+            else btn.classList.remove('filter-active');
+        });
+        filterPosts();
+    }
+
+    function filterPosts() {
+        const searchText = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = allPosts.filter(post => {
+            const matchesSearch = post.placeName.toLowerCase().includes(searchText) || post.category.toLowerCase().includes(searchText);
+            const matchesType = (currentFilterType === "ทั้งหมด") || (post.placeType === currentFilterType);
+            return matchesSearch && matchesType;
+        });
+        renderPosts(filtered);
+    }
+
+    function openModal(post) {
+        document.getElementById('modalTitle').innerText = post.placeName;
+        document.getElementById('modalDesc').innerText = post.description;
+        document.getElementById('modalProvince').innerText = post.category;
+        document.getElementById('modalType').innerText = post.placeType || "ที่เที่ยว";
+        document.getElementById('modalUser').innerText = "📍 โพสต์โดย: " + post.userName + " | 📅 " + formatDate(post.date);
+        
+        const imgDiv = document.getElementById('modalImages');
+        imgDiv.innerHTML = '';
+        post.imageUrl.split(',').forEach(url => {
+            if(url.trim()) imgDiv.innerHTML += `<img src="${getImgUrl(url)}" class="w-full rounded-xl shadow-sm object-contain bg-white">`;
+        });
+        const mapBtn = document.getElementById('modalMapBtn');
+        mapBtn.innerHTML = post.mapUrl ? `<a href="${post.mapUrl}" target="_blank" class="w-full text-center block bg-green-500 text-white py-3 rounded-2xl font-bold hover:bg-green-600 transition-colors">📍 เปิดแผนที่ Google Maps</a>` : '';
+        document.getElementById('detailModal').classList.remove('hidden');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+        document.getElementById('detailModal').classList.add('hidden');
+        document.body.classList.remove('modal-open');
+    }
+
+    async function handleUpload() {
+      const btn = document.getElementById('btnSubmit');
+      const loader = document.getElementById('loader');
+      const fileInput = document.getElementById('photo');
+      const pin = document.getElementById('userPin').value;
+      
+      if (pin.length < 4) { alert("กรุณาใส่ PIN 4 หลัก"); return; }
+      if (!isEditMode && !fileInput.files[0]) { alert("กรุณาเลือกรูปภาพ"); return; }
+      
+      btn.disabled = true; 
+      loader.classList.remove('hidden');
+      
+      let photosArray = [];
+      if (fileInput.files[0]) {
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+          const pData = await new Promise(resolve => {
+              reader.onload = e => resolve({ type: file.type, contents: e.target.result.split(',')[1], name: file.name });
+              reader.readAsDataURL(file);
+          });
+          photosArray.push(pData);
+      }
+
+      const obj = {
+        action: isEditMode ? "updateFull" : "upload",
+        rowId: currentEditId,
+        category: document.getElementById('category').value,
+        placeType: document.getElementById('placeType').value,
+        placeName: document.getElementById('placeName').value,
+        description: document.getElementById('description').value,
+        mapUrl: document.getElementById('mapUrl').value,
+        userName: document.getElementById('userName').value,
+        userPin: pin,
+        photos: photosArray 
+      };
+
+      try {
+        await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(obj) });
+        alert(isEditMode ? "✅ แก้ไขสำเร็จ!" : "🎉 โพสต์เรียบร้อย!");
+        cancelEdit();
+        setTimeout(loadPosts, 1500);
+      } catch (e) { alert("เกิดข้อผิดพลาดในการส่งข้อมูล"); }
+      finally { btn.disabled = false; loader.classList.add('hidden'); }
+    }
+
+    async function editPost(id, name, desc, user, cate, map, type) {
+        const pin = prompt("🔐 ยืนยัน PIN 4 หลักเพื่อแก้ไขโพสต์นี้:");
+        if (!pin) return;
         const check = await fetch(`${WEB_APP_URL}?action=checkPin&id=${id}&pin=${pin}`);
         if ((await check.text()) === "Valid") {
             isEditMode = true;
             currentEditId = id;
-
-            // ดึงข้อมูลเก่าลงฟอร์ม
             document.getElementById('placeName').value = name;
             document.getElementById('description').value = desc;
             document.getElementById('userName').value = user;
             document.getElementById('category').value = cate;
+            document.getElementById('mapUrl').value = map;
+            document.getElementById('placeType').value = type;
             document.getElementById('userPin').value = pin;
 
-            // ปรับ UI ฟอร์ม
-            document.getElementById('formContainer').classList.add('edit-mode-active');
-            document.getElementById('formTitle').innerText = "✏️ แก้ไขข้อมูลโพสต์";
-            document.getElementById('btnSubmit').innerText = "บันทึกการเปลี่ยนแปลง ✨";
-            document.getElementById('btnSubmit').classList.replace('bg-blue-600', 'bg-green-600');
+            // เอฟเฟกต์ตอนกดแก้ไข
+            const formBox = document.getElementById('formContainer');
+            formBox.classList.add('edit-mode-active', 'edit-shake');
+            document.getElementById('formTitle').innerText = "✏️ กำลังแก้ไขโพสต์...";
+            document.getElementById('btnSubmit').innerText = "💾 บันทึกการเปลี่ยนแปลง";
             document.getElementById('btnCancel').classList.remove('hidden');
-            
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            alert("ใส่ข้อมูลใหม่และเลือกรูปภาพใหม่ (ถ้าต้องการเปลี่ยนรูป) ได้เลยครับ");
-        } else {
-            alert("❌ รหัส PIN ไม่ถูกต้อง");
-        }
+            setTimeout(() => formBox.classList.remove('edit-shake'), 1000);
+        } else { alert("❌ PIN ไม่ถูกต้อง"); }
     }
 
     function cancelEdit() {
@@ -147,68 +305,18 @@
         document.getElementById('formContainer').classList.remove('edit-mode-active');
         document.getElementById('formTitle').innerText = "✍️ สร้างโพสต์ใหม่";
         document.getElementById('btnSubmit').innerText = "โพสต์เลย 🚀";
-        document.getElementById('btnSubmit').classList.replace('bg-green-600', 'bg-blue-600');
         document.getElementById('btnCancel').classList.add('hidden');
         document.getElementById('fileLabel').innerText = "📷 คลิกเพื่อเลือกรูปภาพ";
     }
 
-    async function handleUpload() {
-      const btn = document.getElementById('btnSubmit');
-      const loader = document.getElementById('loader');
-      const fileInput = document.getElementById('photo');
-      const pin = document.getElementById('userPin').value;
-
-      if (pin.length < 4) { alert("กรุณาใส่ PIN 4 หลัก"); return; }
-      if (!isEditMode && !fileInput.files[0]) { alert("กรุณาเลือกรูปภาพสำหรับโพสต์ใหม่"); return; }
-
-      btn.disabled = true; loader.classList.remove('hidden');
-      
-      let photoData = null;
-      if (fileInput.files[0]) {
-          const file = fileInput.files[0];
-          const reader = new FileReader();
-          photoData = await new Promise(resolve => {
-              reader.onload = e => resolve({ type: file.type, contents: e.target.result.split(',')[1], name: file.name });
-              reader.readAsDataURL(file);
-          });
-      }
-
-      const obj = {
-        action: isEditMode ? "updateFull" : "upload",
-        rowId: currentEditId,
-        category: document.getElementById('category').value,
-        placeName: document.getElementById('placeName').value,
-        description: document.getElementById('description').value,
-        userName: document.getElementById('userName').value,
-        userPin: pin,
-        photo: photoData
-      };
-
-      try {
-        await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(obj) });
-        alert(isEditMode ? "✅ แก้ไขสำเร็จ!" : "🎉 โพสต์เรียบร้อย!");
-        cancelEdit();
-        setTimeout(loadPosts, 1500);
-      } catch (e) { alert("เกิดข้อผิดพลาด"); }
-      finally { btn.disabled = false; loader.classList.add('hidden'); }
-    }
-
     async function likePost(id) { await fetch(`${WEB_APP_URL}?action=like&id=${id}`); loadPosts(); }
-
     async function deletePost(id) {
         const pass = prompt("รหัส Admin สำหรับการลบ:");
         if (pass === ADMIN_PASS) {
-            if(confirm("ยืนยันการลบ?")) {
-                await fetch(`${WEB_APP_URL}?action=delete&id=${id}`);
-                loadPosts();
-            }
-        }
+            if(confirm("ยืนยันการลบโพสต์นี้หรือไม่?")) { await fetch(`${WEB_APP_URL}?action=delete&id=${id}`); loadPosts(); }
+        } else { alert("รหัส Admin ไม่ถูกต้อง"); }
     }
-
-    document.getElementById('photo').onchange = function() {
-        if(this.files[0]) document.getElementById('fileLabel').innerText = "🎯 เลือกรูปใหม่แล้ว: " + this.files[0].name;
-    };
-
+    document.getElementById('photo').onchange = function() { if(this.files[0]) document.getElementById('fileLabel').innerText = "🎯 เลือกรูปแล้ว: " + this.files[0].name; };
     window.onload = loadPosts;
   </script>
 </body>
