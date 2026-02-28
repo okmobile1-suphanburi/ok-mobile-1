@@ -1,183 +1,215 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TravelShare - ระบบแชร์พิกัด</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap');
-        body { font-family: 'Kanit', sans-serif; background-color: #f3f4f6; }
-        .loading-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; color: white; flex-direction: column; }
-        .card-img { width: 100%; aspect-ratio: 16/9; object-fit: cover; background-color: #eee; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Pro - ระบบแก้ไขข้อมูลและรูปภาพ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Kanit', sans-serif; background: #f1f5f9; }
+    .gradient-header { background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%); }
+    .post-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 1.5rem; overflow: hidden; }
+    .post-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+    .heart-btn:active { transform: scale(1.4); }
+    .edit-mode-active { border: 3px solid #10b981 !important; background-color: #f0fdf4 !important; }
+  </style>
 </head>
-<body>
+<body class="min-h-screen pb-20">
 
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-yellow-400 mb-4"></div>
-        <p>กำลังประมวลผล...</p>
-    </div>
+  <header class="gradient-header text-white py-12 shadow-2xl text-center mb-10">
+    <h1 class="text-4xl font-bold tracking-widest">🌍 TRAVEL PRO COMMUNITY</h1>
+    <p class="mt-2 opacity-80">แก้ไขได้ทุกอย่าง... แม้กระทั่งรูปภาพ!</p>
+  </header>
 
-    <nav class="bg-blue-600 text-white p-4 sticky top-0 z-50 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold" onclick="location.reload()" style="cursor:pointer">TravelShare</h1>
-            <button onclick="document.getElementById('formModal').classList.remove('hidden')" class="bg-yellow-400 text-blue-900 px-4 py-2 rounded-full font-bold text-sm">
-                + เพิ่มที่เที่ยว
-            </button>
-        </div>
-    </nav>
-
-    <main class="container mx-auto my-6 px-4">
-        <div id="travelGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            </div>
-    </main>
-
-    <div id="formModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center p-4 z-[100]">
-        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl overflow-y-auto max-h-[90vh]">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-blue-600">แชร์พิกัดใหม่</h3>
-                <button onclick="document.getElementById('formModal').classList.add('hidden')" class="text-gray-400 text-2xl">&times;</button>
-            </div>
+  <div class="container mx-auto px-4 max-w-7xl">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      
+      <div class="lg:col-span-1">
+        <div id="formContainer" class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100 sticky top-5 transition-all">
+          <h2 id="formTitle" class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">✍️ สร้างโพสต์ใหม่</h2>
+          <form id="travelForm" class="space-y-4">
+            <select id="category" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+                <option value="ภูเขา">⛰️ ภูเขา / ป่าไม้</option>
+                <option value="ทะเล">🌊 ทะเล / เกาะ</option>
+                <option value="คาเฟ่">☕ คาเฟ่ / ร้านอาหาร</option>
+                <option value="วัด">🙏 วัด / วัฒนธรรม</option>
+            </select>
+            <input type="text" id="placeName" placeholder="ชื่อสถานที่" required class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500">
+            <textarea id="description" rows="3" placeholder="เล่าเรื่องราวที่นี่..." class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            <input type="text" id="userName" placeholder="ชื่อเล่นของคุณ" required class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500">
             
-            <form id="travelForm" class="space-y-4">
-                <input type="text" id="placeName" required placeholder="ชื่อสถานที่" class="w-full border p-3 rounded-xl outline-none focus:border-blue-500">
-                <input type="text" id="province" required placeholder="จังหวัด" class="w-full border p-3 rounded-xl">
-                <select id="category" class="w-full border p-3 rounded-xl">
-                    <option value="ที่เที่ยว">ที่เที่ยว</option>
-                    <option value="ที่พัก">ที่พัก</option>
-                    <option value="ร้านอาหาร">ร้านอาหาร</option>
-                </select>
-                <div class="border-2 border-dashed p-4 rounded-xl text-center bg-gray-50">
-                    <p class="text-xs text-gray-500 mb-2">เลือกรูปภาพ</p>
-                    <input type="file" id="fileInput" accept="image/*" class="w-full text-sm">
+            <div class="bg-blue-50 p-3 rounded-2xl border border-blue-100">
+                <label class="block text-[10px] font-bold text-blue-500 uppercase mb-1 ml-1 text-center">รหัส PIN 4 หลัก (เพื่อแก้ไข/ลบ)</label>
+                <input type="password" id="userPin" maxlength="4" placeholder="••••" required 
+                       class="w-full px-4 py-2 rounded-xl border-none text-center text-xl tracking-[1em] font-bold focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <div class="p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center">
+                <input type="file" id="photo" accept="image/*" class="hidden">
+                <label for="photo" id="fileLabel" class="cursor-pointer text-xs text-gray-500 font-medium italic">📷 คลิกเพื่อเลือกรูปภาพ (หรือรูปใหม่)</label>
+            </div>
+
+            <button type="button" onclick="handleUpload()" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">โพสต์เลย 🚀</button>
+            <button type="button" id="btnCancel" onclick="cancelEdit()" class="hidden w-full text-gray-400 text-sm font-medium mt-2 hover:text-red-500 transition-colors">ยกเลิกการแก้ไข</button>
+          </form>
+          <div id="loader" class="hidden mt-4 text-center text-blue-600 animate-bounce text-sm font-bold">กำลังประมวลผล...</div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-3">
+        <div id="postContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+            </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnOhkuabchx0o78XH9pC9AO77m6NaXfOEg_ZTwGfYaSlqO4lAjw7GgOM9NeFahvsnV/exec";
+    const ADMIN_PASS = "1234";
+
+    let isEditMode = false;
+    let currentEditId = null;
+
+    function getImgUrl(rawUrl) {
+      const fileId = rawUrl.split('id=')[1]?.split('&')[0] || rawUrl.split('/d/')[1]?.split('/')[0];
+      return fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w800` : 'https://via.placeholder.com/400x300';
+    }
+
+    async function loadPosts() {
+      const container = document.getElementById('postContainer');
+      try {
+        const response = await fetch(`${WEB_APP_URL}?action=getPosts`);
+        const posts = await response.json();
+        container.innerHTML = ''; 
+        posts.forEach((post) => {
+          container.innerHTML += `
+            <div class="post-card bg-white relative border border-gray-100 flex flex-col text-left">
+              <span class="absolute top-3 left-3 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold shadow-sm z-10 text-blue-600">#${post.category}</span>
+              <div class="h-56 bg-gray-100 overflow-hidden">
+                <img src="${getImgUrl(post.imageUrl)}" class="w-full h-full object-contain">
+              </div>
+              <div class="p-5 flex-grow">
+                <div class="flex justify-between items-start mb-2">
+                    <h4 class="font-bold text-xl text-gray-800">${post.placeName}</h4>
+                    <button onclick="likePost('${post.rowId}')" class="heart-btn text-red-500">❤️ <span class="text-sm text-gray-500">${post.likes}</span></button>
                 </div>
-                <textarea id="description" placeholder="รายละเอียด..." class="w-full border p-3 rounded-xl"></textarea>
-                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">บันทึกข้อมูล</button>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // *** ใส่ URL ของคุณที่นี่ ***
-        const WEB_APP_URL = 'ใส่_URL_ที่ได้จากการ_DEPLOY_ตรงนี้';
-
-        // 1. ย่อรูปภาพก่อนส่ง
-        async function resizeImage(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 400; 
-                        const scale = MAX_WIDTH / img.width;
-                        canvas.width = MAX_WIDTH;
-                        canvas.height = img.height * scale;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                        resolve(canvas.toDataURL('image/jpeg', 0.5)); // คุณภาพ 50%
-                    };
-                };
-            });
-        }
-
-        // 2. โหลดข้อมูลมาแสดง
-        async function loadData() {
-            const grid = document.getElementById('travelGrid');
-            grid.innerHTML = '<p class="col-span-full text-center py-10">กำลังโหลดพิกัด...</p>';
-            
-            try {
-                const res = await fetch(WEB_APP_URL);
-                const data = await res.json();
-                
-                if (!data || data.length === 0) {
-                    grid.innerHTML = '<p class="col-span-full text-center text-gray-400 py-10">ยังไม่มีข้อมูล</p>';
-                    return;
-                }
-
-                grid.innerHTML = data.reverse().map(item => {
-                    // ดึงรูปภาพรูปแรก ถ้าไม่มีให้ใช้ Placeholder
-                    const imgUrl = item.images ? item.images.split(',')[0] : 'https://via.placeholder.com/400x225?text=No+Image';
-                    
-                    return `
-                    <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 transition hover:shadow-md">
-                        <img src="${imgUrl}" class="card-img" onerror="this.src='https://via.placeholder.com/400x225?text=Error'">
-                        <div class="p-4">
-                            <div class="flex justify-between items-start mb-1">
-                                <h3 class="font-bold text-lg">${item.name}</h3>
-                                <span class="bg-blue-100 text-blue-600 text-[10px] px-2 py-1 rounded-full font-bold">${item.category}</span>
-                            </div>
-                            <p class="text-gray-400 text-xs mb-2"><i class="fas fa-map-marker-alt"></i> ${item.province}</p>
-                            <p class="text-gray-600 text-sm line-clamp-2">${item.description || '-'}</p>
-                            <div class="mt-4 flex justify-end">
-                                <button onclick="deletePlace(${item.row})" class="text-red-400 hover:text-red-600 text-xs">
-                                    <i class="fas fa-trash"></i> ลบพิกัด
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    `;
-                }).join('');
-            } catch (err) {
-                grid.innerHTML = '<p class="text-center text-red-400">โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่</p>';
-            }
-        }
-
-        // 3. บันทึกข้อมูล
-        document.getElementById('travelForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            document.getElementById('loadingOverlay').style.display = 'flex';
-            
-            const file = document.getElementById('fileInput').files[0];
-            let imgBase64 = "";
-            if (file) imgBase64 = await resizeImage(file);
-
-            const payload = {
-                action: 'add',
-                name: document.getElementById('placeName').value,
-                province: document.getElementById('province').value,
-                category: document.getElementById('category').value,
-                description: document.getElementById('description').value,
-                images: imgBase64 ? [imgBase64] : []
-            };
-
-            try {
-                await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify(payload)
-                });
-                alert('บันทึกพิกัดเรียบร้อย!');
-                location.reload();
-            } catch (err) {
-                alert('เกิดข้อผิดพลาดในการบันทึก');
-                document.getElementById('loadingOverlay').style.display = 'none';
-            }
+                <p class="text-gray-500 text-sm mb-4 line-clamp-2">${post.description}</p>
+                <div class="flex items-center justify-between border-t pt-4 mt-auto">
+                  <span class="text-[10px] font-semibold text-gray-400">👤 ${post.userName}</span>
+                  <div class="flex gap-3">
+                      <button onclick="editPost('${post.rowId}', '${post.placeName}', '${post.description}', '${post.userName}', '${post.category}')" class="text-blue-500 text-[10px] font-bold">แก้ไข</button>
+                      <button onclick="deletePost('${post.rowId}')" class="text-red-400 text-[10px] font-bold">ลบ</button>
+                  </div>
+                </div>
+              </div>
+            </div>`;
         });
+      } catch (e) { container.innerHTML = "โหลดข้อมูลไม่สำเร็จ"; }
+    }
 
-        // 4. ลบข้อมูล
-        async function deletePlace(row) {
-            if(!confirm('คุณต้องการลบพิกัดนี้ใช่หรือไม่?')) return;
-            document.getElementById('loadingOverlay').style.display = 'flex';
+    // เข้าสู่โหมดแก้ไข
+    async function editPost(id, name, desc, user, cate) {
+        const pin = prompt("🔐 ยืนยัน PIN 4 หลักเพื่อทำการแก้ไข:");
+        if (!pin) return;
+
+        const check = await fetch(`${WEB_APP_URL}?action=checkPin&id=${id}&pin=${pin}`);
+        if ((await check.text()) === "Valid") {
+            isEditMode = true;
+            currentEditId = id;
+
+            // ดึงข้อมูลเก่าลงฟอร์ม
+            document.getElementById('placeName').value = name;
+            document.getElementById('description').value = desc;
+            document.getElementById('userName').value = user;
+            document.getElementById('category').value = cate;
+            document.getElementById('userPin').value = pin;
+
+            // ปรับ UI ฟอร์ม
+            document.getElementById('formContainer').classList.add('edit-mode-active');
+            document.getElementById('formTitle').innerText = "✏️ แก้ไขข้อมูลโพสต์";
+            document.getElementById('btnSubmit').innerText = "บันทึกการเปลี่ยนแปลง ✨";
+            document.getElementById('btnSubmit').classList.replace('bg-blue-600', 'bg-green-600');
+            document.getElementById('btnCancel').classList.remove('hidden');
             
-            try {
-                await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: JSON.stringify({ action: 'delete', row: row })
-                });
-                setTimeout(() => location.reload(), 1000);
-            } catch (err) {
-                alert('ไม่สามารถลบข้อมูลได้');
-                document.getElementById('loadingOverlay').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            alert("ใส่ข้อมูลใหม่และเลือกรูปภาพใหม่ (ถ้าต้องการเปลี่ยนรูป) ได้เลยครับ");
+        } else {
+            alert("❌ รหัส PIN ไม่ถูกต้อง");
+        }
+    }
+
+    function cancelEdit() {
+        isEditMode = false;
+        currentEditId = null;
+        document.getElementById('travelForm').reset();
+        document.getElementById('formContainer').classList.remove('edit-mode-active');
+        document.getElementById('formTitle').innerText = "✍️ สร้างโพสต์ใหม่";
+        document.getElementById('btnSubmit').innerText = "โพสต์เลย 🚀";
+        document.getElementById('btnSubmit').classList.replace('bg-green-600', 'bg-blue-600');
+        document.getElementById('btnCancel').classList.add('hidden');
+        document.getElementById('fileLabel').innerText = "📷 คลิกเพื่อเลือกรูปภาพ";
+    }
+
+    async function handleUpload() {
+      const btn = document.getElementById('btnSubmit');
+      const loader = document.getElementById('loader');
+      const fileInput = document.getElementById('photo');
+      const pin = document.getElementById('userPin').value;
+
+      if (pin.length < 4) { alert("กรุณาใส่ PIN 4 หลัก"); return; }
+      if (!isEditMode && !fileInput.files[0]) { alert("กรุณาเลือกรูปภาพสำหรับโพสต์ใหม่"); return; }
+
+      btn.disabled = true; loader.classList.remove('hidden');
+      
+      let photoData = null;
+      if (fileInput.files[0]) {
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+          photoData = await new Promise(resolve => {
+              reader.onload = e => resolve({ type: file.type, contents: e.target.result.split(',')[1], name: file.name });
+              reader.readAsDataURL(file);
+          });
+      }
+
+      const obj = {
+        action: isEditMode ? "updateFull" : "upload",
+        rowId: currentEditId,
+        category: document.getElementById('category').value,
+        placeName: document.getElementById('placeName').value,
+        description: document.getElementById('description').value,
+        userName: document.getElementById('userName').value,
+        userPin: pin,
+        photo: photoData
+      };
+
+      try {
+        await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(obj) });
+        alert(isEditMode ? "✅ แก้ไขสำเร็จ!" : "🎉 โพสต์เรียบร้อย!");
+        cancelEdit();
+        setTimeout(loadPosts, 1500);
+      } catch (e) { alert("เกิดข้อผิดพลาด"); }
+      finally { btn.disabled = false; loader.classList.add('hidden'); }
+    }
+
+    async function likePost(id) { await fetch(`${WEB_APP_URL}?action=like&id=${id}`); loadPosts(); }
+
+    async function deletePost(id) {
+        const pass = prompt("รหัส Admin สำหรับการลบ:");
+        if (pass === ADMIN_PASS) {
+            if(confirm("ยืนยันการลบ?")) {
+                await fetch(`${WEB_APP_URL}?action=delete&id=${id}`);
+                loadPosts();
             }
         }
+    }
 
-        window.onload = loadData;
-    </script>
+    document.getElementById('photo').onchange = function() {
+        if(this.files[0]) document.getElementById('fileLabel').innerText = "🎯 เลือกรูปใหม่แล้ว: " + this.files[0].name;
+    };
+
+    window.onload = loadPosts;
+  </script>
 </body>
 </html>
