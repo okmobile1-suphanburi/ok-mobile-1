@@ -12,7 +12,6 @@
     .post-card { transition: all 0.3s ease; border-radius: 1.5rem; overflow: hidden; cursor: pointer; }
     .post-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
     
-    /* สไตล์ตอนแก้ไข (Edit Mode) */
     .edit-mode-active { 
       border: 4px solid #f59e0b !important; 
       background-color: #fffbeb !important; 
@@ -29,7 +28,6 @@
     .filter-active { background-color: #3b82f6 !important; color: white !important; border-color: #3b82f6 !important; }
     .modal-open { overflow: hidden; }
 
-    /* CSS สำหรับ Mobile Form Overlay */
     @media (max-width: 1023px) {
       #formWrapper {
         display: none;
@@ -46,7 +44,6 @@
       #formContainer { width: 100%; max-height: 90vh; overflow-y: auto; }
     }
 
-    /* Animation สำหรับปุ่มสร้างโพสต์ */
     @keyframes bounce-short {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-5px); }
@@ -73,9 +70,8 @@
           <form id="travelForm" class="space-y-4">
             <select id="category" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                 <option value="" disabled selected>📍 เลือกจังหวัด</option>
-                <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option><option value="เชียงใหม่">เชียงใหม่</option><option value="ภูเก็ต">ภูเก็ต</option><option value="ชลบุรี">ชลบุรี</option><option value="กระบี่">กระบี่</option>
-                <option value="กาญจนบุรี">กาญจนบุรี</option><option value="ขอนแก่น">ขอนแก่น</option><option value="นครราชสีมา">นครราชสีมา</option>
-                </select>
+                <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option><option value="กระบี่">กระบี่</option><option value="กาญจนบุรี">กาญจนบุรี</option><option value="กาฬสินธุ์">กาฬสินธุ์</option><option value="กำแพงเพชร">กำแพงเพชร</option><option value="ขอนแก่น">ขอนแก่น</option><option value="จันทบุรี">จันทบุรี</option><option value="ฉะเชิงเทรา">ฉะเชิงเทรา</option><option value="ชลบุรี">ชลบุรี</option><option value="ชัยนาท">ชัยนาท</option><option value="ชัยภูมิ">ชัยภูมิ</option><option value="ชุมพร">ชุมพร</option><option value="เชียงราย">เชียงราย</option><option value="เชียงใหม่">เชียงใหม่</option><option value="ตรัง">ตรัง</option><option value="ตราด">ตราด</option><option value="ตาก">ตาก</option><option value="นครนายก">นครนายก</option><option value="นครปฐม">นครปฐม</option><option value="นครพนม">นครพนม</option><option value="นครราชสีมา">นครราชสีมา</option><option value="นครศรีธรรมราช">นครศรีธรรมราช</option><option value="นครสวรรค์">นครสวรรค์</option><option value="นนทบุรี">นนทบุรี</option><option value="นราธิวาส">นราธิวาส</option><option value="น่าน">น่าน</option><option value="บึงกาฬ">บึงกาฬ</option><option value="บุรีรัมย์">บุรีรัมย์</option><option value="ปทุมธานี">ปทุมธานี</option><option value="ประจวบคีรีขันธ์">ประจวบคีรีขันธ์</option><option value="ปราจีนบุรี">ปราจีนบุรี</option><option value="ปัตตานี">ปัตตานี</option><option value="พระนครศรีอยุธยา">พระนครศรีอยุธยา</option><option value="พังงา">พังงา</option><option value="พัทลุง">พัทลุง</option><option value="พิจิตร">พิจิตร</option><option value="พิษณุโลก">พิษณุโลก</option><option value="เพชรบุรี">เพชรบุรี</option><option value="เพชรบูรณ์">เพชรบูรณ์</option><option value="แพร่">แพร่</option><option value="พะเยา">พะเยา</option><option value="ภูเก็ต">ภูเก็ต</option><option value="มหาสารคาม">มหาสารคาม</option><option value="มุกดาหาร">มุกดาหาร</option><option value="แม่ฮ่องสอน">แม่ฮ่องสอน</option><option value="ยะลา">ยะลา</option><option value="ยโสธร">ยโสธร</option><option value="ร้อยเอ็ด">ร้อยเอ็ด</option><option value="ระนอง">ระนอง</option><option value="ระยอง">ระยอง</option><option value="ราชบุรี">ราชบุรี</option><option value="ลพบุรี">ลพบุรี</option><option value="ลำปาง">ลำปาง</option><option value="ลำพูน">ลำพูน</option><option value="เลย">เลย</option><option value="ศรีสะเกษ">ศรีสะเกษ</option><option value="สกลนคร">สกลนคร</option><option value="สงขลา">สงขลา</option><option value="สตูล">สตูล</option><option value="สมุทรปราการ">สมุทรปราการ</option><option value="สมุทรสงคราม">สมุทรสงคราม</option><option value="สมุทรสาคร">สมุทรสาคร</option><option value="สระแก้ว">สระแก้ว</option><option value="สระบุรี">สระบุรี</option><option value="สิงห์บุรี">สิงห์บุรี</option><option value="สุโขทัย">สุโขทัย</option><option value="สุพรรณบุรี">สุพรรณบุรี</option><option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option><option value="สุรินทร์">สุรินทร์</option><option value="หนองคาย">หนองคาย</option><option value="หนองบัวลำภู">หนองบัวลำภู</option><option value="อ่างทอง">อ่างทอง</option><option value="อุดรธานี">อุดรธานี</option><option value="อุทัยธานี">อุทัยธานี</option><option value="อุตรดิตถ์">อุตรดิตถ์</option><option value="อุบลราชธานี">อุบลราชธานี</option><option value="อำนาจเจริญ">อำนาจเจริญ</option>
+            </select>
             <select id="placeType" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
                 <option value="ที่เที่ยว">🏞️ ที่เที่ยว</option>
                 <option value="ที่พัก">🏨 ที่พัก</option>
@@ -94,7 +90,16 @@
                 <input type="file" id="photo" accept="image/*" class="hidden">
                 <label for="photo" id="fileLabel" class="cursor-pointer text-xs text-gray-500 font-medium italic">📷 คลิกเพื่อเลือกรูปภาพ</label>
             </div>
+            
             <button type="button" onclick="handleUpload()" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">โพสต์เลย 🚀</button>
+            
+            <div class="pt-1">
+                <button type="button" onclick="openFeedback()" class="w-full bg-amber-50 border-2 border-dashed border-amber-200 text-amber-600 font-bold py-3 rounded-2xl flex items-center justify-center gap-2 hover:bg-amber-100 transition-all text-sm">
+                    <span>💡</span>
+                    <span>แนะนำฟีเจอร์ / แจ้งปัญหา</span>
+                </button>
+            </div>
+
             <button type="button" id="btnCancel" onclick="cancelEdit()" class="hidden w-full text-gray-500 text-sm font-medium mt-2 hover:text-red-500 transition-colors">ยกเลิกการแก้ไข</button>
           </form>
           <div id="loader" class="hidden mt-4 text-center text-blue-600 animate-bounce text-sm font-bold">กำลังส่งข้อมูล...</div>
@@ -102,7 +107,6 @@
       </div>
 
       <div class="lg:col-span-3">
-        
         <div class="mb-8 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 items-center">
             <div class="relative w-full md:w-1/3">
                 <span class="absolute left-4 top-3 text-gray-400">🔍</span>
@@ -115,7 +119,6 @@
                 <button onclick="setFilterType('คาเฟ่/ร้านอาหาร')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full border bg-white text-gray-500 text-xs font-bold transition-all">☕ คาเฟ่</button>
             </div>
         </div>
-
         <div id="postContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
         <div id="noResults" class="hidden text-center py-20 text-gray-400 italic text-lg">😔 ไม่พบข้อมูลที่ต้องการ...</div>
       </div>
@@ -328,9 +331,7 @@
             document.getElementById('mapUrl').value = map;
             document.getElementById('placeType').value = type;
             document.getElementById('userPin').value = pin;
-
             if (window.innerWidth < 1024) toggleForm();
-
             const formBox = document.getElementById('formContainer');
             formBox.classList.add('edit-mode-active', 'edit-shake');
             document.getElementById('formTitle').innerText = "✏️ กำลังแก้ไขโพสต์...";
@@ -364,7 +365,51 @@
         } else { alert("รหัส Admin ไม่ถูกต้อง"); }
     }
     document.getElementById('photo').onchange = function() { if(this.files[0]) document.getElementById('fileLabel').innerText = "🎯 เลือกรูปแล้ว: " + this.files[0].name; };
+    
+    // --- ฟังก์ชัน Feedback ---
+    function openFeedback() {
+        document.getElementById('feedbackModal').classList.remove('hidden');
+        document.body.classList.add('modal-open');
+    }
+    function closeFeedback() {
+        document.getElementById('feedbackModal').classList.add('hidden');
+        document.body.classList.remove('modal-open');
+        document.getElementById('fbContent').value = '';
+    }
+    async function sendFeedback() {
+        const user = document.getElementById('fbUser').value;
+        const content = document.getElementById('fbContent').value;
+        const btn = document.getElementById('btnFbSubmit');
+        if (!content) { alert("กรุณากรอกข้อเสนอแนะด้วยครับ"); return; }
+        btn.disabled = true; btn.innerText = "กำลังส่ง...";
+        try {
+            await fetch(WEB_APP_URL, {
+                method: "POST", mode: "no-cors",
+                body: JSON.stringify({ action: "feedback", userName: user || "ไม่ระบุชื่อ", description: content })
+            });
+            alert("ขอบคุณสำหรับข้อเสนอแนะ! แอดมินได้รับข้อมูลแล้วครับ");
+            closeFeedback();
+        } catch (e) { alert("เกิดข้อผิดพลาด กรุณาลองใหม่"); }
+        finally { btn.disabled = false; btn.innerText = "ส่งข้อมูล 🚀"; }
+    }
     window.onload = loadPosts;
   </script>
+
+  <div id="feedbackModal" class="hidden fixed inset-0 z-[200] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+          <div class="bg-amber-500 p-6 text-white text-center">
+              <h3 class="text-xl font-bold">💡 เสนอแนะฟีเจอร์ใหม่</h3>
+              <p class="text-sm opacity-90">บอกเราว่าคุณอยากให้ Travel Pro มีอะไรเพิ่ม!</p>
+          </div>
+          <div class="p-6 space-y-4">
+              <input type="text" id="fbUser" placeholder="ชื่อของคุณ" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-amber-500">
+              <textarea id="fbContent" rows="4" placeholder="พิมพ์ข้อเสนอแนะหรือฟีเจอร์ที่อยากได้..." class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+              <div class="flex gap-2">
+                  <button onclick="closeFeedback()" class="flex-1 bg-gray-200 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-300 transition-all">ยกเลิก</button>
+                  <button onclick="sendFeedback()" id="btnFbSubmit" class="flex-1 bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 transition-all">ส่งข้อมูล 🚀</button>
+              </div>
+          </div>
+      </div>
+  </div>
 </body>
 </html>
