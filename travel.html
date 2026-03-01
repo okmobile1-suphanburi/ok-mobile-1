@@ -49,6 +49,10 @@
       50% { transform: translateY(-5px); }
     }
     .animate-bounce-short { animation: bounce-short 3s infinite; }
+    
+    /* สไตล์สำหรับ Image Preview */
+    #imagePreviewContainer { display: none; margin-top: 10px; position: relative; }
+    #imagePreviewContainer img { width: 100%; height: 150px; object-fit: cover; border-radius: 1rem; border: 2px solid #e2e8f0; }
   </style>
 </head>
 <body class="min-h-screen pb-20">
@@ -86,9 +90,14 @@
                 <label class="block text-[10px] font-bold text-blue-500 uppercase mb-1">รหัส PIN 4 หลัก (เพื่อแก้ไข/ลบ)</label>
                 <input type="password" id="userPin" maxlength="4" placeholder="••••" required class="w-full px-4 py-2 rounded-xl border-none text-center text-xl tracking-[1em] font-bold focus:ring-2 focus:ring-blue-400">
             </div>
+            
             <div class="p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center">
                 <input type="file" id="photo" accept="image/*" class="hidden">
                 <label for="photo" id="fileLabel" class="cursor-pointer text-xs text-gray-500 font-medium italic">📷 คลิกเพื่อเลือกรูปภาพ</label>
+                <div id="imagePreviewContainer">
+                    <img id="imagePreview" src="" alt="Preview">
+                    <button type="button" onclick="removeImage()" class="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full text-xs shadow-lg">✕</button>
+                </div>
             </div>
             
             <button type="button" onclick="handleUpload()" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">โพสต์เลย 🚀</button>
@@ -317,6 +326,26 @@
       finally { btn.disabled = false; loader.classList.add('hidden'); }
     }
 
+    // --- ฟังก์ชัน Preview รูปภาพ ---
+    document.getElementById('photo').onchange = function() {
+        const file = this.files[0];
+        if (file) {
+            document.getElementById('fileLabel').innerText = "🎯 เลือกรูปแล้ว: " + file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imagePreview').src = e.target.result;
+                document.getElementById('imagePreviewContainer').style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        }
+    };
+    function removeImage() {
+        document.getElementById('photo').value = "";
+        document.getElementById('fileLabel').innerText = "📷 คลิกเพื่อเลือกรูปภาพ";
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+        document.getElementById('imagePreview').src = "";
+    }
+
     async function editPost(id, name, desc, user, cate, map, type) {
         const pin = prompt("🔐 ยืนยัน PIN 4 หลักเพื่อแก้ไขโพสต์นี้:");
         if (!pin) return;
@@ -346,11 +375,11 @@
         isEditMode = false;
         currentEditId = null;
         document.getElementById('travelForm').reset();
+        removeImage();
         document.getElementById('formContainer').classList.remove('edit-mode-active');
         document.getElementById('formTitle').innerText = "✍️ สร้างโพสต์ใหม่";
         document.getElementById('btnSubmit').innerText = "โพสต์เลย 🚀";
         document.getElementById('btnCancel').classList.add('hidden');
-        document.getElementById('fileLabel').innerText = "📷 คลิกเพื่อเลือกรูปภาพ";
         if (window.innerWidth < 1024) {
             document.getElementById('formWrapper').classList.remove('active');
             document.body.classList.remove('modal-open');
@@ -359,12 +388,22 @@
 
     async function likePost(id) { await fetch(`${WEB_APP_URL}?action=like&id=${id}`); loadPosts(); }
     async function deletePost(id) {
-        const pass = prompt("รหัส Admin สำหรับการลบ:");
-        if (pass === ADMIN_PASS) {
-            if(confirm("ยืนยันการลบโพสต์นี้หรือไม่?")) { await fetch(`${WEB_APP_URL}?action=delete&id=${id}`); loadPosts(); }
-        } else { alert("รหัส Admin ไม่ถูกต้อง"); }
+    const pass = prompt("รหัส Admin สำหรับการลบ:");
+    if (!pass) return;
+    
+    // ส่ง id และ pass ไปที่ Server
+    const resp = await fetch(`${WEB_APP_URL}?action=delete&id=${id}&pass=${pass}`);
+    const result = await resp.text();
+    
+    if (result === "Deleted") {
+        alert("ลบโพสต์เรียบร้อย");
+        loadPosts();
+    } else if (result === "Wrong Password") {
+        alert("รหัส Admin ไม่ถูกต้อง");
+    } else {
+        alert("เกิดข้อผิดพลาด");
     }
-    document.getElementById('photo').onchange = function() { if(this.files[0]) document.getElementById('fileLabel').innerText = "🎯 เลือกรูปแล้ว: " + this.files[0].name; };
+}
     
     // --- ฟังก์ชัน Feedback ---
     function openFeedback() {
