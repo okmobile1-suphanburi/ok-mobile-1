@@ -29,7 +29,7 @@
     .filter-active { background-color: #3b82f6 !important; color: white !important; border-color: #3b82f6 !important; }
     .modal-open { overflow: hidden; }
 
-    /* CSS เพิ่มเติมสำหรับปุ่มกดและ Mobile Form */
+    /* CSS สำหรับ Mobile Form Overlay */
     @media (max-width: 1023px) {
       #formWrapper {
         display: none;
@@ -45,6 +45,13 @@
       #formWrapper.active { display: flex; }
       #formContainer { width: 100%; max-height: 90vh; overflow-y: auto; }
     }
+
+    /* Animation สำหรับปุ่มสร้างโพสต์ */
+    @keyframes bounce-short {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .animate-bounce-short { animation: bounce-short 3s infinite; }
   </style>
 </head>
 <body class="min-h-screen pb-20">
@@ -115,8 +122,9 @@
     </div>
   </div>
 
-  <button onclick="toggleForm()" class="lg:hidden fixed bottom-6 right-6 w-16 h-16 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center text-2xl z-[140] hover:scale-110 active:scale-95 transition-all">
-    ➕
+  <button onclick="toggleForm()" class="lg:hidden fixed bottom-6 right-6 bg-blue-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 z-[140] hover:scale-105 active:scale-95 transition-all animate-bounce-short">
+    <span class="text-xl">✍️</span>
+    <span class="font-bold tracking-wide">สร้างโพสต์</span>
   </button>
 
   <div id="detailModal" class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm">
@@ -141,14 +149,13 @@
   </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnOhkuabchx0o78XH9pC9AO77m6NaXfOEg_ZTwGfYaSlqO4lAjw7GgOM9NeFahvsnV/exec"; // *** อย่าลืมเปลี่ยนเป็น URL ของคุณ ***
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnOhkuabchx0o78XH9pC9AO77m6NaXfOEg_ZTwGfYaSlqO4lAjw7GgOM9NeFahvsnV/exec"; 
     const ADMIN_PASS = "1234";
     let isEditMode = false;
     let currentEditId = null;
     let allPosts = [];
     let currentFilterType = "ทั้งหมด";
 
-    // ฟังก์ชัน เปิด/ปิด ฟอร์มในมือถือ
     function toggleForm() {
         const wrapper = document.getElementById('formWrapper');
         wrapper.classList.toggle('active');
@@ -322,10 +329,8 @@
             document.getElementById('placeType').value = type;
             document.getElementById('userPin').value = pin;
 
-            // เปิดฟอร์มขึ้นมาถ้าเป็นมือถือ
             if (window.innerWidth < 1024) toggleForm();
 
-            // เอฟเฟกต์ตอนกดแก้ไข
             const formBox = document.getElementById('formContainer');
             formBox.classList.add('edit-mode-active', 'edit-shake');
             document.getElementById('formTitle').innerText = "✏️ กำลังแก้ไขโพสต์...";
@@ -345,7 +350,6 @@
         document.getElementById('btnSubmit').innerText = "โพสต์เลย 🚀";
         document.getElementById('btnCancel').classList.add('hidden');
         document.getElementById('fileLabel').innerText = "📷 คลิกเพื่อเลือกรูปภาพ";
-        // ปิดฟอร์มถ้าเป็นมือถือ
         if (window.innerWidth < 1024) {
             document.getElementById('formWrapper').classList.remove('active');
             document.body.classList.remove('modal-open');
