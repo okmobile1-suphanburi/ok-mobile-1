@@ -343,11 +343,21 @@
         document.getElementById('modalProvince').innerText = post.category;
         document.getElementById('modalType').innerText = post.placeType || "ที่เที่ยว";
         document.getElementById('modalUser').innerText = "📍 โพสต์โดย: " + post.userName + " | 📅 " + formatDate(post.date);
+        
         const imgDiv = document.getElementById('modalImages');
         imgDiv.innerHTML = '';
-        post.imageUrl.split(',').forEach(url => {
-            if(url.trim()) imgDiv.innerHTML += `<img src="${getImgUrl(url)}" class="w-full rounded-xl shadow-sm object-contain bg-white">`;
+        const urls = post.imageUrl.split(',').filter(url => url.trim() !== '');
+        
+        urls.forEach((url, index) => {
+            imgDiv.innerHTML += `
+                <div class="relative">
+                    <img src="${getImgUrl(url)}" class="w-full rounded-xl shadow-sm object-contain bg-white">
+                    <div class="absolute top-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
+                        📸 รูปที่ ${index + 1} / ${urls.length}
+                    </div>
+                </div>`;
         });
+        
         const mapBtn = document.getElementById('modalMapBtn');
         mapBtn.innerHTML = post.mapUrl ? `<a href="${post.mapUrl}" target="_blank" class="w-full text-center block bg-green-500 text-white py-3 rounded-2xl font-bold hover:bg-green-600 transition-colors">📍 เปิดแผนที่ Google Maps</a>` : '';
         document.getElementById('detailModal').classList.remove('hidden');
