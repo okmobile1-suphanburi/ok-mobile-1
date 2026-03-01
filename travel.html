@@ -12,6 +12,12 @@
     .post-card { transition: all 0.3s ease; border-radius: 1.5rem; overflow: hidden; cursor: pointer; }
     .post-card:hover { transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
     
+    @keyframes skeleton-pulse {
+      0%, 100% { background-color: #e2e8f0; }
+      50% { background-color: #f1f5f9; }
+    }
+    .skeleton { animation: skeleton-pulse 1.5s infinite ease-in-out; border-radius: 1rem; }
+
     .edit-mode-active { 
       border: 4px solid #f59e0b !important; 
       background-color: #fffbeb !important; 
@@ -50,9 +56,9 @@
     }
     .animate-bounce-short { animation: bounce-short 3s infinite; }
     
-    /* สไตล์สำหรับ Image Preview */
-    #imagePreviewContainer { display: none; margin-top: 10px; position: relative; }
-    #imagePreviewContainer img { width: 100%; height: 150px; object-fit: cover; border-radius: 1rem; border: 2px solid #e2e8f0; }
+    #imagePreviewContainer { display: none; margin-top: 10px; }
+    .preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .preview-grid img { width: 100%; height: 80px; object-fit: cover; border-radius: 0.75rem; border: 2px solid #e2e8f0; }
   </style>
 </head>
 <body class="min-h-screen pb-20">
@@ -91,13 +97,12 @@
                 <input type="password" id="userPin" maxlength="4" placeholder="••••" required class="w-full px-4 py-2 rounded-xl border-none text-center text-xl tracking-[1em] font-bold focus:ring-2 focus:ring-blue-400">
             </div>
             
-            <div class="p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center">
-                <input type="file" id="photo" accept="image/*" class="hidden">
-                <label for="photo" id="fileLabel" class="cursor-pointer text-xs text-gray-500 font-medium italic">📷 คลิกเพื่อเลือกรูปภาพ</label>
-                <div id="imagePreviewContainer">
-                    <img id="imagePreview" src="" alt="Preview">
-                    <button type="button" onclick="removeImage()" class="absolute top-1 right-1 bg-red-500 text-white w-6 h-6 rounded-full text-xs shadow-lg">✕</button>
-                </div>
+            <div class="p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center relative">
+                <input type="file" id="photo" accept="image/*" multiple class="hidden">
+                <label for="photo" id="fileLabel" class="cursor-pointer text-xs text-gray-500 font-medium italic">📷 คลิกเพื่อเลือกรูปภาพ (สูงสุด 5 รูป)</label>
+                
+                <div id="imagePreviewContainer" class="preview-grid"></div>
+                <button type="button" id="btnRemoveImg" onclick="removeImage()" class="hidden w-full text-[10px] text-red-500 mt-2 font-bold uppercase">✕ ล้างรูปภาพทั้งหมด</button>
             </div>
             
             <button type="button" onclick="handleUpload()" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">โพสต์เลย 🚀</button>
@@ -143,7 +148,7 @@
       <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-hidden relative shadow-2xl flex flex-col md:flex-row">
           <button onclick="closeModal()" class="absolute top-4 right-4 bg-black/50 text-white w-10 h-10 rounded-full z-20 hover:bg-black transition-all">✕</button>
           <div id="modalImages" class="md:w-1/2 bg-gray-100 p-2 overflow-y-auto h-[300px] md:h-auto border-r flex flex-col gap-2"></div>
-          <div class="md:w-1/2 p-8 overflow-y-auto flex flex-col justify-between h-[400px] md:h-auto">
+          <div class="md:w-1/2 p-8 overflow-y-auto flex flex-col justify-between h-[400px] md:h-auto text-left">
               <div>
                   <div class="flex gap-2 mb-4">
                       <span id="modalProvince" class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs font-bold"></span>
@@ -160,9 +165,25 @@
       </div>
   </div>
 
+  <div id="feedbackModal" class="hidden fixed inset-0 z-[200] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
+      <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
+          <div class="bg-amber-500 p-6 text-white text-center">
+              <h3 class="text-xl font-bold">💡 เสนอแนะฟีเจอร์ใหม่</h3>
+              <p class="text-sm opacity-90">บอกเราว่าคุณอยากให้ Travel Pro มีอะไรเพิ่ม!</p>
+          </div>
+          <div class="p-6 space-y-4">
+              <input type="text" id="fbUser" placeholder="ชื่อของคุณ" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-amber-500">
+              <textarea id="fbContent" rows="4" placeholder="พิมพ์ข้อเสนอแนะหรือฟีเจอร์ที่อยากได้..." class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+              <div class="flex gap-2">
+                  <button onclick="closeFeedback()" class="flex-1 bg-gray-200 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-300 transition-all">ยกเลิก</button>
+                  <button onclick="sendFeedback()" id="btnFbSubmit" class="flex-1 bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 transition-all">ส่งข้อมูล 🚀</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
   <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxnOhkuabchx0o78XH9pC9AO77m6NaXfOEg_ZTwGfYaSlqO4lAjw7GgOM9NeFahvsnV/exec"; 
-    const ADMIN_PASS = "1234";
     let isEditMode = false;
     let currentEditId = null;
     let allPosts = [];
@@ -190,13 +211,32 @@
       return fileId ? `https://drive.google.com/thumbnail?id=${fileId}&sz=w800` : 'https://via.placeholder.com/400x300';
     }
 
-    async function loadPosts() {
+    function showSkeleton() {
       const container = document.getElementById('postContainer');
+      container.innerHTML = '';
+      for(let i=0; i<6; i++) {
+        container.innerHTML += `
+          <div class="bg-white rounded-[1.5rem] border border-gray-100 overflow-hidden shadow-sm">
+            <div class="h-56 skeleton"></div>
+            <div class="p-5 space-y-4">
+              <div class="h-6 skeleton w-3/4"></div>
+              <div class="h-4 skeleton w-full"></div>
+              <div class="flex justify-between pt-4">
+                <div class="h-4 skeleton w-1/4"></div>
+                <div class="h-4 skeleton w-1/4"></div>
+              </div>
+            </div>
+          </div>`;
+      }
+    }
+
+    async function loadPosts() {
+      showSkeleton();
       try {
         const response = await fetch(`${WEB_APP_URL}?action=getPosts`);
         allPosts = await response.json();
         renderPosts(allPosts);
-      } catch (e) { container.innerHTML = "โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่"; }
+      } catch (e) { document.getElementById('postContainer').innerHTML = "โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่"; }
     }
 
     function renderPosts(posts) {
@@ -207,20 +247,43 @@
       noResults.classList.add('hidden');
 
       posts.forEach((post) => {
-        const firstImg = post.imageUrl.split(',')[0];
+        const images = post.imageUrl.split(',').filter(url => url.trim() !== '');
+        const firstImg = images[0];
+        const photoCount = images.length;
+        
+        const isHot = post.likes >= 10;
+        const postDate = new Date(post.date);
+        const isNew = (new Date() - postDate) < (24 * 60 * 60 * 1000);
+
         container.innerHTML += `
           <div class="post-card bg-white relative border border-gray-100 flex flex-col text-left" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&apos;")})'>
+            
+            <div class="absolute top-3 right-3 flex flex-col gap-1 z-20 items-end">
+                ${isHot ? `<span class="bg-orange-500 text-white px-3 py-1 rounded-full text-[10px] font-bold shadow-lg animate-pulse">🔥 ยอดฮิต</span>` : ''}
+                ${isNew ? `<span class="bg-green-500 text-white px-3 py-1 rounded-full text-[10px] font-bold shadow-lg">✨ มาใหม่</span>` : ''}
+                ${photoCount > 1 ? `
+                  <span class="bg-orange-600/90 backdrop-blur text-white px-2 py-1 rounded-lg text-[9px] font-bold flex items-center gap-1 shadow-lg border border-white/20">
+                    🖼️ +${photoCount - 1} รูป
+                  </span>
+                ` : ''}
+            </div>
+
             <div class="absolute top-3 left-3 flex gap-1 z-10">
               <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold shadow-sm text-blue-600">🏠 ${post.category}</span>
               <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-bold shadow-sm">${post.placeType || 'ที่เที่ยว'}</span>
             </div>
-            <div class="h-56 bg-gray-100 overflow-hidden">
-              <img src="${getImgUrl(firstImg)}" class="w-full h-full object-contain">
+            
+            <div class="h-56 bg-gray-100 overflow-hidden relative">
+              <img src="${getImgUrl(firstImg)}" class="w-full h-full object-cover">
             </div>
-            <div class="p-5 flex-grow">
+
+            <div class="p-5 flex-grow text-left">
               <div class="flex justify-between items-start mb-2">
                   <h4 class="font-bold text-xl text-gray-800">${post.placeName}</h4>
-                  <button onclick="event.stopPropagation(); likePost('${post.rowId}')" class="heart-btn text-red-500">❤️ <span class="text-sm text-gray-500">${post.likes}</span></button>
+                  <div class="flex items-center gap-3">
+                    <button onclick="event.stopPropagation(); likePost('${post.rowId}')" class="text-red-500 text-sm">❤️ <span id="like-count-${post.rowId}">${post.likes}</span></button>
+                    <button onclick="event.stopPropagation(); sharePost('${post.placeName}', '${post.category}')" class="text-gray-400 hover:text-blue-500 text-sm">🔗 แชร์</button>
+                  </div>
               </div>
               <p class="text-gray-500 text-sm mb-4 line-clamp-2">${post.description}</p>
               
@@ -237,6 +300,22 @@
             </div>
           </div>`;
       });
+    }
+
+    async function sharePost(title, province) {
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({ title: `Travel Pro: ${title}`, text: `ไปเที่ยวที่ ${title} (จ.${province}) กันไหม?`, url });
+        } else {
+            navigator.clipboard.writeText(url);
+            alert("📋 คัดลอกลิงก์เรียบร้อย!");
+        }
+    }
+
+    async function likePost(id) { 
+        const countSpan = document.getElementById(`like-count-${id}`);
+        if(countSpan) countSpan.innerText = parseInt(countSpan.innerText) + 1;
+        await fetch(`${WEB_APP_URL}?action=like&id=${id}`); 
     }
 
     function setFilterType(type) {
@@ -264,7 +343,6 @@
         document.getElementById('modalProvince').innerText = post.category;
         document.getElementById('modalType').innerText = post.placeType || "ที่เที่ยว";
         document.getElementById('modalUser').innerText = "📍 โพสต์โดย: " + post.userName + " | 📅 " + formatDate(post.date);
-        
         const imgDiv = document.getElementById('modalImages');
         imgDiv.innerHTML = '';
         post.imageUrl.split(',').forEach(url => {
@@ -286,19 +364,23 @@
       const loader = document.getElementById('loader');
       const fileInput = document.getElementById('photo');
       const pin = document.getElementById('userPin').value;
-      
       if (pin.length < 4) { alert("กรุณาใส่ PIN 4 หลัก"); return; }
-      if (!isEditMode && !fileInput.files[0]) { alert("กรุณาเลือกรูปภาพ"); return; }
+      if (!isEditMode && fileInput.files.length === 0) { alert("กรุณาเลือกรูปภาพอย่างน้อย 1 รูป"); return; }
       
-      btn.disabled = true; 
-      loader.classList.remove('hidden');
+      btn.disabled = true; loader.classList.remove('hidden');
       
       let photosArray = [];
-      if (fileInput.files[0]) {
-          const file = fileInput.files[0];
-          const reader = new FileReader();
+      const files = fileInput.files;
+      
+      for (let i = 0; i < files.length; i++) {
+          const file = files[i];
           const pData = await new Promise(resolve => {
-              reader.onload = e => resolve({ type: file.type, contents: e.target.result.split(',')[1], name: file.name });
+              const reader = new FileReader();
+              reader.onload = e => resolve({ 
+                  type: file.type, 
+                  contents: e.target.result.split(',')[1], 
+                  name: file.name 
+              });
               reader.readAsDataURL(file);
           });
           photosArray.push(pData);
@@ -326,24 +408,40 @@
       finally { btn.disabled = false; loader.classList.add('hidden'); }
     }
 
-    // --- ฟังก์ชัน Preview รูปภาพ ---
     document.getElementById('photo').onchange = function() {
-        const file = this.files[0];
-        if (file) {
-            document.getElementById('fileLabel').innerText = "🎯 เลือกรูปแล้ว: " + file.name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('imagePreview').src = e.target.result;
-                document.getElementById('imagePreviewContainer').style.display = 'block';
-            }
-            reader.readAsDataURL(file);
+        const files = this.files;
+        const container = document.getElementById('imagePreviewContainer');
+        container.innerHTML = ''; 
+        
+        if (files.length > 5) {
+            alert("เลือกได้สูงสุด 5 รูปครับ");
+            this.value = "";
+            return;
+        }
+
+        if (files.length > 0) {
+            document.getElementById('fileLabel').innerText = "🎯 เลือกแล้ว " + files.length + " รูป";
+            container.style.display = 'grid';
+            document.getElementById('btnRemoveImg').classList.remove('hidden');
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    container.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            });
         }
     };
+
     function removeImage() {
         document.getElementById('photo').value = "";
-        document.getElementById('fileLabel').innerText = "📷 คลิกเพื่อเลือกรูปภาพ";
+        document.getElementById('fileLabel').innerText = "📷 คลิกเพื่อเลือกรูปภาพ (สูงสุด 5 รูป)";
         document.getElementById('imagePreviewContainer').style.display = 'none';
-        document.getElementById('imagePreview').src = "";
+        document.getElementById('imagePreviewContainer').innerHTML = "";
+        document.getElementById('btnRemoveImg').classList.add('hidden');
     }
 
     async function editPost(id, name, desc, user, cate, map, type) {
@@ -386,26 +484,16 @@
         }
     }
 
-    async function likePost(id) { await fetch(`${WEB_APP_URL}?action=like&id=${id}`); loadPosts(); }
     async function deletePost(id) {
-    const pass = prompt("รหัส Admin สำหรับการลบ:");
-    if (!pass) return;
-    
-    // ส่ง id และ pass ไปที่ Server
-    const resp = await fetch(`${WEB_APP_URL}?action=delete&id=${id}&pass=${pass}`);
-    const result = await resp.text();
-    
-    if (result === "Deleted") {
-        alert("ลบโพสต์เรียบร้อย");
-        loadPosts();
-    } else if (result === "Wrong Password") {
-        alert("รหัส Admin ไม่ถูกต้อง");
-    } else {
-        alert("เกิดข้อผิดพลาด");
+        const pass = prompt("รหัส Admin สำหรับการลบ:");
+        if (!pass) return;
+        const resp = await fetch(`${WEB_APP_URL}?action=delete&id=${id}&pass=${pass}`);
+        const result = await resp.text();
+        if (result === "Deleted") { alert("ลบโพสต์เรียบร้อย"); loadPosts(); } 
+        else if (result === "Wrong Password") { alert("รหัส Admin ไม่ถูกต้อง"); } 
+        else { alert("เกิดข้อผิดพลาด"); }
     }
-}
     
-    // --- ฟังก์ชัน Feedback ---
     function openFeedback() {
         document.getElementById('feedbackModal').classList.remove('hidden');
         document.body.classList.add('modal-open');
@@ -433,22 +521,5 @@
     }
     window.onload = loadPosts;
   </script>
-
-  <div id="feedbackModal" class="hidden fixed inset-0 z-[200] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm">
-      <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden">
-          <div class="bg-amber-500 p-6 text-white text-center">
-              <h3 class="text-xl font-bold">💡 เสนอแนะฟีเจอร์ใหม่</h3>
-              <p class="text-sm opacity-90">บอกเราว่าคุณอยากให้ Travel Pro มีอะไรเพิ่ม!</p>
-          </div>
-          <div class="p-6 space-y-4">
-              <input type="text" id="fbUser" placeholder="ชื่อของคุณ" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-amber-500">
-              <textarea id="fbContent" rows="4" placeholder="พิมพ์ข้อเสนอแนะหรือฟีเจอร์ที่อยากได้..." class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-amber-500"></textarea>
-              <div class="flex gap-2">
-                  <button onclick="closeFeedback()" class="flex-1 bg-gray-200 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-300 transition-all">ยกเลิก</button>
-                  <button onclick="sendFeedback()" id="btnFbSubmit" class="flex-1 bg-amber-500 text-white font-bold py-3 rounded-xl hover:bg-amber-600 transition-all">ส่งข้อมูล 🚀</button>
-              </div>
-          </div>
-      </div>
-  </div>
 </body>
 </html>
