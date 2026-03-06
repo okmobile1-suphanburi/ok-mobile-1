@@ -59,6 +59,13 @@
     #imagePreviewContainer { display: none; margin-top: 10px; }
     .preview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .preview-grid img { width: 100%; height: 80px; object-fit: cover; border-radius: 0.75rem; border: 2px solid #e2e8f0; }
+
+    /* --- เพิ่มเติม: ระบบระดับผู้ใช้งาน --- */
+    .rank-badge { padding: 2px 8px; border-radius: 20px; font-size: 9px; font-weight: 600; display: inline-flex; align-items: center; }
+    .rank-newbie { background-color: #f1f5f9; color: #475569; }
+    .rank-explorer { background-color: #dcfce7; color: #15803d; }
+    .rank-guide { background-color: #e0f2fe; color: #0369a1; }
+    .rank-master { background: linear-gradient(45deg, #fef3c7, #fffbeb); color: #b45309; border: 1px solid #fcd34d; }
   </style>
 </head>
 <body class="min-h-screen">
@@ -121,6 +128,11 @@
       </div>
 
       <div class="lg:col-span-3">
+        <div id="leaderboardSection" class="mb-10 hidden">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">🏆 ทำเนียบสุดยอดนักเดินทาง</h3>
+            <div id="leaderboardContent" class="grid grid-cols-2 md:grid-cols-5 gap-4"></div>
+        </div>
+
         <div class="mb-8 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 items-center">
             <div class="relative w-full md:w-1/3 flex gap-2">
                 <div class="relative flex-grow">
@@ -211,6 +223,43 @@
     let allPosts = [];
     let currentFilterType = "ทั้งหมด";
 
+    /* --- ฟังก์ชันใหม่: คำนวณระดับ --- */
+    function getUserRank(userName) {
+        const userPosts = allPosts.filter(p => p.userName === userName);
+        const postCount = userPosts.length;
+        const totalLikes = userPosts.reduce((sum, p) => sum + (Number(p.likes) || 0), 0);
+
+        if (postCount >= 15 && totalLikes >= 100) return { label: "👑 ตำนานนักรีวิว", class: "rank-master" };
+        if (postCount >= 7 || totalLikes >= 30) return { label: "🌟 เซียนที่เที่ยว", class: "rank-guide" };
+        if (postCount >= 3 || totalLikes >= 10) return { label: "📸 นักสำรวจ", class: "rank-explorer" };
+        return { label: "🌱 นักเดินทางหน้าใหม่", class: "rank-newbie" };
+    }
+
+    /* --- ฟังก์ชันใหม่: อัปเดตตารางอันดับ --- */
+    function updateLeaderboard() {
+        const section = document.getElementById('leaderboardSection');
+        const content = document.getElementById('leaderboardContent');
+        const stats = allPosts.reduce((acc, p) => {
+            if (!acc[p.userName]) acc[p.userName] = { name: p.userName, likes: 0 };
+            acc[p.userName].likes += (Number(p.likes) || 0);
+            return acc;
+        }, {});
+        const top = Object.values(stats).sort((a, b) => b.likes - a.likes).slice(0, 5);
+        if (top.length === 0) { section.classList.add('hidden'); return; }
+        section.classList.remove('hidden');
+        content.innerHTML = top.map((u, i) => {
+            const r = getUserRank(u.name);
+            const m = ['🥇','🥈','🥉','✨','✨'][i];
+            return `
+                <div class="bg-white p-3 rounded-2xl shadow-sm border border-blue-50 flex flex-col items-center text-center">
+                    <div class="text-xl mb-1">${m}</div>
+                    <div class="font-bold text-gray-800 text-[11px] line-clamp-1">${u.name}</div>
+                    <div class="text-[10px] text-blue-500 font-bold mb-1">${u.likes} ❤️</div>
+                    <div class="rank-badge ${r.class} scale-75">${r.label}</div>
+                </div>`;
+        }).join('');
+    }
+
     function toggleForm() {
         const wrapper = document.getElementById('formWrapper');
         wrapper.classList.toggle('active');
@@ -258,6 +307,7 @@
         const response = await fetch(`${WEB_APP_URL}?action=getPosts`);
         allPosts = await response.json();
         renderPosts(allPosts);
+        updateLeaderboard(); // อัปเดตอันดับหลังโหลด
       } catch (e) { document.getElementById('postContainer').innerHTML = "โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่"; }
     }
 
@@ -272,10 +322,12 @@
         const images = post.imageUrl.split(',').filter(url => url.trim() !== '');
         const firstImg = images[0];
         const photoCount = images.length;
-        
         const isHot = post.likes >= 10;
         const postDate = new Date(post.date);
         const isNew = (new Date() - postDate) < (24 * 60 * 60 * 1000);
+        
+        // คำนวณระดับของผู้โพสต์
+        const rank = getUserRank(post.userName);
 
         container.innerHTML += `
           <div class="post-card bg-white relative border border-gray-100 flex flex-col text-left" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&apos;")})'>
@@ -310,8 +362,11 @@
               <p class="text-gray-500 text-sm mb-4 line-clamp-2">${post.description}</p>
               
               <div class="flex items-center justify-between border-t pt-4">
-                <div class="flex flex-col">
-                  <span class="text-[10px] font-semibold text-gray-400">👤 ${post.userName}</span>
+                <div class="flex flex-col gap-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-semibold text-gray-700">👤 ${post.userName}</span>
+                    <span class="rank-badge ${rank.class}">${rank.label}</span>
+                  </div>
                   <span class="text-[9px] text-gray-300">📅 ${formatDate(post.date)}</span>
                 </div>
                 <div class="flex gap-3">
@@ -338,6 +393,8 @@
         const countSpan = document.getElementById(`like-count-${id}`);
         if(countSpan) countSpan.innerText = parseInt(countSpan.innerText) + 1;
         await fetch(`${WEB_APP_URL}?action=like&id=${id}`); 
+        // อัปเดตอันดับในหน้าจอทันทีหลังจากกดไลก์
+        setTimeout(updateLeaderboard, 500);
     }
 
     function setFilterType(type) {
@@ -533,26 +590,25 @@
     function closeFeedback() {
         document.getElementById('feedbackModal').classList.add('hidden');
         document.body.classList.remove('modal-open');
-        document.getElementById('fbContent').value = '';
     }
+
     async function sendFeedback() {
         const user = document.getElementById('fbUser').value;
         const content = document.getElementById('fbContent').value;
+        if(!user || !content) { alert("กรุณากรอกข้อมูลให้ครบ"); return; }
         const btn = document.getElementById('btnFbSubmit');
-        if (!content) { alert("กรุณากรอกข้อเสนอแนะด้วยครับ"); return; }
         btn.disabled = true; btn.innerText = "กำลังส่ง...";
         try {
-            await fetch(WEB_APP_URL, {
-                method: "POST", mode: "no-cors",
-                body: JSON.stringify({ action: "feedback", userName: user || "ไม่ระบุชื่อ", description: content })
-            });
-            alert("ขอบคุณสำหรับข้อเสนอแนะ! แอดมินได้รับข้อมูลแล้วครับ");
+            await fetch(WEB_APP_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "feedback", user, content }) });
+            alert("ขอบคุณสำหรับข้อเสนอแนะครับ! 🙏");
             closeFeedback();
-        } catch (e) { alert("เกิดข้อผิดพลาด กรุณาลองใหม่"); }
+            document.getElementById('fbUser').value = "";
+            document.getElementById('fbContent').value = "";
+        } catch(e) { alert("ส่งไม่สำเร็จ"); }
+        finally { btn.disabled = false; btn.innerText = "ส่งข้อมูล 🚀"; }
     }
 
-    loadPosts();
+    window.onload = loadPosts;
   </script>
-
 </body>
 </html>
