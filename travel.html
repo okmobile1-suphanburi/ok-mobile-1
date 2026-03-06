@@ -17,7 +17,18 @@
       50% { background-color: #f1f5f9; }
     }
     .skeleton { animation: skeleton-pulse 1.5s infinite ease-in-out; border-radius: 1rem; }
-
+/* ทำให้แถบเลื่อนของทำเนียบในมือถือดูสวยขึ้น */
+    #leaderboardContent::-webkit-scrollbar {
+        height: 6px;
+    }
+    #leaderboardContent::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 10px;
+    }
+    #leaderboardContent::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
     .edit-mode-active { 
       border: 4px solid #f59e0b !important; 
       background-color: #fffbeb !important; 
@@ -236,26 +247,33 @@
     }
 
     /* --- ฟังก์ชันใหม่: อัปเดตตารางอันดับ --- */
+    /* --- ฟังก์ชันใหม่: อัปเดตตารางอันดับ (ปรับปรุงเพื่อมือถือ) --- */
     function updateLeaderboard() {
         const section = document.getElementById('leaderboardSection');
         const content = document.getElementById('leaderboardContent');
+        
+        // ปรับให้เลื่อนซ้าย-ขวาได้ในมือถือ (flex) และเป็นตารางในคอม (grid)
+        content.className = "flex overflow-x-auto pb-4 gap-4 lg:grid lg:grid-cols-5 lg:overflow-visible";
+
         const stats = allPosts.reduce((acc, p) => {
             if (!acc[p.userName]) acc[p.userName] = { name: p.userName, likes: 0 };
             acc[p.userName].likes += (Number(p.likes) || 0);
             return acc;
         }, {});
+        
         const top = Object.values(stats).sort((a, b) => b.likes - a.likes).slice(0, 5);
         if (top.length === 0) { section.classList.add('hidden'); return; }
+        
         section.classList.remove('hidden');
         content.innerHTML = top.map((u, i) => {
             const r = getUserRank(u.name);
             const m = ['🥇','🥈','🥉','✨','✨'][i];
             return `
-                <div class="bg-white p-3 rounded-2xl shadow-sm border border-blue-50 flex flex-col items-center text-center">
-                    <div class="text-xl mb-1">${m}</div>
-                    <div class="font-bold text-gray-800 text-[11px] line-clamp-1">${u.name}</div>
-                    <div class="text-[10px] text-blue-500 font-bold mb-1">${u.likes} ❤️</div>
-                    <div class="rank-badge ${r.class} scale-75">${r.label}</div>
+                <div class="bg-white p-4 rounded-2xl shadow-sm border border-blue-50 flex flex-col items-center text-center min-w-[150px] flex-shrink-0 lg:min-w-0 transition-all hover:border-blue-200">
+                    <div class="text-2xl mb-1">${m}</div>
+                    <div class="font-bold text-gray-800 text-sm line-clamp-1">${u.name}</div>
+                    <div class="text-[11px] text-blue-500 font-bold mb-2">${u.likes} ❤️ คะแนน</div>
+                    <div class="rank-badge ${r.class} whitespace-nowrap">${r.label}</div>
                 </div>`;
         }).join('');
     }
