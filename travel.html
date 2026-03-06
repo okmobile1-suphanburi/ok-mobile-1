@@ -3,15 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Travel Pro - ชุมชนแชร์พิกัดที่เที่ยว ที่พัก และคาเฟ่ทั่วไทย</title>
-  <meta name="description" content="ศูนย์รวมรีวิวสถานที่ท่องเที่ยว พิกัดลับ คาเฟ่สวย และที่พักแนะนำในประเทศไทย แชร์ประสบการณ์เดินทางของคุณพร้อมพิกัด Google Maps">
-  <meta name="keywords" content="ที่เที่ยวไทย, รีวิวคาเฟ่, ที่พักไทย, วางแผนเที่ยว, สุพรรณบุรี, เที่ยวญี่ปุ่น, เช็คอินไทยแลนด์">
-  
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://okmobile-suphanburi.com/"> <meta property="og:title" content="Travel Pro - ค้นหาพิกัดเที่ยวไทยที่ใช่สำหรับคุณ">
-  <meta property="og:description" content="แชร์ที่เที่ยว พักที่ไหนดี กินอะไรอร่อย รวมคำตอบไว้ให้ที่ Travel Pro Community">
-  <meta property="og:image" content="https://images.unsplash.com/photo-1506605156031-7897cd0273c3?q=80&w=1200"> <script src="https://cdn.tailwindcss.com"></script>
+  <title>Travel Pro - Thailand</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Kanit', sans-serif; background: #f1f5f9; }
@@ -71,18 +64,18 @@
 <body class="min-h-screen">
 
   <header class="gradient-header text-white py-12 shadow-2xl text-center mb-10">
-    <h1 class="text-4xl font-bold tracking-widest uppercase">🌍 Travel Pro Community</h1>
-    <p class="mt-2 opacity-80">ศูนย์รวมที่เที่ยว ที่พัก และแชร์ประสบการณ์เดินทางในไทย</p>
+    <h1 class="text-4xl font-bold tracking-widest">🌍 TRAVEL PRO COMMUNITY</h1>
+    <p class="mt-2 opacity-80">ค้นหาที่เที่ยว ที่พัก และแชร์ประสบการณ์ของคุณ</p>
   </header>
 
-  <main class="container mx-auto px-4 max-w-7xl">
+  <div class="container mx-auto px-4 max-w-7xl">
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
       
-      <aside id="formWrapper" class="lg:col-span-1">
+      <div id="formWrapper" class="lg:col-span-1">
         <div id="formContainer" class="bg-white p-6 rounded-3xl shadow-xl border border-gray-100 sticky top-5 transition-all duration-500">
           <div class="flex justify-between items-center mb-6">
             <h2 id="formTitle" class="text-xl font-bold text-gray-800 flex items-center gap-2">✍️ สร้างโพสต์ใหม่</h2>
-            <button onclick="toggleForm()" class="lg:hidden text-gray-400 hover:text-red-500 text-2xl" aria-label="ปิดฟอร์ม">✕</button>
+            <button onclick="toggleForm()" class="lg:hidden text-gray-400 hover:text-red-500 text-2xl">✕</button>
           </div>
           <form id="travelForm" class="space-y-4">
             <select id="category" class="w-full px-4 py-2.5 rounded-xl border bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 text-sm">
@@ -107,19 +100,13 @@
             <div class="p-4 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50 text-center relative">
                 <input type="file" id="photo" accept="image/*" multiple class="hidden">
                 <label for="photo" id="fileLabel" class="cursor-pointer text-xs text-gray-500 font-medium italic">📷 คลิกเพื่อเลือกรูปภาพ (สูงสุด 5 รูป)</label>
+                
                 <div id="imagePreviewContainer" class="preview-grid"></div>
                 <button type="button" id="btnRemoveImg" onclick="removeImage()" class="hidden w-full text-[10px] text-red-500 mt-2 font-bold uppercase">✕ ล้างรูปภาพทั้งหมด</button>
             </div>
             
             <button type="button" onclick="handleUpload()" id="btnSubmit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95">โพสต์เลย 🚀</button>
             
-            <div id="pwaArea" class="hidden pt-2">
-                <button type="button" id="btnInstall" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-2xl flex items-center justify-center gap-2 hover:bg-indigo-700 transition-all text-sm shadow-md">
-                    <span>📲</span>
-                    <span>ติดตั้งแอป Travel Pro</span>
-                </button>
-            </div>
-
             <div class="pt-1">
                 <button type="button" onclick="openFeedback()" class="w-full bg-amber-50 border-2 border-dashed border-amber-200 text-amber-600 font-bold py-3 rounded-2xl flex items-center justify-center gap-2 hover:bg-amber-100 transition-all text-sm">
                     <span>💡</span>
@@ -131,10 +118,10 @@
           </form>
           <div id="loader" class="hidden mt-4 text-center text-blue-600 animate-bounce text-sm font-bold">กำลังส่งข้อมูล...</div>
         </div>
-      </aside>
+      </div>
 
-      <section class="lg:col-span-3">
-        <nav class="mb-8 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 items-center">
+      <div class="lg:col-span-3">
+        <div class="mb-8 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 items-center">
             <div class="relative w-full md:w-1/3 flex gap-2">
                 <div class="relative flex-grow">
                   <span class="absolute left-4 top-3 text-gray-400">🔍</span>
@@ -151,12 +138,12 @@
                 <button onclick="setFilterType('ที่พัก')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full border bg-white text-gray-500 text-xs font-bold transition-all">🏨 ที่พัก</button>
                 <button onclick="setFilterType('คาเฟ่/ร้านอาหาร')" class="filter-btn whitespace-nowrap px-5 py-2 rounded-full border bg-white text-gray-500 text-xs font-bold transition-all">☕ คาเฟ่</button>
             </div>
-        </nav>
+        </div>
         <div id="postContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"></div>
         <div id="noResults" class="hidden text-center py-20 text-gray-400 italic text-lg">😔 ไม่พบข้อมูลที่ต้องการ...</div>
-      </section>
+      </div>
     </div>
-  </main>
+  </div>
 
   <button onclick="toggleForm()" class="lg:hidden fixed bottom-6 right-6 bg-blue-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-2 z-[140] hover:scale-105 active:scale-95 transition-all animate-bounce-short">
     <span class="text-xl">✍️</span>
@@ -204,15 +191,15 @@
   <footer class="mt-20 py-10 border-t border-gray-200 bg-white text-center">
     <div class="container mx-auto px-4">
         <div class="flex justify-center gap-6 mb-4 text-2xl">
-            <span class="grayscale hover:grayscale-0 cursor-pointer transition-all" title="Instagram">📸</span>
-            <span class="grayscale hover:grayscale-0 cursor-pointer transition-all" title="Google Maps">📍</span>
-            <span class="grayscale hover:grayscale-0 cursor-pointer transition-all" title="Sea">🌊</span>
+            <span class="grayscale hover:grayscale-0 cursor-pointer transition-all">📸</span>
+            <span class="grayscale hover:grayscale-0 cursor-pointer transition-all">📍</span>
+            <span class="grayscale hover:grayscale-0 cursor-pointer transition-all">🌊</span>
         </div>
         <p class="text-gray-500 text-sm font-medium">
             © 2026 <span class="text-blue-600 font-bold">Travel Pro</span> Community. All rights reserved.
         </p>
         <p class="text-gray-400 text-[10px] mt-2 tracking-widest uppercase">
-            Designed for Travelers in Thailand | U-Thong, Suphan Buri
+            Designed with ❤️ for Travelers in Thailand
         </p>
     </div>
   </footer>
@@ -223,31 +210,6 @@
     let currentEditId = null;
     let allPosts = [];
     let currentFilterType = "ทั้งหมด";
-    let deferredPrompt; // สำหรับ PWA
-
-    // --- ส่วนควบคุม PWA ---
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('pwaArea').classList.remove('hidden');
-    });
-
-    document.getElementById('btnInstall')?.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-          document.getElementById('pwaArea').classList.add('hidden');
-        }
-        deferredPrompt = null;
-      }
-    });
-
-    window.addEventListener('appinstalled', () => {
-      document.getElementById('pwaArea').classList.add('hidden');
-      deferredPrompt = null;
-    });
-    // ----------------------
 
     function toggleForm() {
         const wrapper = document.getElementById('formWrapper');
@@ -316,7 +278,7 @@
         const isNew = (new Date() - postDate) < (24 * 60 * 60 * 1000);
 
         container.innerHTML += `
-          <article class="post-card bg-white relative border border-gray-100 flex flex-col text-left" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&apos;")})'>
+          <div class="post-card bg-white relative border border-gray-100 flex flex-col text-left" onclick='openModal(${JSON.stringify(post).replace(/'/g, "&apos;")})'>
             
             <div class="absolute top-3 right-3 flex flex-col gap-1 z-20 items-end">
                 ${isHot ? `<span class="bg-orange-500 text-white px-3 py-1 rounded-full text-[10px] font-bold shadow-lg animate-pulse">🔥 ยอดฮิต</span>` : ''}
@@ -334,12 +296,12 @@
             </div>
             
             <div class="h-56 bg-gray-100 overflow-hidden relative">
-              <img src="${getImgUrl(firstImg)}" loading="lazy" alt="${post.placeName} จังหวัด ${post.category}" class="w-full h-full object-cover">
+              <img src="${getImgUrl(firstImg)}" class="w-full h-full object-cover">
             </div>
 
             <div class="p-5 flex-grow text-left">
               <div class="flex justify-between items-start mb-2">
-                  <h3 class="font-bold text-xl text-gray-800">${post.placeName}</h3>
+                  <h4 class="font-bold text-xl text-gray-800">${post.placeName}</h4>
                   <div class="flex items-center gap-3">
                     <button onclick="event.stopPropagation(); likePost('${post.rowId}')" class="text-red-500 text-sm">❤️ <span id="like-count-${post.rowId}">${post.likes}</span></button>
                     <button onclick="event.stopPropagation(); sharePost('${post.placeName}', '${post.category}')" class="text-gray-400 hover:text-blue-500 text-sm">🔗 แชร์</button>
@@ -358,7 +320,7 @@
                 </div>
               </div>
             </div>
-          </article>`;
+          </div>`;
       });
     }
 
@@ -404,8 +366,6 @@
         document.getElementById('modalType').innerText = post.placeType || "ที่เที่ยว";
         document.getElementById('modalUser').innerText = "📍 โพสต์โดย: " + post.userName + " | 📅 " + formatDate(post.date);
         
-        document.title = post.placeName + " - Travel Pro Community";
-
         const imgDiv = document.getElementById('modalImages');
         imgDiv.innerHTML = '';
         const urls = post.imageUrl.split(',').filter(url => url.trim() !== '');
@@ -413,7 +373,7 @@
         urls.forEach((url, index) => {
             imgDiv.innerHTML += `
                 <div class="relative">
-                    <img src="${getImgUrl(url)}" alt="${post.placeName} - ${index+1}" class="w-full rounded-xl shadow-sm object-contain bg-white">
+                    <img src="${getImgUrl(url)}" class="w-full rounded-xl shadow-sm object-contain bg-white">
                     <div class="absolute top-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
                         📸 รูปที่ ${index + 1} / ${urls.length}
                     </div>
@@ -429,7 +389,6 @@
     function closeModal() {
         document.getElementById('detailModal').classList.add('hidden');
         document.body.classList.remove('modal-open');
-        document.title = "Travel Pro - ชุมชนแชร์พิกัดที่เที่ยว ที่พัก และคาเฟ่ทั่วไทย";
     }
 
     async function handleUpload() {
@@ -551,33 +510,49 @@
         document.getElementById('formTitle').innerText = "✍️ สร้างโพสต์ใหม่";
         document.getElementById('btnSubmit').innerText = "โพสต์เลย 🚀";
         document.getElementById('btnCancel').classList.add('hidden');
-    }
-
-    async function deletePost(id) {
-        const pass = prompt("ระบบความปลอดภัย: ป้อนรหัสผู้ดูแลเพื่อลบข้อมูลนี้:");
-        if (!pass) return;
-        if(confirm("ยืนยันการลบข้อมูลถาวร?")) {
-            const resp = await fetch(`${WEB_APP_URL}?action=delete&id=${id}&pass=${pass}`);
-            if ((await resp.text()) === "Deleted") {
-                alert("ลบโพสต์เรียบร้อยแล้ว");
-                loadPosts();
-            } else { alert("❌ รหัสไม่ถูกต้อง!"); }
+        if (window.innerWidth < 1024) {
+            document.getElementById('formWrapper').classList.remove('active');
+            document.body.classList.remove('modal-open');
         }
     }
 
-    function openFeedback() { document.getElementById('feedbackModal').classList.remove('hidden'); }
-    function closeFeedback() { document.getElementById('feedbackModal').classList.add('hidden'); }
+    async function deletePost(id) {
+        const pass = prompt("รหัส Admin สำหรับการลบ:");
+        if (!pass) return;
+        const resp = await fetch(`${WEB_APP_URL}?action=delete&id=${id}&pass=${pass}`);
+        const result = await resp.text();
+        if (result === "Deleted") { alert("ลบโพสต์เรียบร้อย"); loadPosts(); } 
+        else if (result === "Wrong Password") { alert("รหัส Admin ไม่ถูกต้อง"); } 
+        else { alert("เกิดข้อผิดพลาด"); }
+    }
+    
+    function openFeedback() {
+        document.getElementById('feedbackModal').classList.remove('hidden');
+        document.body.classList.add('modal-open');
+    }
+    function closeFeedback() {
+        document.getElementById('feedbackModal').classList.add('hidden');
+        document.body.classList.remove('modal-open');
+        document.getElementById('fbContent').value = '';
+    }
     async function sendFeedback() {
         const user = document.getElementById('fbUser').value;
         const content = document.getElementById('fbContent').value;
-        if(!user || !content) { alert("กรุณากรอกข้อมูลให้ครบครับ"); return; }
-        document.getElementById('btnFbSubmit').disabled = true;
-        await fetch(`${WEB_APP_URL}?action=feedback&user=${encodeURIComponent(user)}&content=${encodeURIComponent(content)}`);
-        alert("ขอบคุณสำหรับข้อเสนอแนะ! เราจะรีบพัฒนาครับ");
-        closeFeedback();
+        const btn = document.getElementById('btnFbSubmit');
+        if (!content) { alert("กรุณากรอกข้อเสนอแนะด้วยครับ"); return; }
+        btn.disabled = true; btn.innerText = "กำลังส่ง...";
+        try {
+            await fetch(WEB_APP_URL, {
+                method: "POST", mode: "no-cors",
+                body: JSON.stringify({ action: "feedback", userName: user || "ไม่ระบุชื่อ", description: content })
+            });
+            alert("ขอบคุณสำหรับข้อเสนอแนะ! แอดมินได้รับข้อมูลแล้วครับ");
+            closeFeedback();
+        } catch (e) { alert("เกิดข้อผิดพลาด กรุณาลองใหม่"); }
     }
 
-    window.onload = loadPosts;
+    loadPosts();
   </script>
+
 </body>
 </html>
