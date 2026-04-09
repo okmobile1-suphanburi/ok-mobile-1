@@ -12,7 +12,6 @@
     <style>
         :root {
             --bg-dark: #050a10;
-            --luxury-blue: #0a192f;
             --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
             --gold-text: #d4af37;
         }
@@ -25,20 +24,30 @@
             background-image: radial-gradient(circle at top right, #112240, #050a10);
         }
 
-        /* Header Section */
         .premium-header {
             padding: 60px 0 30px;
             text-align: center;
         }
+
+        /* ปรับปรุงส่วนที่เคยกลืนพื้นหลัง */
+        .highlight-intro {
+            color: var(--gold-text); /* เปลี่ยนเป็นสีทอง */
+            font-weight: 400;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8); /* ใส่เงาหนุนให้อ่านง่าย */
+            margin-top: 10px;
+        }
+
         .premium-header h1 {
             font-weight: 600;
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 2px;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
-        /* Glass Card */
         .luxury-card {
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(10px);
@@ -48,7 +57,6 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
 
-        /* Payment Methods */
         .method-box {
             background: rgba(255, 255, 255, 0.02);
             border-left: 4px solid var(--gold-text);
@@ -69,21 +77,13 @@
             margin-bottom: 5px;
         }
 
-        .link-app {
-            color: #4facfe;
-            text-decoration: none;
-            border-bottom: 1px dashed #4facfe;
-        }
-
-        /* iFrame */
         .iframe-wrapper {
             border-radius: 25px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #fff; /* ขาวเพื่อให้ระบบ SG ชัดเจน */
+            background: #fff;
         }
 
-        /* ปุ่มกลับหน้าหลัก */
         .btn-luxury-home {
             background: var(--gold-gradient);
             color: #000 !important;
@@ -107,7 +107,7 @@
             list-style: none;
             padding: 10px 0 0 20px;
             font-size: 0.9rem;
-            color: #aaa;
+            color: #ccc;
         }
         .ref-details b { color: #fff; }
 
@@ -119,7 +119,7 @@
 <header class="premium-header">
     <div class="container">
         <h1 class="display-5">คู่มือชำระเงิน SG Capital</h1>
-        <p class="text-muted">ขอแนะนำช่องทางการชำระเงินที่สะดวก รวดเร็ว และปลอดภัย ดังนี้</p>
+        <p class="highlight-intro">ขอแนะนำช่องทางการชำระเงินที่สะดวก รวดเร็ว และปลอดภัย ดังนี้</p>
     </div>
 </header>
 
@@ -130,29 +130,29 @@
                 
                 <div class="method-box">
                     <span class="method-number">วิธีที่ 1</span>
-                    <p class="mb-1"><b>Download App SG Finance</b> ได้ที่ Play Store เพื่อลงทะเบียน</p>
-                    <a href="https://cutt.ly/3ePbcJZq" target="_blank" class="link-app small">กดที่ Link : https://cutt.ly/3ePbcJZq</a>
-                    <p class="small text-muted mt-2">ท่านสามารถตรวจสอบค่างวด, ชำระค่างวดผ่าน QR Code และดูสินเชื่อของตนเองได้</p>
+                    <p class="mb-1"><b>Download App SG Finance</b> ได้ที่ Play Store</p>
+                    <a href="https://cutt.ly/3ePbcJZq" target="_blank" style="color:#4facfe; text-decoration:none; border-bottom:1px dashed;">Link : https://cutt.ly/3ePbcJZq</a>
+                    <p class="small text-muted mt-2">ตรวจสอบค่างวด, ชำระผ่าน QR Code และดูสินเชื่อได้ทันที</p>
                 </div>
 
                 <div class="method-box">
                     <span class="method-number">วิธีที่ 2</span>
-                    <p class="mb-0"><b>ชำระที่ 7-11</b> โดยยื่นบัตรประชาชนของผู้เช่าซื้อที่เคาน์เตอร์ แจ้งยอดชำระ และชำระเข้า <b>บริษัท เอสจี แคปปิตอล จำกัด (มหาชน)</b></p>
+                    <p class="mb-0"><b>ชำระที่ 7-11</b> ยื่นบัตรประชาชนผู้เช่าซื้อที่เคาน์เตอร์ และชำระเข้า <b>บริษัท เอสจี แคปปิตอล จำกัด (มหาชน)</b></p>
                 </div>
 
                 <div class="method-box">
                     <span class="method-number">วิธีที่ 3</span>
-                    <p class="mb-0"><b>สแกน QR Code จากใบแจ้งหนี้</b> เพื่อชำระค่างวดผ่านแอปฯ ธนาคารได้ทันที</p>
+                    <p class="mb-0"><b>สแกน QR Code จากใบแจ้งหนี้</b> เพื่อชำระค่างวดผ่าน Mobile Banking</p>
                 </div>
 
                 <div class="method-box">
                     <span class="method-number">วิธีที่ 4</span>
-                    <p class="mb-1"><b>ชำระผ่าน Mobile Banking</b> (เมนู จ่ายบิล / ชำระบิล)</p>
+                    <p class="mb-1"><b>ชำระผ่าน Mobile Banking</b> (เมนู จ่ายบิล)</p>
                     <ul class="ref-details">
                         <li>• ค้นหา: <b>บมจ.เอสจี แคปปิตอล</b></li>
                         <li>• Ref 1: <b>ใส่เลขที่สัญญา</b></li>
                         <li>• Ref 2: <b>ใส่รหัสบริษัทฯ 7101</b></li>
-                        <li>• ช่องที่ 3: <b>ใส่ยอดเงินค่างวดที่ต้องชำระ</b></li>
+                        <li>• ช่องที่ 3: <b>ใส่ยอดเงินค่างวด</b></li>
                     </ul>
                 </div>
 
