@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>วิธีการชำระเงิน Samsung Finance+ | OK Mobile</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Kanit', sans-serif; background-color: #f4f7f9; color: #333; }
+        /* คุมโทน น้ำเงิน-ทอง ตามสไตล์ร้าน */
+        .navbar-ok { background-color: #001f3f; border-bottom: 4px solid #ffd700; }
+        .header-section { background: white; padding: 40px 0; border-bottom: 1px solid #dee2e6; margin-bottom: 30px; }
+        .step-card { 
+            background: white; 
+            border: none; 
+            border-radius: 20px; 
+            padding: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .step-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .step-num { 
+            background: linear-gradient(135deg, #001f3f, #004080); 
+            color: #ffd700; 
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 0 auto 20px; 
+            font-size: 22px; 
+            font-weight: 600;
+        }
+        .img-instruction { 
+            width: 100%; 
+            border-radius: 12px; 
+            margin-top: 15px;
+            border: 1px solid #eee;
+        }
+        .btn-line { background-color: #06c755; color: white; font-weight: 500; border-radius: 10px; padding: 12px 30px; }
+        .btn-line:hover { background-color: #05a346; color: white; }
+        .alert-warning-custom { background-color: #fff9e6; border-left: 5px solid #ffd700; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-ok shadow-sm">
+    <div class="container justify-content-center">
+        <a class="navbar-brand font-weight-bold" href="index.html">
+            <i class="fas fa-mobile-alt me-2"></i> OK MOBILE อู่ทอง
+        </a>
+    </div>
+</nav>
+
+<header class="header-section text-center">
+    <div class="container">
+        <h1 class="fw-bold" style="color: #001f3f;">ขั้นตอนการชำระเงิน</h1>
+        <h4 class="text-primary">Samsung Finance+</h4>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="alert alert-warning-custom p-4 shadow-sm">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle fa-2x text-warning me-3"></i>
+                    <div>
+                        <h5 class="mb-1 fw-bold">กรณีเครื่องถูกล็อคหน้าจอ</h5>
+                        <p class="mb-0">ท่านยังสามารถชำระเงินได้ โดยกดที่ปุ่ม <strong>"ชำระเงิน"</strong> และเลือก <strong>"โชว์ QR Code"</strong> เพื่อนำไปสแกนผ่านแอปธนาคารตามขั้นตอนด้านล่างนี้ครับ</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-6 col-lg-3">
+            <div class="step-card text-center">
+                <div class="step-num">1</div>
+                <h5 class="fw-bold">เปิดแอป</h5>
+                <p class="text-muted small">เข้าแอปพลิเคชัน Samsung Finance+</p>
+                <img src="images/step1.jpg" alt="Step 1" class="img-instruction">
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="step-card text-center">
+                <div class="step-num">2</div>
+                <h5 class="fw-bold">กดชำระเงิน</h5>
+                <p class="text-muted small">คลิกปุ่มสีน้ำเงิน "ชำระเงิน" กลางหน้าจอ</p>
+                <img src="images/step2.jpg" alt="Step 2" class="img-instruction">
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="step-card text-center">
+                <div class="step-num">3</div>
+                <h5 class="fw-bold">ขอ QR Code</h5>
+                <p class="text-muted small">เลือกเมนู "โชว์ QR Code" ด้านล่าง</p>
+                <img src="images/step3.jpg" alt="Step 3" class="img-instruction">
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3">
+            <div class="step-card text-center">
+                <div class="step-num">4</div>
+                <h5 class="fw-bold">สแกนจ่าย</h5>
+                <p class="text-muted small">ใช้แอปธนาคารสแกนจ่ายได้ทุกธนาคาร</p>
+                <img src="images/step4.jpg" alt="Step 4" class="img-instruction">
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center my-5 py-4">
+        <h5 class="mb-3">ต้องการความช่วยเหลือเพิ่มเติม?</h5>
+        <a href="https://lin.ee/bQSzNzC" target="_blank" class="btn btn-line shadow-sm mb-3">
+            <i class="fab fa-line me-2"></i> ติดต่อสอบถามทาง LINE
+        </a>
+        <br>
+        <a href="index.html" class="text-secondary text-decoration-none mt-4 d-inline-block">
+            <i class="fas fa-arrow-left me-1"></i> กลับไปหน้าหลักเว็บไซต์
+        </a>
+    </div>
+</div>
+
+<footer class="bg-dark text-white text-center py-4 mt-5">
+    <p class="mb-0 small">© 2026 OK Mobile อู่ทอง - ศูนย์ซ่อมและจำหน่ายมือถือครบวงจร</p>
+</footer>
+
+</body>
+</html>
