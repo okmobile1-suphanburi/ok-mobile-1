@@ -46,6 +46,10 @@
         .btn-line { background-color: #06c755; color: white; font-weight: 500; border-radius: 10px; padding: 12px 30px; }
         .btn-line:hover { background-color: #05a346; color: white; }
         .alert-warning-custom { background-color: #fff9e6; border-left: 5px solid #ffd700; border-radius: 10px; }
+        
+        /* สไตล์เพิ่มเติมสำหรับ Kashjoy */
+        .kashjoy-header { background-color: #f7941d; color: white; border-radius: 20px 20px 0 0; padding: 15px 25px; }
+        .iframe-container { border-radius: 0 0 20px 20px; overflow: hidden; background: white; border: 1px solid #eee; }
     </style>
 </head>
 <body>
@@ -80,7 +84,7 @@
         </div>
     </div>
 
-    <div class="row g-4 justify-content-center">
+    <div class="row g-4 justify-content-center mb-5">
         <div class="col-md-6 col-lg-3">
             <div class="step-card text-center">
                 <div class="step-num">1</div>
@@ -111,6 +115,45 @@
                 <h5 class="fw-bold">สแกนจ่าย</h5>
                 <p class="text-muted small">ใช้แอปธนาคารสแกนจ่ายได้ทุกธนาคาร</p>
                 <img src="images/step4.jpg" alt="Step 4" class="img-instruction">
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="text-center mb-4">
+                <h3 class="fw-bold" style="color: #f7941d;">ตรวจสอบยอดค้างชำระ Kashjoy</h3>
+                <p class="text-muted">กรอกข้อมูลด้านล่างเพื่อตรวจสอบยอดและรับ QR Code สำหรับชำระเงิน</p>
+            </div>
+            
+            <div class="shadow-lg">
+                <div class="kashjoy-header d-flex align-items-center">
+                    <i class="fas fa-search-dollar me-2 fa-lg"></i>
+                    <h5 class="mb-0 fw-bold">ระบบตรวจสอบข้อมูลออนไลน์</h5>
+                </div>
+                
+                <div class="bg-white p-3 border-start border-end">
+                    <div class="row align-items-center">
+                        <div class="col-md-7">
+                             <img src="images/how-to-check.jpg" alt="วิธีตรวจสอบยอด" class="img-fluid rounded border shadow-sm mb-3 mb-md-0">
+                        </div>
+                        <div class="col-md-5">
+                            <h6 class="fw-bold text-dark"><i class="fas fa-info-circle text-primary me-2"></i>วิธีใช้งาน:</h6>
+                            <ol class="small text-secondary">
+                                <li>ใส่หมายเลขบัตรประชาชน (ที่ลงทะเบียน)</li>
+                                <li>ใส่เบอร์โทรศัพท์ (ที่ลงทะเบียน)</li>
+                                <li>กดปุ่ม <strong>"ค้นหา"</strong> เพื่อแสดงข้อมูล</li>
+                                <li>สแกน <strong>QR Code</strong> ผ่านแอปธนาคารเพื่อจ่าย</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="iframe-container" style="min-height: 550px;">
+                    <iframe src="https://payment.kbjkashjoy.com/onlinepayment/" style="width:100%; height:600px; border:none;" title="Kashjoy Payment System"></iframe>
+                </div>
             </div>
         </div>
     </div>
