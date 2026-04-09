@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG Capital Payment | OK Mobile Premium</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400;500;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #050a10;
+            --luxury-blue: #0a192f;
+            --gold-gradient: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --gold-text: #d4af37;
+        }
+
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background: var(--bg-dark);
+            color: #ffffff;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at top right, #112240, #050a10);
+        }
+
+        /* Header Section */
+        .premium-header {
+            padding: 60px 0 30px;
+            text-align: center;
+        }
+        .premium-header h1 {
+            font-weight: 600;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 2px;
+        }
+
+        /* Glass Card */
+        .luxury-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        /* Payment Methods */
+        .method-box {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 4px solid var(--gold-text);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 20px 20px 0;
+            transition: 0.3s;
+        }
+        .method-box:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(10px);
+        }
+        .method-number {
+            color: var(--gold-text);
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .link-app {
+            color: #4facfe;
+            text-decoration: none;
+            border-bottom: 1px dashed #4facfe;
+        }
+
+        /* iFrame */
+        .iframe-wrapper {
+            border-radius: 25px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: #fff; /* ขาวเพื่อให้ระบบ SG ชัดเจน */
+        }
+
+        /* ปุ่มกลับหน้าหลัก */
+        .btn-luxury-home {
+            background: var(--gold-gradient);
+            color: #000 !important;
+            padding: 18px 60px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            font-size: 1.2rem;
+            box-shadow: 0 10px 30px rgba(179, 135, 40, 0.3);
+            transition: 0.4s;
+            margin: 50px 0;
+        }
+        .btn-luxury-home:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(179, 135, 40, 0.5);
+        }
+
+        .ref-details {
+            list-style: none;
+            padding: 10px 0 0 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        .ref-details b { color: #fff; }
+
+        footer { opacity: 0.5; padding-bottom: 40px; }
+    </style>
+</head>
+<body>
+
+<header class="premium-header">
+    <div class="container">
+        <h1 class="display-5">คู่มือชำระเงิน SG Capital</h1>
+        <p class="text-muted">ขอแนะนำช่องทางการชำระเงินที่สะดวก รวดเร็ว และปลอดภัย ดังนี้</p>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="luxury-card">
+                
+                <div class="method-box">
+                    <span class="method-number">วิธีที่ 1</span>
+                    <p class="mb-1"><b>Download App SG Finance</b> ได้ที่ Play Store เพื่อลงทะเบียน</p>
+                    <a href="https://cutt.ly/3ePbcJZq" target="_blank" class="link-app small">กดที่ Link : https://cutt.ly/3ePbcJZq</a>
+                    <p class="small text-muted mt-2">ท่านสามารถตรวจสอบค่างวด, ชำระค่างวดผ่าน QR Code และดูสินเชื่อของตนเองได้</p>
+                </div>
+
+                <div class="method-box">
+                    <span class="method-number">วิธีที่ 2</span>
+                    <p class="mb-0"><b>ชำระที่ 7-11</b> โดยยื่นบัตรประชาชนของผู้เช่าซื้อที่เคาน์เตอร์ แจ้งยอดชำระ และชำระเข้า <b>บริษัท เอสจี แคปปิตอล จำกัด (มหาชน)</b></p>
+                </div>
+
+                <div class="method-box">
+                    <span class="method-number">วิธีที่ 3</span>
+                    <p class="mb-0"><b>สแกน QR Code จากใบแจ้งหนี้</b> เพื่อชำระค่างวดผ่านแอปฯ ธนาคารได้ทันที</p>
+                </div>
+
+                <div class="method-box">
+                    <span class="method-number">วิธีที่ 4</span>
+                    <p class="mb-1"><b>ชำระผ่าน Mobile Banking</b> (เมนู จ่ายบิล / ชำระบิล)</p>
+                    <ul class="ref-details">
+                        <li>• ค้นหา: <b>บมจ.เอสจี แคปปิตอล</b></li>
+                        <li>• Ref 1: <b>ใส่เลขที่สัญญา</b></li>
+                        <li>• Ref 2: <b>ใส่รหัสบริษัทฯ 7101</b></li>
+                        <li>• ช่องที่ 3: <b>ใส่ยอดเงินค่างวดที่ต้องชำระ</b></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="iframe-wrapper">
+                <iframe 
+                    src="https://qr.sgcapital.co.th/view/qr" 
+                    style="width: 100%; height: 800px; border: none;"
+                    title="SG Capital System">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="index.html" class="btn-luxury-home">
+            <i class="fas fa-home me-3"></i> กลับหน้าหลักเว็บไซต์
+        </a>
+    </div>
+</div>
+
+<footer class="text-center small">
+    © 2023 OK MOBILE U-THONG | PREMIUM SERVICE
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
