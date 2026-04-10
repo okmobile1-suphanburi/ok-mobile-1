@@ -33,7 +33,6 @@
             text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
 
-        /* --- เพิ่มใหม่: CSS สำหรับแถบข้อความวิ่ง --- */
         .promo-ticker {
             background: var(--tiktok-gradient);
             padding: 10px 0;
@@ -60,7 +59,6 @@
             100% { transform: translate3d(-100%, 0, 0); }
         }
 
-        /* --- ส่วนที่เพิ่มใหม่: CSS ของป้าย Badge --- */
         .badge {
             position: absolute;
             top: 10px;
@@ -76,34 +74,69 @@
         .badge-hot { background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; }
         .badge-new { background: linear-gradient(45deg, #00b09b, #96c93d); color: white; }
 
+        /* --- ส่วนที่แก้ไขให้ปุ่มขึ้นแน่นอน --- */
         .controls-section {
             max-width: 600px;
-            margin: 0 auto 40px;
+            margin: 0 auto 30px;
             display: flex;
             flex-direction: column;
             gap: 15px;
             padding: 0 10px;
         }
 
+        .input-row {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .search-box { flex: 1; }
         .search-box input {
             width: 100%;
-            padding: 12px 25px;
+            height: 44px;
+            padding: 0 18px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(212, 175, 55, 0.3);
             border-radius: 30px;
             color: #fff;
             font-family: 'Kanit';
             outline: none;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .btn-ui {
+            height: 44px;
+            padding: 0 15px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
             transition: 0.3s;
-            text-align: center;
+            font-family: 'Kanit';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            text-decoration: none;
             box-sizing: border-box;
         }
 
-        .search-box input:focus {
-            border-color: var(--accent-gold);
+        .btn-clear {
             background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
         }
+
+        .btn-home {
+            background: transparent;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            flex: 1;
+        }
+
+        .btn-home:hover { background: rgba(212, 175, 55, 0.1); }
+        .btn-ui:active { transform: scale(0.95); }
 
         .category-menu {
             display: flex;
@@ -128,6 +161,7 @@
             color: var(--accent-gold);
             background: rgba(212, 175, 55, 0.1);
         }
+        /* --- จบส่วนที่แก้ไข --- */
 
         .product-grid {
             display: grid;
@@ -150,30 +184,15 @@
             position: relative;
         }
 
-        .product-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--accent-gold);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-        }
-
-        /* เพิ่มเอฟเฟกต์ตอนกดสำหรับการใช้งานบนมือถือ */
-        .product-card:active { transform: scale(0.98); }
+        .product-card:hover { transform: translateY(-8px); border-color: var(--accent-gold); }
 
         .media-container { width: 100%; aspect-ratio: 1 / 1; background: #000; overflow: hidden; position: relative; }
         .media-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.6s; }
-        .product-card:hover .media-container img { transform: scale(1.1); }
 
         .product-info { padding: 15px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; }
         .product-name { font-size: 0.95rem; height: 2.8em; overflow: hidden; margin-bottom: 12px; opacity: 0.9; }
         
-        /* ปรับปรุง CSS ราคาให้ดูพรีเมียมขึ้น */
-        .price { 
-            font-size: 1.5rem; 
-            color: var(--accent-gold); 
-            font-weight: 700; 
-            margin-bottom: 15px; 
-            display: block; 
-        }
+        .price { font-size: 1.5rem; color: var(--accent-gold); font-weight: 700; margin-bottom: 15px; display: block; }
         .price-symbol { font-size: 1rem; margin-right: 2px; font-weight: 400; }
 
         .btn-tiktok {
@@ -182,21 +201,12 @@
             border-radius: 50px; font-size: 0.85rem; font-weight: 600;
             transition: 0.3s;
         }
-        
-        /* เพิ่มเอฟเฟกต์ตอนกดปุ่ม */
-        .btn-tiktok:active { transform: scale(0.95); filter: brightness(0.9); }
 
         #loader { text-align: center; padding: 80px; color: var(--accent-gold); }
 
-        /* ส่วนท้ายเว็บ */
         footer {
-            text-align: center;
-            padding: 50px 0;
-            opacity: 0.5;
-            font-size: 0.8rem;
-            border-top: 1px solid rgba(212,175,55,0.1);
-            margin-top: 50px;
-            line-height: 1.6;
+            text-align: center; padding: 50px 0; opacity: 0.5; font-size: 0.8rem;
+            border-top: 1px solid rgba(212,175,55,0.1); margin-top: 50px;
         }
     </style>
 </head>
@@ -209,18 +219,25 @@
 
     <div class="promo-ticker">
         <div class="ticker-content">
-            🎫 อย่าลืมเก็บคูปองส่วนลด 50% และคูปองส่งฟรีที่หน้าโปรไฟล์ TikTok ของเรา &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            🎫 อย่าลืมเก็บคูปองส่วนลด 50% และคูปองส่งฟรีที่หน้าโปรไฟล์ TikTok &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
             🔥 สินค้ามาใหม่ประจำสัปดาห์ พร้อมส่งทุกชิ้น &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
             🛠️ OK MOBILE ตลาดอู่ทอง รับซ่อมมือถือ รอรับได้เลย! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
     </div>
 
     <div class="controls-section">
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="🔍 ค้นหาสินค้าที่ต้องการ..." onkeyup="filterProducts()">
+        <div class="input-row">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 ค้นหาสินค้า..." onkeyup="filterProducts()">
+            </div>
+            <button onclick="resetSearch()" class="btn-ui btn-clear">ล้าง</button>
         </div>
-        <div class="category-menu" id="category-menu">
+
+        <div class="input-row">
+            <a href="https://okmobile-suphanburi.com" class="btn-ui btn-home">🏠 กลับสู่หน้าเว็บหลัก</a>
         </div>
+
+        <div class="category-menu" id="category-menu"></div>
     </div>
 
     <div id="loader">กำลังเตรียมสินค้า...</div>
@@ -228,13 +245,12 @@
 
     <footer>
         <p>OK MOBILE SHOP - ตลาดอู่ทอง สุพรรณบุรี</p>
-        <p>© 2026 All Rights Reserved. จัดจำหน่ายสินค้าและงานซ่อมมือถือ</p>
+        <p>© 2026 All Rights Reserved.</p>
     </footer>
 </div>
 
 <script>
     const script_url = "https://script.google.com/macros/s/AKfycbxQ7-Teg9E-ZRaEa6b9fAoIlvWPw_Vh-xha8PgnMLKfD68ETvo37dCM4DyAQr5cuzUY/exec";
-    
     let allProducts = [];
     let currentCat = 'ทั้งหมด';
 
@@ -242,11 +258,10 @@
         try {
             const response = await fetch(script_url);
             allProducts = await response.json();
-            
             renderCategories();
             renderDisplay(allProducts);
         } catch (error) {
-            document.getElementById('loader').innerText = "ขออภัย โหลดข้อมูลไม่สำเร็จ";
+            document.getElementById('loader').innerText = "โหลดข้อมูลไม่สำเร็จ";
         }
     }
 
@@ -275,13 +290,23 @@
         renderDisplay(filtered);
     }
 
+    function resetSearch() {
+        document.getElementById('searchInput').value = '';
+        currentCat = 'ทั้งหมด';
+        document.querySelectorAll('.cat-btn').forEach(b => {
+            b.classList.remove('active');
+            if(b.innerText === 'ทั้งหมด') b.classList.add('active');
+        });
+        renderDisplay(allProducts);
+    }
+
     function renderDisplay(data) {
         const container = document.getElementById('product-container');
         document.getElementById('loader').style.display = 'none';
         container.style.opacity = '1';
         
         if(data.length === 0) {
-            container.innerHTML = `<p style="grid-column:1/-1; text-align:center; opacity:0.5; padding:50px;">ไม่พบข้อมูลสินค้า</p>`;
+            container.innerHTML = `<p style="grid-column:1/-1; text-align:center; opacity:0.5; padding:50px;">ไม่พบสินค้า</p>`;
             return;
         }
 
@@ -298,7 +323,7 @@
                     <div class="product-info">
                         <div class="product-name">${item.name}</div>
                         <span class="price"><span class="price-symbol">฿</span>${Number(item.price).toLocaleString()}</span>
-                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="btn-tiktok">🛒 สั่งซื้อผ่าน TikTok</a>
+                        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="btn-tiktok">🛒 สั่งซื้อ</a>
                     </div>
                 </div>
             `;
@@ -307,6 +332,5 @@
 
     fetchProducts();
 </script>
-
 </body>
 </html>
