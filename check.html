@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OK MOBILE U-THONG - PREMIUM SYSTEM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Prompt', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* พิ้นหลัง Mesh Gradient เต็มหน้าจอสำหรับระบบเซิร์ฟเวอร์ */
+        body {
+            background-color: #0b0b0d;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(31, 58, 138, 0.18) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(88, 28, 135, 0.18) 0px, transparent 50%);
+            color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* กล่องเนื้อหาหลัก */
+        .container {
+            width: 100%;
+            max-width: 820px;
+        }
+
+        /* การ์ดสไตล์กระจกฝ้าระดับพรีเมียม */
+        .card {
+            background: rgba(23, 23, 27, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 30px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* เส้นแสงนีออนแยกตามหมวดหมู่ด้านบนการ์ด */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+        }
+        .card-warranty::before { background: linear-gradient(90deg, #00f2fe, #4facfe); }
+        .card-icloud::before { background: linear-gradient(90deg, #ff0844, #ffb199); }
+        .card-mdm::before { background: linear-gradient(90deg, #f12711, #f5af19); }
+
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* กรอบรูปภาพหัวข้อ */
+        .icon-box img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            filter: brightness(0.9) contrast(1.1); /* ช่วยให้รูปภาพกลืนเข้ากับธีมมืด */
+        }
+
+        .details h2 {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        /* สีหัวข้อแบบไล่เฉดสี */
+        .text-warranty {
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .text-icloud {
+            background: linear-gradient(135deg, #ff0844 0%, #ff758c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .text-mdm {
+            background: linear-gradient(135deg, #f5af19 0%, #f12711 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .details p {
+            font-size: 13.5px;
+            color: #9ca3af;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bullet { opacity: 0.6; }
+        .highlight { color: #ffffff; font-weight: 500; }
+
+        /* จัดระเบียบกลุ่มปุ่มแบบ Grid อัตโนมัติ เรียงบล็อกเท่ากันสวยงามบนทุกหน้าจอ */
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 12px;
+        }
+
+        /* ดีไซน์ปุ่มสไตล์ Tech-Dark */
+        .btn {
+            display: block;
+            background: rgba(255, 255, 255, 0.03);
+            color: #d1d5db;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px 12px;
+            font-size: 13.5px;
+            font-weight: 500;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* เอฟเฟกต์แสงวิ่งผ่านปุ่ม (Shimmer Effect) */
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 30%;
+            height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+            transform: rotate(30deg);
+            transition: none;
+        }
+        .btn:hover::after {
+            left: 140%;
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* เอฟเฟกต์แสงโกลว์แยกสีตามหมวดหมู่ */
+        .card-warranty .btn:hover {
+            background: #4facfe;
+            color: #ffffff;
+            border-color: #4facfe;
+            box-shadow: 0 0 15px rgba(79, 172, 254, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .card-icloud .btn:hover {
+            background: #ff758c;
+            color: #ffffff;
+            border-color: #ff758c;
+            box-shadow: 0 0 15px rgba(255, 117, 140, 0.45);
+            transform: translateY(-2px);
+        }
+
+        .card-mdm .btn:hover {
+            background: #f12711;
+            color: #ffffff;
+            border-color: #f12711;
+            box-shadow: 0 0 15px rgba(241, 39, 17, 0.45);
+            transform: translateY(-2px);
+        }
+
+        /* สำหรับหน้าจอมือถือขนาดเล็ก */
+        @media (max-width: 600px) {
+            .row {
+                flex-direction: column;
+                text-align: center;
+            }
+            .details p {
+                justify-content: center;
+            }
+            .button-group {
+                grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+                gap: 8px;
+            }
+            .btn {
+                padding: 8px 8px;
+                font-size: 12.5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card card-warranty">
+        <div class="row">
+            <div class="icon-box">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqPTMu8bomUxyqkRavlxXN_nARKCSQ6ZTRwIRBc6u8nQ&s" alt="Warranty">
+            </div>
+            <div class="details">
+                <h2 class="text-warranty">เช็คประกันเครื่อง</h2>
+                <p><span class="bullet">⚡</span> <span class="highlight" style="color: #ff5252;">กด *#06# เพื่อเช็คหมายเลขเลขอีมี่ (IMEI)</span></p>
+                <p><span class="bullet">⚡</span> <span>Huawei ใช้ SN ในการเช็ค</span></p>
+            </div>
+        </div>
+        <div class="button-group">
+            <a href="https://www.vivo.com/th/support/IMEI" target="_blank" class="btn">VIVO</a>
+            <a href="https://support.oppo.com/th/check/" target="_blank" class="btn">OPPO</a>
+            <a href="https://www.realme.com/th/support/phonecheck" target="_blank" class="btn">REALME</a>
+            <a href="https://checkcoverage.apple.com/?locale=th_TH" target="_blank" class="btn">iPHONE</a>
+            <a href="https://www.tecno-mobile.com/warranty/" target="_blank" class="btn">Tecno</a>
+            <a href="https://www.infinixmobility.com/th/support/warranty-check" target="_blank" class="btn">Infinix</a>
+            <a href="https://www.carlcare.com/global/warranty-check/" target="_blank" class="btn">itel</a>
+            <a href="https://consumer.huawei.com/th/support/warranty-query/" target="_blank" class="btn">Huawei</a>
+            <a href="https://imeicheck.com/imei-check" target="_blank" class="btn">Samsung</a>
+        </div>
+    </div>
+
+    <div class="card card-icloud">
+        <div class="row">
+            <div class="icon-box">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYh1LgtSOE5YHdn_qHUUXk4BltuIx2Ts8UzmTCU2UUrA&s" alt="iCloud">
+            </div>
+            <div class="details">
+                <h2 class="text-icloud">เช็คไอคลาว</h2>
+                <p><span class="bullet">⚡</span> <span class="highlight" style="color: #ffcc00;">iCloud 3 ใช้เครดิตในการเช็ค</span></p>
+            </div>
+        </div>
+        <div class="button-group">
+            <a href="https://ifreeicloud.co.uk/free-check?fbclid=IwAR0B8dkkZTunawIXEaHNRJW5hfSKPkbPBuOUZORwVZOQ5ftKznZE7jkqaH8#google_vignette" target="_blank" class="btn">iCloud 1</a>
+            <a href="https://www.imeipro.info/" target="_blank" class="btn">iCloud 2</a>
+            <a href="https://lsvunlock.com/resellerplaceorder/imei" target="_blank" class="btn">iCloud 3</a>
+        </div>
+    </div>
+
+    <div class="card card-mdm">
+        <div class="row">
+            <div class="icon-box">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm5Nc99pCIY2YZhTv0cNeKtl9idNDNlDYhgO-a7c5nUA&s" alt="MDM">
+            </div>
+            <div class="details">
+                <h2 class="text-mdm">SamSung</h2>
+                <p><span class="bullet">⚡</span> <span style="color: #2ecc71; font-weight: 500;">ใช้เครดิตในการเช็ค $0.25 / 1 เครื่อง</span></p>
+            </div>
+        </div>
+        <div class="button-group">
+            <a href="https://www.liveonknox.com/index.php" target="_blank" class="btn">เช็ครายเดือน</a>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; font-size: 11px; color: #4b5563; letter-spacing: 1px;">
+        ลิขสิทธิ์ © 2026 OK MOBILE U-THONG | PREMIUM SYSTEM
+    </div>
+
+</div>
+
+</body>
+</html>
