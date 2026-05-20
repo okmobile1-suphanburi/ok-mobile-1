@@ -192,6 +192,38 @@
             transform: translateY(-2px);
         }
 
+        /* ดีไซน์ปุ่มกลับหน้าหลักระดับพรีเมียม */
+        .btn-home-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .btn-home {
+            background: rgba(255, 255, 255, 0.04);
+            color: #e5e7eb;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 35px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 30px; /* ดีไซน์ทรงมนรีให้ดูต่างจากปุ่มเช็คระบบ */
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-home:hover {
+            background: #ffffff;
+            color: #0b0b0d;
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
         /* สำหรับหน้าจอมือถือขนาดเล็ก */
         @media (max-width: 600px) {
             .row {
@@ -208,6 +240,12 @@
             .btn {
                 padding: 8px 8px;
                 font-size: 12.5px;
+            }
+            .btn-home {
+                padding: 10px 28px;
+                font-size: 13px;
+                width: 100%; /* เต็มหน้าจอมือถือเพื่อความกดง่าย */
+                justify-content: center;
             }
         }
     </style>
@@ -270,6 +308,12 @@
         <div class="button-group">
             <a href="https://www.liveonknox.com/index.php" target="_blank" class="btn">เช็ครายเดือน</a>
         </div>
+    </div>
+
+    <div class="btn-home-container">
+        <a href="index.html" class="btn-home">
+            🏠 กลับหน้าหลัก
+        </a>
     </div>
 
     <div style="text-align: center; margin-top: 40px; font-size: 11px; color: #4b5563; letter-spacing: 1px;">
