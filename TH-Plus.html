@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>คำนวณไทยช่วยไทยพลัส 60/40</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:    #0d2f7c;
+      --royal:   #1a4dbf;
+      --sky:     #4c9aff;
+      --gold:    #f5a623;
+      --gold-lt: #fff8e6;
+      --green:   #17b26a;
+      --green-lt:#e8faf3;
+      --red:     #e03e3e;
+      --red-lt:  #fef0f0;
+      --white:   #ffffff;
+      --bg:      #f0f4ff;
+      --gray100: #e8ecf5;
+      --gray300: #c0c8dd;
+      --gray500: #8891aa;
+      --gray700: #3d4566;
+      --text:    #131929;
+    }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── HEADER ── */
+    header {
+      width: 100%;
+      background: linear-gradient(145deg, #0a2266 0%, #1a4dbf 60%, #2d6ef0 100%);
+      padding: 36px 20px 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header .orb1 {
+      position: absolute; top: -70px; right: -50px;
+      width: 260px; height: 260px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(76,154,255,0.18) 0%, transparent 70%);
+    }
+    header .orb2 {
+      position: absolute; bottom: -90px; left: -60px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    header h1 {
+      color: var(--white);
+      font-size: clamp(24px, 6vw, 34px);
+      font-weight: 700;
+      line-height: 1.25;
+      position: relative;
+    }
+    header h1 .accent { color: var(--gold); }
+    header p {
+      color: rgba(255,255,255,0.65);
+      font-size: 14px;
+      margin-top: 8px;
+      position: relative;
+    }
+    .btn-home {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: var(--navy);
+      color: #fff;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 11px;
+      border-radius: 10px;
+      text-decoration: none;
+      margin-top: 8px;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .btn-home:hover {
+      background: var(--royal);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(13,47,124,0.25);
+    }
+
+    /* ── MAIN ── */
+    main {
+      width: 100%;
+      max-width: 480px;
+      padding: 0 16px 48px;
+      margin-top: -20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(13,47,124,0.08), 0 8px 32px rgba(13,47,124,0.06);
+      padding: 24px;
+      margin-bottom: 14px;
+      transition: box-shadow 0.2s;
+    }
+    .card:focus-within {
+      box-shadow: 0 2px 12px rgba(26,77,191,0.14), 0 8px 32px rgba(26,77,191,0.10);
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray500);
+      margin-bottom: 16px;
+    }
+
+    /* ── INPUT ── */
+    .label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .label-row label {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--gray700);
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-wrap .currency {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 22px;
+      color: var(--gray300);
+      font-family: 'IBM Plex Mono', monospace;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .input-wrap:focus-within .currency { color: var(--royal); }
+    input[type="number"] {
+      width: 100%;
+      padding: 15px 16px 15px 42px;
+      font-size: 32px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--bg);
+      border: 2px solid transparent;
+      border-radius: 14px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    input[type="number"]:focus {
+      border-color: var(--royal);
+      background: var(--white);
+      box-shadow: 0 0 0 4px rgba(26,77,191,0.08);
+    }
+
+    /* ── QUICK BTNS ── */
+    .quick-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+    .quick-btns button {
+      flex: 1 1 calc(20% - 7px);
+      min-width: 52px;
+      background: var(--bg);
+      color: var(--gray700);
+      border: 1.5px solid transparent;
+      border-radius: 10px;
+      padding: 9px 6px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+      overflow: hidden;
+    }
+    .quick-btns button:hover {
+      border-color: var(--royal);
+      color: var(--royal);
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(26,77,191,0.15);
+    }
+    .quick-btns button:active { transform: translateY(0); }
+
+    /* ── PWA INSTALL BANNER ── */
+    #pwa-banner {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #0a2266, #1a4dbf);
+      color: #fff;
+      padding: 14px 18px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(13,47,124,0.2);
+      animation: fadeSlide 0.3s ease;
+    }
+    #pwa-banner.show { display: flex; }
+    #pwa-banner .pwa-icon { font-size: 28px; flex-shrink: 0; }
+    #pwa-banner .pwa-text { flex: 1; }
+    #pwa-banner .pwa-text strong { display: block; font-size: 14px; margin-bottom: 2px; }
+    #pwa-banner .pwa-text span { font-size: 12px; opacity: 0.75; }
+    .btn-pwa-install {
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
+    .btn-pwa-install:hover { opacity: 0.88; }
+    .btn-pwa-dismiss {
+      background: none; border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 18px; cursor: pointer;
+      padding: 0 0 0 4px; flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* ── RESET BTN ── */
+    .btn-reset {
+      width: 100%;
+      padding: 11px;
+      background: transparent;
+      color: var(--gray500);
+      border: 1.5px solid var(--gray100);
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-reset:hover {
+      border-color: var(--gray300);
+      color: var(--gray700);
+      background: var(--bg);
+    }
+    .btn-reset svg { transition: transform 0.3s; }
+    .btn-reset:hover svg { transform: rotate(-180deg); }
+
+    /* ── RESULT SPLIT ── */
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .result-box {
+      border-radius: 16px;
+      padding: 18px 16px 16px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .result-box:hover { transform: translateY(-2px); }
+    .result-box .rb-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .result-box .rb-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 2px;
+    }
+    .result-box .rb-pct {
+      font-size: 11px;
+      opacity: 0.5;
+      margin-bottom: 10px;
+    }
+    .result-box .rb-amount {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: clamp(22px, 6vw, 30px);
+      font-weight: 600;
+      line-height: 1;
+      transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .result-box .rb-unit { font-size: 14px; font-weight: 400; margin-left: 2px; }
+
+    .box-you   { background: linear-gradient(135deg, #fff8e6, #ffefc2); color: #7a4800; }
+    .box-state { background: linear-gradient(135deg, #e8faf3, #c8f5e2); color: #0a5c3a; }
+
+    /* number pop animation */
+    @keyframes popNum {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+    .pop { animation: popNum 0.3s cubic-bezier(.34,1.56,.64,1); }
+
+    /* ── DONUT CHART ── */
+    .donut-wrap {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .donut-svg { flex-shrink: 0; }
+    .donut-legend { flex: 1; }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .legend-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .legend-label { font-size: 13px; color: var(--gray500); }
+    .legend-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-left: auto;
+    }
+
+    /* ── SUMMARY ROWS ── */
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray100);
+    }
+    .total-row:last-child { border-bottom: none; }
+    .total-row .tr-label { font-size: 14px; color: var(--gray500); }
+    .total-row .tr-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .tr-val.green { color: var(--green); }
+    .tr-val.gold  { color: #c17a00; }
+
+    /* ── CAP BAR ── */
+    .cap-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 10px;
+    }
+    .cap-head .cap-title { font-size: 13px; color: var(--gray500); }
+    .cap-head .cap-pct {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray700);
+    }
+    .cap-bar-bg {
+      height: 12px;
+      background: var(--gray100);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+    .cap-bar-fill {
+      height: 100%;
+      border-radius: 20px;
+      background: linear-gradient(90deg, var(--green) 0%, #34d494 100%);
+      transition: width 0.5s cubic-bezier(.4,0,.2,1);
+      position: relative;
+    }
+    .cap-bar-fill.near  { background: linear-gradient(90deg, var(--green) 0%, var(--gold) 100%); }
+    .cap-bar-fill.over  { background: linear-gradient(90deg, var(--gold) 0%, var(--red) 100%); }
+    .cap-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 2px; left: 8px; right: 8px; height: 4px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.35);
+    }
+    .cap-sub {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--gray500);
+    }
+    .cap-sub strong { color: var(--text); }
+
+    /* ── STATUS BANNER ── */
+    .status-banner {
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 14px;
+      animation: fadeSlide 0.25s ease;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(-6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .status-banner .s-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+    .banner-green { background: var(--green-lt); color: #0a5c3a; border: 1px solid #b3efd5; }
+    .banner-gold  { background: var(--gold-lt);  color: #7a4800; border: 1px solid #ffd87a; }
+    .banner-red   { background: var(--red-lt);   color: #7a1010; border: 1px solid #f5b8b8; }
+
+    /* ── PILLS ── */
+    .info-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill {
+      background: var(--bg);
+      border: 1.5px solid var(--gray100);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: var(--gray700);
+    }
+    .pill strong { color: var(--navy); }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray300);
+      padding: 0 16px 40px;
+      line-height: 1.7;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .cap-bar-fill, .result-box .rb-amount, .status-banner { transition: none; animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="orb1"></div>
+  <div class="orb2"></div>
+  <div class="badge">🇹🇭 ไทยช่วยไทยพลัส</div>
+  <h1>รัฐช่วย<span class="accent"> 60%</span><br>เราจ่ายแค่ <span class="accent">40%</span></h1>
+  <p>ใส่ราคาสินค้า → รู้ผลทันที ไม่ต้องคิดเอง</p>
+</header>
+
+<main>
+
+  <!-- PWA Install Banner -->
+  <div id="pwa-banner">
+    <div class="pwa-icon">📲</div>
+    <div class="pwa-text">
+      <strong>ติดตั้งเป็นแอปได้เลย!</strong>
+      <span>เปิดเร็ว ใช้ได้แม้ไม่มีเน็ต</span>
+    </div>
+    <button class="btn-pwa-install" onclick="installPWA()">ติดตั้ง</button>
+    <button class="btn-pwa-dismiss" onclick="dismissPWA()" title="ปิด">×</button>
+  </div>
+
+  <!-- กรอกราคา -->
+  <div class="card">
+    <div class="label-row">
+      <label for="price">ราคาสินค้า / บริการ</label>
+    </div>
+    <div class="input-wrap">
+      <span class="currency">฿</span>
+      <input type="number" id="price" placeholder="0" min="0" step="0.01" oninput="calc()" autofocus />
+    </div>
+    <div class="quick-btns">
+      <button onclick="addAmt(50)">+50</button>
+      <button onclick="addAmt(100)">+100</button>
+      <button onclick="addAmt(150)">+150</button>
+      <button onclick="addAmt(200)">+200</button>
+      <button onclick="addAmt(333.33)">+333</button>
+    </div>
+    <button class="btn-reset" onclick="resetCalc()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+        <path d="M3 3v5h5"/>
+      </svg>
+      คำนวณใหม่
+    </button>
+    <a href="https://okmobile-suphanburi.com/" class="btn-home">🏠 กลับหน้าหลัก</a>
+  </div>
+
+  <!-- ผลลัพธ์หลัก -->
+  <div class="card">
+    <div class="result-grid">
+      <div class="result-box box-you">
+        <span class="rb-icon">🧾</span>
+        <div class="rb-label">เราจ่าย</div>
+        <div class="rb-pct">40% + ส่วนเกิน</div>
+        <div class="rb-amount" id="we-pay">0<span class="rb-unit">฿</span></div>
+      </div>
+      <div class="result-box box-state">
+        <span class="rb-icon">🏛️</span>
+        <div class="rb-label">รัฐช่วย</div>
+        <div class="rb-pct">60% สูงสุด 200 ฿/วัน</div>
+        <div class="rb-amount" id="state-pay">0<span class="rb-unit">฿</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Donut + สรุป -->
+  <div class="card">
+    <div class="donut-wrap">
+      <svg class="donut-svg" width="90" height="90" viewBox="0 0 90 90">
+        <circle cx="45" cy="45" r="36" fill="none" stroke="#eef0f5" stroke-width="14"/>
+        <circle id="donut-state" cx="45" cy="45" r="36" fill="none"
+          stroke="#17b26a" stroke-width="14"
+          stroke-dasharray="0 226.2"
+          stroke-dashoffset="56.55"
+          stroke-linecap="round"
+          style="transition: stroke-dasharray 0.5s cubic-bezier(.4,0,.2,1); transform-origin:center; transform:rotate(-90deg) scaleX(-1) translateX(-90px);"
+        />
+        <circle id="donut-you" cx="45" cy="45" r="36" fill="none"
+          stroke="#f5a623" stroke-width="14"
+          stroke-dasharray="0 226.2"
+          stroke-dashoffset="56.55"
+          stroke-linecap="round"
+          style="transition: stroke-dasharray 0.5s cubic-bezier(.4,0,.2,1);"
+        />
+        <text x="45" y="40" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#8891aa">รวม</text>
+        <text id="donut-total" x="45" y="56" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="13" font-weight="600" fill="#131929">0฿</text>
+      </svg>
+      <div class="donut-legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#17b26a"></div>
+          <span class="legend-label">รัฐช่วย</span>
+          <span class="legend-val green" id="leg-state">0.00 ฿</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background:#f5a623"></div>
+          <span class="legend-label">เราจ่าย</span>
+          <span class="legend-val gold"  id="leg-we">0.00 ฿</span>
+        </div>
+        <div class="legend-item" style="margin-bottom:0;padding-top:8px;border-top:1px solid #eef0f5;">
+          <span class="legend-label" style="font-weight:600;color:#3d4566;">ยอดรวม</span>
+          <span class="legend-val" id="leg-total">0.00 ฿</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cap bar -->
+  <div class="card">
+    <div class="cap-head">
+      <span class="cap-title">วงเงินที่รัฐช่วยวันนี้</span>
+      <span class="cap-pct" id="cap-pct">0%</span>
+    </div>
+    <div class="cap-bar-bg">
+      <div class="cap-bar-fill" id="cap-bar" style="width:0%"></div>
+    </div>
+    <div class="cap-sub">
+      <span>ใช้ไป <strong id="cap-used">0.00</strong> ฿</span>
+      <span>คงเหลือ <strong id="cap-left">200.00</strong> ฿ จาก 200 ฿/วัน</span>
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div id="status-wrap"></div>
+
+  <!-- Info pills -->
+  <div class="card">
+    <div style="font-size:12px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gray500);margin-bottom:12px;">เงื่อนไขโครงการ</div>
+    <div class="info-pills">
+      <div class="pill">เพดานรัฐช่วย <strong>200 ฿/วัน</strong></div>
+      <div class="pill">ยอดคุ้มสุด <strong>333.33 ฿</strong></div>
+      <div class="pill">รัฐช่วย <strong>60%</strong></div>
+      <div class="pill">เราจ่าย <strong>40%</strong></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  ข้อมูลอ้างอิงจากเงื่อนไขโครงการไทยช่วยไทยพลัส<br>
+  ใช้เพื่อประมาณการเท่านั้น ยอดจริงอาจแตกต่างตามเงื่อนไขโครงการ
+</footer>
+
+<script>
+  const CAP = 200;
+  const CIRC = 2 * Math.PI * 36; // ~226.19
+
+  function fmt(n) {
+    return n.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function fmtShort(n) {
+    return n % 1 === 0
+      ? n.toLocaleString('th-TH')
+      : n.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  let prevWe = 0, prevState = 0;
+
+  function popEl(id) {
+    const el = document.getElementById(id);
+    el.classList.remove('pop');
+    void el.offsetWidth;
+    el.classList.add('pop');
+  }
+
+  function calc() {
+    const price = parseFloat(document.getElementById('price').value) || 0;
+    const stateAmt = Math.min(price * 0.6, CAP);
+    const weAmt    = price - stateAmt;
+
+    // Big numbers
+    if (Math.round(weAmt * 100) !== Math.round(prevWe * 100)) {
+      document.getElementById('we-pay').innerHTML = fmtShort(weAmt) + '<span class="rb-unit">฿</span>';
+      popEl('we-pay');
+    }
+    if (Math.round(stateAmt * 100) !== Math.round(prevState * 100)) {
+      document.getElementById('state-pay').innerHTML = fmtShort(stateAmt) + '<span class="rb-unit">฿</span>';
+      popEl('state-pay');
+    }
+    prevWe = weAmt; prevState = stateAmt;
+
+    // Donut
+    const total = price || 1;
+    const stateArc = (stateAmt / total) * CIRC;
+    const weArc    = (weAmt    / total) * CIRC;
+    document.getElementById('donut-state').setAttribute('stroke-dasharray', `${stateArc} ${CIRC - stateArc}`);
+    document.getElementById('donut-you').setAttribute('stroke-dasharray', `${weArc} ${CIRC - weArc}`);
+    // offset donut-you so it starts after state arc
+    const offset = CIRC / 4 - stateArc; // -90deg + state portion
+    document.getElementById('donut-you').style.strokeDashoffset = offset;
+    document.getElementById('donut-total').textContent = price > 0 ? fmtShort(price) + '฿' : '0฿';
+
+    // Legend
+    document.getElementById('leg-state').textContent = fmt(stateAmt) + ' ฿';
+    document.getElementById('leg-we').textContent    = fmt(weAmt) + ' ฿';
+    document.getElementById('leg-total').textContent = fmt(price) + ' ฿';
+
+    // Cap bar
+    const pct   = Math.min((stateAmt / CAP) * 100, 100);
+    const left  = Math.max(CAP - stateAmt, 0);
+    const bar   = document.getElementById('cap-bar');
+    bar.style.width = pct + '%';
+    bar.className = 'cap-bar-fill' + (pct >= 100 ? ' over' : pct >= 75 ? ' near' : '');
+    document.getElementById('cap-pct').textContent  = Math.round(pct) + '%';
+    document.getElementById('cap-used').textContent = fmt(stateAmt);
+    document.getElementById('cap-left').textContent = fmt(left);
+
+    renderStatus(price, stateAmt, weAmt);
+  }
+
+  function renderStatus(price, stateAmt, weAmt) {
+    const wrap = document.getElementById('status-wrap');
+    if (price === 0) { wrap.innerHTML = ''; return; }
+
+    const SWEET = 333.33;
+    let cls = '', icon = '', msg = '';
+
+    if (stateAmt >= CAP && price > SWEET + 0.5) {
+      cls  = 'banner-red'; icon = '⚠️';
+      const over = price - SWEET;
+      msg = `ยอดซื้อเกิน 333.33 ฿ → <strong>ส่วนเกิน ${fmt(over)} ฿</strong> คุณต้องจ่ายเองทั้งหมด เพราะรัฐช่วยได้แค่ 200 ฿/วัน`;
+    } else if (Math.abs(price - SWEET) < 0.5) {
+      cls  = 'banner-green'; icon = '🎯';
+      msg  = `<strong>คุ้มที่สุด!</strong> ยอดนี้ทำให้รัฐช่วยเต็มเพดาน 200 ฿ พอดิบพอดี`;
+    } else if (stateAmt >= CAP) {
+      cls  = 'banner-gold'; icon = '🏁';
+      msg  = `รัฐช่วยเต็มเพดาน 200 ฿/วันแล้ว ซื้อเพิ่มได้ แต่ส่วนที่เกิน 333.33 ฿ ต้องจ่ายเองทั้งหมด`;
+    } else {
+      const remain = (CAP - stateAmt) / 0.6;
+      cls  = 'banner-green'; icon = '💡';
+      msg  = `ซื้อได้อีก <strong>${fmt(remain)} ฿</strong> แล้วรัฐจะช่วยเต็มเพดาน 200 ฿/วัน`;
+    }
+
+    wrap.innerHTML = `<div class="status-banner ${cls}"><span class="s-icon">${icon}</span><span>${msg}</span></div>`;
+  }
+
+  function addAmt(n) {
+    const inp = document.getElementById('price');
+    inp.value = Math.round(((parseFloat(inp.value) || 0) + n) * 100) / 100;
+    calc();
+  }
+
+  function resetCalc() {
+    document.getElementById('price').value = '';
+    calc();
+    document.getElementById('price').focus();
+  }
+
+  calc();
+
+  // ── PWA Install ──
+  let deferredPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (!sessionStorage.getItem('pwa_dismissed')) {
+      document.getElementById('pwa-banner').classList.add('show');
+    }
+  });
+
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('pwa-banner').classList.remove('show');
+    deferredPrompt = null;
+  });
+
+  async function installPWA() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      document.getElementById('pwa-banner').classList.remove('show');
+    }
+    deferredPrompt = null;
+  }
+
+  function dismissPWA() {
+    document.getElementById('pwa-banner').classList.remove('show');
+    sessionStorage.setItem('pwa_dismissed', '1');
+  }
+
+  // ── PWA Manifest (inline blob) ──
+  const manifest = {
+    name: 'คำนวณไทยช่วยไทยพลัส',
+    short_name: 'ไทยช่วยไทย+',
+    description: 'คำนวณยอด 60/40 โครงการไทยช่วยไทยพลัส',
+    start_url: '.',
+    display: 'standalone',
+    background_color: '#f0f4ff',
+    theme_color: '#0d2f7c',
+    icons: [{
+      src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230d2f7c'/><text y='.9em' font-size='75' x='12'>🇹🇭</text></svg>",
+      sizes: 'any',
+      type: 'image/svg+xml'
+    }]
+  };
+  const mBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  const mLink = document.createElement('link');
+  mLink.rel = 'manifest';
+  mLink.href = URL.createObjectURL(mBlob);
+  document.head.appendChild(mLink);
+
+  // ── Service Worker ──
+  if ('serviceWorker' in navigator) {
+    const swCode = `
+const CACHE='thplus-v1';
+self.addEventListener('install',e=>{self.skipWaiting();});
+self.addEventListener('fetch',e=>{
+  e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{
+    const clone=res.clone();
+    caches.open(CACHE).then(c=>c.put(e.request,clone));
+    return res;
+  })));
+});`;
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(()=>{});
+  }
+</script>
+</body>
+</html>
