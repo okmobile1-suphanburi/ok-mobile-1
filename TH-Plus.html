@@ -470,6 +470,36 @@
     }
     .pill strong { color: var(--navy); }
 
+    /* ── REVERSE CALC ── */
+    .rev-result {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .rev-box {
+      border-radius: 14px;
+      padding: 14px;
+      text-align: center;
+    }
+    .rev-box .rv-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.7px;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 6px;
+    }
+    .rev-box .rv-amount {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: clamp(20px, 5.5vw, 26px);
+      font-weight: 600;
+      line-height: 1;
+    }
+    .rv-unit { font-size: 13px; font-weight: 400; margin-left: 2px; }
+    .rev-box-price { background: linear-gradient(135deg, #e8f0ff, #cddaff); color: #1a3a99; }
+    .rev-box-pay   { background: linear-gradient(135deg, #fff8e6, #ffefc2); color: #7a4800; }
+
     footer {
       text-align: center;
       font-size: 12px;
@@ -609,6 +639,34 @@
   <!-- Status -->
   <div id="status-wrap"></div>
 
+  <!-- Reverse calculator -->
+  <div class="card">
+    <div class="card-title">🔄 คำนวณย้อนกลับ — วงเงินรัฐเหลือเท่าไหร่?</div>
+    <div class="label-row">
+      <label for="state-remain">วงเงินรัฐที่เหลืออยู่</label>
+    </div>
+    <div class="input-wrap">
+      <span class="currency">฿</span>
+      <input type="number" id="state-remain" placeholder="0" min="0" max="200" step="0.01" oninput="calcReverse()" />
+    </div>
+    <div class="quick-btns">
+      <button onclick="setRemain(50)">50</button>
+      <button onclick="setRemain(100)">100</button>
+      <button onclick="setRemain(150)">150</button>
+      <button onclick="setRemain(200)">200</button>
+    </div>
+    <div class="rev-result" id="rev-result" style="display:none;">
+      <div class="rev-box rev-box-price">
+        <div class="rv-label">ซื้อของได้สูงสุด</div>
+        <div class="rv-amount" id="rev-price">0<span class="rv-unit">฿</span></div>
+      </div>
+      <div class="rev-box rev-box-pay">
+        <div class="rv-label">ต้องเติมเงินเอง</div>
+        <div class="rv-amount" id="rev-pay">0<span class="rv-unit">฿</span></div>
+      </div>
+    </div>
+  </div>
+
   <!-- Info pills -->
   <div class="card">
     <div style="font-size:12px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;color:var(--gray500);margin-bottom:12px;">เงื่อนไขโครงการ</div>
@@ -730,6 +788,23 @@
     document.getElementById('price').value = '';
     calc();
     document.getElementById('price').focus();
+  }
+
+  function calcReverse() {
+    const remain = parseFloat(document.getElementById('state-remain').value) || 0;
+    const resultDiv = document.getElementById('rev-result');
+    if (remain <= 0) { resultDiv.style.display = 'none'; return; }
+    const clampedRemain = Math.min(remain, CAP);
+    const maxPrice = clampedRemain / 0.6;
+    const youPay   = maxPrice * 0.4;
+    document.getElementById('rev-price').innerHTML = fmtShort(maxPrice) + '<span class="rv-unit">฿</span>';
+    document.getElementById('rev-pay').innerHTML   = fmtShort(youPay)   + '<span class="rv-unit">฿</span>';
+    resultDiv.style.display = 'grid';
+  }
+
+  function setRemain(n) {
+    document.getElementById('state-remain').value = n;
+    calcReverse();
   }
 
   calc();
