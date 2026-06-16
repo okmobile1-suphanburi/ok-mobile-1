@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://okmobile-suphanburi.com/sitemap.xml
