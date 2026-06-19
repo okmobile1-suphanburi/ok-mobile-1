@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SECURE PAYMENT - OK MOBILE</title>
+    <title>ช่องทางการชำระเงิน - ร้านโอเค โมบาย</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
+    <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+
     <style>
         :root {
-            --primary-blue: #2563eb;
+            --primary-blue: #1d63ed;
+            --shop-orange: #f5a623;
             --success-green: #00a049;
             --bg-light: #f1f5f9;
             --text-main: #1e293b;
@@ -26,7 +27,6 @@
             margin: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
             min-height: 100vh;
             padding: 15px;
         }
@@ -35,40 +35,43 @@
             background: #ffffff;
             width: 100%;
             max-width: 450px;
-            border-radius: 28px;
+            border-radius: 24px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            padding: 25px 20px;
+            padding: 0 0 20px 0;
             border: 1px solid #f8fafc;
             margin: auto;
-        }
-
-        .header { text-align: center; margin-bottom: 25px; }
-        .logo-wrapper {
-            width: 65px; height: 65px;
-            background: #fff;
-            border-radius: 16px;
-            display: inline-flex;
-            align-items: center; justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            margin-bottom: 12px;
             overflow: hidden;
         }
+
+        .banner-img { width: 100%; display: block; }
+
+        .header { text-align: center; padding: 16px 20px 0 20px; }
+        .logo-wrapper {
+            width: 70px; height: 70px;
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            overflow: hidden;
+            background: #fff;
+        }
         .logo-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-        .title { font-size: 22px; font-weight: 800; margin: 0; color: var(--dark-btn); }
-        .subtitle { color: var(--success-green); font-size: 13px; font-weight: 500; margin-top: 4px; }
+        .title { font-size: 20px; font-weight: 800; margin: 0; color: var(--dark-btn); }
+        .subtitle { color: var(--text-muted); font-size: 13px; font-weight: 400; margin-top: 4px; }
 
-        .label { font-size: 12px; font-weight: 700; color: var(--text-muted); margin: 20px 0 10px 0; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+        .body-content { padding: 0 20px; }
 
-        /* Bank Section */
+        .label { font-size: 12px; font-weight: 700; color: var(--text-muted); margin: 18px 0 10px 0; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
+
         .bank-section {
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
+            border-radius: 18px;
+            padding: 18px;
         }
-        .bank-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 12px; font-size: 14px; }
-        .bank-brand img { width: 24px; }
+        .bank-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; margin-bottom: 10px; font-size: 14px; }
+        .bank-brand img { width: 22px; }
         .acc-name-value { color: var(--primary-blue); font-weight: 600; font-size: 15px; margin-bottom: 12px; }
 
         .number-box {
@@ -79,7 +82,7 @@
             text-align: center;
             margin-bottom: 12px;
         }
-        .number-text { font-size: clamp(22px, 7vw, 26px); font-weight: 800; color: var(--success-green); letter-spacing: 1px; }
+        .number-text { font-size: clamp(20px, 6.5vw, 24px); font-weight: 800; color: var(--success-green); letter-spacing: 1px; }
 
         .btn-copy {
             background: var(--primary-blue);
@@ -87,63 +90,65 @@
             border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 14px;
         }
 
-        /* QR Section */
         .qr-section {
             background: #fff;
             border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            padding: 20px;
+            border-radius: 18px;
+            padding: 18px;
             text-align: center;
-            margin-bottom: 15px;
+            margin-top: 14px;
         }
         .qr-box {
             display: inline-block;
-            padding: 20px; /* เพิ่ม Padding เพื่อให้ตอนแคปภาพไม่ติดขอบ */
+            padding: 14px;
             background: white;
             border: 1px solid #f1f5f9;
-            border-radius: 15px;
-            margin-bottom: 12px;
-            position: relative;
+            border-radius: 14px;
+            margin-bottom: 10px;
         }
         .qr-box img { width: 180px; height: 180px; max-width: 100%; display: block; }
-        .qr-box::before, .qr-box::after { content: ''; position: absolute; width: 20px; height: 20px; border: 3px solid var(--primary-blue); }
-        .qr-box::before { top: 8px; left: 8px; border-right: 0; border-bottom: 0; }
-        .qr-box::after { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+        .qr-caption { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
 
         .btn-shot {
             background: #00c853;
             color: white; border: none; width: 100%; padding: 12px;
-            border-radius: 12px; font-weight: 700; font-size: 13px; text-transform: uppercase; cursor: pointer;
+            border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer;
         }
 
-        /* Contact Dashboard */
+        .notice {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 14px;
+            padding: 12px 14px;
+            font-size: 12.5px;
+            color: #9a3412;
+            margin-top: 14px;
+            line-height: 1.6;
+        }
+
         .contact-dashboard {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-top: 14px;
         }
         .contact-card {
-            text-decoration: none; padding: 15px 5px; border-radius: 16px;
+            text-decoration: none; padding: 14px 5px; border-radius: 14px;
             display: flex; flex-direction: column; align-items: center; gap: 5px; color: white;
         }
         .contact-card.line { background: linear-gradient(135deg, #06C755 0%, #05a346 100%); }
-        .contact-card.phone { background: linear-gradient(135deg, #007AFF 0%, #0056b3 100%); }
+        .contact-card.phone { background: linear-gradient(135deg, var(--primary-blue) 0%, #0d47c2 100%); }
         .contact-card span { font-weight: 700; font-size: 13px; }
 
-        .btn-home-hero {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            background: var(--dark-btn); color: #fff; text-decoration: none;
-            padding: 18px; border-radius: 18px; font-weight: 800; font-size: 16px;
-            border-bottom: 4px solid #000;
+        .footer-note {
+            text-align: center;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-top: 16px;
         }
 
-        /* Utility Class สำหรับซ่อนตอนแคปภาพ */
-        .no-capture { }
-
         @media (max-width: 360px) {
-            .main-card { padding: 20px 15px; }
-            .number-text { font-size: 20px; }
+            .number-text { font-size: 18px; }
             .contact-dashboard { grid-template-columns: 1fr; }
         }
     </style>
@@ -151,101 +156,134 @@
 <body>
 
     <div class="main-card">
+        <img class="banner-img" src="assets/banner.jpg" alt="ร้านโอเค โมบาย ตลาดอู่ทอง">
+
         <div class="header">
             <div class="logo-wrapper">
-                <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile">
+                <img src="assets/logo.jpg" alt="OK Mobile">
             </div>
-            <h1 class="title">SECURE PAYMENT</h1>
-            <div class="subtitle">โอนเงินแล้วกรุณาแจ้งทุกครั้ง ✨</div>
+            <h1 class="title">ร้านโอเค โมบาย</h1>
+            <div class="subtitle">ตลาดอู่ทอง · ช่องทางการชำระเงิน</div>
         </div>
 
-        <span class="label">ช่องทางการโอน</span>
-        <div class="bank-section">
-            <div class="bank-brand">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kasikornbank_Logo.svg/240px-Kasikornbank_Logo.svg.png">
-                <span>ธนาคารกสิกรไทย</span>
-            </div>
-            <div class="acc-name-value">ชื่อบัญชี : โอเคโมบาย (OK MOBILE)</div>
-            <div class="number-box">
-                <div class="number-text">175-139-8588</div>
-            </div>
-            <button class="btn-copy" onclick="copyAccount()">
-                <i class="far fa-copy"></i> กดคัดลอกเลขบัญชี
-            </button>
-        </div>
-
-        <span class="label">สแกน QR Code</span>
-        <div class="qr-section">
-            <div class="qr-box" id="qr-target">
-                <img src="https://i.imgur.com/uwkjbbf.jpeg" crossorigin="anonymous">
-            </div>
-            
-            <div style="margin-top: 10px;">
-                <button class="btn-shot" onclick="captureQROnly()">
-                    <i class="fas fa-camera"></i> กดบันทึก QR Code
+        <div class="body-content">
+            <span class="label">โอนเงินผ่านบัญชีธนาคาร</span>
+            <div class="bank-section">
+                <div class="bank-brand">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Kasikornbank_Logo.svg/240px-Kasikornbank_Logo.svg.png" alt="KBank">
+                    <span>ธนาคารกสิกรไทย</span>
+                </div>
+                <div class="acc-name-value">ชื่อบัญชี : ร้านโอเคโมบาย</div>
+                <div class="number-box">
+                    <div class="number-text">175-139-8588</div>
+                </div>
+                <button class="btn-copy" onclick="copyAccount()">
+                    <i class="far fa-copy"></i> กดคัดลอกเลขบัญชี
                 </button>
             </div>
-        </div>
 
-        <span class="label">แจ้งโอนหรือสอบถาม</span>
-        <div class="contact-dashboard">
-            <a href="https://line.me/ti/p/@661qazoc" class="contact-card line">
-                <i class="fab fa-line"></i>
-                <span>แจ้งทาง LINE</span>
-            </a>
-            <a href="tel:0946613961" class="contact-card phone">
-                <i class="fas fa-phone-alt"></i>
-                <span>โทรหาเรา</span>
-            </a>
-        </div>
+            <span class="label">สแกน QR เพื่อโอนเงิน</span>
+            <div class="qr-section">
+                <div class="qr-box" id="qr-target">
+                    <img src="assets/qr.png" alt="QR PromptPay ร้านโอเคโมบาย" crossorigin="anonymous"
+                         onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<p style=\'color:#dc2626;font-size:13px;\'>โหลด QR ไม่สำเร็จ กรุณาติดต่อทาง LINE หรือโทร</p>')">
+                </div>
+                <div class="qr-caption">PromptPay · ร้านโอเคโมบาย</div>
+                <button class="btn-shot" onclick="captureQROnly()">
+                    <i class="fas fa-camera"></i> บันทึกรูป QR Code
+                </button>
+            </div>
 
-        <a href="https://okmobile-suphanburi.com/" class="btn-home-hero">
-            <i class="fas fa-house-chimney"></i> กลับสู่หน้าหลัก
-        </a>
+            <div class="notice">
+                <i class="fas fa-circle-info"></i>
+                กรุณาส่งสลิปยืนยันการโอนทาง LINE หรือโทรแจ้งหลังโอนทุกครั้ง เพื่อความรวดเร็วในการตรวจสอบ
+            </div>
+
+            <div class="contact-dashboard">
+                <a href="https://line.me/ti/p/@661qazoc" class="contact-card line">
+                    <i class="fab fa-line"></i>
+                    <span>แจ้งทาง LINE</span>
+                </a>
+                <a href="tel:0946613961" class="contact-card phone">
+                    <i class="fas fa-phone-alt"></i>
+                    <span>โทร 094-661-3961</span>
+                </a>
+            </div>
+
+            <div class="footer-note">ร้านโอเค โมบาย ตลาดอู่ทอง · จำหน่าย-รับซ่อม-รับเทิร์นมือถือทุกรุ่น</div>
+        </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
         function copyAccount() {
-            navigator.clipboard.writeText("1751398588").then(() => {
-                const btn = document.querySelector('.btn-copy');
-                const originalText = btn.innerHTML;
+            const btn = document.querySelector('.btn-copy');
+            const originalText = btn.innerHTML;
+            const accountNumber = "1751398588";
+
+            function showSuccess() {
                 btn.innerHTML = '✅ คัดลอกเรียบร้อย';
                 btn.style.background = '#00a049';
                 setTimeout(() => {
                     btn.innerHTML = originalText;
-                    btn.style.background = '#2563eb';
+                    btn.style.background = '';
                 }, 2000);
-            });
+            }
+
+            function showError() {
+                btn.innerHTML = '❌ คัดลอกไม่สำเร็จ กรุณาคัดลอกเอง';
+                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(accountNumber).then(showSuccess).catch(showError);
+            } else {
+                try {
+                    const textarea = document.createElement('textarea');
+                    textarea.value = accountNumber;
+                    textarea.style.position = 'fixed';
+                    textarea.style.opacity = '0';
+                    document.body.appendChild(textarea);
+                    textarea.focus();
+                    textarea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textarea);
+                    showSuccess();
+                } catch (err) {
+                    console.error('Copy failed:', err);
+                    showError();
+                }
+            }
         }
 
-        // ฟังก์ชันใหม่: แคปเฉพาะ QR Code
         function captureQROnly() {
             const target = document.getElementById('qr-target');
             const btn = event.currentTarget;
-            
+            const originalText = btn.innerHTML;
+
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> กำลังบันทึก...';
 
             html2canvas(target, {
-                scale: 3, // เพิ่มความละเอียดภาพเพื่อให้สแกนง่าย
+                scale: 3,
                 backgroundColor: "#ffffff",
                 useCORS: true,
                 logging: false,
             }).then(canvas => {
                 try {
                     const link = document.createElement('a');
-                    link.download = 'OK-Mobile-QR.png';
+                    link.download = 'OKMobile-QR.png';
                     link.href = canvas.toDataURL("image/png");
                     link.click();
-                    
                     btn.innerHTML = '✅ บันทึกสำเร็จ!';
                 } catch (err) {
                     btn.innerHTML = '❌ พลาด! กรุณาแคปจอเอง';
                     console.error("Capture Error:", err);
                 }
-                
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="fas fa-camera"></i> บันทึกภาพเฉพาะ QR Code';
-                }, 2000);
+                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+            }).catch(err => {
+                console.error("html2canvas Error:", err);
+                btn.innerHTML = '❌ พลาด! กรุณาแคปจอเอง';
+                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
             });
         }
     </script>
