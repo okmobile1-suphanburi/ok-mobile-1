@@ -3,226 +3,682 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OK Mobile | เช็คประกัน</title>
-    <!-- TailwindCSS -->
+    <title>OK Mobile | ใบรับรองการตรวจสอบเครื่อง</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* Import Thai Font - Prompt */
-        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700&display=swap');
-        
-        /* Apply Prompt font globally and define primary colors */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@400;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --obsidian: #0B0C0E;
+            --panel: #15161A;
+            --panel-raised: #1B1C21;
+            --hairline: rgba(201, 168, 118, 0.22);
+            --gold: #C9A876;
+            --gold-bright: #E6CB94;
+            --ivory: #EFEAE0;
+            --muted: #8C887F;
+            --emerald: #5FAE8C;
+            --emerald-dim: rgba(95, 174, 140, 0.12);
+            --amber: #D7B05C;
+            --amber-dim: rgba(215, 176, 92, 0.12);
+            --rose: #C77B7B;
+            --rose-dim: rgba(199, 123, 123, 0.12);
+        }
+
+        [data-theme="light"] {
+            --obsidian: #F4F0E6;
+            --panel: #FFFFFF;
+            --panel-raised: #FAF7F0;
+            --hairline: rgba(150, 115, 60, 0.25);
+            --gold: #9C7A3E;
+            --gold-bright: #B6904F;
+            --ivory: #2B2722;
+            --muted: #756F63;
+            --emerald: #2F8A63;
+            --emerald-dim: rgba(47, 138, 99, 0.10);
+            --amber: #A87A1E;
+            --amber-dim: rgba(168, 122, 30, 0.10);
+            --rose: #A3433F;
+            --rose-dim: rgba(163, 67, 63, 0.10);
+        }
+
+        * { box-sizing: border-box; }
+
         body {
-            font-family: 'Prompt', sans-serif;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            color: #333;
+            background: var(--obsidian);
+            color: var(--ivory);
+            transition: background 0.3s ease, color 0.3s ease;
+            background-image:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,168,118,0.10), transparent),
+                repeating-linear-gradient(115deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px);
         }
 
-        /* Custom Colors for Consistency with Product Page */
-        .bg-gradient-header {
-            background-image: linear-gradient(to right, var(--tw-gradient-stops));
-            --tw-gradient-from: #ec4899; /* pink-500 */
-            --tw-gradient-to: #ef4444; /* red-500 */
-            --tw-gradient-stops: var(--tw-gradient-from), #f59e0b, var(--tw-gradient-to); /* pink -> yellow -> red */
+        .font-display { font-family: 'Noto Serif Thai', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .cert-frame {
+            position: relative;
+            background: linear-gradient(180deg, var(--panel) 0%, var(--panel) 100%);
+            border: 1px solid var(--hairline);
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .cert-frame::before {
+            content: "";
+            position: absolute;
+            inset: 8px;
+            border: 1px solid var(--hairline);
+            opacity: 0.6;
+            pointer-events: none;
         }
 
-        .bg-secondary { background-color: #ec4899; } /* pink */
-
-        /* --- Animation Keyframes --- */
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .animate-slideInUp {
-            animation: slideInUp 0.6s ease-out forwards;
+        .eyebrow {
+            letter-spacing: 0.28em;
+            font-size: 0.68rem;
+            color: var(--gold);
+            font-weight: 500;
         }
 
-        /* Button Press Effect (Active State) */
-        .btn-press:active {
-            transform: scale(0.98) translateY(1px);
-            box-shadow: none;
+        @keyframes riseIn {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-riseIn { animation: riseIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes fadeScale {
+            from { opacity: 0; transform: scale(0.97); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .animate-fadeScale { animation: fadeScale 0.4s ease-out forwards; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .animate-riseIn, .animate-fadeScale { animation: none; }
         }
 
-        /* Enhanced Result Styling */
-        .result {
-            /* Ensure smooth transition for color/shadow changes */
-            transition: all 0.3s ease-in-out; 
+        .imei-row { position: relative; }
+        .imei-input {
+            background: var(--panel-raised);
+            border: 1px solid var(--hairline);
+            color: var(--ivory);
+            letter-spacing: 0.18em;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.25);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.3s ease;
+            padding-right: 3rem;
+        }
+        .imei-input::placeholder {
+            color: var(--muted);
+            opacity: 0.6;
+            letter-spacing: 0.04em;
+            font-family: 'IBM Plex Sans Thai', sans-serif;
+        }
+        .imei-input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.25), 0 0 0 3px rgba(201,168,118,0.16);
         }
 
-        .result.success {
-            background-color: #d1fae5; /* green-100 */
-            border: 2px solid #10b981; /* green-500 */
-            color: #065f46; /* green-700 */
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3); /* Stronger shadow */
+        .paste-btn {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            transition: color 0.2s ease;
         }
+        .paste-btn:hover { color: var(--gold); }
+        .paste-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
 
-        .result.error {
-            background-color: #fee2e2; /* red-100 */
-            border: 2px solid #f87171; /* red-400 */
-            color: #991b1b; /* red-800 */
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(248, 113, 113, 0.3); /* Stronger shadow */
+        .btn-gold {
+            background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 100%);
+            color: #1A1306;
+            font-weight: 600;
+            transition: filter 0.2s ease, transform 0.15s ease;
         }
-        
-        .result p {
-            margin: 5px 0;
-            text-align: left;
-            padding-left: 10px;
-        }
+        [data-theme="light"] .btn-gold { color: #FFFBF2; }
+        .btn-gold:hover { filter: brightness(1.08); }
+        .btn-gold:active { transform: translateY(1px) scale(0.99); }
 
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--hairline);
+            color: var(--ivory);
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+        .btn-ghost:hover { border-color: var(--gold); background: rgba(201,168,118,0.06); }
+
+        .result-panel { transition: all 0.3s ease; }
+        .result-panel.success { background: var(--emerald-dim); border: 1px solid var(--emerald); }
+        .result-panel.warn { background: var(--amber-dim); border: 1px solid var(--amber); }
+        .result-panel.error { background: var(--rose-dim); border: 1px solid var(--rose); }
+        .result-panel p { text-align: left; }
+
+        .seal {
+            width: 44px; height: 44px;
+            border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-weight: 600;
+        }
+        .seal.success { border: 1px solid var(--emerald); color: var(--emerald); }
+        .seal.warn { border: 1px solid var(--amber); color: var(--amber); }
+        .seal.error { border: 1px solid var(--rose); color: var(--rose); }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            letter-spacing: 0.06em;
+            font-weight: 500;
+        }
+        .status-badge.success { background: var(--emerald-dim); color: var(--emerald); border: 1px solid var(--emerald); }
+        .status-badge.warn { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber); }
+        .status-badge.error { background: var(--rose-dim); color: var(--rose); border: 1px solid var(--rose); }
+        .status-dot { width: 6px; height: 6px; border-radius: 9999px; background: currentColor; }
+
+        .hairline-divider { display: flex; align-items: center; gap: 12px; color: var(--gold); }
+        .hairline-divider::before, .hairline-divider::after { content: ""; flex: 1; height: 1px; background: var(--hairline); }
+
+        .spinner {
+            width: 16px; height: 16px;
+            border: 2px solid rgba(201,168,118,0.25);
+            border-top-color: var(--gold);
+            border-radius: 9999px;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .icon-btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            gap: 8px;
+            border: 1px solid var(--hairline);
+            color: var(--ivory);
+            background: var(--panel-raised);
+            transition: border-color 0.2s ease, background 0.2s ease;
+        }
+        .icon-btn:hover { border-color: var(--gold); }
+
+        .theme-toggle {
+            border: 1px solid var(--hairline);
+            background: var(--panel-raised);
+            color: var(--gold);
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+        .theme-toggle:hover { border-color: var(--gold); }
+
+        ::selection { background: rgba(201,168,118,0.35); color: var(--ivory); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body data-theme="dark">
 
-    <!-- Header (Vibrant Gradient) -->
-    <header class="bg-gradient-header text-white p-6 text-center shadow-xl relative rounded-b-xl">
-        <div class="max-w-xl mx-auto flex items-center justify-center space-x-3">
-            <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="h-12 w-12 rounded-full object-cover shadow-lg border-2 border-white" />
-            <h1 class="text-3xl font-extrabold drop-shadow-lg tracking-wide">
+    <!-- Theme toggle -->
+    <button id="themeToggle" onclick="toggleTheme()" aria-label="สลับโหมดสว่าง/มืด"
+            class="theme-toggle fixed top-4 right-4 z-10 w-10 h-10 rounded-full flex items-center justify-center text-sm">
+        <span id="themeIcon">☀</span>
+    </button>
+
+    <!-- Header -->
+    <header class="pt-10 pb-6 px-4 text-center">
+        <div class="max-w-xl mx-auto flex flex-col items-center">
+            <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="h-14 w-14 rounded-full object-cover mb-4" style="border: 1px solid var(--hairline); box-shadow: 0 0 0 4px rgba(201,168,118,0.06);" />
+            <p class="eyebrow uppercase mb-2">Certified Device Registry</p>
+            <h1 class="font-display text-3xl sm:text-4xl font-semibold tracking-wide" style="color: var(--ivory);">
                 OK MOBILE
             </h1>
+            <p class="text-sm mt-2" style="color: var(--muted);">ระบบตรวจสอบการรับประกันสินค้า</p>
         </div>
-        <p class="text-sm mt-1 opacity-90">ระบบตรวจสอบการรับประกันสินค้า</p>
     </header>
 
-    <!-- Main Content Container -->
-    <div class="flex-grow flex flex-col items-center justify-center p-4">
-        <!-- Main Card with Slide-In Animation -->
-        <div class="bg-white p-6 sm:p-10 rounded-2xl shadow-2xl w-full max-w-md border-t-4 border-secondary transition-all duration-500 animate-slideInUp">
-            
-            <h2 class="text-2xl font-bold mb-4 text-center text-gray-700">
-                🔍 เช็คประกันเครื่อง มือ1 มือ2
+    <!-- Main Content -->
+    <div class="flex-grow flex flex-col items-center justify-center px-4 pb-10">
+        <div id="certCard" class="cert-frame rounded-sm shadow-2xl w-full max-w-md p-7 sm:p-10 animate-riseIn">
+
+            <p class="eyebrow text-center mb-1">ตรวจสอบเครื่อง มือ 1 / มือ 2</p>
+            <h2 class="font-display text-xl text-center font-semibold mb-7" style="color: var(--ivory);">
+                เช็คสถานะการรับประกัน
             </h2>
 
-            <!-- Input Field -->
-            <label for="serialNumber" class="block text-left text-lg font-medium mb-2 text-pink-600">
-                หมายเลข IMEI:
+            <!-- Input -->
+            <label for="serialNumber" class="block text-left text-xs eyebrow mb-2 uppercase">
+                หมายเลข IMEI
             </label>
-            <!-- Added stronger focus ring -->
-            <input type="text" id="serialNumber" placeholder="กรอกหมายเลข IMEI (กดเช็ค *#06#) 15 หลัก"
-                   class="p-4 w-full border-2 border-gray-300 rounded-xl text-lg mb-4 focus:ring-4 focus:ring-pink-500/50 outline-none transition duration-300 shadow-inner">
-            
-            <!-- Button Group -->
-            <div class="flex flex-col sm:flex-row gap-3 mt-4 justify-between">
-                <!-- Added btn-press class for active effect -->
-                <button onclick="checkWarranty()" class="flex-1 bg-secondary text-white py-3 rounded-xl text-lg font-semibold shadow-md hover:bg-pink-600 transition-transform transform hover:scale-[1.01] btn-press">
-                    เช็คประกัน
+            <div class="imei-row mb-6">
+                <input type="text" id="serialNumber" placeholder="กด *#06# เพื่อดูเลข 15 หลัก"
+                       inputmode="numeric" maxlength="15"
+                       class="imei-input font-mono p-4 w-full rounded-sm text-lg">
+                <button type="button" class="paste-btn" onclick="pasteImei()" aria-label="วางจากคลิปบอร์ด" title="วางจากคลิปบอร์ด">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <rect x="9" y="2" width="6" height="4" rx="1"></rect>
+                        <path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"></path>
+                    </svg>
                 </button>
-                <!-- Added btn-press class for active effect -->
-                <a href="index.html" class="flex-1 text-center bg-gray-500 text-white py-3 rounded-xl text-lg font-semibold shadow-md hover:bg-gray-600 transition-transform transform hover:scale-[1.01] btn-press">
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="checkWarranty()" class="btn-gold flex-1 py-3.5 rounded-sm text-base tracking-wide">
+                    ตรวจสอบ
+                </button>
+                <a href="index.html" class="btn-ghost flex-1 text-center py-3.5 rounded-sm text-base tracking-wide">
                     กลับหน้าหลัก
                 </a>
             </div>
 
-            <!-- Result Display -->
-            <div id="result" class="result text-center mt-6"></div>
+            <!-- Result -->
+            <div id="result" class="mt-7"></div>
 
-            <!-- ข้อความหมายเหตุ (Note Section) -->
-            <div class="note bg-gray-100 p-4 rounded-xl mt-6 border-l-4 border-indigo-400">
-                <p class="font-bold text-gray-600 mb-1">ข้อกำหนดการรับประกัน:</p>
-                <ul class="list-disc pl-5 text-gray-500 text-sm space-y-1">
-                    <li>กรุณากรอกหมายเลข IMEI ให้ครบถ้วน 15 หลัก</li>
-                    <li>ระบบนี้ใช้ได้เฉพาะเครื่องที่ซื้อจากร้าน OK Mobile เท่านั้น</li>
-                    <li>หล่นแตก โดนน้ำ ไม่รับประกันทุกกรณี</li>
-                    <li>มือ2 รับประกัน 3 เดือน</li>
-                    <li>มือ1 รับประกัน 12 เดือน</li>
+            <!-- Result actions (hidden until a result exists) -->
+            <div id="resultActions" class="hidden mt-4 grid grid-cols-2 gap-3">
+                <button onclick="saveAsImage()" class="icon-btn rounded-sm py-2.5 text-sm">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+                    บันทึกเป็นรูป
+                </button>
+                <a id="callBtn" href="tel:0946613961" class="icon-btn rounded-sm py-2.5 text-sm">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    โทรหาร้าน
+                </a>
+            </div>
+
+            <!-- Terms -->
+            <div class="mt-8">
+                <div class="hairline-divider mb-4">
+                    <span class="text-xs uppercase tracking-widest" style="color: var(--gold);">เงื่อนไข</span>
+                </div>
+                <ul class="text-sm space-y-2" style="color: var(--muted);">
+                    <li class="flex gap-2"><span style="color: var(--gold);">·</span>กรอกหมายเลข IMEI ให้ครบถ้วน 15 หลัก</li>
+                    <li class="flex gap-2"><span style="color: var(--gold);">·</span>ใช้ได้เฉพาะเครื่องที่ซื้อจากร้าน OK Mobile</li>
+                    <li class="flex gap-2"><span style="color: var(--gold);">·</span>หล่นแตก โดนน้ำ ไม่อยู่ในเงื่อนไขการรับประกัน</li>
+                    <li class="flex gap-2"><span style="color: var(--gold);">·</span>เครื่องมือ 2 รับประกัน 3 เดือน</li>
+                    <li class="flex gap-2"><span style="color: var(--gold);">·</span>เครื่องมือ 1 รับประกัน 12 เดือน</li>
                 </ul>
             </div>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-pink-500 text-white text-center p-4 rounded-t-xl shadow-inner mt-8">
-        <p class="text-sm">©OK-MOBILE2021 Ver.1.5 | โทร.094-6613961</p>
+    <footer class="text-center py-6 px-4" style="border-top: 1px solid var(--hairline);">
+        <p class="text-xs font-mono" style="color: var(--muted); letter-spacing: 0.05em;">© OK MOBILE 2021 · VER. 2.0 · โทร 094-661-3961</p>
     </footer>
 
     <script>
+        /* =========================================================
+           THEME TOGGLE
+        ========================================================= */
+        function toggleTheme() {
+            var body = document.body;
+            var isLight = body.getAttribute('data-theme') === 'light';
+            body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+            document.getElementById('themeIcon').textContent = isLight ? '☀' : '☾';
+            try { localStorage.setItem('okmobile-theme', isLight ? 'dark' : 'light'); } catch (e) {}
+        }
+        (function initTheme() {
+            try {
+                var saved = localStorage.getItem('okmobile-theme');
+                if (saved === 'light') {
+                    document.body.setAttribute('data-theme', 'light');
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('themeIcon').textContent = '☾';
+                    });
+                }
+            } catch (e) {}
+        })();
+
+        /* =========================================================
+           HELPERS
+        ========================================================= */
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.textContent = String(str);
+            return div.innerHTML;
+        }
+
+        function setResult(html, hasActions) {
+            document.getElementById("result").innerHTML = html;
+            document.getElementById("resultActions").classList.toggle('hidden', !hasActions);
+        }
+
+        async function pasteImei() {
+            try {
+                var text = await navigator.clipboard.readText();
+                var digitsOnly = text.replace(/\D/g, '').slice(0, 15);
+                if (digitsOnly) {
+                    document.getElementById("serialNumber").value = digitsOnly;
+                }
+            } catch (e) {
+                // เบราว์เซอร์บางตัวไม่อนุญาตให้อ่านคลิปบอร์ดอัตโนมัติ ให้ผู้ใช้วางเอง (Ctrl/Cmd+V)
+            }
+        }
+
+        function saveAsImage() {
+            html2canvas(document.getElementById('certCard'), {
+                backgroundColor: getComputedStyle(document.body).getPropertyValue('--obsidian').trim(),
+                scale: 2
+            }).then(function (canvas) {
+                var link = document.createElement('a');
+                link.download = 'ok-mobile-warranty-' + Date.now() + '.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(function (err) {
+                console.error('บันทึกรูปไม่สำเร็จ:', err);
+            });
+        }
+
+        /* =========================================================
+           WARRANTY EXPIRY CALCULATION
+        ========================================================= */
+        // แปลงสตริงวันที่หลายรูปแบบ (DD/M/YYYY) รองรับทั้ง พ.ศ. (เช่น 16/7/2567)
+        // และ ค.ศ. (เช่น 1/9/2024) ที่ปะปนกันอยู่ในชีตจริง
+        function parsePurchaseDate(str) {
+            if (!str) return null;
+            str = String(str).trim();
+
+            var m = str.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
+            if (m) {
+                var d = parseInt(m[1], 10), mo = parseInt(m[2], 10), y = parseInt(m[3], 10);
+                if (y < 100) y += 2000;
+                if (y > 2400) y -= 543; // ปี พ.ศ. (เช่น 2567) -> แปลงเป็น ค.ศ. (2024)
+                var dt = new Date(y, mo - 1, d);
+                return isNaN(dt.getTime()) ? null : dt;
+            }
+
+            m = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+            if (m) {
+                var y2 = parseInt(m[1], 10);
+                if (y2 > 2400) y2 -= 543;
+                var dt2 = new Date(y2, parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+                return isNaN(dt2.getTime()) ? null : dt2;
+            }
+
+            var fallback = new Date(str);
+            return isNaN(fallback.getTime()) ? null : fallback;
+        }
+
+        // ในชีตจริง ประเภทเครื่องถูกฝังไว้เป็นคำนำหน้าชื่อรุ่นในคอลัมน์ B
+        // เช่น "<มือ2>Realme C53" หรือ "<มือ1>Samsung A15 5G"
+        var DEVICE_TYPE_PREFIX = /^<\s*(มือ\s*1|มือ\s*2|มือหนึ่ง|มือสอง)\s*>\s*/i;
+
+        // แยกคำนำหน้าประเภทเครื่องออกจากชื่อรุ่น คืนค่าทั้งชื่อรุ่นที่ตัดแล้วและประเภท
+        function splitModelAndType(rawModel) {
+            var text = String(rawModel || '');
+            var match = text.match(DEVICE_TYPE_PREFIX);
+            if (match) {
+                var typeText = match[1].replace(/\s/g, '');
+                return {
+                    model: text.replace(DEVICE_TYPE_PREFIX, '').trim(),
+                    deviceType: typeText
+                };
+            }
+            return { model: text.trim(), deviceType: '' };
+        }
+
+        // คำนวณจำนวนเดือนประกันจากประเภทเครื่อง ถ้าไม่ระบุ จะเดาจากคำในหมายเหตุ
+        // และถ้ายังไม่เจอ จะถือว่าเป็นมือ 1 (12 เดือน) เป็นค่าเริ่มต้น
+        function resolveWarrantyMonths(deviceType, notes) {
+            var text = (String(deviceType || '') + ' ' + String(notes || ''));
+            if (/มือ\s*2|มือสอง/.test(text)) return 3;
+            if (/มือ\s*1|มือหนึ่ง/.test(text)) return 12;
+            return 12; // ค่าเริ่มต้นเมื่อไม่ระบุ
+        }
+
+        function computeWarrantyStatus(purchaseDateStr, deviceType, notes) {
+            var purchaseDate = parsePurchaseDate(purchaseDateStr);
+            if (!purchaseDate) {
+                return { known: false };
+            }
+            var months = resolveWarrantyMonths(deviceType, notes);
+            var expiry = new Date(purchaseDate);
+            expiry.setMonth(expiry.getMonth() + months);
+
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+            var expiryDay = new Date(expiry);
+            expiryDay.setHours(0, 0, 0, 0);
+
+            var msPerDay = 1000 * 60 * 60 * 24;
+            var daysLeft = Math.round((expiryDay - today) / msPerDay);
+
+            var level;
+            if (daysLeft < 0) level = 'error';
+            else if (daysLeft <= 30) level = 'warn';
+            else level = 'success';
+
+            var expiryLabel = expiry.toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+
+            return {
+                known: true,
+                months: months,
+                level: level,
+                daysLeft: daysLeft,
+                expiryLabel: expiryLabel
+            };
+        }
+
+        function statusBadgeHtml(status) {
+            if (!status.known) {
+                return `<span class="status-badge warn"><span class="status-dot"></span>ไม่ทราบวันหมดประกัน</span>`;
+            }
+            var text;
+            if (status.level === 'error') {
+                text = `หมดประกันแล้ว (${Math.abs(status.daysLeft)} วันก่อน)`;
+            } else if (status.level === 'warn') {
+                text = `ใกล้หมดประกัน · เหลือ ${status.daysLeft} วัน`;
+            } else {
+                text = `อยู่ในประกัน · เหลือ ${status.daysLeft} วัน`;
+            }
+            return `<span class="status-badge ${status.level}"><span class="status-dot"></span>${text}</span>`;
+        }
+
+        /* =========================================================
+           RESULT PANELS
+        ========================================================= */
+        function loadingPanel() {
+            return `
+                <div class="result-panel rounded-sm p-5 flex items-center gap-3 animate-fadeScale" style="background: var(--panel-raised); border: 1px solid var(--hairline);">
+                    <span class="spinner"></span>
+                    <span class="text-sm" style="color: var(--muted);">กำลังตรวจสอบข้อมูล...</span>
+                </div>
+            `;
+        }
+
+        function errorPanel(message) {
+            return `
+                <div class="result-panel error rounded-sm p-5 flex items-start gap-3 animate-fadeScale">
+                    <div class="seal error">!</div>
+                    <p class="text-sm pt-2.5" style="color: var(--ivory);">${message}</p>
+                </div>
+            `;
+        }
+
+        function successPanel(rows) {
+            var entriesHtml = rows.map((row, idx) => {
+                var rawModel = row[1] || '-';
+                var price = row[2] || '-';
+                var purchaseDate = row[3] || '-';
+                var notes = row[4] || 'ไม่มีข้อมูลเพิ่มเติม';
+
+                var parsedModel = splitModelAndType(rawModel);
+                var model = parsedModel.model || rawModel;
+                var deviceType = parsedModel.deviceType;
+
+                var status = computeWarrantyStatus(purchaseDate, deviceType, notes);
+
+                var divider = idx > 0
+                    ? `<div class="hairline-divider my-4"><span class="text-xs font-mono" style="color: var(--gold);">รายการที่ ${idx + 1}</span></div>`
+                    : '';
+
+                var typeLabel = deviceType === 'มือ2' ? 'เครื่องมือ 2' : (deviceType === 'มือ1' ? 'เครื่องมือ 1' : '');
+
+                var expiryRow = status.known
+                    ? `<dt style="color: var(--muted);">วันหมดประกัน</dt><dd class="col-span-2 font-mono" style="color: var(--ivory);">${escapeHtml(status.expiryLabel)}</dd>`
+                    : '';
+
+                return `
+                    ${divider}
+                    <div class="mb-3 flex flex-wrap items-center gap-2">
+                        ${statusBadgeHtml(status)}
+                        ${typeLabel ? `<span class="status-badge" style="border:1px solid var(--hairline); color: var(--muted);">${typeLabel}</span>` : ''}
+                    </div>
+                    <dl class="grid grid-cols-3 gap-y-2 text-sm">
+                        <dt style="color: var(--muted);">ชื่อรุ่น</dt>
+                        <dd class="col-span-2 font-medium" style="color: var(--ivory);">${escapeHtml(model)}</dd>
+                        <dt style="color: var(--muted);">ราคาขาย</dt>
+                        <dd class="col-span-2 font-mono" style="color: var(--ivory);">${escapeHtml(price)}</dd>
+                        <dt style="color: var(--muted);">วันที่ซื้อ</dt>
+                        <dd class="col-span-2 font-mono" style="color: var(--ivory);">${escapeHtml(purchaseDate)}</dd>
+                        ${expiryRow}
+                        <dt style="color: var(--muted);">หมายเหตุ</dt>
+                        <dd class="col-span-2" style="color: var(--ivory);">${escapeHtml(notes)}</dd>
+                    </dl>
+                `;
+            }).join('');
+
+            var titleText = rows.length > 1
+                ? `พบข้อมูลประกัน ${rows.length} รายการ`
+                : `ข้อมูลประกันพบแล้ว`;
+
+            return `
+                <div class="result-panel success rounded-sm p-5 animate-fadeScale">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="seal success">✓</div>
+                        <p class="font-display font-semibold" style="color: var(--ivory);">${titleText}</p>
+                    </div>
+                    ${entriesHtml}
+                </div>
+            `;
+        }
+
+        /* =========================================================
+           SHORT-LIVED CACHE (sessionStorage)
+        ========================================================= */
+        var CACHE_TTL_MS = 10 * 60 * 1000; // 10 นาที
+
+        function getCached(imei) {
+            try {
+                var raw = sessionStorage.getItem('imei:' + imei);
+                if (!raw) return null;
+                var parsed = JSON.parse(raw);
+                if (Date.now() - parsed.t > CACHE_TTL_MS) {
+                    sessionStorage.removeItem('imei:' + imei);
+                    return null;
+                }
+                return parsed.rows;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function setCached(imei, rows) {
+            try {
+                sessionStorage.setItem('imei:' + imei, JSON.stringify({ t: Date.now(), rows: rows }));
+            } catch (e) {}
+        }
+
+        function logLookup(imei, found) {
+            try {
+                var key = 'okmobile-lookup-log';
+                var log = JSON.parse(localStorage.getItem(key) || '[]');
+                log.push({ imei: imei, found: found, at: new Date().toISOString() });
+                if (log.length > 200) log = log.slice(-200); // กันโตไม่จำกัด
+                localStorage.setItem(key, JSON.stringify(log));
+            } catch (e) {}
+        }
+
+        /* =========================================================
+           MAIN LOOKUP
+        ========================================================= */
+        document.getElementById("serialNumber").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                checkWarranty();
+            }
+        });
+
+        // รองรับ QR Code: ถ้ามี ?imei=xxxxxxxxxxxxxxx ใน URL ให้กรอกและเช็คให้อัตโนมัติ
+        (function autoFillFromQuery() {
+            try {
+                var params = new URLSearchParams(window.location.search);
+                var imeiFromUrl = (params.get('imei') || '').replace(/\D/g, '').slice(0, 15);
+                if (imeiFromUrl) {
+                    document.getElementById("serialNumber").value = imeiFromUrl;
+                    if (/^\d{15}$/.test(imeiFromUrl)) {
+                        checkWarranty();
+                    }
+                }
+            } catch (e) {}
+        })();
+
         function checkWarranty() {
-            var serialNumber = document.getElementById("serialNumber").value;
-            var resultElement = document.getElementById("result");
+            var serialNumber = document.getElementById("serialNumber").value.trim();
 
-            // Clear previous classes and content for smooth transition
-            resultElement.classList.remove('success', 'error');
-            resultElement.innerHTML = ''; // Clear content temporarily
-
-            if (!serialNumber.trim()) {
-                resultElement.innerHTML = "กรุณากรอกหมายเลข IMEI ก่อนเช็คประกัน";
-                resultElement.classList.add('error');
+            if (!serialNumber) {
+                setResult(errorPanel("กรุณากรอกหมายเลข IMEI ก่อนตรวจสอบ"), false);
                 return;
             }
 
-            if (serialNumber.length !== 15 || isNaN(serialNumber)) {
-                resultElement.innerHTML = "หมายเลข IMEI ต้องเป็นตัวเลข 15 หลักเท่านั้น";
-                resultElement.classList.add('error');
+            if (!/^\d{15}$/.test(serialNumber)) {
+                setResult(errorPanel("หมายเลข IMEI ต้องเป็นตัวเลข 15 หลักเท่านั้น"), false);
                 return;
             }
 
-            // --- Google Sheets API Configuration ---
-            // The API key and Sheet ID are hardcoded here for demonstration. 
-            var apiKey = "AIzaSyBCtEQL9aVLIFMVnTdAXhRnz3vm__3eQ1M"; 
-            var spreadsheetId = "1Jaf3ifI-pJhDng9TQ0_0X4taa2rUfUscGBxocWW6s14";
-            var range = "Sheet1!A2:F";
-            var sheetURL = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+            var cached = getCached(serialNumber);
+            if (cached) {
+                setResult(successPanel(cached), true);
+                return;
+            }
 
-            // Updated loading indicator with spinning emoji
-            resultElement.innerHTML = "กำลังตรวจสอบข้อมูล... <span class='text-xl animate-spin text-pink-500'>⚙️</span>";
+            // --- เรียกผ่าน Apps Script Proxy แทนการยิง Sheets API ตรงๆ ---
+            // API key และ Spreadsheet ID ถูกซ่อนไว้ในฝั่ง Apps Script แล้ว
+            // ไม่มีข้อมูลอ่อนไหวหลุดออกมาในโค้ดฝั่ง client อีกต่อไป
+            var proxyURL = "https://script.google.com/macros/s/AKfycbzqN6ExGTS2MaEcx49BIeITNBjwkHS7N-L0hNGkmJUq0gCOBsFKtHIu9EHuVWyeqmZI/exec";
 
-            fetch(sheetURL)
+            setResult(loadingPanel(), false);
+
+            var controller = new AbortController();
+            var timeoutId = setTimeout(() => controller.abort(), 15000);
+
+            fetch(`${proxyURL}?imei=${serialNumber}`, { signal: controller.signal })
                 .then(response => {
+                    clearTimeout(timeoutId);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response.json();
                 })
                 .then(data => {
-                    if (!data.values || !Array.isArray(data.values)) {
-                        resultElement.innerHTML = "⚠️ ไม่พบข้อมูลในตารางประกัน";
-                        resultElement.classList.add('error');
+                    if (data.error) {
+                        setResult(errorPanel(data.message || "เกิดข้อผิดพลาดในการตรวจสอบข้อมูล"), false);
                         return;
                     }
 
-                    var found = false;
-                    data.values.forEach(row => {
-                        var productSN = row[0] ? row[0].trim() : '';
-                        if (productSN === serialNumber) {
-                            found = true;
-                            
-                            var model = row[1] || '-';
-                            var price = row[2] || '-';
-                            var purchaseDate = row[3] || '-';
-                            var notes = row[4] || 'ไม่มีข้อมูลเพิ่มเติม';
-
-                            resultElement.innerHTML = `
-                                <p class="text-xl font-bold mb-3">✅ ข้อมูลประกันพบแล้ว</p>
-                                <p><strong>ชื่อรุ่น:</strong> ${model}</p>
-                                <p><strong>ราคาขาย:</strong> ${price}</p>
-                                <p><strong>วันที่ซื้อ:</strong> ${purchaseDate}</p>
-                                <p><strong>หมายเหตุ:</strong> ${notes}</p>
-                            `;
-                            resultElement.classList.add('success');
-                        }
-                    });
-
-                    if (!found) {
-                        resultElement.innerHTML = "❌ ไม่พบข้อมูลประกันสำหรับหมายเลขนี้";
-                        resultElement.classList.add('error');
+                    if (data.found && Array.isArray(data.rows) && data.rows.length > 0) {
+                        setCached(serialNumber, data.rows);
+                        logLookup(serialNumber, true);
+                        setResult(successPanel(data.rows), true);
+                    } else {
+                        logLookup(serialNumber, false);
+                        setResult(errorPanel("ไม่พบข้อมูลประกันสำหรับหมายเลขนี้"), false);
                     }
                 })
                 .catch(error => {
+                    clearTimeout(timeoutId);
                     console.error("Error fetching data: ", error);
-                    resultElement.innerHTML = "⚠️ เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล (โปรดตรวจสอบ Key/ID Google Sheet)";
-                    resultElement.classList.add('error');
+                    if (error.name === 'AbortError') {
+                        setResult(errorPanel("การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่อีกครั้ง"), false);
+                    } else {
+                        setResult(errorPanel("เกิดข้อผิดพลาดในการเชื่อมต่อข้อมูล กรุณาลองใหม่อีกครั้ง"), false);
+                    }
                 });
         }
     </script>
