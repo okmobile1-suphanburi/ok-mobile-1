@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GmailShop — สมัคร Gmail ผ่านร้าน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0F1E;--surface:#111827;--surface2:#1a2236;--surface3:#21262D;
+  --border:#1e2d45;--accent:#3B82F6;--accent2:#06B6D4;--green:#10B981;
+  --orange:#F59E0B;--red:#EF4444;--purple:#8B5CF6;--cyan:#06B6D4;
+  --text:#F1F5F9;--text2:#94A3B8;--text3:#475569;--radius:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans Thai','Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV */
+nav{width:100%;background:rgba(10,15,30,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 1.25rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:200}
+.nav-logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;cursor:pointer}
+.nav-g{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.nav-tabs{display:flex;gap:4px}
+.nav-tab{padding:6px 14px;border-radius:8px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;border:none;background:none;font-family:'IBM Plex Sans Thai','Inter',sans-serif;transition:all 0.15s}
+.nav-tab:hover{background:var(--surface2);color:var(--text)}
+.nav-tab.active{background:rgba(59,130,246,0.15);color:var(--accent)}
+.nav-badge{background:rgba(59,130,246,0.15);color:var(--accent);border:1px solid rgba(59,130,246,0.3);border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600}
+
+/* PAGES */
+.page{display:none;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ==================== ORDER PAGE ==================== */
+.hero{text-align:center;padding:2.5rem 1.5rem 1.5rem;max-width:540px;margin:0 auto}
+.hero-chip{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);color:var(--green);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;margin-bottom:1rem}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-size:clamp(22px,5vw,32px);font-weight:700;line-height:1.2;letter-spacing:-0.5px;margin-bottom:0.5rem}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:14px;color:var(--text2);line-height:1.6}
+.price-row{display:flex;gap:10px;justify-content:center;margin:1.25rem auto 0;max-width:360px}
+.price-item{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0.875rem;text-align:center}
+.price-item .num{font-size:20px;font-weight:700;color:var(--accent)}
+.price-item .lbl{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* Steps */
+.steps-wrap{display:flex;align-items:center;justify-content:center;padding:1.5rem 1.5rem 0;max-width:480px;margin:0 auto;width:100%}
+.step-item{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
+.step-circle{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text3);background:var(--surface);transition:all 0.4s;z-index:1}
+.step-circle.active{border-color:var(--accent);color:var(--accent);background:rgba(59,130,246,0.1);box-shadow:0 0 14px rgba(59,130,246,0.3)}
+.step-circle.done{border-color:var(--green);color:var(--green);background:rgba(16,185,129,0.1)}
+.step-label{font-size:10px;color:var(--text3);text-align:center;transition:color 0.3s;white-space:nowrap}
+.step-label.active{color:var(--accent)}
+.step-label.done{color:var(--green)}
+.step-line{flex:1;height:1px;background:var(--border);margin-bottom:16px;transition:background 0.4s;max-width:36px}
+.step-line.done{background:var(--green)}
+
+/* Form */
+.main-wrap{width:100%;max-width:460px;padding:1.25rem 1rem 0;margin:0 auto}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;margin-top:1rem;animation:fadeIn 0.3s ease}
+.card-title{font-size:14px;font-weight:600;margin-bottom:1.1rem;display:flex;align-items:center;gap:8px}
+.card-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.ci-blue{background:rgba(59,130,246,0.15)}
+.ci-orange{background:rgba(245,158,11,0.15)}
+.ci-green{background:rgba(16,185,129,0.15)}
+.ci-purple{background:rgba(139,92,246,0.15)}
+.field{margin-bottom:0.9rem}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--text2);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px}
+.field input{width:100%;padding:10px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:'IBM Plex Sans Thai','Inter',sans-serif;color:var(--text);outline:none;transition:all 0.2s}
+.field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,0.1)}
+.field input.error{border-color:var(--red)}
+.field input::placeholder{color:var(--text3)}
+.err{font-size:11px;color:var(--red);margin-top:4px;display:none}
+.hint{font-size:11px;color:var(--text3);margin-top:4px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.info-box{background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:10px;padding:11px 13px;font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:0.9rem}
+.info-box strong{color:var(--text)}
+.btn-primary{width:100%;padding:12px;background:linear-gradient(135deg,var(--accent),#2563EB);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:'IBM Plex Sans Thai','Inter',sans-serif;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 6px 20px rgba(59,130,246,0.3)}
+.btn-primary:disabled{background:#1e2d45;color:var(--text3);cursor:not-allowed;transform:none;box-shadow:none;filter:none}
+.order-box{background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.2);border-radius:10px;padding:0.875rem;margin-bottom:0.875rem}
+.orow{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
+.orow:last-child{border-bottom:none}
+.orow-lbl{color:var(--text2)}
+.orow-val{font-weight:600}
+.order-id-tag{background:rgba(16,185,129,0.15);color:var(--green);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700}
+.poll-box{display:flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;font-size:13px;color:var(--text2)}
+.poll-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.5s infinite;flex-shrink:0}
+.otp-input{width:100%;padding:14px;background:var(--surface2);border:2px solid var(--orange);border-radius:10px;font-size:26px;font-family:'Inter',sans-serif;text-align:center;letter-spacing:10px;font-weight:700;color:var(--text);outline:none;transition:all 0.2s}
+.otp-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(245,158,11,0.15)}
+.btn-orange{width:100%;padding:12px;background:linear-gradient(135deg,var(--orange),#D97706);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:'IBM Plex Sans Thai','Inter',sans-serif;cursor:pointer;margin-top:0.75rem;transition:all 0.2s}
+.btn-orange:hover{filter:brightness(1.1)}
+.btn-orange:disabled{background:#1e2d45;color:var(--text3);cursor:not-allowed}
+.sent-box{background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:11px 13px;font-size:13px;color:var(--green);font-weight:600;text-align:center;margin-top:0.75rem;display:none}
+.amount-display{background:linear-gradient(135deg,rgba(139,92,246,0.1),rgba(59,130,246,0.1));border:1px solid rgba(139,92,246,0.3);border-radius:12px;padding:1.1rem;text-align:center;margin-bottom:1rem}
+.amount-num{font-size:36px;font-weight:700}
+.amount-lbl{font-size:12px;color:var(--text2);margin-top:3px}
+.bank-box{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:0.875rem;margin-bottom:0.875rem}
+.bank-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:13px;border-bottom:1px solid rgba(255,255,255,0.04)}
+.bank-row:last-child{border-bottom:none}
+.bank-lbl{color:var(--text2)}
+.bank-val{font-weight:600;display:flex;align-items:center;gap:6px}
+.copy-mini{background:rgba(59,130,246,0.15);color:var(--accent);border:none;border-radius:4px;padding:2px 8px;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;font-weight:600}
+.qr-zone{border:2px dashed rgba(255,255,255,0.1);border-radius:12px;padding:1.5rem;text-align:center;margin-bottom:0.875rem;background:rgba(255,255,255,0.02)}
+.slip-zone{border:2px dashed rgba(59,130,246,0.3);border-radius:12px;padding:1.25rem;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:0.875rem}
+.slip-zone:hover{background:rgba(59,130,246,0.05)}
+.slip-zone input{display:none}
+.slip-preview{max-width:100%;max-height:180px;border-radius:8px;margin-top:8px;display:none}
+.btn-green{width:100%;padding:12px;background:linear-gradient(135deg,var(--green),#059669);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;font-family:'IBM Plex Sans Thai','Inter',sans-serif;cursor:pointer;transition:all 0.2s}
+.btn-green:hover{filter:brightness(1.1)}
+.btn-green:disabled{background:#1e2d45;color:var(--text3);cursor:not-allowed}
+.wait-box{background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:1.1rem;text-align:center;display:none}
+.wait-box .w-title{font-size:14px;font-weight:600;color:var(--purple);margin:0.4rem 0 0.2rem}
+.wait-box .w-sub{font-size:12px;color:var(--text2)}
+
+/* ==================== STATUS PAGE ==================== */
+.status-wrap{width:100%;max-width:440px;padding:1.5rem 1rem;margin:0 auto}
+.page-title{font-size:19px;font-weight:700;margin-bottom:0.2rem}
+.page-sub{font-size:13px;color:var(--text2);margin-bottom:1.25rem}
+.sbox{border-radius:12px;padding:1.25rem;border:1px solid;margin-top:1rem}
+.sbox-orange{background:rgba(245,158,11,0.07);border-color:rgba(245,158,11,0.25)}
+.sbox-blue{background:rgba(59,130,246,0.07);border-color:rgba(59,130,246,0.25)}
+.sbox-purple{background:rgba(139,92,246,0.07);border-color:rgba(139,92,246,0.25)}
+.sbox-green{background:rgba(16,185,129,0.07);border-color:rgba(16,185,129,0.25)}
+.sbox-red{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.25)}
+.s-icon{font-size:30px;margin-bottom:0.4rem}
+.s-title{font-size:15px;font-weight:700;margin-bottom:0.25rem}
+.s-sub{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:0.875rem}
+.info-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.info-row:last-child{border-bottom:none}
+.i-lbl{color:var(--text2)}
+.i-val{font-weight:600}
+.gmail-display{margin-top:0.875rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:10px;padding:0.875rem}
+.gmail-label{font-size:10px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:3px}
+.gmail-addr{font-size:16px;font-weight:700;word-break:break-all;margin-bottom:7px}
+.pass-row{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.04);border-radius:7px;padding:7px 11px}
+.pass-lbl{font-size:11px;color:var(--text2)}
+.pass-val{font-size:13px;font-weight:700;font-family:'Inter',sans-serif;letter-spacing:2px}
+.copy-btn{background:rgba(16,185,129,0.2);color:var(--green);border:none;border-radius:6px;padding:3px 9px;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;font-weight:600}
+.warn{font-size:11px;color:var(--text3);margin-top:7px}
+
+/* ==================== ADMIN PAGE ==================== */
+.admin-layout{display:flex;min-height:calc(100vh - 56px)}
+.sidebar{width:200px;background:var(--surface);border-right:1px solid var(--border);padding:1rem 0;display:flex;flex-direction:column;flex-shrink:0}
+.sb-menu{padding:0 0.5rem;display:flex;flex-direction:column;gap:2px;flex:1}
+.sb-item{display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:500;color:var(--text2);cursor:pointer;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;font-family:'IBM Plex Sans Thai','Inter',sans-serif}
+.sb-item:hover{background:var(--surface2);color:var(--text)}
+.sb-item.active{background:rgba(59,130,246,0.15);color:var(--accent)}
+.sb-badge{margin-left:auto;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700}
+.sb-badge.blue{background:rgba(59,130,246,0.2);color:var(--accent)}
+.sb-badge.orange{background:rgba(245,158,11,0.2);color:var(--orange)}
+.sb-badge.purple{background:rgba(139,92,246,0.2);color:var(--purple)}
+.sb-footer{padding:0.75rem 1rem;border-top:1px solid var(--border);margin-top:auto;font-size:11px;color:var(--text3)}
+.online-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;animation:pulse 2s infinite}
+.admin-content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.admin-topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.25rem;height:50px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.search-box{display:flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 11px;flex:1;max-width:280px}
+.search-box input{background:none;border:none;outline:none;font-size:13px;color:var(--text);font-family:'Inter',sans-serif;width:100%}
+.search-box input::placeholder{color:var(--text3)}
+.refresh-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);border-radius:8px;padding:6px 12px;font-size:12px;font-family:'Inter',sans-serif;cursor:pointer}
+.refresh-btn:hover{border-color:var(--accent);color:var(--accent)}
+.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border);flex-shrink:0}
+.stat-cell{background:var(--surface);padding:0.875rem 1rem}
+.stat-num{font-size:20px;font-weight:700}
+.stat-lbl{font-size:10px;color:var(--text2);margin-top:1px}
+.stat-cell.c-orange .stat-num{color:var(--orange)}
+.stat-cell.c-blue .stat-num{color:var(--accent)}
+.stat-cell.c-purple .stat-num{color:var(--purple)}
+.stat-cell.c-green .stat-num{color:var(--green)}
+.order-area{flex:1;overflow-y:auto;padding:1rem}
+.section-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:0.6rem;margin-top:0.2rem}
+.order-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+.order-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.25rem;transition:border-color 0.2s}
+.order-card:hover{border-color:var(--accent)}
+.order-card.c-otp-wait{border-left:3px solid var(--orange)}
+.order-card.c-otp-got{border-left:3px solid var(--accent)}
+.order-card.c-pay{border-left:3px solid var(--purple)}
+.order-card.c-slip{border-left:3px solid var(--purple)}
+.order-card.c-done{border-left:3px solid var(--green)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.6rem}
+.card-left .order-id{font-size:10px;color:var(--text3);font-weight:600;margin-bottom:2px;font-family:'Inter',sans-serif}
+.card-left .order-name{font-size:14px;font-weight:600}
+.status-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.sp-pending{background:rgba(255,255,255,0.05);color:var(--text3)}
+.sp-otp-wait{background:rgba(245,158,11,0.12);color:var(--orange)}
+.sp-otp-got{background:rgba(59,130,246,0.12);color:var(--accent)}
+.sp-pay{background:rgba(139,92,246,0.12);color:var(--purple)}
+.sp-slip{background:rgba(139,92,246,0.15);color:var(--purple)}
+.sp-done{background:rgba(16,185,129,0.12);color:var(--green)}
+.card-meta{font-size:12px;color:var(--text2);margin-bottom:0.75rem}
+.action-zone{border-top:1px solid var(--border);padding-top:0.75rem}
+.act-label{font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
+.btn-row{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.abtn{padding:7px 14px;border:none;border-radius:8px;font-size:12px;font-weight:600;font-family:'IBM Plex Sans Thai','Inter',sans-serif;cursor:pointer;transition:all 0.15s}
+.abtn-orange{background:rgba(245,158,11,0.15);color:var(--orange);border:1px solid rgba(245,158,11,0.3)}
+.abtn-green{background:rgba(16,185,129,0.15);color:var(--green);border:1px solid rgba(16,185,129,0.3)}
+.abtn-red{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.25)}
+.abtn:hover{filter:brightness(1.2)}
+.gmail-input{flex:1;min-width:160px;padding:7px 11px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:'Inter',sans-serif;color:var(--text);outline:none}
+.gmail-input:focus{border-color:var(--green)}
+.gmail-input::placeholder{color:var(--text3)}
+.otp-display{display:inline-flex;align-items:center;gap:10px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:10px;padding:8px 14px;margin-bottom:10px}
+.otp-code{font-size:24px;font-weight:700;color:var(--accent);letter-spacing:6px;font-family:'Inter',sans-serif}
+.acopy-btn{background:rgba(59,130,246,0.2);color:var(--accent);border:none;border-radius:6px;padding:3px 9px;font-size:11px;font-family:'Inter',sans-serif;cursor:pointer;font-weight:600}
+.slip-thumb{width:70px;height:70px;object-fit:cover;border-radius:8px;cursor:pointer;border:1px solid var(--border);transition:transform 0.15s;margin-bottom:8px}
+.slip-thumb:hover{transform:scale(1.05)}
+.gmail-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.25);border-radius:8px;padding:6px 11px;font-size:13px;font-weight:600;color:var(--green)}
+.rev-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);color:var(--green);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;margin-top:6px}
+.empty{text-align:center;padding:2.5rem;color:var(--text3);font-size:13px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:999;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal.open{display:flex}
+.modal img{max-width:90vw;max-height:90vh;border-radius:12px}
+.modal-close{position:fixed;top:16px;right:20px;color:#fff;font-size:26px;cursor:pointer;background:rgba(255,255,255,0.1);border:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif}
+
+/* Login */
+.login-screen{display:flex;justify-content:center;align-items:center;height:calc(100vh - 56px)}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2.25rem;width:100%;max-width:320px;text-align:center}
+.login-box .l-logo{width:44px;height:44px;border-radius:11px;background:linear-gradient(135deg,var(--accent),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;margin:0 auto 1rem}
+.login-box h2{font-size:17px;font-weight:700;margin-bottom:0.25rem}
+.login-box p{font-size:12px;color:var(--text2);margin-bottom:1.25rem}
+.login-input{width:100%;padding:10px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;font-size:14px;font-family:'IBM Plex Sans Thai','Inter',sans-serif;color:var(--text);outline:none;margin-bottom:0.875rem;text-align:center}
+.login-input:focus{border-color:var(--accent)}
+
+/* Hidden */
+.hidden{display:none!important}
+
+/* Spinner */
+.spinner{width:17px;height:17px;border:2px solid rgba(255,255,255,0.3);border-top:2px solid #fff;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:640px){
+  .sidebar{display:none}
+  .stats-bar{grid-template-columns:repeat(3,1fr)}
+  .nav-tabs .nav-tab span{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="showPage('order')">
+    <div class="nav-g">G</div>
+    GmailShop
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tab-order" onclick="showPage('order')">🛒 สมัคร Gmail</button>
+    <button class="nav-tab" id="tab-status" onclick="showPage('status')">🔍 เช็คสถานะ</button>
+    <button class="nav-tab" id="tab-admin" onclick="showPage('admin')">🔐 แอดมิน</button>
+  </div>
+  <span class="nav-badge">✦ 24 ชม.</span>
+</nav>
+
+<!-- ==================== ORDER PAGE ==================== -->
+<div class="page active" id="page-order">
+  <div class="hero">
+    <div class="hero-chip"><div class="dot"></div>พร้อมรับออเดอร์</div>
+    <h1>สมัคร <span>Gmail</span> ง่าย เร็ว</h1>
+    <p>กรอกข้อมูล รอรับ OTP แล้วได้ Gmail ทันที</p>
+    <div class="price-row">
+      <div class="price-item"><div class="num">฿100</div><div class="lbl">ต่อ 1 บัญชี</div></div>
+      <div class="price-item"><div class="num">&lt;30</div><div class="lbl">นาทีเสร็จ</div></div>
+      <div class="price-item"><div class="num">24/7</div><div class="lbl">รับออเดอร์</div></div>
+    </div>
+  </div>
+
+  <div class="steps-wrap" id="o-steps">
+    <div class="step-item"><div class="step-circle active" id="sc1">1</div><div class="step-label active" id="sl1">กรอกข้อมูล</div></div>
+    <div class="step-line" id="ln1"></div>
+    <div class="step-item"><div class="step-circle" id="sc2">2</div><div class="step-label" id="sl2">ยืนยัน OTP</div></div>
+    <div class="step-line" id="ln2"></div>
+    <div class="step-item"><div class="step-circle" id="sc3">3</div><div class="step-label" id="sl3">ชำระเงิน</div></div>
+    <div class="step-line" id="ln3"></div>
+    <div class="step-item"><div class="step-circle" id="sc4">4</div><div class="step-label" id="sl4">รับ Gmail</div></div>
+  </div>
+
+  <div class="main-wrap">
+    <!-- STEP1: ฟอร์ม -->
+    <div class="card" id="o-cardForm">
+      <div class="card-title"><div class="card-icon ci-blue">📋</div>ข้อมูลของคุณ</div>
+      <div class="row2">
+        <div class="field"><label>ชื่อ *</label><input type="text" id="o-fname" placeholder="สมชาย"><div class="err" id="o-err-fname">กรุณากรอกชื่อ</div></div>
+        <div class="field"><label>นามสกุล *</label><input type="text" id="o-lname" placeholder="ใจดี"><div class="err" id="o-err-lname">กรุณากรอกนามสกุล</div></div>
+      </div>
+      <div class="field">
+        <label>เบอร์โทร *</label>
+        <input type="tel" id="o-phone" placeholder="0812345678" maxlength="10">
+        <div class="hint">Google จะส่ง OTP มาที่เบอร์นี้</div>
+        <div class="err" id="o-err-phone">กรุณากรอกเบอร์ 9–10 หลัก</div>
+      </div>
+      <div class="field"><label>หมายเหตุ</label><input type="text" id="o-note" placeholder="เช่น ต้องการด่วน"></div>
+      <div class="info-box">ทางร้านจะ<strong>สุ่มชื่อ Gmail</strong> ให้อัตโนมัติ · รหัสผ่านเริ่มต้น <strong>app12345</strong></div>
+      <button class="btn-primary" onclick="o_submitOrder()" id="o-submitBtn">
+        <span id="o-btnText">ส่งคำสั่งสมัคร</span>
+        <div class="spinner hidden" id="o-spinner"></div>
+      </button>
+    </div>
+
+    <!-- STEP2: รอ + OTP -->
+    <div class="hidden" id="o-cardWait">
+      <div class="card">
+        <div class="card-title"><div class="card-icon ci-green">✅</div>ส่งคำสั่งสำเร็จ</div>
+        <div class="order-box">
+          <div class="orow"><span class="orow-lbl">หมายเลขคำสั่ง</span><span class="order-id-tag" id="o-s-orderid">-</span></div>
+          <div class="orow"><span class="orow-lbl">ชื่อ</span><span class="orow-val" id="o-s-name">-</span></div>
+          <div class="orow"><span class="orow-lbl">เบอร์</span><span class="orow-val" id="o-s-phone">-</span></div>
+        </div>
+        <div class="poll-box"><div class="poll-dot"></div><span id="o-pollText">ร้านกำลังเริ่มสมัคร Gmail ให้คุณ...</span></div>
+      </div>
+      <div class="card hidden" id="o-cardOTP">
+        <div class="card-title"><div class="card-icon ci-orange">📱</div>กรอกรหัส OTP</div>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:0.875rem;line-height:1.7">Google ส่งรหัส 6 หลักไปที่ <strong style="color:var(--text)" id="o-otpPhone">-</strong></p>
+        <input type="number" class="otp-input" id="o-otpInput" placeholder="000000" oninput="if(this.value.length>6)this.value=this.value.slice(0,6)">
+        <button class="btn-orange" onclick="o_submitOTP()" id="o-otpBtn">ส่ง OTP →</button>
+        <div class="sent-box" id="o-otpSent">✅ ส่ง OTP แล้ว — ร้านกำลังดำเนินการ</div>
+      </div>
+    </div>
+
+    <!-- STEP3: ชำระเงิน -->
+    <div class="card hidden" id="o-cardPay">
+      <div class="card-title"><div class="card-icon ci-purple">💳</div>ชำระค่าบริการ</div>
+      <div class="amount-display"><div class="amount-num">฿100</div><div class="amount-lbl">ค่าบริการสมัคร Gmail 1 บัญชี</div></div>
+      <div class="bank-box">
+        <div class="bank-row"><span class="bank-lbl">ธนาคาร</span><span class="bank-val">กสิกรไทย (KBank)</span></div>
+        <div class="bank-row"><span class="bank-lbl">เลขบัญชี</span><span class="bank-val">175-139-8588 <button class="copy-mini" onclick="copyText('0XXXXXXXXXX',this)">คัดลอก</button></span></div>
+        <div class="bank-row"><span class="bank-lbl">ชื่อบัญชี</span><span class="bank-val">โอเคโมบาย</span></div>
+        <div class="bank-row"><span class="bank-lbl">ยอดโอน</span><span class="bank-val" style="color:var(--green);font-size:15px">฿100.00</span></div>
+      </div>
+      <div class="qr-zone"><div style="font-size:32px;margin-bottom:6px">📷</div><p style="font-weight:600;color:var(--text)">QR Code พร้อมเพย์</p><p style="color:var(--text3);font-size:11px;margin-top:3px">วาง QR Code ของร้านที่นี่</p></div>
+      <div class="slip-zone" onclick="document.getElementById('o-slipFile').click()">
+        <input type="file" id="o-slipFile" accept="image/*" onchange="o_previewSlip(this)">
+        <div style="font-size:24px;margin-bottom:4px">📎</div>
+        <p style="font-weight:600;color:var(--text);font-size:13px">แนบสลิปโอนเงิน</p>
+        <p style="font-size:11px;color:var(--text3);margin-top:2px">คลิกเพื่อเลือกรูป</p>
+        <img class="slip-preview" id="o-slipImg">
+      </div>
+      <button class="btn-green" onclick="o_submitSlip()" id="o-payBtn">ยืนยันการชำระเงิน →</button>
+      <div class="wait-box" id="o-waitPay"><div style="font-size:26px">🧾</div><div class="w-title">รอร้านตรวจสลิป</div><div class="w-sub">ปกติไม่เกิน 5 นาที</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== STATUS PAGE ==================== -->
+<div class="page" id="page-status">
+  <div class="status-wrap">
+    <div class="page-title">เช็คสถานะ Gmail</div>
+    <div class="page-sub">กรอกหมายเลขคำสั่งที่ได้รับ</div>
+    <div class="card" style="margin-top:0">
+      <div class="field"><label>หมายเลขคำสั่ง (Order ID)</label><input type="text" id="s-orderId" placeholder="ORD1234567890" onkeydown="if(event.key==='Enter')s_check()"></div>
+      <button class="btn-primary" onclick="s_check()">ตรวจสอบสถานะ</button>
+      <div id="s-result"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== ADMIN PAGE ==================== -->
+<div class="page" id="page-admin">
+  <!-- Login -->
+  <div class="login-screen" id="a-loginScreen">
+    <div class="login-box">
+      <div class="l-logo">G</div>
+      <h2>Admin Panel</h2>
+      <p>เข้าสู่ระบบจัดการออเดอร์</p>
+      <input type="password" class="login-input" id="a-pass" placeholder="รหัสผ่าน" onkeydown="if(event.key==='Enter')a_login()">
+      <button class="btn-primary" onclick="a_login()">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+  <!-- Dashboard -->
+  <div class="admin-layout hidden" id="a-dashboard">
+    <div class="sidebar">
+      <div class="sb-menu">
+        <button class="sb-item active" onclick="a_setFilter('all',this)">📋 ทั้งหมด <span class="sb-badge blue" id="nb-all">0</span></button>
+        <button class="sb-item" onclick="a_setFilter('pending',this)">⬜ รอดำเนินการ <span class="sb-badge orange" id="nb-pend">0</span></button>
+        <button class="sb-item" onclick="a_setFilter('otp',this)">🔵 ได้รับ OTP <span class="sb-badge blue" id="nb-otp">0</span></button>
+        <button class="sb-item" onclick="a_setFilter('pay',this)">💳 รอสลิป <span class="sb-badge purple" id="nb-pay">0</span></button>
+        <button class="sb-item" onclick="a_setFilter('done',this)">✅ เสร็จแล้ว</button>
+      </div>
+      <div class="sb-footer"><span class="online-dot"></span>ออนไลน์ · รีเฟรชทุก 15 วิ</div>
+    </div>
+    <div class="admin-content">
+      <div class="admin-topbar">
+        <div class="search-box"><span style="font-size:12px;color:var(--text3)">🔍</span><input type="text" id="a-search" placeholder="ค้นหาชื่อ เบอร์ Order ID..." oninput="a_renderOrders()"></div>
+        <button class="refresh-btn" onclick="a_loadOrders()">↻ รีเฟรช</button>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-cell"><div class="stat-num" id="st-all">0</div><div class="stat-lbl">ทั้งหมด</div></div>
+        <div class="stat-cell c-orange"><div class="stat-num" id="st-pend">0</div><div class="stat-lbl">รอดำเนินการ</div></div>
+        <div class="stat-cell c-blue"><div class="stat-num" id="st-otp">0</div><div class="stat-lbl">รอ/ได้ OTP</div></div>
+        <div class="stat-cell c-purple"><div class="stat-num" id="st-pay">0</div><div class="stat-lbl">รอสลิป</div></div>
+        <div class="stat-cell c-green"><div class="stat-num" id="st-rev">฿0</div><div class="stat-lbl">รายได้</div></div>
+      </div>
+      <div class="order-area" id="a-orderArea"><div class="empty">กำลังโหลด...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal สลิป -->
+<div class="modal" id="a-modal" onclick="a_closeModal()">
+  <button class="modal-close">✕</button>
+  <img id="a-modalImg" src="">
+</div>
+
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwHbw6sISD50Xy-soaey88Bov8FOOlyAbuDuaGvGsiAd8i_CbajNKrQ3YECVIoMzkTB/exec";
+const ADMIN_PASS = "kitsada6365"; // เปลี่ยนรหัสแอดมินได้ที่นี่
+
+// ==================== NAV ====================
+function showPage(p) {
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('tab-'+p).classList.add('active');
+  if(p==='admin' && !adminLoggedIn) return;
+  if(p==='admin' && adminLoggedIn) a_loadOrders();
+}
+
+// ==================== ORDER ====================
+let o_orderId='', o_pollTimer=null;
+
+function randGmail(f,l){
+  const base=(f+l).replace(/\s+/g,'').toLowerCase().replace(/[^a-z0-9]/g,'')||'user';
+  return base.substring(0,7)+'.'+Math.floor(1000+Math.random()*9000);
+}
+function setStep(n){
+  [1,2,3,4].forEach(i=>{
+    document.getElementById('sc'+i).className='step-circle'+(i<n?' done':i===n?' active':'');
+    document.getElementById('sl'+i).className='step-label'+(i<n?' done':i===n?' active':'');
+  });
+  [1,2,3].forEach(i=>document.getElementById('ln'+i).className='step-line'+(i<n?' done':''));
+}
+function showErr(id,show){
+  document.getElementById('o-err-'+id).style.display=show?'block':'none';
+  document.getElementById('o-'+id).classList.toggle('error',show);
+}
+function validate(){
+  let ok=true;
+  const f=document.getElementById('o-fname').value.trim();
+  const l=document.getElementById('o-lname').value.trim();
+  const p=document.getElementById('o-phone').value.trim();
+  showErr('fname',!f);if(!f)ok=false;
+  showErr('lname',!l);if(!l)ok=false;
+  const vp=/^[0-9]{9,10}$/.test(p);showErr('phone',!vp);if(!vp)ok=false;
+  return ok;
+}
+async function o_submitOrder(){
+  if(!validate())return;
+  const fname=document.getElementById('o-fname').value.trim();
+  const lname=document.getElementById('o-lname').value.trim();
+  const phone=document.getElementById('o-phone').value.trim();
+  const note=document.getElementById('o-note').value.trim();
+  const gmail_want=randGmail(fname,lname);
+  document.getElementById('o-btnText').classList.add('hidden');
+  document.getElementById('o-spinner').classList.remove('hidden');
+  document.getElementById('o-submitBtn').disabled=true;
+  try{
+    const res=await fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'newOrder',fname,lname,phone,gmail_want,note})});
+    const d=await res.json();
+    if(d.success){
+      o_orderId=d.order_id;
+      document.getElementById('o-s-orderid').textContent=d.order_id;
+      document.getElementById('o-s-name').textContent=fname+' '+lname;
+      document.getElementById('o-s-phone').textContent=phone;
+      document.getElementById('o-otpPhone').textContent=phone;
+      document.getElementById('o-cardForm').classList.add('hidden');
+      document.getElementById('o-cardWait').classList.remove('hidden');
+      setStep(2);
+      o_startPolling();
+    }else{alert('เกิดข้อผิดพลาด');o_resetBtn();}
+  }catch(e){alert('ไม่สามารถเชื่อมต่อได้');o_resetBtn();}
+}
+function o_resetBtn(){
+  document.getElementById('o-btnText').classList.remove('hidden');
+  document.getElementById('o-spinner').classList.add('hidden');
+  document.getElementById('o-submitBtn').disabled=false;
+}
+function o_startPolling(){
+  o_pollTimer=setInterval(async()=>{
+    try{
+      const res=await fetch(SHEET_URL+'?order_id='+o_orderId+'&t='+Date.now());
+      const d=await res.json();
+      if(d.status==='รอ OTP จากลูกค้า'){
+        clearInterval(o_pollTimer);
+        document.getElementById('o-pollText').textContent='📱 Google ส่ง OTP มาที่เบอร์คุณแล้ว!';
+        document.getElementById('o-cardOTP').classList.remove('hidden');
+        document.getElementById('o-cardOTP').scrollIntoView({behavior:'smooth',block:'center'});
+      }else if(d.status==='รอชำระเงิน'){
+        clearInterval(o_pollTimer);
+        document.getElementById('o-cardWait').classList.add('hidden');
+        document.getElementById('o-cardPay').classList.remove('hidden');
+        setStep(3);
+        document.getElementById('o-cardPay').scrollIntoView({behavior:'smooth'});
+      }else if(d.status==='เสร็จแล้ว'){
+        clearInterval(o_pollTimer);
+        // แสดงใน status tab แทน redirect
+        document.getElementById('s-orderId').value=o_orderId;
+        showPage('status');
+        s_check();
+      }
+    }catch(e){}
+  },5000);
+}
+async function o_submitOTP(){
+  const otp=document.getElementById('o-otpInput').value.trim();
+  if(!otp||otp.length<4){alert('กรุณากรอก OTP ให้ครบ');return;}
+  document.getElementById('o-otpBtn').disabled=true;
+  document.getElementById('o-otpBtn').textContent='กำลังส่ง...';
+  try{
+    await fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'submitOTP',order_id:o_orderId,otp})});
+    document.getElementById('o-otpInput').disabled=true;
+    document.getElementById('o-otpBtn').style.display='none';
+    document.getElementById('o-otpSent').style.display='block';
+    o_startPolling();
+  }catch(e){alert('เกิดข้อผิดพลาด');document.getElementById('o-otpBtn').disabled=false;document.getElementById('o-otpBtn').textContent='ส่ง OTP →';}
+}
+function o_previewSlip(input){
+  const file=input.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{const img=document.getElementById('o-slipImg');img.src=e.target.result;img.style.display='block';};
+  r.readAsDataURL(file);
+}
+async function o_submitSlip(){
+  const file=document.getElementById('o-slipFile').files[0];
+  if(!file){alert('กรุณาแนบสลิปก่อน');return;}
+  document.getElementById('o-payBtn').disabled=true;
+  document.getElementById('o-payBtn').textContent='กำลังส่ง...';
+  const r=new FileReader();
+  r.onload=async e=>{
+    const b64=e.target.result.split(',')[1];
+    try{
+      await fetch(SHEET_URL,{method:'POST',body:JSON.stringify({action:'submitSlip',order_id:o_orderId,slip:b64})});
+      document.getElementById('o-payBtn').style.display='none';
+      document.getElementById('o-waitPay').style.display='block';
+      setStep(4);
+    }catch(e){alert('เกิดข้อผิดพลาด');document.getElementById('o-payBtn').disabled=false;document.getElementById('o-payBtn').textContent='ยืนยันการชำระเงิน →';}
+  };
+  r.readAsDataURL(file);
+}
+
+// ==================== STATUS ====================
+async function s_check(){
+  const id=document.getElementById('s-orderId').value.trim();
+  if(!id){alert('กรุณากรอกหมายเลขคำสั่ง');return;}
+  const r=document.getElementById('s-result');
+  r.innerHTML='<div style="padding:1.5rem;text-align:center"><div class="spinner" style="margin:0 auto"></div></div>';
+  try{
+    const res=await fetch(SHEET_URL+'?order_id='+encodeURIComponent(id)+'&t='+Date.now());
+    const d=await res.json();
+    r.innerHTML=d.order_id?s_render(d):'<div class="sbox sbox-red"><div class="s-icon">❌</div><div class="s-title" style="color:var(--red)">ไม่พบหมายเลขคำสั่งนี้</div></div>';
+  }catch(e){r.innerHTML='<div class="sbox sbox-red"><div class="s-icon">⚠️</div><div class="s-title" style="color:var(--red)">เชื่อมต่อไม่ได้</div></div>';}
+}
+function s_render(d){
+  const rows=`<div class="info-row"><span class="i-lbl">Order ID</span><span class="i-val" style="font-family:'Inter',sans-serif;font-size:11px">${d.order_id}</span></div>
+    <div class="info-row"><span class="i-lbl">ชื่อ</span><span class="i-val">${d.name}</span></div>`;
+  const s=d.status;
+  if(['รอดำเนินการ','รอ OTP จากลูกค้า','ได้รับ OTP แล้ว'].includes(s))
+    return `<div class="sbox sbox-orange"><div class="s-icon">⏳</div><div class="s-title" style="color:var(--orange)">กำลังสมัครให้คุณ</div><div class="s-sub">รอรับ SMS OTP จากเบอร์ที่กรอกไว้</div>${rows}</div>`;
+  if(s==='รอชำระเงิน')
+    return `<div class="sbox sbox-purple"><div class="s-icon">💳</div><div class="s-title" style="color:var(--purple)">รอชำระเงิน ฿100</div><div class="s-sub">กลับไปหน้าสมัครเพื่อส่งสลิป</div>${rows}</div>`;
+  if(s==='รอตรวจสลิป')
+    return `<div class="sbox sbox-blue"><div class="s-icon">🧾</div><div class="s-title" style="color:var(--accent)">รอร้านตรวจสลิป</div><div class="s-sub">ปกติไม่เกิน 5 นาที</div>${rows}</div>`;
+  if(s==='เสร็จแล้ว')
+    return `<div class="sbox sbox-green"><div class="s-icon">🎉</div><div class="s-title" style="color:var(--green)">เรียบร้อย!</div><div class="s-sub">Gmail พร้อมใช้งานแล้ว</div>${rows}
+      <div class="gmail-display">
+        <div class="gmail-label">Gmail ของคุณ</div>
+        <div class="gmail-addr">${d.gmail}</div>
+        <div class="pass-row"><div><div class="pass-lbl">รหัสผ่าน</div><div class="pass-val">app12345</div></div><button class="copy-btn" onclick="copyText('app12345',this)">คัดลอก</button></div>
+        <div class="warn">⚠️ เปลี่ยนรหัสผ่านหลังเข้าใช้ครั้งแรก</div>
+      </div></div>`;
+  return `<div class="sbox sbox-orange"><div class="s-sub">สถานะ: ${s}</div></div>`;
+}
+
+// ==================== ADMIN ====================
+let adminLoggedIn=false, a_allOrders=[], a_filter='all';
+
+function a_login(){
+  if(document.getElementById('a-pass').value===ADMIN_PASS){
+    adminLoggedIn=true;
+    document.getElementById('a-loginScreen').classList.add('hidden');
+    document.getElementById('a-dashboard').classList.remove('hidden');
+    a_loadOrders();
+    setInterval(a_loadOrders,15000);
+  }else{alert('รหัสผ่านไม่ถูกต้อง');document.getElementById('a-pass').value='';}
+}
+async function a_loadOrders(){
+  try{
+    const res=await fetch(SHEET_URL+'?t='+Date.now());
+    a_allOrders=(await res.json()).reverse();
+    a_updateStats();a_renderOrders();
+  }catch(e){console.error(e);}
+}
+function a_updateStats(){
+  const pend=a_allOrders.filter(o=>o.status==='รอดำเนินการ').length;
+  const otpW=a_allOrders.filter(o=>o.status==='รอ OTP จากลูกค้า').length;
+  const otpG=a_allOrders.filter(o=>o.status==='ได้รับ OTP แล้ว').length;
+  const pay=a_allOrders.filter(o=>['รอตรวจสลิป','รอชำระเงิน'].includes(o.status)).length;
+  const done=a_allOrders.filter(o=>o.status==='เสร็จแล้ว').length;
+  document.getElementById('st-all').textContent=a_allOrders.length;
+  document.getElementById('st-pend').textContent=pend+otpW;
+  document.getElementById('st-otp').textContent=otpG;
+  document.getElementById('st-pay').textContent=pay;
+  document.getElementById('st-rev').textContent='฿'+(done*100).toLocaleString();
+  document.getElementById('nb-all').textContent=a_allOrders.length;
+  document.getElementById('nb-pend').textContent=pend+otpW;
+  document.getElementById('nb-otp').textContent=otpG;
+  document.getElementById('nb-pay').textContent=pay;
+}
+function a_setFilter(f,btn){
+  a_filter=f;
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');a_renderOrders();
+}
+function a_renderOrders(){
+  const q=document.getElementById('a-search').value.toLowerCase();
+  let orders=a_allOrders;
+  if(a_filter==='pending') orders=orders.filter(o=>['รอดำเนินการ','รอ OTP จากลูกค้า'].includes(o.status));
+  if(a_filter==='otp')     orders=orders.filter(o=>o.status==='ได้รับ OTP แล้ว');
+  if(a_filter==='pay')     orders=orders.filter(o=>['รอตรวจสลิป','รอชำระเงิน'].includes(o.status));
+  if(a_filter==='done')    orders=orders.filter(o=>o.status==='เสร็จแล้ว');
+  if(q) orders=orders.filter(o=>(o.name||'').toLowerCase().includes(q)||(o.phone||'').includes(q)||(o.order_id||'').toLowerCase().includes(q));
+  const area=document.getElementById('a-orderArea');
+  if(!orders.length){area.innerHTML='<div class="empty">ไม่พบออเดอร์</div>';return;}
+  const groups=[
+    {label:'⚡ ต้องดำเนินการ',fn:o=>['รอ OTP จากลูกค้า','ได้รับ OTP แล้ว','รอตรวจสลิป'].includes(o.status)},
+    {label:'🕐 รอลูกค้า',fn:o=>['รอดำเนินการ','รอชำระเงิน'].includes(o.status)},
+    {label:'✅ เสร็จแล้ว',fn:o=>o.status==='เสร็จแล้ว'},
+  ];
+  let html='';
+  groups.forEach(g=>{
+    const items=orders.filter(g.fn);
+    if(!items.length)return;
+    html+=`<div class="section-label">${g.label} (${items.length})</div><div class="order-grid">${items.map(a_orderCard).join('')}</div>`;
+  });
+  area.innerHTML=html||'<div class="empty">ไม่พบออเดอร์</div>';
+}
+function a_orderCard(o){
+  const s=o.status;
+  let cls='',pill='',pCls='sp-pending';
+  if(s==='รอดำเนินการ')     {cls='';          pill='⬜ รอ';}
+  if(s==='รอ OTP จากลูกค้า'){cls='c-otp-wait';pill='📱 รอ OTP';pCls='sp-otp-wait';}
+  if(s==='ได้รับ OTP แล้ว') {cls='c-otp-got'; pill='🔵 ได้ OTP';pCls='sp-otp-got';}
+  if(s==='รอชำระเงิน')      {cls='c-pay';     pill='💳 รอชำระ';pCls='sp-pay';}
+  if(s==='รอตรวจสลิป')      {cls='c-slip';    pill='🧾 รอสลิป';pCls='sp-slip';}
+  if(s==='เสร็จแล้ว')       {cls='c-done';    pill='✅ เสร็จ';pCls='sp-done';}
+  const t=o.time?new Date(o.time).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'}):'';
+  let action='';
+  if(s==='รอดำเนินการ'){
+    action=`<div class="action-zone"><button class="abtn abtn-orange" onclick="a_requestOTP('${o.order_id}')">📱 เริ่มสมัคร → รอ OTP</button></div>`;
+  }else if(s==='รอ OTP จากลูกค้า'){
+    action=`<div class="action-zone"><div style="font-size:12px;color:var(--orange)">⏳ รอลูกค้ากรอก OTP...</div></div>`;
+  }else if(s==='ได้รับ OTP แล้ว'){
+    action=`<div class="action-zone">
+      <div class="act-label">OTP จากลูกค้า</div>
+      <div class="otp-display"><div class="otp-code">${o.otp||'------'}</div><button class="acopy-btn" onclick="copyText('${o.otp}',this)">คัดลอก</button></div>
+      <div class="act-label">กรอก Gmail ที่สมัครได้</div>
+      <div class="btn-row"><input class="gmail-input" id="gi-${o.order_id}" placeholder="ชื่อ@gmail.com" type="email"><button class="abtn abtn-green" onclick="a_setGmail('${o.order_id}')">✅ เสร็จ</button></div>
+    </div>`;
+  }else if(s==='รอชำระเงิน'){
+    action=`<div class="action-zone"><div style="font-size:12px;color:var(--purple)">⏳ รอลูกค้าส่งสลิป...</div><div class="gmail-tag" style="margin-top:6px">📧 ${o.gmail||'-'}</div></div>`;
+  }else if(s==='รอตรวจสลิป'){
+    const slipHTML=o.slip?`<img class="slip-thumb" src="data:image/jpeg;base64,${o.slip}" onclick="a_viewSlip(this.src)">`:'<span style="font-size:11px;color:var(--text3)">ไม่มีรูปสลิป</span>';
+    action=`<div class="action-zone">
+      <div class="act-label">สลิป</div>${slipHTML}
+      <div class="gmail-tag" style="margin:8px 0">📧 ${o.gmail||'-'}</div>
+      <div class="btn-row">
+        <button class="abtn abtn-green" onclick="a_confirm('${o.order_id}')">✅ ยืนยันรับเงิน</button>
+        <button class="abtn abtn-red" onclick="a_reject('${o.order_id}')">✕ ปฏิเสธ</button>
+      </div>
+    </div>`;
+  }else if(s==='เสร็จแล้ว'){
+    action=`<div class="action-zone"><div class="gmail-tag">📧 ${o.gmail||'-'}</div><div style="font-size:11px;color:var(--text3);margin-top:4px">🔑 app12345</div><div class="rev-chip">💰 รับชำระ ฿100</div></div>`;
+  }
+  return `<div class="order-card ${cls}">
+    <div class="card-top"><div class="card-left"><div class="order-id">${o.order_id} · ${t}</div><div class="order-name">${o.name}</div></div><span class="status-pill ${pCls}">${pill}</span></div>
+    <div class="card-meta">📞 ${o.phone||'-'}${o.note?' · 📝 '+o.note:''}</div>
+    ${action}</div>`;
+}
+async function a_requestOTP(id){if(!confirm('เริ่มสมัคร Gmail และรอ OTP?'))return;await a_post({action:'requestOTP',order_id:id});await a_loadOrders();}
+async function a_setGmail(id){
+  const gmail=document.getElementById('gi-'+id).value.trim();
+  if(!gmail||!gmail.includes('@')){alert('กรุณากรอก Gmail ให้ถูกต้อง');return;}
+  if(!confirm('Gmail: '+gmail+'\nแจ้งลูกค้าชำระ ฿100?'))return;
+  await a_post({action:'setGmailAndRequestPay',order_id:id,gmail_result:gmail});await a_loadOrders();
+}
+async function a_confirm(id){if(!confirm('ยืนยันรับเงิน ฿100?'))return;await a_post({action:'confirmPayment',order_id:id});await a_loadOrders();}
+async function a_reject(id){if(!confirm('ปฏิเสธสลิป?'))return;await a_post({action:'rejectPayment',order_id:id});await a_loadOrders();}
+async function a_post(data){try{await fetch(SHEET_URL,{method:'POST',body:JSON.stringify(data)});}catch(e){alert('เกิดข้อผิดพลาด');}}
+function a_viewSlip(src){document.getElementById('a-modalImg').src=src;document.getElementById('a-modal').classList.add('open');}
+function a_closeModal(){document.getElementById('a-modal').classList.remove('open');}
+
+// ==================== UTILS ====================
+function copyText(t,btn){
+  navigator.clipboard.writeText(t).then(()=>{if(btn){const o=btn.textContent;btn.textContent='✓';setTimeout(()=>btn.textContent=o,1500);}});
+}
+</script>
+</body>
+</html>
