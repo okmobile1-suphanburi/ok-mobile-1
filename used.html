@@ -212,7 +212,7 @@
         const renderSkeleton = (count = 6) => {
             grid.innerHTML = Array.from({ length: count }).map(() => `
                 <div class="card rounded-3xl p-4">
-                    <div class="skeleton h-44 rounded-2xl mb-4"></div>
+                    <div class="skeleton aspect-square rounded-2xl mb-4"></div>
                     <div class="skeleton h-5 w-3/4 rounded mb-2"></div>
                     <div class="skeleton h-7 w-1/2 rounded mb-4"></div>
                     <div class="skeleton h-10 w-full rounded-full mb-2"></div>
@@ -303,11 +303,11 @@
                 card.className = `card rounded-3xl p-4 relative ${soldOut ? 'is-soldout' : ''}`;
 
                 card.innerHTML = `
-                    <div class="h-44 mb-4 overflow-hidden rounded-2xl bg-[var(--bg-soft)] relative">
+                    <div class="aspect-square mb-4 overflow-hidden rounded-2xl bg-[var(--bg-soft)] relative p-4">
                         ${badge ? `<div class="absolute top-2 left-2 z-10">${badge}</div>` : ''}
                         ${soldOut ? `<div class="absolute top-2 right-2 z-10 badge-soldout text-[11px] font-bold px-2.5 py-1 rounded-full">สินค้าหมด</div>` : ''}
                         <img src="${image}" alt="รูปภาพของ ${name}"
-                            class="w-full h-full object-cover"
+                            class="w-full h-full object-contain"
                             loading="lazy"
                             onerror="this.src='https://placehold.co/400x300/1b1430/c8ff4d?text=NO+IMAGE'">
                     </div>
