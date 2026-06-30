@@ -4,211 +4,412 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>โอเค โมบาย | ร้านมือถือ</title>
-    <!-- TailwindCSS -->
+    <meta name="description" content="โอเค โมบาย - มือถือมือสอง/ใหม่ ราคาเฟรนด์ลี่ ส่งไว ของแท้ชัวร์"/>
+    <meta property="og:title" content="โอเค โมบาย | ร้านมือถือ"/>
+    <meta property="og:description" content="มือถือมือสอง/ใหม่ ราคาเฟรนด์ลี่ ส่งไว ของแท้ชัวร์"/>
+    <meta property="og:type" content="website"/>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Papa Parse -->
     <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;700&display=swap');
-        .font-prompt {
-            font-family: 'Prompt', sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+
+        :root {
+            --bg: #0e0a1a;
+            --bg-soft: #161025;
+            --card: #1b1430;
+            --line: #2c2347;
+            --ink: #f3f0fb;
+            --muted: #a89fc4;
+            --acid: #c8ff4d;
+            --pink: #ff4fd8;
+            --blue: #4fd8ff;
         }
-        @layer utilities {
-            .text-primary { color: #4f46e5; }
-            .text-secondary { color: #ec4899; }
-            .bg-primary { background-color: #4f46e5; }
-            .bg-secondary { background-color: #ec4899; }
+
+        * { font-family: 'Prompt', sans-serif; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+
+        body { background: var(--bg); color: var(--ink); }
+
+        .grad-text {
+            background: linear-gradient(90deg, var(--blue), var(--pink) 50%, var(--acid));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
+
+        .noise-bg {
+            background-image:
+                radial-gradient(circle at 15% 20%, rgba(79,216,255,0.18), transparent 40%),
+                radial-gradient(circle at 85% 0%, rgba(255,79,216,0.18), transparent 45%),
+                radial-gradient(circle at 50% 100%, rgba(200,255,77,0.10), transparent 50%);
+        }
+
+        .chip {
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.03);
+        }
+        .chip-active {
+            border-color: var(--pink) !important;
+            background: rgba(255,79,216,0.12) !important;
+            color: var(--pink);
+        }
+
+        .btn-primary {
+            background: var(--acid);
+            color: #0e0a1a;
+            font-weight: 700;
+            box-shadow: 0 0 0 0 rgba(200,255,77,0);
+            transition: box-shadow .2s ease, transform .2s ease;
+        }
+        .btn-primary:hover { box-shadow: 0 0 24px 2px rgba(200,255,77,0.45); transform: translateY(-1px); }
+        .btn-primary:disabled {
+            background: #3a3454; color: var(--muted); box-shadow: none; cursor: not-allowed; transform: none;
+        }
+
+        .btn-ghost {
+            border: 1px solid var(--line);
+            color: var(--ink);
+            background: rgba(255,255,255,0.02);
+            transition: border-color .2s ease, background .2s ease;
+        }
+        .btn-ghost:hover { border-color: var(--pink); background: rgba(255,79,216,0.08); }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease;
+        }
+        .card:hover {
+            transform: translateY(-6px) rotate(-0.3deg);
+            border-color: rgba(255,79,216,0.5);
+            box-shadow: 0 20px 50px -20px rgba(255,79,216,0.35);
+        }
+        .card.is-soldout:hover { transform: none; border-color: var(--line); box-shadow: none; }
+        .card.is-soldout img { filter: grayscale(0.6) brightness(0.6); }
+
+        .price-tag {
+            background: linear-gradient(90deg, var(--acid), var(--blue));
+            color: #0e0a1a;
+        }
+
+        .badge-new { background: var(--blue); color: #0e0a1a; }
+        .badge-sale { background: var(--pink); color: #fff; }
+        .badge-hot { background: var(--acid); color: #0e0a1a; }
+        .badge-soldout { background: rgba(0,0,0,0.6); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+
+        input::placeholder { color: var(--muted); }
+
+        .skeleton {
+            background: linear-gradient(90deg, #1b1430 0px, #241b3d 40px, #1b1430 80px);
+            background-size: 800px 100%;
+            animation: shimmer 1.4s infinite linear;
+        }
+        @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card, .skeleton, .btn-primary, .btn-ghost { transition: none; animation: none; }
+        }
+
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+
+        .scroll-x { -ms-overflow-style: none; scrollbar-width: none; }
+        .scroll-x::-webkit-scrollbar { display: none; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 text-gray-800 font-prompt min-h-screen">
+<body class="min-h-screen noise-bg">
 
     <!-- Header -->
-    <header class="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 shadow-xl p-8 text-center rounded-b-3xl sticky top-0 z-10 relative">
-        <h1 class="text-6xl font-extrabold text-white drop-shadow-2xl tracking-wide">
-            โอเค โมบาย
-        </h1>
-        <p class="text-gray-100 mt-2 text-xl font-medium drop-shadow-lg">
-            📱 OK-MOBILE SHOP ONLINE | สินค้าคุณภาพ ราคาเป็นกันเอง
-        </p>
+    <header class="sticky top-0 z-20 backdrop-blur-md bg-[#0e0a1a]/80 border-b border-[var(--line)]">
+        <div class="max-w-6xl mx-auto px-5 py-5 flex items-center justify-between gap-4">
+            <div>
+                <h1 class="font-display text-2xl sm:text-3xl font-bold tracking-tight">
+                    <span class="grad-text">โอเค โมบาย</span>
+                </h1>
+                <p class="text-[var(--muted)] text-xs sm:text-sm mt-0.5">มือถือมือสอง/ใหม่ ราคาเฟรนด์ลี่ ✦ ส่งไว ของแท้ชัวร์</p>
+            </div>
+            <div class="hidden sm:flex items-center gap-2 shrink-0">
+                <a href="warranty.html" class="btn-ghost rounded-full px-4 py-2 text-sm font-medium">เช็คประกัน</a>
+                <a href="index.html" class="btn-ghost rounded-full px-4 py-2 text-sm font-medium">หน้าหลัก</a>
+            </div>
+        </div>
+        <div class="sm:hidden flex gap-2 px-5 pb-4">
+            <a href="warranty.html" class="btn-ghost rounded-full px-4 py-2 text-xs font-medium flex-1 text-center">เช็คประกัน</a>
+            <a href="index.html" class="btn-ghost rounded-full px-4 py-2 text-xs font-medium flex-1 text-center">หน้าหลัก</a>
+        </div>
     </header>
 
-    <!-- Navigation & Search/Sort Section -->
-    <div class="p-6 max-w-6xl mx-auto">
-        
-        <!-- ปุ่มเช็คประกัน & กลับหน้าแรก -->
-        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 my-6">
-            <a href="warranty.html" class="inline-flex items-center justify-center bg-blue-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-blue-700 transition-transform transform hover:scale-105 font-semibold text-lg">
-                🔍 เช็คประกันสินค้า
-            </a>
-            <a href="index.html" class="inline-flex items-center justify-center bg-gray-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-gray-700 transition-transform transform hover:scale-105 font-semibold text-lg">
-                🏠 กลับหน้าหลัก
-            </a>
-        </div>
-
-        <!-- Search Input & Sort Dropdown -->
-        <div class="flex flex-col md:flex-row gap-4 mb-8 mt-6 items-center">
-            <!-- Search Input -->
-            <input type="text" id="product-search" placeholder="ค้นหาสินค้า (เช่น iPhone, Samsung, Xiaomi)"
-                   class="w-full md:w-2/3 p-4 border-2 border-pink-400 rounded-xl shadow-inner text-lg focus:ring-4 focus:ring-pink-300 transition duration-300">
-            
-            <!-- Sort Dropdown -->
-            <select id="product-sort" class="w-full md:w-1/3 p-4 border-2 border-pink-400 rounded-xl shadow-inner text-lg bg-white appearance-none cursor-pointer focus:ring-4 focus:ring-pink-300 transition duration-300">
-                <option value="default">เรียงลำดับสินค้า (ค่าเริ่มต้น)</option>
-                <option value="price-asc">ราคา: น้อยไปมาก (↑)</option>
-                <option value="price-desc">ราคา: มากไปน้อย (↓)</option>
-            </select>
-        </div>
-
-        <!-- Product Grid Title -->
-        <h2 class="text-4xl font-bold text-gray-800 mb-6 border-b-4 border-pink-500 pb-2">
-            สินค้าทั้งหมดในร้าน
-        </h2>
-        
-        <!-- Product Grid -->
-        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <p id="loading" class="text-gray-500 text-center col-span-full py-10 text-xl animate-pulse">
-                กำลังโหลดสินค้า... กรุณารอสักครู่
-            </p>
+    <!-- Hero strip -->
+    <div class="max-w-6xl mx-auto px-5 pt-8 pb-2">
+        <div class="flex flex-wrap items-end justify-between gap-4">
+            <h2 class="font-display text-3xl sm:text-4xl font-bold leading-tight">
+                เลือกเครื่อง<br class="sm:hidden"/> <span class="grad-text">ที่ใช่</span> สำหรับคุณ
+            </h2>
+            <span id="result-count" class="chip rounded-full px-4 py-1.5 text-xs text-[var(--muted)] font-medium"></span>
         </div>
     </div>
 
-    <!-- Footer for design completeness -->
-    <footer class="mt-12 p-6 bg-pink-500 text-white text-center rounded-t-3xl shadow-inner">
-        <p>© 2025 OK-MOBILE Shop Online. บริการด้วยใจ ใส่ใจทุกออเดอร์</p>
+    <!-- Search / Sort -->
+    <div class="max-w-6xl mx-auto px-5 pt-5">
+        <div class="flex flex-col md:flex-row gap-3">
+            <div class="relative w-full md:w-2/3">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]">⌕</span>
+                <input type="text" id="product-search" placeholder="ค้นหา iPhone, Samsung, Xiaomi..."
+                       class="w-full pl-11 pr-4 py-3.5 rounded-2xl chip text-[var(--ink)] text-base focus:outline-none focus:border-[var(--pink)] focus:ring-1 focus:ring-[var(--pink)] transition">
+            </div>
+            <select id="product-sort"
+                    class="w-full md:w-1/3 px-4 py-3.5 rounded-2xl chip text-[var(--ink)] bg-[var(--bg-soft)] text-base cursor-pointer focus:outline-none focus:ring-1 focus:ring-[var(--blue)] transition">
+                <option value="default">เรียงลำดับสินค้า</option>
+                <option value="price-asc">ราคา น้อย → มาก</option>
+                <option value="price-desc">ราคา มาก → น้อย</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Brand filter chips -->
+    <div class="max-w-6xl mx-auto px-5 py-4">
+        <div id="brand-filters" class="flex gap-2 overflow-x-auto scroll-x pb-1"></div>
+    </div>
+
+    <!-- Price range chips -->
+    <div class="max-w-6xl mx-auto px-5 pb-5">
+        <div id="price-filters" class="flex gap-2 overflow-x-auto scroll-x pb-1">
+            <button data-min="0" data-max="Infinity" class="price-chip chip-active chip rounded-full px-4 py-1.5 text-xs font-medium whitespace-nowrap">ทั้งหมด</button>
+            <button data-min="0" data-max="5000" class="price-chip chip rounded-full px-4 py-1.5 text-xs font-medium whitespace-nowrap">ต่ำกว่า 5,000</button>
+            <button data-min="5000" data-max="10000" class="price-chip chip rounded-full px-4 py-1.5 text-xs font-medium whitespace-nowrap">5,000–10,000</button>
+            <button data-min="10000" data-max="20000" class="price-chip chip rounded-full px-4 py-1.5 text-xs font-medium whitespace-nowrap">10,000–20,000</button>
+            <button data-min="20000" data-max="Infinity" class="price-chip chip rounded-full px-4 py-1.5 text-xs font-medium whitespace-nowrap">สูงกว่า 20,000</button>
+        </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="max-w-6xl mx-auto px-5 pb-20">
+        <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-[var(--line)] text-center py-8 text-[var(--muted)] text-sm">
+        © 2025 OK-MOBILE Shop Online · บริการด้วยใจ ใส่ใจทุกออเดอร์
     </footer>
 
     <script type="module">
-        // --- Global Variables and Constants ---
         let allProducts = [];
+        let activeBrand = 'all';
+        let activePriceMin = 0;
+        let activePriceMax = Infinity;
+
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR3Ks0x16haRC2E60V7UzcEYGul-goV234Uenpln-wtFCtFgkoxUfTeGlBnSEZr65MisugNJtR1AvQF/pub?gid=715824064&output=csv';
+        const CACHE_KEY = 'okmobile_products_cache_v1';
+        const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
         const grid = document.getElementById('product-grid');
-        const loading = document.getElementById('loading');
         const searchInput = document.getElementById('product-search');
         const sortInput = document.getElementById('product-sort');
+        const resultCount = document.getElementById('result-count');
+        const brandFilters = document.getElementById('brand-filters');
+        const priceFilters = document.getElementById('price-filters');
 
-        // Function to format price with Thai locale
-        const formatPrice = (price) => Number(price).toLocaleString('th-TH');
+        const renderSkeleton = (count = 6) => {
+            grid.innerHTML = Array.from({ length: count }).map(() => `
+                <div class="card rounded-3xl p-4">
+                    <div class="skeleton h-44 rounded-2xl mb-4"></div>
+                    <div class="skeleton h-5 w-3/4 rounded mb-2"></div>
+                    <div class="skeleton h-7 w-1/2 rounded mb-4"></div>
+                    <div class="skeleton h-10 w-full rounded-full mb-2"></div>
+                    <div class="skeleton h-10 w-full rounded-full"></div>
+                </div>
+            `).join('');
+        };
+        renderSkeleton();
 
-        // Function to render products onto the grid
+        const formatPrice = (price) => {
+            const n = Number(price);
+            return Number.isFinite(n) ? n.toLocaleString('th-TH') : '0';
+        };
+
+        const debounce = (fn, wait = 250) => {
+            let t;
+            return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), wait); };
+        };
+
+        const isSoldOut = (stock) => {
+            const s = (stock || '').trim();
+            return s === 'หมด';
+        };
+
+        const tagBadge = (tag) => {
+            const t = (tag || '').trim();
+            if (t === 'ใหม่') return `<span class="badge-new text-[11px] font-bold px-2.5 py-1 rounded-full">ใหม่</span>`;
+            if (t === 'ลดราคา') return `<span class="badge-sale text-[11px] font-bold px-2.5 py-1 rounded-full">ลดราคา</span>`;
+            if (t === 'ขายดี') return `<span class="badge-hot text-[11px] font-bold px-2.5 py-1 rounded-full">ขายดี</span>`;
+            return '';
+        };
+
+        const buildBrandFilters = () => {
+            const brands = Array.from(new Set(
+                allProducts.map(p => p.brand?.trim()).filter(Boolean)
+            )).sort();
+
+            const allChip = `<button data-brand="all" class="brand-chip chip-active chip rounded-full px-4 py-1.5 text-xs font-medium whitespace-nowrap">ทุกแบรนด์</button>`;
+            const chips = brands.map(b => `<button data-brand="${b}" class="brand-chip chip rounded-full px-4 py-1.5 text-xs font-medium whitespace-nowrap">${b}</button>`).join('');
+
+            brandFilters.innerHTML = brands.length ? (allChip + chips) : '';
+
+            brandFilters.querySelectorAll('.brand-chip').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    activeBrand = btn.dataset.brand;
+                    brandFilters.querySelectorAll('.brand-chip').forEach(b => b.classList.remove('chip-active'));
+                    btn.classList.add('chip-active');
+                    filterAndSortProducts();
+                });
+            });
+        };
+
+        priceFilters.querySelectorAll('.price-chip').forEach(btn => {
+            btn.addEventListener('click', () => {
+                activePriceMin = Number(btn.dataset.min);
+                activePriceMax = btn.dataset.max === 'Infinity' ? Infinity : Number(btn.dataset.max);
+                priceFilters.querySelectorAll('.price-chip').forEach(b => b.classList.remove('chip-active'));
+                btn.classList.add('chip-active');
+                filterAndSortProducts();
+            });
+        });
+
         const renderProducts = (products) => {
-            grid.innerHTML = ''; // Clear existing products
+            grid.innerHTML = '';
+            resultCount.textContent = products.length ? `${products.length} รายการ` : '';
 
             if (products.length === 0) {
-                grid.innerHTML = '<div class="col-span-full text-center py-10">' +
-                                 '<p class="text-2xl text-red-500 font-semibold">⚠️ ไม่พบสินค้าที่คุณค้นหา</p>' +
-                                 '<p class="text-gray-500 mt-2">โปรดลองใช้คำค้นหาอื่น</p>' +
-                                 '</div>';
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-20">
+                        <p class="text-2xl font-display font-bold grad-text">ไม่เจอเครื่องที่ค้นหา 🥲</p>
+                        <p class="text-[var(--muted)] mt-2">ลองพิมพ์คำอื่น หรือล้างตัวกรองดูใหม่</p>
+                    </div>`;
                 return;
             }
 
-            products.forEach(item => {
+            const frag = document.createDocumentFragment();
+
+            products.forEach((item) => {
                 const name = item.name?.trim() || 'ไม่มีชื่อสินค้า';
                 const price = item.price?.trim() || '0';
-                const image = item.image?.trim() || 'https://placehold.co/400x300/fecaca/9f1239?text=NO+IMAGE'; 
-                const facebook = item.facebook?.trim() || 'https://www.facebook.com/profile.php?id=61566120762780'; 
-                
-                // All items are assumed to be in stock
-                const buyButtonClass = 'w-full text-center bg-green-500 text-white px-4 py-3 rounded-full text-lg font-semibold hover:bg-green-600 transition shadow-md hover:shadow-lg';
-                const buyButtonText = '🛒 สั่งซื้อสินค้า';
-                const buyButtonHref = 'https://www.facebook.com/profile.php?id=61566120762780'; 
-                const buyButtonTarget = '_blank';
-
+                const image = item.image?.trim() || 'https://placehold.co/400x300/1b1430/c8ff4d?text=NO+IMAGE';
+                const facebook = item.facebook?.trim() || 'https://www.facebook.com/profile.php?id=61566120762780';
+                const buyHref = 'https://www.facebook.com/profile.php?id=61566120762780';
+                const soldOut = isSoldOut(item.stock);
+                const badge = tagBadge(item.tag);
 
                 const card = document.createElement('div');
-                // Standard card styling
-                card.className = `bg-white p-6 rounded-3xl shadow-xl hover:shadow-2xl transition duration-300 transform hover:-translate-y-1 border border-gray-100 relative`;
-                
+                card.className = `card rounded-3xl p-4 relative ${soldOut ? 'is-soldout' : ''}`;
+
                 card.innerHTML = `
-                    <div class="h-64 mb-4 overflow-hidden rounded-xl relative">
+                    <div class="h-44 mb-4 overflow-hidden rounded-2xl bg-[var(--bg-soft)] relative">
+                        ${badge ? `<div class="absolute top-2 left-2 z-10">${badge}</div>` : ''}
+                        ${soldOut ? `<div class="absolute top-2 right-2 z-10 badge-soldout text-[11px] font-bold px-2.5 py-1 rounded-full">สินค้าหมด</div>` : ''}
                         <img src="${image}" alt="รูปภาพของ ${name}"
-                            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                            onerror="this.src='https://placehold.co/400x300/fecaca/9f1239?text=NO+IMAGE'">
+                            class="w-full h-full object-cover"
+                            loading="lazy"
+                            onerror="this.src='https://placehold.co/400x300/1b1430/c8ff4d?text=NO+IMAGE'">
                     </div>
-                    <h3 class="text-2xl font-bold mb-1 text-gray-900 truncate">${name}</h3>
-                    <p class="text-3xl font-extrabold mb-4 text-pink-600">
-                        <span class="text-2xl font-normal">฿</span>${formatPrice(price)}
-                    </p>
-                    <div class="flex flex-col space-y-3">
-                        <!-- ปุ่มดูรายละเอียด -->
+                    <h3 class="font-display text-lg font-bold mb-2 truncate" title="${name}">${name}</h3>
+                    <div class="inline-flex items-center price-tag rounded-full px-3 py-1 mb-4">
+                        <span class="text-xs font-bold mr-1">฿</span>
+                        <span class="font-display text-lg font-bold">${formatPrice(price)}</span>
+                    </div>
+                    <div class="flex flex-col gap-2">
                         <a href="${facebook}" target="_blank" rel="noopener noreferrer"
-                            class="w-full text-center bg-secondary text-white px-4 py-3 rounded-full text-lg font-semibold hover:bg-pink-600 transition shadow-md hover:shadow-lg">
-                            🔗 ดูรายละเอียดสินค้า
+                            class="btn-ghost w-full text-center rounded-full px-4 py-2.5 text-sm font-semibold">
+                            ดูรายละเอียด
                         </a>
-                        <!-- ปุ่มสั่งซื้อสินค้า (Always active) -->
-                        <a href="${buyButtonHref}" target="${buyButtonTarget}" rel="noopener noreferrer"
-                            class="${buyButtonClass}">
-                            ${buyButtonText}
-                        </a>
+                        ${soldOut
+                            ? `<button disabled class="btn-primary w-full text-center rounded-full px-4 py-2.5 text-sm" disabled>สินค้าหมด</button>`
+                            : `<a href="${buyHref}" target="_blank" rel="noopener noreferrer" class="btn-primary w-full text-center rounded-full px-4 py-2.5 text-sm">สั่งซื้อเลย →</a>`
+                        }
                     </div>
                 `;
-                grid.appendChild(card);
+                frag.appendChild(card);
             });
+
+            grid.appendChild(frag);
         };
 
-        // Function to filter and sort products based on user inputs 
         const filterAndSortProducts = () => {
             const searchTerm = searchInput.value.toLowerCase().trim();
             const sortMethod = sortInput.value;
-            
-            // 1. Filter based on search term
-            const filtered = allProducts.filter(product => {
-                const name = product.name?.trim()?.toLowerCase() || '';
-                return name.includes(searchTerm);
+
+            let filtered = allProducts.filter(p => (p.name?.trim()?.toLowerCase() || '').includes(searchTerm));
+
+            if (activeBrand !== 'all') {
+                filtered = filtered.filter(p => (p.brand?.trim() || '') === activeBrand);
+            }
+
+            filtered = filtered.filter(p => {
+                const n = parseFloat(p.price) || 0;
+                return n >= activePriceMin && n <= activePriceMax;
             });
 
-            // 2. Sort based on selection
-            let sorted = [...filtered]; 
+            let sorted = [...filtered];
+            if (sortMethod === 'price-asc') sorted.sort((a, b) => (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0));
+            else if (sortMethod === 'price-desc') sorted.sort((a, b) => (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0));
 
-            if (sortMethod === 'price-asc') {
-                sorted.sort((a, b) => {
-                    return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
-                });
-            } else if (sortMethod === 'price-desc') {
-                sorted.sort((a, b) => {
-                    return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
-                });
-            }
-            
-            // 3. Render the final list
+            // push sold-out items to the end regardless of sort
+            sorted.sort((a, b) => (isSoldOut(a.stock) ? 1 : 0) - (isSoldOut(b.stock) ? 1 : 0));
+
             renderProducts(sorted);
         };
-        
-        // --- Main Initialization ---
-        
-        // 1. Initialize data loading (products)
+
+        const debouncedFilter = debounce(filterAndSortProducts, 250);
+
+        const processResults = (data) => {
+            allProducts = data
+                .filter(item => item.name && item.price)
+                .map(item => ({ ...item, price: item.price ? String(item.price).replace(/,/g, '') : '0' }));
+
+            buildBrandFilters();
+            filterAndSortProducts();
+
+            searchInput.addEventListener('input', debouncedFilter);
+            sortInput.addEventListener('change', filterAndSortProducts);
+        };
+
+        // Try cache first for instant render, then refresh in background
+        let cacheUsed = false;
+        try {
+            const cachedRaw = sessionStorage.getItem(CACHE_KEY);
+            if (cachedRaw) {
+                const cached = JSON.parse(cachedRaw);
+                if (cached.ts && (Date.now() - cached.ts) < CACHE_TTL_MS && Array.isArray(cached.data)) {
+                    processResults(cached.data);
+                    cacheUsed = true;
+                }
+            }
+        } catch (e) {
+            console.warn('cache read failed', e);
+        }
+
         Papa.parse(csvUrl, {
             download: true,
             header: true,
             skipEmptyLines: true,
-            complete: function(results) {
-                // Remove loading indicator
-                loading?.remove(); 
-                
-                // Store all data and clean price string (remove commas) for reliable numerical sorting
-                allProducts = results.data
-                    .filter(item => item.name && item.price) 
-                    .map(item => ({
-                        ...item,
-                        // Clean up the price string before use
-                        price: item.price ? String(item.price).replace(/,/g, '') : '0' 
-                    })); 
-
-                filterAndSortProducts(); // Call the combined function to render initial state
-
-                // Attach listeners to trigger filtering and sorting
-                searchInput.addEventListener('keyup', filterAndSortProducts);
-                searchInput.addEventListener('change', filterAndSortProducts);
-                sortInput.addEventListener('change', filterAndSortProducts); 
+            complete: function (results) {
+                processResults(results.data);
+                try {
+                    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data: results.data }));
+                } catch (e) {
+                    console.warn('cache write failed', e);
+                }
             },
-            error: function(err) {
+            error: function (err) {
                 console.error('ไม่สามารถโหลดสินค้า:', err);
-                grid.innerHTML = '<p class="text-3xl text-red-600 font-bold col-span-full text-center py-10">' + 
-                                 '❌ เกิดข้อผิดพลาดในการโหลดข้อมูลสินค้าจาก Google Sheet' + 
-                                 '</p>';
+                if (!cacheUsed) {
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-20">
+                            <p class="text-xl font-display font-bold text-[var(--pink)]">โหลดข้อมูลสินค้าไม่สำเร็จ</p>
+                            <p class="text-[var(--muted)] mt-2">กรุณาลองโหลดหน้านี้ใหม่อีกครั้ง</p>
+                        </div>`;
+                }
             }
         });
-
     </script>
 
 </body>
