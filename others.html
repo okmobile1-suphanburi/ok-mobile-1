@@ -28,7 +28,6 @@
             --thaimart-red: #e2231a;
             --thaimart-red-dark: #a3160f;
             --line-green: #06c755;
-            --fb-blue: #1877f2;
         }
 
         * { box-sizing: border-box; }
@@ -236,15 +235,20 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 24px rgba(6,199,85,0.2);
         }
-        .btn-fb {
-            background: rgba(24,119,242,0.1);
-            border: 1.5px solid var(--fb-blue);
-            color: var(--fb-blue);
+        .btn-copy {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1.5px solid var(--accent-gold);
+            color: var(--accent-gold);
         }
-        .btn-fb:hover {
-            background: rgba(24,119,242,0.18);
+        .btn-copy:hover {
+            background: rgba(212, 175, 55, 0.18);
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px rgba(24,119,242,0.2);
+            box-shadow: 0 10px 24px rgba(212,175,55,0.2);
+        }
+        .btn-copy.copied {
+            background: rgba(6,199,85,0.15);
+            border-color: var(--line-green);
+            color: var(--line-green);
         }
 
         /* ---- QR section ---- */
@@ -336,10 +340,11 @@
                     <span class="icon" aria-hidden="true">💬</span> LINE
                 </button>
                 <button type="button"
-                        class="btn-fancy btn-fb btn-share"
-                        aria-label="แชร์ร้านผ่าน Facebook"
-                        onclick="shareViaFacebook(); trackThaimartClick('share_facebook')">
-                    <span class="icon" aria-hidden="true">📘</span> Facebook
+                        class="btn-fancy btn-copy btn-share"
+                        id="copyLinkBtn"
+                        aria-label="คัดลอกลิงก์ร้าน"
+                        onclick="copyShareLink(); trackThaimartClick('copy_link')">
+                    <span class="icon" aria-hidden="true">🔗</span> คัดลอกลิงก์
                 </button>
             </div>
         </div>
@@ -459,11 +464,47 @@
         openShareWindow(lineUrl);
     }
 
-    // ---- แชร์ผ่าน Facebook ----
-    function shareViaFacebook() {
+    // ---- คัดลอกลิงก์ร้าน ----
+    function copyShareLink() {
         const url = 'https://okmobile-suphanburi.com/others.html';
-        const fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
-        openShareWindow(fbUrl, 'noopener,noreferrer,width=600,height=500');
+        const btn = document.getElementById('copyLinkBtn');
+
+        function showCopied() {
+            if (!btn) return;
+            const original = btn.innerHTML;
+            btn.classList.add('copied');
+            btn.innerHTML = '<span class="icon" aria-hidden="true">✅</span> คัดลอกแล้ว!';
+            setTimeout(() => {
+                btn.classList.remove('copied');
+                btn.innerHTML = original;
+            }, 2000);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(showCopied).catch(() => {
+                fallbackCopy(url, showCopied);
+            });
+        } else {
+            fallbackCopy(url, showCopied);
+        }
+    }
+
+    // ---- สำรองกรณี navigator.clipboard ใช้ไม่ได้ (เช่นเปิดผ่าน http ไม่ใช่ https) ----
+    function fallbackCopy(url, onSuccess) {
+        try {
+            const textarea = document.createElement('textarea');
+            textarea.value = url;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            onSuccess();
+        } catch (err) {
+            alert('คัดลอกลิงก์ไม่สำเร็จ กรุณาคัดลอกด้วยตนเอง: ' + url);
+        }
     }
 
     // ---- ตรวจจับอุปกรณ์ผู้ใช้ แล้วพาไปหน้าติดตั้งแอป Thaimart ที่ถูกต้องอัตโนมัติ ----
