@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OK Mobile x Thaimart</title>
+
+    <!-- Open Graph: ให้ลิงก์นี้มีพรีวิวสวยๆ เวลาแชร์ใน Facebook/LINE -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="OK Mobile Shop x Thaimart">
+    <meta property="og:description" content="ตามซื้อ OK Mobile Shop ต่อได้ที่ Thaimart มาร์เก็ตเพลสของคนไทยเพื่อคนไทย">
+    <!-- รูปนี้อัปโหลดขึ้น GitHub แล้ว (okmobile1-suphanburi/ok-mobile-1) -->
+    <meta property="og:image" content="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/3b253bb4beeccdf2857605e88cc963cf05341663/images/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://okmobile-suphanburi.com/thaimart">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Favicon แบบ inline ไม่ต้องพึ่งไฟล์ภายนอก -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23e2231a'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle'%3E%F0%9F%9B%8D%EF%B8%8F%3C/text%3E%3C/svg%3E">
+
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
@@ -12,6 +27,8 @@
             --accent-gold: #d4af37;
             --thaimart-red: #e2231a;
             --thaimart-red-dark: #a3160f;
+            --line-green: #06c755;
+            --fb-blue: #1877f2;
         }
 
         * { box-sizing: border-box; }
@@ -28,6 +45,14 @@
         .container { max-width: 640px; margin: 0 auto; padding: 20px; }
 
         header { text-align: center; padding: 40px 0 10px; }
+        header img.logo {
+            width: 84px; height: 84px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent-gold);
+            box-shadow: 0 0 24px rgba(212,175,55,0.35);
+            margin-bottom: 14px;
+        }
         header h1 {
             color: var(--accent-gold);
             font-size: 2rem;
@@ -42,7 +67,7 @@
             letter-spacing: 1px;
         }
 
-        .home-row { text-align: center; margin: 20px 0 30px; }
+        .home-row { text-align: center; margin: 34px 0 10px; }
         .btn-home {
             display: inline-flex;
             align-items: center;
@@ -106,7 +131,17 @@
         .thaimart-card .sub {
             color: rgba(255,255,255,0.55);
             font-size: 0.9rem;
-            margin-bottom: 26px;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* บรรทัดคะแนน/ผู้ติดตาม: ใส่ข้อมูลจริงจากหน้าร้านของคุณเองก่อนเปิดใช้
+        <p class="trust-line">⭐ 4.9 คะแนนร้าน · ผู้ติดตาม 1.2k คน</p> */
+        .trust-line {
+            color: var(--accent-gold);
+            font-size: 0.8rem;
+            margin-bottom: 20px;
             position: relative;
             z-index: 1;
         }
@@ -117,6 +152,7 @@
             gap: 14px;
             position: relative;
             z-index: 1;
+            margin-top: 18px;
         }
 
         .btn-fancy {
@@ -134,6 +170,9 @@
             overflow: hidden;
             transition: transform 0.25s ease, box-shadow 0.25s ease;
             isolation: isolate;
+            border: none;
+            cursor: pointer;
+            font-family: 'Kanit';
         }
         .btn-fancy:active { transform: scale(0.97); }
 
@@ -179,6 +218,36 @@
             box-shadow: 0 10px 24px rgba(212,175,55,0.2);
         }
 
+        .share-row {
+            display: flex;
+            gap: 12px;
+        }
+        .btn-share {
+            flex: 1;
+            height: 48px;
+            font-size: 0.88rem;
+        }
+        .btn-line {
+            background: rgba(6,199,85,0.1);
+            border: 1.5px solid var(--line-green);
+            color: var(--line-green);
+        }
+        .btn-line:hover {
+            background: rgba(6,199,85,0.18);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(6,199,85,0.2);
+        }
+        .btn-fb {
+            background: rgba(24,119,242,0.1);
+            border: 1.5px solid var(--fb-blue);
+            color: var(--fb-blue);
+        }
+        .btn-fb:hover {
+            background: rgba(24,119,242,0.18);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(24,119,242,0.2);
+        }
+
         /* ---- QR section ---- */
         .qr-section {
             display: none;
@@ -206,12 +275,23 @@
             border-radius: 16px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.35);
             transition: transform 0.3s ease;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .qr-box:hover { transform: translateY(-4px) scale(1.03); }
         .qr-caption {
             font-size: 0.75rem;
             opacity: 0.6;
             margin-top: 8px;
+        }
+        .qr-fallback {
+            color: #333;
+            font-size: 0.7rem;
+            padding: 6px;
+            line-height: 1.4;
         }
 
         footer {
@@ -223,27 +303,49 @@
 
 <div class="container">
     <header>
+        <img class="logo" src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Shop โลโก้ร้าน">
         <h1>OK MOBILE SHOP</h1>
         <p>ตลาดอู่ทอง สุพรรณบุรี</p>
     </header>
-
-    <div class="home-row">
-        <a href="https://okmobile-suphanburi.com" class="btn-home">🏠 กลับสู่หน้าเว็บหลัก</a>
-    </div>
 
     <div class="thaimart-card">
         <span class="thaimart-badge">🇹🇭 พร้อมให้บริการบน Thaimart</span>
         <h2>ตามซื้อเราต่อได้ที่ Thaimart</h2>
         <p class="sub">มาร์เก็ตเพลสของคนไทยเพื่อคนไทย เลือกช้อปหรือโหลดแอปได้เลยด้านล่าง</p>
+        <!-- ใส่ trust-line จริงเมื่อมีข้อมูลคะแนนร้าน/ผู้ติดตาม เช่น
+        <p class="trust-line">⭐ 4.9 คะแนนร้าน · ผู้ติดตาม 1.2k คน</p> -->
 
         <div class="btn-row">
-            <a href="https://thaimart.com/sellers/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%84-%E0%B9%82%E0%B8%A1%E0%B8%9A%E0%B8%B2%E0%B8%A2-0VUBoE" target="_blank" rel="noopener noreferrer" class="btn-fancy btn-primary">
-                <span class="icon">🛍️</span> ไปที่ร้านเราใน Thaimart
+            <a href="https://thaimart.com/sellers/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%84-%E0%B9%82%E0%B8%A1%E0%B8%9A%E0%B8%B2%E0%B8%A2-0VUBoE"
+               target="_blank" rel="noopener noreferrer"
+               class="btn-fancy btn-primary"
+               aria-label="ไปที่ร้าน OK Mobile Shop บน Thaimart"
+               onclick="trackThaimartClick('visit_store')">
+                <span class="icon" aria-hidden="true">🛍️</span> ไปที่ร้านเราใน Thaimart
             </a>
-            <a href="https://thaimart.com" id="thaimartAppBtn" target="_blank" rel="noopener noreferrer" class="btn-fancy btn-secondary">
-                <span class="icon">📲</span> ติดตั้งแอป Thaimart
+            <a href="https://thaimart.com" id="thaimartAppBtn" target="_blank" rel="noopener noreferrer"
+               class="btn-fancy btn-secondary"
+               aria-label="ติดตั้งแอป Thaimart"
+               onclick="trackThaimartClick('install_app')">
+                <span class="icon" aria-hidden="true">📲</span> ติดตั้งแอป Thaimart
             </a>
+            <div class="share-row">
+                <button type="button"
+                        class="btn-fancy btn-line btn-share"
+                        aria-label="แชร์ร้านผ่าน LINE"
+                        onclick="shareViaLine(); trackThaimartClick('share_line')">
+                    <span class="icon" aria-hidden="true">💬</span> LINE
+                </button>
+                <button type="button"
+                        class="btn-fancy btn-fb btn-share"
+                        aria-label="แชร์ร้านผ่าน Facebook"
+                        onclick="shareViaFacebook(); trackThaimartClick('share_facebook')">
+                    <span class="icon" aria-hidden="true">📘</span> Facebook
+                </button>
+            </div>
         </div>
+
+        <p class="click-stat" id="clickStat" style="text-align:center; color: rgba(255,255,255,0.4); font-size: 0.78rem; margin-top: 14px;"></p>
 
         <div class="qr-section" id="qrSection">
             <p class="qr-label">📱 สแกนด้วยมือถือเพื่อติดตั้งแอป Thaimart</p>
@@ -260,6 +362,10 @@
         </div>
     </div>
 
+    <div class="home-row">
+        <a href="https://okmobile-suphanburi.com" class="btn-home">🏠 กลับสู่หน้าเว็บหลัก</a>
+    </div>
+
     <footer>
         <p>OK MOBILE SHOP - ตลาดอู่ทอง สุพรรณบุรี</p>
         <p>© 2026 All Rights Reserved.</p>
@@ -267,6 +373,79 @@
 </div>
 
 <script>
+    // ---- นับจำนวนคลิก: ใช้ CountAPI ฟรี ไม่ต้องสมัคร ----
+    // เช็คยอดได้ตลอดเวลาที่ลิงก์:
+    // ติดตั้งแอป: https://countapi.mileshilliard.com/api/v1/get/okmobile_suphanburi_thaimart_install
+    // ไปร้านค้า: https://countapi.mileshilliard.com/api/v1/get/okmobile_suphanburi_thaimart_visit
+    function countHit(key) {
+        try {
+            fetch('https://countapi.mileshilliard.com/api/v1/hit/' + key)
+                .then(() => showClickStats())
+                .catch(function(e) {
+                    console.warn('นับคลิกไม่สำเร็จ:', e);
+                });
+        } catch (e) {
+            console.warn('นับคลิกไม่สำเร็จ:', e);
+        }
+    }
+
+    function trackThaimartClick(action) {
+        try {
+            if (typeof gtag === 'function') {
+                gtag('event', action, { event_category: 'thaimart', event_label: 'thaimart_page' });
+            }
+            if (typeof fbq === 'function') {
+                fbq('trackCustom', 'ThaimartClick', { action: action });
+            }
+        } catch (e) {
+            console.warn('Tracking ไม่สำเร็จ:', e);
+        }
+
+        if (action === 'install_app') {
+            countHit('okmobile_suphanburi_thaimart_install');
+        } else if (action === 'visit_store') {
+            countHit('okmobile_suphanburi_thaimart_visit');
+        } else if (action === 'share_line') {
+            countHit('okmobile_suphanburi_thaimart_share_line');
+        } else if (action === 'share_facebook') {
+            countHit('okmobile_suphanburi_thaimart_share_facebook');
+        }
+    }
+
+    // ---- แสดงยอดคลิกสะสมบนหน้าเว็บ (ใช้ get ไม่ใช้ hit เพื่อไม่ให้ยอดเพิ่มเองตอนโหลดหน้า) ----
+    async function showClickStats() {
+        const statEl = document.getElementById('clickStat');
+        if (!statEl) return;
+        try {
+            const [installRes, visitRes] = await Promise.all([
+                fetch('https://countapi.mileshilliard.com/api/v1/get/okmobile_suphanburi_thaimart_install').then(r => r.json()).catch(() => null),
+                fetch('https://countapi.mileshilliard.com/api/v1/get/okmobile_suphanburi_thaimart_visit').then(r => r.json()).catch(() => null)
+            ]);
+            const installCount = installRes && installRes.value ? installRes.value : 0;
+            const visitCount = visitRes && visitRes.value ? visitRes.value : 0;
+            statEl.textContent = `👥 กดไปที่ร้าน ${visitCount.toLocaleString()} ครั้ง · กดติดตั้งแอป ${installCount.toLocaleString()} ครั้ง`;
+        } catch (e) {
+            console.warn('โหลดสถิติไม่สำเร็จ:', e);
+        }
+    }
+    showClickStats();
+
+    // ---- แชร์ผ่าน LINE ----
+    function shareViaLine() {
+        const text = 'ตามซื้อ OK Mobile Shop ต่อได้ที่ Thaimart แล้วนะ 🛍️';
+        const url = 'https://thaimart.com/sellers/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%84-%E0%B9%82%E0%B8%A1%E0%B8%9A%E0%B8%B2%E0%B8%A2-0VUBoE';
+        const lineUrl = 'https://line.me/R/msg/text/?' + encodeURIComponent(text + ' ' + url);
+        window.open(lineUrl, '_blank', 'noopener,noreferrer');
+    }
+
+    // ---- แชร์ผ่าน Facebook ----
+    function shareViaFacebook() {
+        const url = 'https://thaimart.com/sellers/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%84-%E0%B9%82%E0%B8%A1%E0%B8%9A%E0%B8%B2%E0%B8%A2-0VUBoE';
+        const fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
+        window.open(fbUrl, '_blank', 'noopener,noreferrer,width=600,height=500');
+    }
+
+    // ---- ตรวจจับอุปกรณ์ผู้ใช้ แล้วพาไปหน้าติดตั้งแอป Thaimart ที่ถูกต้องอัตโนมัติ ----
     (function setThaimartAppLink() {
         const ua = navigator.userAgent || navigator.vendor || window.opera || '';
         const iosLink = "https://apps.apple.com/th/app/thaimart-marketplace/id6767475856";
@@ -282,19 +461,34 @@
             btn.href = "https://thaimart.com";
             const qr = document.getElementById('qrSection');
             if (qr) qr.style.display = 'block';
+
+            const qrIOSEl = document.getElementById("qrIOS");
+            const qrAndroidEl = document.getElementById("qrAndroid");
+
+            if (typeof QRCode === 'undefined') {
+                // CDN โหลดไม่สำเร็จ: โชว์ข้อความสำรองแทน QR
+                const fallbackMsg = '<div class="qr-fallback">โหลด QR ไม่สำเร็จ<br>กดปุ่มด้านบนแทนได้เลย</div>';
+                if (qrIOSEl) qrIOSEl.innerHTML = fallbackMsg;
+                if (qrAndroidEl) qrAndroidEl.innerHTML = fallbackMsg;
+                return;
+            }
+
             try {
-                new QRCode(document.getElementById("qrIOS"), {
+                new QRCode(qrIOSEl, {
                     text: iosLink, width: 130, height: 130,
                     colorDark: "#0a0a0a", colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.M
                 });
-                new QRCode(document.getElementById("qrAndroid"), {
+                new QRCode(qrAndroidEl, {
                     text: androidLink, width: 130, height: 130,
                     colorDark: "#0a0a0a", colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.M
                 });
             } catch (e) {
                 console.error("สร้าง QR Code ไม่สำเร็จ:", e);
+                const fallbackMsg = '<div class="qr-fallback">โหลด QR ไม่สำเร็จ<br>กดปุ่มด้านบนแทนได้เลย</div>';
+                if (qrIOSEl) qrIOSEl.innerHTML = fallbackMsg;
+                if (qrAndroidEl) qrAndroidEl.innerHTML = fallbackMsg;
             }
         }
     })();
