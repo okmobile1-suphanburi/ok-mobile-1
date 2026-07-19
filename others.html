@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OK Mobile x Thaimart</title>
 
+    <!-- SEO พื้นฐาน -->
+    <meta name="description" content="OK Mobile Shop ตลาดอู่ทอง สุพรรณบุรี ตามซื้อสินค้าต่อได้ที่ Thaimart มาร์เก็ตเพลสของคนไทยเพื่อคนไทย เลือกซื้อหรือโหลดแอปได้เลย">
+    <link rel="canonical" href="https://okmobile-suphanburi.com/others.html">
+
     <!-- Open Graph: ให้ลิงก์นี้มีพรีวิวสวยๆ เวลาแชร์ใน Facebook/LINE -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="OK Mobile Shop x Thaimart">
@@ -14,13 +18,41 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://okmobile-suphanburi.com/others.html">
+    <meta property="og:locale" content="th_TH">
+
+    <!-- Twitter / X Card -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OK Mobile Shop x Thaimart">
+    <meta name="twitter:description" content="ตามซื้อ OK Mobile Shop ต่อได้ที่ Thaimart มาร์เก็ตเพลสของคนไทยเพื่อคนไทย">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/3b253bb4beeccdf2857605e88cc963cf05341663/images/og-image.jpg">
+
+    <!-- Structured data: บอก Google ว่าเป็นหน้าร้านค้า อาจได้ rich snippet (ชื่อร้าน/ที่อยู่) ในผลค้นหา -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "OK Mobile Shop",
+        "description": "ร้านโทรศัพท์มือถือและอุปกรณ์เสริม ตลาดอู่ทอง สุพรรณบุรี วางจำหน่ายผ่าน Thaimart มาร์เก็ตเพลส",
+        "url": "https://okmobile-suphanburi.com/others.html",
+        "image": "https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/3b253bb4beeccdf2857605e88cc963cf05341663/images/og-image.jpg",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "อู่ทอง",
+            "addressRegion": "สุพรรณบุรี",
+            "addressCountry": "TH"
+        },
+        "sameAs": [
+            "https://thaimart.com/sellers/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%84-%E0%B9%82%E0%B8%A1%E0%B8%9A%E0%B8%B2%E0%B8%A2-0VUBoE"
+        ]
+    }
+    </script>
 
     <!-- Favicon แบบ inline ไม่ต้องพึ่งไฟล์ภายนอก -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23e2231a'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle'%3E%F0%9F%9B%8D%EF%B8%8F%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23e2231a'/%3E%3Ctext x='50' y='68' font-size='60' text-anchor='middle'%3E%F0%9F%9B%8D%EF%B8%8F%3C/text%3E%3C/svg%3E">
 
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
     <style>
         :root {
             --primary-bg: #0a0a0a;
@@ -32,6 +64,14 @@
 
         * { box-sizing: border-box; }
 
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            header, .thaimart-card { animation: none !important; }
+        }
+
         body {
             background: radial-gradient(circle at top, #1a0808 0%, #0a0a0a 60%) var(--primary-bg);
             color: #fff;
@@ -42,7 +82,7 @@
 
         .container { max-width: 640px; margin: 0 auto; padding: 20px; }
 
-        header { text-align: center; padding: 40px 0 10px; }
+        header { text-align: center; padding: 40px 0 10px; animation: fade-in-up 0.6s ease both; }
         header img.logo {
             width: 84px; height: 84px;
             border-radius: 50%;
@@ -89,6 +129,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 20px 60px rgba(226,35,26,0.12);
+            animation: fade-in-up 0.6s ease both 0.15s;
         }
         .thaimart-card::before {
             content: "";
@@ -134,8 +175,6 @@
             z-index: 1;
         }
 
-        /* บรรทัดคะแนน/ผู้ติดตาม: ใส่ข้อมูลจริงจากหน้าร้านของคุณเองก่อนเปิดใช้
-        <p class="trust-line">⭐ 4.9 คะแนนร้าน · ผู้ติดตาม 1.2k คน</p> */
         .trust-line {
             color: var(--accent-gold);
             font-size: 0.8rem;
@@ -219,6 +258,9 @@
         .share-row {
             display: flex;
             gap: 12px;
+            margin-top: 6px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
         }
         .btn-share {
             flex: 1;
@@ -249,6 +291,21 @@
             background: rgba(6,199,85,0.15);
             border-color: var(--line-green);
             color: var(--line-green);
+            animation: copy-pop 0.35s ease;
+        }
+        @keyframes copy-pop {
+            0% { transform: scale(1); }
+            40% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+        .copy-check {
+            display: inline-block;
+            animation: check-bounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes check-bounce {
+            0% { transform: scale(0) rotate(-15deg); opacity: 0; }
+            60% { transform: scale(1.2) rotate(5deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); }
         }
 
         /* ---- QR section ---- */
@@ -283,8 +340,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
         .qr-box:hover { transform: translateY(-4px) scale(1.03); }
+        /* Shimmer: โชว์ระหว่างรอ qrcode.min.js สร้าง QR เสร็จ ลบ class นี้ทิ้งตอน QR วาดเสร็จ */
+        .qr-box.qr-loading::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                100deg,
+                rgba(0,0,0,0.06) 30%,
+                rgba(0,0,0,0.14) 50%,
+                rgba(0,0,0,0.06) 70%
+            );
+            background-size: 200% 100%;
+            animation: qr-shimmer 1.3s ease-in-out infinite;
+        }
+        @keyframes qr-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
         .qr-caption {
             font-size: 0.75rem;
             opacity: 0.6;
@@ -315,8 +392,8 @@
         <span class="thaimart-badge">🇹🇭 พร้อมให้บริการบน Thaimart</span>
         <h2>ตามซื้อเราต่อได้ที่ Thaimart</h2>
         <p class="sub">มาร์เก็ตเพลสของคนไทยเพื่อคนไทย เลือกช้อปหรือโหลดแอปได้เลยด้านล่าง</p>
-        <!-- ใส่ trust-line จริงเมื่อมีข้อมูลคะแนนร้าน/ผู้ติดตาม เช่น
-        <p class="trust-line">⭐ 4.9 คะแนนร้าน · ผู้ติดตาม 1.2k คน</p> -->
+        <!-- มีข้อมูลผู้ติดตาม/คะแนนร้านจริงเมื่อไหร่ เปิดใช้บรรทัดนี้ได้เลย
+        <p class="trust-line">👥 ผู้ติดตามกว่า 12,000 คน</p> -->
 
         <div class="btn-row">
             <a href="https://thaimart.com/sellers/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%84-%E0%B9%82%E0%B8%A1%E0%B8%9A%E0%B8%B2%E0%B8%A2-0VUBoE"
@@ -355,11 +432,11 @@
             <p class="qr-label">📱 สแกนด้วยมือถือเพื่อติดตั้งแอป Thaimart</p>
             <div class="qr-grid">
                 <div>
-                    <div class="qr-box" id="qrIOS"></div>
+                    <div class="qr-box qr-loading" id="qrIOS"></div>
                     <p class="qr-caption">iPhone / iOS</p>
                 </div>
                 <div>
-                    <div class="qr-box" id="qrAndroid"></div>
+                    <div class="qr-box qr-loading" id="qrAndroid"></div>
                     <p class="qr-caption">Android</p>
                 </div>
             </div>
@@ -473,7 +550,7 @@
             if (!btn) return;
             const original = btn.innerHTML;
             btn.classList.add('copied');
-            btn.innerHTML = '<span class="icon" aria-hidden="true">✅</span> คัดลอกแล้ว!';
+            btn.innerHTML = '<span class="icon copy-check" aria-hidden="true">✅</span> คัดลอกแล้ว!';
             setTimeout(() => {
                 btn.classList.remove('copied');
                 btn.innerHTML = original;
@@ -508,7 +585,9 @@
     }
 
     // ---- ตรวจจับอุปกรณ์ผู้ใช้ แล้วพาไปหน้าติดตั้งแอป Thaimart ที่ถูกต้องอัตโนมัติ ----
-    (function setThaimartAppLink() {
+    // หมายเหตุ: qrcode.min.js โหลดแบบ defer แล้ว จึงต้องรอ DOMContentLoaded
+    // (ซึ่งรับประกันว่าสคริปต์ defer ทั้งหมดรันเสร็จก่อน) ไม่งั้น QRCode จะยัง undefined อยู่
+    document.addEventListener('DOMContentLoaded', function setThaimartAppLink() {
         const ua = navigator.userAgent || navigator.vendor || window.opera || '';
         const iosLink = "https://apps.apple.com/th/app/thaimart-marketplace/id6767475856";
         const androidLink = "https://play.google.com/store/apps/details?id=com.sevensolutions.thaimart";
@@ -535,8 +614,8 @@
             if (typeof QRCode === 'undefined') {
                 // CDN โหลดไม่สำเร็จ: โชว์ข้อความสำรองแทน QR
                 const fallbackMsg = '<div class="qr-fallback">โหลด QR ไม่สำเร็จ<br>กดปุ่มด้านบนแทนได้เลย</div>';
-                if (qrIOSEl) qrIOSEl.innerHTML = fallbackMsg;
-                if (qrAndroidEl) qrAndroidEl.innerHTML = fallbackMsg;
+                if (qrIOSEl) { qrIOSEl.classList.remove('qr-loading'); qrIOSEl.innerHTML = fallbackMsg; }
+                if (qrAndroidEl) { qrAndroidEl.classList.remove('qr-loading'); qrAndroidEl.innerHTML = fallbackMsg; }
                 return;
             }
 
@@ -551,14 +630,17 @@
                     colorDark: "#0a0a0a", colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.M
                 });
+                // สร้างเสร็จแล้ว เอา shimmer ออก
+                if (qrIOSEl) qrIOSEl.classList.remove('qr-loading');
+                if (qrAndroidEl) qrAndroidEl.classList.remove('qr-loading');
             } catch (e) {
                 console.error("สร้าง QR Code ไม่สำเร็จ:", e);
                 const fallbackMsg = '<div class="qr-fallback">โหลด QR ไม่สำเร็จ<br>กดปุ่มด้านบนแทนได้เลย</div>';
-                if (qrIOSEl) qrIOSEl.innerHTML = fallbackMsg;
-                if (qrAndroidEl) qrAndroidEl.innerHTML = fallbackMsg;
+                if (qrIOSEl) { qrIOSEl.classList.remove('qr-loading'); qrIOSEl.innerHTML = fallbackMsg; }
+                if (qrAndroidEl) { qrAndroidEl.classList.remove('qr-loading'); qrAndroidEl.innerHTML = fallbackMsg; }
             }
         }
-    })();
+    });
 </script>
 </body>
 </html>
