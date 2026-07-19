@@ -13,7 +13,7 @@
     <meta property="og:image" content="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/3b253bb4beeccdf2857605e88cc963cf05341663/images/og-image.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://okmobile-suphanburi.com/thaimart">
+    <meta property="og:url" content="https://okmobile-suphanburi.com/others.html">
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Favicon แบบ inline ไม่ต้องพึ่งไฟล์ภายนอก -->
@@ -34,11 +34,10 @@
         * { box-sizing: border-box; }
 
         body {
-            background: var(--primary-bg);
+            background: radial-gradient(circle at top, #1a0808 0%, #0a0a0a 60%) var(--primary-bg);
             color: #fff;
             font-family: 'Kanit', sans-serif;
             margin: 0;
-            background: radial-gradient(circle at top, #1a0808 0%, #0a0a0a 60%);
             min-height: 100vh;
         }
 
@@ -430,19 +429,30 @@
     }
     showClickStats();
 
+    // ---- เปิดลิงก์แชร์: ถ้าโดน popup blocker บล็อก ให้เปลี่ยนไปหน้านั้นในแท็บเดิมแทน ----
+    function openShareWindow(url, features) {
+        const win = window.open(url, '_blank', features || 'noopener,noreferrer');
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+            // popup ถูกบล็อก (เช่นเบราว์เซอร์ตั้งค่าเข้มงวด หรือเปิดไฟล์แบบ file://)
+            window.location.href = url;
+        }
+    }
+
     // ---- แชร์ผ่าน LINE ----
+    // หมายเหตุ: ต้องแชร์ลิงก์ "หน้านี้เอง" (ตรงกับ og:url) ไม่ใช่ลิงก์ thaimart.com ตรง ๆ
+    // เพราะถ้าแชร์ลิงก์ thaimart.com ตรง ๆ พรีวิวรูป/ชื่อจะไปดึงจากเว็บ thaimart.com แทน
     function shareViaLine() {
         const text = 'ตามซื้อ OK Mobile Shop ต่อได้ที่ Thaimart แล้วนะ 🛍️';
-        const url = 'https://thaimart.com/sellers/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%84-%E0%B9%82%E0%B8%A1%E0%B8%9A%E0%B8%B2%E0%B8%A2-0VUBoE';
+        const url = 'https://okmobile-suphanburi.com/others.html';
         const lineUrl = 'https://line.me/R/msg/text/?' + encodeURIComponent(text + ' ' + url);
-        window.open(lineUrl, '_blank', 'noopener,noreferrer');
+        openShareWindow(lineUrl);
     }
 
     // ---- แชร์ผ่าน Facebook ----
     function shareViaFacebook() {
-        const url = 'https://thaimart.com/sellers/%E0%B9%82%E0%B8%AD%E0%B9%80%E0%B8%84-%E0%B9%82%E0%B8%A1%E0%B8%9A%E0%B8%B2%E0%B8%A2-0VUBoE';
+        const url = 'https://okmobile-suphanburi.com/others.html';
         const fbUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url);
-        window.open(fbUrl, '_blank', 'noopener,noreferrer,width=600,height=500');
+        openShareWindow(fbUrl, 'noopener,noreferrer,width=600,height=500');
     }
 
     // ---- ตรวจจับอุปกรณ์ผู้ใช้ แล้วพาไปหน้าติดตั้งแอป Thaimart ที่ถูกต้องอัตโนมัติ ----
@@ -453,7 +463,12 @@
         const btn = document.getElementById('thaimartAppBtn');
         if (!btn) return;
 
-        if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) {
+        // iPad รุ่นใหม่ (iPadOS 13+) จะส่ง User-Agent เป็น "Macintosh" เหมือน Mac
+        // จึงต้องเช็คเพิ่มด้วย touch support เพื่อแยก iPad ออกจาก Mac ตัวจริง
+        const isIOS = /iPad|iPhone|iPod/.test(ua)
+            || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+
+        if (isIOS) {
             btn.href = iosLink;
         } else if (/android/i.test(ua)) {
             btn.href = androidLink;
