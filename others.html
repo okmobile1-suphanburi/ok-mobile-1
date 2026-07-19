@@ -431,6 +431,17 @@
 
     // ---- เปิดลิงก์แชร์: ถ้าโดน popup blocker บล็อก ให้เปลี่ยนไปหน้านั้นในแท็บเดิมแทน ----
     function openShareWindow(url, features) {
+        const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(ua)
+            || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+
+        // บนมือถือ: เปิด popup แบบกำหนดขนาด (width/height) มักถูกเบราว์เซอร์มือถือ
+        // ตัดการนำทางทิ้งจนได้หน้าเปล่า ๆ จึงให้เปลี่ยนหน้าที่แท็บเดิมแทนจะเสถียรกว่า
+        if (isMobile) {
+            window.location.href = url;
+            return;
+        }
+
         const win = window.open(url, '_blank', features || 'noopener,noreferrer');
         if (!win || win.closed || typeof win.closed === 'undefined') {
             // popup ถูกบล็อก (เช่นเบราว์เซอร์ตั้งค่าเข้มงวด หรือเปิดไฟล์แบบ file://)
