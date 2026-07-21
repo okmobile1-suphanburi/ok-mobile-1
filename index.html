@@ -11,7 +11,44 @@
     <meta property="og:url" content="https://okmobile-suphanburi.com/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="th_TH">
-    
+    <link rel="canonical" href="https://okmobile-suphanburi.com/">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MobilePhoneStore",
+        "name": "OK Mobile อู่ทอง",
+        "image": "https://i.imgur.com/nvYSgCM.jpeg",
+        "url": "https://okmobile-suphanburi.com/",
+        "telephone": "+66946613961",
+        "priceRange": "฿฿",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "อู่ทอง",
+            "addressRegion": "สุพรรณบุรี",
+            "addressCountry": "TH"
+        },
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+                "opens": "08:00",
+                "closes": "20:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Sunday"],
+                "opens": "08:00",
+                "closes": "17:00"
+            }
+        ],
+        "sameAs": [
+            "https://www.facebook.com/profile.php?id=61566120762780",
+            "https://lin.ee/bQSzNzC"
+        ]
+    }
+    </script>
+
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,12 +58,10 @@
     <link rel="icon" type="image/jpeg" href="https://i.imgur.com/nvYSgCM.jpeg">
 
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2WT79LK89W"></script>
     <script>
+        // Google Analytics จะถูกโหลดจริงหลังผู้ใช้กด "ยอมรับ" คุกกี้เท่านั้น (ดูฟังก์ชัน loadGoogleAnalytics ด้านล่าง)
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-2WT79LK89W');
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -202,7 +237,7 @@
     </div>
     <div id="overlay" class="fixed inset-0 bg-primary-950 bg-opacity-50 backdrop-blur-sm hidden z-[55] transition-opacity"></div>
 
-    <section class="relative pt-24 min-h-[90vh] flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1556742049-0c63d7006cc4?auto=format&fit=crop&w=1920&q=80');">
+    <section class="relative pt-24 min-h-[90vh] flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1556742049-0c63d7006cc4?auto=format,compress&fit=crop&w=1600&q=60');">
         <div class="absolute inset-0 hero-overlay"></div> 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-left">
             <div class="max-w-2xl">
@@ -226,7 +261,7 @@
                     </a>
 
                     <div class="hero-contact-icons flex space-x-3 mt-4 sm:mt-0">
-                        <a href="https://www.facebook.com/profile.php?id=61566120762780&locale=th_TH" target="_blank" rel="noopener noreferrer" class="bg-[#1877F2] hover:bg-[#0d65d9] text-white">
+                        <a href="https://www.facebook.com/profile.php?id=61566120762780" target="_blank" rel="noopener noreferrer" class="bg-[#1877F2] hover:bg-[#0d65d9] text-white">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                                 <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.312h3.587l-.467 3.622h-3.12V24h6.116C23.403 24 24 23.403 24 22.676V1.325C24 .597 23.403 0 22.675 0z"/>
                             </svg>
@@ -255,7 +290,7 @@
     <div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-primary-800 rounded-xl shadow-2xl z-50 opacity-0 pointer-events-none transition-all duration-500 w-[90%] max-w-md overflow-hidden border border-primary-100 dark:border-primary-700">
         <div class="relative">
             <div class="relative w-full bg-primary-200 dark:bg-primary-700" style="padding-top: 56.25%;">
-                <img src="https://github.com/okmobile1-suphanburi/ok-mobile-1/blob/main/images/pagnew.jpg?raw=true" alt="Welcome Banner" loading="lazy" class="absolute inset-0 object-cover w-full h-full"/>
+                <img src="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/main/images/pagnew.jpg" alt="Welcome Banner" loading="lazy" class="absolute inset-0 object-cover w-full h-full"/>
             </div>
             <button id="close-popup" class="absolute top-3 right-3 p-1.5 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors backdrop-blur-sm focus:outline-none">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
@@ -285,6 +320,7 @@
                     <li><a href="used.html" class="hover:text-accent-400 transition-colors">สินค้ามือ 2</a></li>
                     <li><a href="warranty.html" class="hover:text-accent-400 transition-colors">เช็คประกัน</a></li>
                     <li><a href="map.html" class="hover:text-accent-400 transition-colors">แผนที่ร้าน</a></li>
+                    <li><a href="privacy.html" class="hover:text-accent-400 transition-colors">นโยบายความเป็นส่วนตัว</a></li>
                 </ul>
             </div>
             <div class="text-center sm:text-right">
@@ -302,9 +338,26 @@
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 text-center text-sm text-primary-500">
-            <p>© 2025 OK Mobile อู่ทอง. All rights reserved.</p>
+            <p>© <span id="current-year">2025</span> OK Mobile อู่ทอง. All rights reserved.</p>
         </div>
     </footer>
+
+    <div id="cookie-consent" class="fixed bottom-0 left-0 right-0 bg-primary-900 dark:bg-black text-primary-100 p-4 sm:p-5 shadow-2xl z-[80] border-t border-primary-700 hidden">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center gap-4">
+            <p class="text-sm text-primary-200 flex-1 text-center sm:text-left">
+                เว็บไซต์นี้ใช้คุกกี้เพื่อเก็บสถิติการเข้าชมและปรับปรุงประสบการณ์การใช้งาน อ่านรายละเอียดเพิ่มเติมได้ที่
+                <a href="privacy.html" class="underline hover:text-accent-400 transition-colors">นโยบายความเป็นส่วนตัว</a>
+            </p>
+            <div class="flex gap-3 shrink-0">
+                <button id="cookie-decline" class="px-4 py-2 rounded-lg text-sm font-medium border border-primary-600 text-primary-200 hover:bg-primary-800 transition-colors">
+                    ปฏิเสธ
+                </button>
+                <button id="cookie-accept" class="px-5 py-2 rounded-lg text-sm font-bold bg-accent-500 hover:bg-accent-600 text-primary-900 transition-colors">
+                    ยอมรับ
+                </button>
+            </div>
+        </div>
+    </div>
 
     <div id="install-banner" class="fixed bottom-6 left-4 right-4 bg-primary-900 text-white p-4 rounded-2xl shadow-2xl z-[70] flex items-center justify-between transform translate-y-48 transition-transform duration-500 border border-primary-700 md:hidden">
         <div class="flex items-center">
@@ -412,6 +465,11 @@
         }
 
         function showPopup() {
+            // ถ้าผู้ใช้เคยปิด popup ไปแล้วใน session นี้ ไม่ต้องโชว์ซ้ำ
+            if (sessionStorage.getItem('welcomePopupClosed') === 'true') {
+                return;
+            }
+
             const popup = document.getElementById('popup-alert');
             const closeButton = document.getElementById('close-popup');
             
@@ -424,6 +482,7 @@
 
             closeButton.onclick = () => {
                 clearTimeout(timeoutId);
+                sessionStorage.setItem('welcomePopupClosed', 'true');
                 hidePopup();
             };
         }
@@ -432,6 +491,7 @@
             const popup = document.getElementById('popup-alert');
             popup.classList.remove('opacity-100');
             popup.classList.add('opacity-0');
+            sessionStorage.setItem('welcomePopupClosed', 'true');
             setTimeout(() => popup.classList.add('pointer-events-none'), 500);
         }
 
@@ -458,9 +518,48 @@
             }
         });
 
+        function loadGoogleAnalytics() {
+            if (window.gaLoaded) return;
+            window.gaLoaded = true;
+            const script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-2WT79LK89W';
+            document.head.appendChild(script);
+            gtag('js', new Date());
+            gtag('config', 'G-2WT79LK89W');
+        }
+
+        function initCookieConsent() {
+            const consentBanner = document.getElementById('cookie-consent');
+            const acceptBtn = document.getElementById('cookie-accept');
+            const declineBtn = document.getElementById('cookie-decline');
+            const consent = localStorage.getItem('cookieConsent');
+
+            if (consent === 'accepted') {
+                loadGoogleAnalytics();
+            } else if (consent !== 'declined') {
+                // ยังไม่เคยตอบ ให้แสดง banner
+                consentBanner.classList.remove('hidden');
+            }
+
+            acceptBtn.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'accepted');
+                consentBanner.classList.add('hidden');
+                loadGoogleAnalytics();
+            });
+
+            declineBtn.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'declined');
+                consentBanner.classList.add('hidden');
+            });
+        }
+
         window.onload = function () {
             updateStoreStatus();
-            showPopup(); 
+            showPopup();
+            initCookieConsent();
+            const yearEl = document.getElementById('current-year');
+            if (yearEl) yearEl.textContent = new Date().getFullYear();
         }
 
         setInterval(updateStoreStatus, 60000);
