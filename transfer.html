@@ -438,17 +438,55 @@
                 useCORS: true,
                 logging: false,
             }).then(canvas => {
-                try {
+                canvas.toBlob((blob) => {
+                    if (!blob) {
+                        btn.innerHTML = 'พลาด! กรุณาแคปจอเอง';
+                        setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+                        return;
+                    }
+
+                    const fileName = 'OKMobile-QR.png';
+                    const file = new File([blob], fileName, { type: 'image/png' });
+
+                    // Mobile path: native share sheet has a real "Save Image" action.
+                    // <a download> is silently ignored by iOS Safari and by in-app
+                    // browsers (LINE, Facebook, Instagram), which is why saving
+                    // failed on phones even though it worked on desktop.
+                    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                        navigator.share({ files: [file], title: fileName })
+                            .then(() => {
+                                btn.innerHTML = '<i class="fas fa-check"></i> บันทึกสำเร็จ!';
+                                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+                            })
+                            .catch(() => {
+                                // User cancelled the share sheet - not an error, just reset.
+                                btn.innerHTML = originalText;
+                            });
+                        return;
+                    }
+
+                    // Desktop / fallback path.
+                    const blobUrl = URL.createObjectURL(blob);
                     const link = document.createElement('a');
-                    link.download = 'OKMobile-QR.png';
-                    link.href = canvas.toDataURL("image/png");
+                    link.download = fileName;
+                    link.href = blobUrl;
+                    document.body.appendChild(link);
                     link.click();
-                    btn.innerHTML = '<i class="fas fa-check"></i> บันทึกสำเร็จ!';
-                } catch (err) {
-                    btn.innerHTML = 'พลาด! กรุณาแคปจอเอง';
-                    console.error("Capture Error:", err);
-                }
-                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+                    document.body.removeChild(link);
+
+                    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+                    if (isMobile) {
+                        // download attribute is unreliable on mobile browsers/webviews;
+                        // open the image directly so the user can long-press and save it.
+                        window.open(blobUrl, '_blank');
+                        btn.innerHTML = 'กดค้างที่รูป แล้วเลือก "บันทึกรูปภาพ"';
+                    } else {
+                        btn.innerHTML = '<i class="fas fa-check"></i> บันทึกสำเร็จ!';
+                    }
+
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+                    setTimeout(() => { btn.innerHTML = originalText; }, 3000);
+                }, 'image/png');
             }).catch(err => {
                 console.error("html2canvas Error:", err);
                 btn.innerHTML = 'พลาด! กรุณาแคปจอเอง';
