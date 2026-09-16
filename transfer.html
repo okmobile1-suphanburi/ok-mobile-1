@@ -12,6 +12,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/jpeg" href="assets/logo.jpg">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="assets/logo.jpg">
+
+    <!--
+      Google Analytics 4 (optional)
+      แทนที่ G-XXXXXXXXXX ด้วย Measurement ID ของร้าน (ดูได้จาก analytics.google.com)
+      ถ้าไม่ต้องการเก็บสถิติ ลบ <script> สองแท็กนี้ออกได้เลย ระบบอื่นในหน้านี้จะไม่พังเพราะมีการเช็คก่อนเรียกใช้ gtag เสมอ
+    -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX');
+    </script>
 
     <style>
         :root {
@@ -211,14 +226,110 @@
         .qr-box img { width: 176px; height: 176px; max-width: 100%; display: block; border-radius: 4px; }
         .qr-caption { font-size: 11.5px; color: var(--text-muted); margin-bottom: 14px; letter-spacing: 0.3px; }
 
-        .btn-shot {
+        .qr-actions { display: flex; gap: 9px; }
+        .btn-shot, .btn-copy-qr {
             background: transparent;
-            color: var(--gold-bright); border: 1px solid rgba(212,168,67,0.4); width: 100%; padding: 12px;
-            border-radius: 12px; font-weight: 500; font-size: 13px; cursor: pointer;
+            color: var(--gold-bright); border: 1px solid rgba(212,168,67,0.4); flex: 1; padding: 12px 8px;
+            border-radius: 12px; font-weight: 500; font-size: 12.5px; cursor: pointer;
             font-family: 'Prompt', sans-serif;
             transition: background 0.15s ease;
+            white-space: nowrap;
         }
-        .btn-shot:active { background: rgba(212,168,67,0.1); }
+        .btn-shot:active, .btn-copy-qr:active { background: rgba(212,168,67,0.1); }
+
+        .amount-panel { margin-top: 14px; text-align: left; }
+        .amount-row { display: flex; gap: 8px; }
+        .amount-input {
+            flex: 1; min-width: 0;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(212,168,67,0.3);
+            border-radius: 12px;
+            padding: 12px 12px;
+            color: var(--text-main);
+            font-family: 'Prompt', sans-serif;
+            font-size: 14px;
+        }
+        .amount-input::placeholder { color: var(--text-muted); }
+        .amount-input:focus { outline: none; border-color: var(--gold-bright); }
+        .btn-amount {
+            background: var(--gold);
+            color: var(--navy-deep); border: none; padding: 0 16px;
+            border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 13px;
+            font-family: 'Prompt', sans-serif;
+            transition: filter 0.15s ease;
+            white-space: nowrap;
+        }
+        .btn-amount:active { filter: brightness(0.92); }
+        .amount-badge {
+            display: none;
+            align-items: center; justify-content: center; gap: 8px;
+            background: rgba(61,220,132,0.1);
+            border: 1px solid rgba(61,220,132,0.35);
+            color: var(--success);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        .amount-badge button {
+            background: none; border: none; color: var(--success); opacity: 0.75;
+            cursor: pointer; font-size: 12px; text-decoration: underline;
+            font-family: 'Prompt', sans-serif;
+        }
+
+        .toast-container {
+            position: fixed;
+            left: 50%;
+            bottom: 26px;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 9999;
+            width: calc(100% - 40px);
+            max-width: 400px;
+            pointer-events: none;
+            align-items: center;
+        }
+        .toast {
+            font-family: 'Prompt', sans-serif;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--text-main);
+            background: linear-gradient(180deg, #1c2440 0%, #131a2e 100%);
+            border: 1px solid rgba(212,168,67,0.3);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.45);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            max-width: 100%;
+        }
+        .toast.show { opacity: 1; transform: translateY(0); }
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: #e07a5f; }
+        .toast.info i { color: var(--gold-bright); }
+
+        .install-btn {
+            height: 34px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(212,168,67,0.25);
+            background: rgba(255,255,255,0.03);
+            color: var(--gold-bright);
+            display: none;
+            align-items: center; justify-content: center; gap: 6px;
+            cursor: pointer;
+            font-size: 12.5px;
+            font-family: 'Prompt', sans-serif;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+        .install-btn:active { background: rgba(212,168,67,0.12); }
 
         .notice {
             background: rgba(212,168,67,0.06);
@@ -286,6 +397,9 @@
 
     <div class="main-card">
         <div class="top-bar">
+            <button class="install-btn" id="install-btn" onclick="handleInstallClick()" aria-label="เพิ่มที่หน้าจอโฮม">
+                <i class="fas fa-square-plus"></i> เพิ่มหน้าจอโฮม
+            </button>
             <button class="icon-btn" onclick="sharePage()" aria-label="แชร์หน้านี้">
                 <i class="fas fa-share-nodes"></i> แชร์
             </button>
@@ -320,14 +434,32 @@
 
             <span class="label"><i class="fas fa-qrcode"></i> สแกน QR เพื่อโอนเงิน</span>
             <div class="panel qr-section">
+                <div class="amount-badge" id="amount-badge">
+                    <i class="fas fa-circle-check"></i>
+                    <span id="amount-badge-text"></span>
+                    <button onclick="resetQR()">รีเซ็ต</button>
+                </div>
                 <div class="qr-box" id="qr-target">
-                    <img src="assets/qr.png" alt="QR PromptPay ร้านโอเคโมบาย" crossorigin="anonymous" loading="lazy"
+                    <img src="assets/qr.png" alt="QR PromptPay ร้านโอเคโมบาย" crossorigin="anonymous" loading="lazy" id="qr-static-img"
                          onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<p style=\'color:#e07a5f;font-size:12.5px;\'>โหลด QR ไม่สำเร็จ กรุณาติดต่อทาง LINE หรือโทร</p>')">
                 </div>
                 <div class="qr-caption">PromptPay · ร้านโอเคโมบาย</div>
-                <button class="btn-shot" onclick="captureQROnly()">
-                    <i class="fas fa-camera"></i> บันทึกรูป QR Code
-                </button>
+
+                <div class="amount-panel" id="amount-panel" style="display:none;">
+                    <div class="amount-row">
+                        <input type="number" inputmode="decimal" min="1" step="0.01" class="amount-input" id="amount-input" placeholder="ระบุยอดเงิน เช่น 500">
+                        <button class="btn-amount" onclick="generateAmountQR()">สร้าง QR</button>
+                    </div>
+                </div>
+
+                <div class="qr-actions" style="margin-top:12px;">
+                    <button class="btn-shot" onclick="captureQROnly()">
+                        <i class="fas fa-camera"></i> บันทึกรูป
+                    </button>
+                    <button class="btn-copy-qr" onclick="copyQRImage()">
+                        <i class="far fa-copy"></i> คัดลอกรูป
+                    </button>
+                </div>
             </div>
 
             <div class="notice">
@@ -346,22 +478,22 @@
             </div>
 
             <div class="contact-dashboard">
-                <a href="https://line.me/ti/p/@661qazoc" class="contact-card line">
+                <a href="https://line.me/ti/p/@661qazoc" class="contact-card line" onclick="trackEvent('contact_line')">
                     <i class="fab fa-line"></i>
                     <span>แจ้งทาง LINE</span>
                 </a>
-                <a href="tel:0946613961" class="contact-card phone">
+                <a href="tel:0946613961" class="contact-card phone" onclick="trackEvent('contact_phone')">
                     <i class="fas fa-phone-alt"></i>
                     <span>094-661-3961</span>
                 </a>
             </div>
 
-            <a href="https://www.google.com/maps/search/?api=1&query=ร้านโอเคโมบาย+ตลาดอู่ทอง" target="_blank" rel="noopener" class="contact-card" style="display:flex; flex-direction:row; justify-content:center; margin-top:10px; padding:13px;">
+            <a href="https://www.google.com/maps/search/?api=1&query=ร้านโอเคโมบาย+ตลาดอู่ทอง" target="_blank" rel="noopener" class="contact-card" style="display:flex; flex-direction:row; justify-content:center; margin-top:10px; padding:13px;" onclick="trackEvent('view_map')">
                 <i class="fas fa-location-dot" style="color:var(--gold-bright); font-size:15px;"></i>
                 <span>ดูแผนที่ร้าน / เดินทางมาที่ร้าน</span>
             </a>
 
-            <a href="https://okmobile-suphanburi.com/" class="btn-home" style="text-decoration:none;">
+            <a href="https://okmobile-suphanburi.com/" class="btn-home" style="text-decoration:none;" onclick="trackEvent('go_home')">
                 <i class="fas fa-house-chimney"></i> กลับสู่หน้าหลัก
             </a>
 
@@ -369,24 +501,55 @@
         </div>
     </div>
 
+    <div class="toast-container" id="toast-container"></div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <script>
-        // Web Share API with clipboard fallback
+        /* ===================== Analytics (optional) ===================== *
+         * Fires only if the GA4 snippet in <head> loaded successfully.
+         * Safe to call even if analytics is removed - never throws.        */
+        function trackEvent(name, params) {
+            try {
+                if (typeof gtag === 'function') gtag('event', name, params || {});
+            } catch (e) { /* never let analytics break the page */ }
+        }
+
+        /* ===================== Toast notifications ===================== */
+        function showToast(message, type, duration) {
+            type = type || 'success';
+            duration = duration || 2600;
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const icons = { success: 'fa-circle-check', error: 'fa-circle-exclamation', info: 'fa-circle-info' };
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.innerHTML = '<i class="fas ' + (icons[type] || icons.info) + '"></i><span>' + message + '</span>';
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        /* ===================== Web Share API with clipboard fallback ===================== */
         function sharePage() {
             const shareData = {
                 title: 'ร้านโอเค โมบาย - ช่องทางการชำระเงิน',
                 text: 'ช่องทางการโอนเงิน ร้านโอเค โมบาย ตลาดอู่ทอง',
                 url: window.location.href
             };
+            trackEvent('share_page');
             if (navigator.share) {
                 navigator.share(shareData).catch(() => {});
             } else if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(window.location.href).then(() => {
-                    const btn = event.currentTarget;
-                    const original = btn.innerHTML;
-                    btn.innerHTML = '<i class="fas fa-check"></i> คัดลอกแล้ว';
-                    setTimeout(() => { btn.innerHTML = original; }, 1500);
-                });
+                    showToast('คัดลอกลิงก์แล้ว', 'success');
+                }).catch(() => showToast('คัดลอกลิงก์ไม่สำเร็จ', 'error'));
             }
         }
 
@@ -397,6 +560,7 @@
 
             function showSuccess() {
                 btn.innerHTML = '<i class="fas fa-check"></i> คัดลอกเรียบร้อย';
+                trackEvent('copy_account_number');
                 setTimeout(() => { btn.innerHTML = originalText; }, 2000);
             }
             function showError() {
@@ -430,7 +594,8 @@
             const btn = event.currentTarget;
             const originalText = btn.innerHTML;
 
-            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> กำลังบันทึก...';
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            btn.disabled = true;
 
             html2canvas(target, {
                 scale: 3,
@@ -439,9 +604,11 @@
                 logging: false,
             }).then(canvas => {
                 canvas.toBlob((blob) => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+
                     if (!blob) {
-                        btn.innerHTML = 'พลาด! กรุณาแคปจอเอง';
-                        setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+                        showToast('บันทึกไม่สำเร็จ กรุณาแคปหน้าจอแทน', 'error');
                         return;
                     }
 
@@ -454,14 +621,8 @@
                     // failed on phones even though it worked on desktop.
                     if (navigator.canShare && navigator.canShare({ files: [file] })) {
                         navigator.share({ files: [file], title: fileName })
-                            .then(() => {
-                                btn.innerHTML = '<i class="fas fa-check"></i> บันทึกสำเร็จ!';
-                                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
-                            })
-                            .catch(() => {
-                                // User cancelled the share sheet - not an error, just reset.
-                                btn.innerHTML = originalText;
-                            });
+                            .then(() => { trackEvent('save_qr_image', { method: 'share_sheet' }); })
+                            .catch(() => { /* user cancelled the share sheet - not an error */ });
                         return;
                     }
 
@@ -479,18 +640,235 @@
                         // download attribute is unreliable on mobile browsers/webviews;
                         // open the image directly so the user can long-press and save it.
                         window.open(blobUrl, '_blank');
-                        btn.innerHTML = 'กดค้างที่รูป แล้วเลือก "บันทึกรูปภาพ"';
+                        showToast('กดค้างที่รูป แล้วเลือก "บันทึกรูปภาพ"', 'info', 4000);
+                        trackEvent('save_qr_image', { method: 'open_tab' });
                     } else {
-                        btn.innerHTML = '<i class="fas fa-check"></i> บันทึกสำเร็จ!';
+                        showToast('บันทึกรูปสำเร็จ', 'success');
+                        trackEvent('save_qr_image', { method: 'download' });
                     }
-
                     setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
-                    setTimeout(() => { btn.innerHTML = originalText; }, 3000);
                 }, 'image/png');
             }).catch(err => {
                 console.error("html2canvas Error:", err);
-                btn.innerHTML = 'พลาด! กรุณาแคปจอเอง';
-                setTimeout(() => { btn.innerHTML = originalText; }, 2000);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                showToast('บันทึกไม่สำเร็จ กรุณาแคปหน้าจอแทน', 'error');
+            });
+        }
+
+        /* ===================== Copy QR image to clipboard ===================== */
+        function copyQRImage() {
+            const target = document.getElementById('qr-target');
+            const btn = event.currentTarget;
+            const originalText = btn.innerHTML;
+
+            if (!navigator.clipboard || !window.ClipboardItem) {
+                showToast('เบราว์เซอร์นี้ยังไม่รองรับ กรุณาใช้ปุ่ม "บันทึกรูป" แทน', 'error', 3500);
+                return;
+            }
+
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i>';
+            btn.disabled = true;
+
+            html2canvas(target, {
+                scale: 3,
+                backgroundColor: "#fdfcf9",
+                useCORS: true,
+                logging: false,
+            }).then(canvas => {
+                canvas.toBlob(async (blob) => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    if (!blob) {
+                        showToast('คัดลอกรูปไม่สำเร็จ', 'error');
+                        return;
+                    }
+                    try {
+                        await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
+                        showToast('คัดลอกรูป QR แล้ว วางในแชทได้เลย', 'success');
+                        trackEvent('copy_qr_image');
+                    } catch (err) {
+                        console.error('Clipboard write failed:', err);
+                        showToast('คัดลอกรูปไม่สำเร็จ กรุณาใช้ปุ่ม "บันทึกรูป" แทน', 'error', 3500);
+                    }
+                }, 'image/png');
+            }).catch(err => {
+                console.error("html2canvas Error:", err);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                showToast('คัดลอกรูปไม่สำเร็จ', 'error');
+            });
+        }
+
+        /* ===================== Dynamic PromptPay QR (with amount) =====================
+         * Reads the EMVCo payload already encoded in assets/qr.png, then rebuilds a new
+         * QR with the transaction-amount field (tag 54) filled in and the checksum (tag 63)
+         * recalculated. If the static QR can't be decoded for any reason, this feature
+         * quietly disables itself and the page keeps working exactly as before.        */
+        let basePromptPayPayload = null;
+
+        function crc16ccitt(str) {
+            let crc = 0xFFFF;
+            for (let i = 0; i < str.length; i++) {
+                crc ^= str.charCodeAt(i) << 8;
+                for (let j = 0; j < 8; j++) {
+                    crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
+                    crc &= 0xFFFF;
+                }
+            }
+            return crc.toString(16).toUpperCase().padStart(4, '0');
+        }
+
+        function parseTLV(payload) {
+            // The payload always ends with the CRC field itself: "63" + "04" + 4-char checksum
+            // (8 characters total). Strip it off first so it isn't parsed as a normal field -
+            // it gets recalculated and re-appended by buildAmountPayload() instead.
+            const body = payload.slice(0, payload.length - 8);
+            const fields = [];
+            let i = 0;
+            while (i < body.length) {
+                const id = body.substr(i, 2);
+                const len = parseInt(body.substr(i + 2, 2), 10);
+                const value = body.substr(i + 4, len);
+                fields.push({ id, value });
+                i += 4 + len;
+            }
+            return fields;
+        }
+
+        function buildTLV(fields) {
+            return fields.map(f => f.id + String(f.value.length).padStart(2, '0') + f.value).join('');
+        }
+
+        function buildAmountPayload(basePayload, amount) {
+            const fields = parseTLV(basePayload).filter(f => f.id !== '54'); // drop old amount if any
+            const amountStr = amount.toFixed(2);
+
+            // Field 54 (Transaction Amount) belongs right after field 53 (Currency),
+            // and point-of-initiation (field 01) should read "12" (dynamic) instead of "11" (static).
+            const out = [];
+            let inserted = false;
+            for (const f of fields) {
+                if (f.id === '01') { out.push({ id: '01', value: '12' }); continue; }
+                out.push(f);
+                if (f.id === '53') { out.push({ id: '54', value: amountStr }); inserted = true; }
+            }
+            if (!inserted) out.push({ id: '54', value: amountStr });
+
+            const withoutCRC = buildTLV(out) + '6304';
+            const crc = crc16ccitt(withoutCRC);
+            return withoutCRC + crc;
+        }
+
+        function initDynamicQR() {
+            if (typeof jsQR === 'undefined' || typeof QRCode === 'undefined') return;
+            const img = document.getElementById('qr-static-img');
+            if (!img) return;
+
+            const decode = () => {
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.naturalWidth;
+                    canvas.height = img.naturalHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const result = jsQR(imgData.data, imgData.width, imgData.height);
+                    if (result && result.data && result.data.length > 20) {
+                        basePromptPayPayload = result.data;
+                        document.getElementById('amount-panel').style.display = 'block';
+                    }
+                } catch (err) {
+                    // CORS-tainted canvas or decode failure - feature just stays hidden.
+                    console.warn('Dynamic QR unavailable:', err);
+                }
+            };
+
+            if (img.complete && img.naturalWidth > 0) decode();
+            else img.addEventListener('load', decode);
+        }
+
+        function generateAmountQR() {
+            const input = document.getElementById('amount-input');
+            const amount = parseFloat(input.value);
+
+            if (!basePromptPayPayload) {
+                showToast('ยังไม่พร้อมใช้งานฟีเจอร์นี้ กรุณาระบุยอดแล้วแจ้งทาง LINE แทน', 'error', 3500);
+                return;
+            }
+            if (!amount || amount <= 0) {
+                showToast('กรุณาระบุยอดเงินให้ถูกต้อง', 'error');
+                return;
+            }
+
+            try {
+                const payload = buildAmountPayload(basePromptPayPayload, amount);
+                const target = document.getElementById('qr-target');
+                target.innerHTML = '';
+                new QRCode(target, {
+                    text: payload,
+                    width: 176,
+                    height: 176,
+                    colorDark: '#0a0e1a',
+                    colorLight: '#fdfcf9',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+
+                const badge = document.getElementById('amount-badge');
+                document.getElementById('amount-badge-text').textContent =
+                    'ระบุยอด ฿' + amount.toLocaleString('th-TH', { minimumFractionDigits: 2 });
+                badge.style.display = 'flex';
+
+                showToast('สร้าง QR ระบุยอดเงินแล้ว', 'success');
+                trackEvent('generate_amount_qr', { value: amount });
+            } catch (err) {
+                console.error('Amount QR generation failed:', err);
+                showToast('สร้าง QR ไม่สำเร็จ กรุณาลองใหม่', 'error');
+            }
+        }
+
+        function resetQR() {
+            const target = document.getElementById('qr-target');
+            target.innerHTML = '<img src="assets/qr.png" alt="QR PromptPay ร้านโอเคโมบาย" crossorigin="anonymous" id="qr-static-img">';
+            document.getElementById('amount-badge').style.display = 'none';
+            document.getElementById('amount-input').value = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', initDynamicQR);
+
+        /* ===================== Add to Home Screen ===================== */
+        let deferredInstallPrompt = null;
+        const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            document.getElementById('install-btn').style.display = 'flex';
+        });
+
+        if (isIOS && !isStandalone) {
+            document.getElementById('install-btn').style.display = 'flex';
+        }
+
+        function handleInstallClick() {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                deferredInstallPrompt.userChoice.then(choice => {
+                    trackEvent('install_prompt', { outcome: choice.outcome });
+                    deferredInstallPrompt = null;
+                    document.getElementById('install-btn').style.display = 'none';
+                });
+            } else if (isIOS) {
+                showToast('กดปุ่ม "แชร์" (สี่เหลี่ยมมีลูกศร) ด้านล่างจอ แล้วเลือก "เพิ่มไปยังหน้าจอโฮม"', 'info', 5000);
+            } else {
+                showToast('เบราว์เซอร์นี้ยังไม่รองรับการเพิ่มหน้าจอโฮมอัตโนมัติ', 'info', 3500);
+            }
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(() => { /* optional - safe to fail */ });
             });
         }
     </script>
