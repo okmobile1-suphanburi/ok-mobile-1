@@ -86,14 +86,17 @@
          * From tablet width up, the card grows a bit and the page gets extra
          * breathing room + a subtle vignette so it doesn't look like a stray
          * strip floating in empty space on a big monitor.                        */
-        @media (min-width: 640px) {
+        @media (min-width: 640px) and (max-width: 899px) {
             body { padding: 48px 20px; }
             .main-card { max-width: 480px; }
         }
 
-        @media (min-width: 1024px) {
+        /* From here the card stops being a phone-width strip: it widens
+           substantially, the two payment panels sit side by side, and
+           text/QR scale up so the page actually fills a desktop screen. */
+        @media (min-width: 900px) {
             body {
-                padding: 64px 20px;
+                padding: 70px 32px;
                 background:
                     radial-gradient(circle at 20% 20%, #1a2440 0%, transparent 40%),
                     radial-gradient(circle at 85% 15%, #23305a 0%, transparent 35%),
@@ -101,12 +104,37 @@
                     var(--navy-deep);
             }
             .main-card {
-                max-width: 460px;
+                max-width: 820px;
+                border-radius: 32px;
                 box-shadow:
-                    0 40px 90px rgba(0,0,0,0.6),
+                    0 50px 110px rgba(0,0,0,0.6),
                     0 0 0 1px rgba(212,168,67,0.14),
                     inset 0 1px 0 rgba(255,255,255,0.04);
             }
+            .banner-frame { padding: 22px 28px 0 28px; }
+            .header { padding: 14px 32px 0 32px; }
+            .logo-wrapper { width: 92px; height: 92px; }
+            .title { font-size: 27px; }
+            .subtitle { font-size: 14px; }
+            .body-content { padding: 0 32px; }
+
+            .payment-methods {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 24px;
+                align-items: start;
+            }
+            .payment-col .label { margin-top: 0; }
+            .panel { padding: 24px; height: 100%; }
+            .qr-box img { width: 200px; height: 200px; }
+
+            .notice { padding: 16px 18px; font-size: 13px; }
+            .contact-dashboard { max-width: 480px; margin-left: auto; margin-right: auto; }
+            .btn-home { max-width: 480px; margin-left: auto; margin-right: auto; }
+        }
+
+        @media (min-width: 1200px) {
+            .main-card { max-width: 900px; }
         }
 
         /* Hairline gold top accent */
@@ -445,48 +473,54 @@
         <div class="body-content">
             <div class="divider"></div>
 
-            <span class="label"><i class="fas fa-building-columns"></i> โอนเงินผ่านบัญชีธนาคาร</span>
-            <div class="panel">
-                <div class="bank-brand">
-                    <i class="fas fa-building-columns"></i>
-                    <span>ธนาคารกสิกรไทย</span>
-                </div>
-                <div class="acc-name-value">ชื่อบัญชี : <b>ร้านโอเคโมบาย</b></div>
-                <div class="number-box">
-                    <div class="number-text">175-139-8588</div>
-                </div>
-                <button class="btn-copy" onclick="copyAccount()">
-                    <i class="far fa-copy"></i> คัดลอกเลขบัญชี
-                </button>
-            </div>
-
-            <span class="label"><i class="fas fa-qrcode"></i> สแกน QR เพื่อโอนเงิน</span>
-            <div class="panel qr-section">
-                <div class="amount-badge" id="amount-badge">
-                    <i class="fas fa-circle-check"></i>
-                    <span id="amount-badge-text"></span>
-                    <button onclick="resetQR()">รีเซ็ต</button>
-                </div>
-                <div class="qr-box" id="qr-target">
-                    <img src="assets/qr.png" alt="QR PromptPay ร้านโอเคโมบาย" crossorigin="anonymous" loading="lazy" id="qr-static-img"
-                         onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<p style=\'color:#e07a5f;font-size:12.5px;\'>โหลด QR ไม่สำเร็จ กรุณาติดต่อทาง LINE หรือโทร</p>')">
-                </div>
-                <div class="qr-caption">PromptPay · ร้านโอเคโมบาย</div>
-
-                <div class="amount-panel" id="amount-panel" style="display:none;">
-                    <div class="amount-row">
-                        <input type="number" inputmode="decimal" min="1" step="0.01" class="amount-input" id="amount-input" placeholder="ระบุยอดเงิน เช่น 500">
-                        <button class="btn-amount" onclick="generateAmountQR()">สร้าง QR</button>
+            <div class="payment-methods">
+                <div class="payment-col">
+                    <span class="label"><i class="fas fa-building-columns"></i> โอนเงินผ่านบัญชีธนาคาร</span>
+                    <div class="panel">
+                        <div class="bank-brand">
+                            <i class="fas fa-building-columns"></i>
+                            <span>ธนาคารกสิกรไทย</span>
+                        </div>
+                        <div class="acc-name-value">ชื่อบัญชี : <b>ร้านโอเคโมบาย</b></div>
+                        <div class="number-box">
+                            <div class="number-text">175-139-8588</div>
+                        </div>
+                        <button class="btn-copy" onclick="copyAccount()">
+                            <i class="far fa-copy"></i> คัดลอกเลขบัญชี
+                        </button>
                     </div>
                 </div>
 
-                <div class="qr-actions" style="margin-top:12px;">
-                    <button class="btn-shot" onclick="captureQROnly()">
-                        <i class="fas fa-camera"></i> บันทึกรูป
-                    </button>
-                    <button class="btn-copy-qr" onclick="copyQRImage()">
-                        <i class="far fa-copy"></i> คัดลอกรูป
-                    </button>
+                <div class="payment-col">
+                    <span class="label"><i class="fas fa-qrcode"></i> สแกน QR เพื่อโอนเงิน</span>
+                    <div class="panel qr-section">
+                        <div class="amount-badge" id="amount-badge">
+                            <i class="fas fa-circle-check"></i>
+                            <span id="amount-badge-text"></span>
+                            <button onclick="resetQR()">รีเซ็ต</button>
+                        </div>
+                        <div class="qr-box" id="qr-target">
+                            <img src="assets/qr.png" alt="QR PromptPay ร้านโอเคโมบาย" crossorigin="anonymous" loading="lazy" id="qr-static-img"
+                                 onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<p style=\'color:#e07a5f;font-size:12.5px;\'>โหลด QR ไม่สำเร็จ กรุณาติดต่อทาง LINE หรือโทร</p>')">
+                        </div>
+                        <div class="qr-caption">PromptPay · ร้านโอเคโมบาย</div>
+
+                        <div class="amount-panel" id="amount-panel" style="display:none;">
+                            <div class="amount-row">
+                                <input type="number" inputmode="decimal" min="1" step="0.01" class="amount-input" id="amount-input" placeholder="ระบุยอดเงิน เช่น 500">
+                                <button class="btn-amount" onclick="generateAmountQR()">สร้าง QR</button>
+                            </div>
+                        </div>
+
+                        <div class="qr-actions" style="margin-top:12px;">
+                            <button class="btn-shot" onclick="captureQROnly()">
+                                <i class="fas fa-camera"></i> บันทึกรูป
+                            </button>
+                            <button class="btn-copy-qr" onclick="copyQRImage()">
+                                <i class="far fa-copy"></i> คัดลอกรูป
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
