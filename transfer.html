@@ -78,7 +78,35 @@
             overflow: hidden;
             position: relative;
             animation: fadeUp 0.6s ease both;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, max-width 0.3s ease;
+        }
+
+        /* ===================== Responsive: tablet & desktop =====================
+         * Below this the page behaves exactly like the original mobile-card design.
+         * From tablet width up, the card grows a bit and the page gets extra
+         * breathing room + a subtle vignette so it doesn't look like a stray
+         * strip floating in empty space on a big monitor.                        */
+        @media (min-width: 640px) {
+            body { padding: 48px 20px; }
+            .main-card { max-width: 480px; }
+        }
+
+        @media (min-width: 1024px) {
+            body {
+                padding: 64px 20px;
+                background:
+                    radial-gradient(circle at 20% 20%, #1a2440 0%, transparent 40%),
+                    radial-gradient(circle at 85% 15%, #23305a 0%, transparent 35%),
+                    radial-gradient(circle at 90% 90%, #1c1407 0%, transparent 45%),
+                    var(--navy-deep);
+            }
+            .main-card {
+                max-width: 460px;
+                box-shadow:
+                    0 40px 90px rgba(0,0,0,0.6),
+                    0 0 0 1px rgba(212,168,67,0.14),
+                    inset 0 1px 0 rgba(255,255,255,0.04);
+            }
         }
 
         /* Hairline gold top accent */
