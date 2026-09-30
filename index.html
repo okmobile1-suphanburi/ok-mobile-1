@@ -1,681 +1,513 @@
 <!DOCTYPE html>
-<html lang="th" class="scroll-smooth">
+<html lang="th">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>OK Mobile - ตลาดอู่ทอง | มืออาชีพเรื่องมือถือ</title>
-    <meta name="description" content="OK Mobile ตลาดอู่ทอง จ.สุพรรณบุรี ศูนย์รวมบริการซ่อม-ขาย-แลกเปลี่ยนมือถือครบวงจร พร้อมบริการเช็คประกัน ชำระไฟแนนซ์ และ SG-Capital สะดวก รวดเร็ว">
-    <meta property="og:title" content="OK Mobile อู่ทอง | มืออาชีพเรื่องมือถือ">
-    <meta property="og:description" content="ศูนย์รวมบริการซ่อม-ขาย-แลกเปลี่ยนมือถือครบวงจร ตลาดอู่ทอง จ.สุพรรณบุรี">
-    <meta property="og:image" content="https://i.imgur.com/nvYSgCM.jpeg">
-    <meta property="og:url" content="https://okmobile-suphanburi.com/">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="th_TH">
-    <link rel="canonical" href="https://okmobile-suphanburi.com/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OK Mobile - ตลาดอู่ทอง | มืออาชีพเรื่องมือถือ</title>
+<meta name="description" content="OK Mobile ตลาดอู่ทอง จ.สุพรรณบุรี ศูนย์รวมบริการซ่อม-ขาย-แลกเปลี่ยนมือถือครบวงจร พร้อมบริการเช็คประกัน ชำระไฟแนนซ์ และ SG-Capital สะดวก รวดเร็ว">
+<meta property="og:title" content="OK Mobile อู่ทอง | มืออาชีพเรื่องมือถือ">
+<meta property="og:description" content="ศูนย์รวมบริการซ่อม-ขาย-แลกเปลี่ยนมือถือครบวงจร ตลาดอู่ทอง จ.สุพรรณบุรี">
+<meta property="og:image" content="https://i.imgur.com/nvYSgCM.jpeg">
+<meta property="og:url" content="https://okmobile-suphanburi.com/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="th_TH">
+<link rel="canonical" href="https://okmobile-suphanburi.com/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"MobilePhoneStore","name":"OK Mobile อู่ทอง","image":"https://i.imgur.com/nvYSgCM.jpeg","url":"https://okmobile-suphanburi.com/","telephone":"+66946613961","priceRange":"฿฿","address":{"@type":"PostalAddress","addressLocality":"อู่ทอง","addressRegion":"สุพรรณบุรี","addressCountry":"TH"},"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"08:00","closes":"20:00"},{"@type":"OpeningHoursSpecification","dayOfWeek":["Sunday"],"opens":"08:00","closes":"17:00"}],"sameAs":["https://www.facebook.com/profile.php?id=61566120762780","https://lin.ee/bQSzNzC"]}
+</script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1224">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="OK Mobile">
+<link rel="apple-touch-icon" href="https://i.imgur.com/nvYSgCM.jpeg">
+<link rel="icon" type="image/jpeg" href="https://i.imgur.com/nvYSgCM.jpeg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}</script>
+<style>
+:root{--bg:#f3f5fa;--sf:#fff;--ink:#0b1224;--mute:#59647a;--line:#dfe4ef;--amber:#ffb020;--amber-d:#b45309;--navy:#0b1224;--r:18px;--ok:#10b981;--no:#ef4444}
+:root[data-theme=dark]{--bg:#070b17;--sf:#111a30;--ink:#eef1f8;--mute:#93a0ba;--line:#22304d;--amber-d:#fbbf24}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
+body{font-family:Prompt,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;padding-bottom:calc(72px + env(safe-area-inset-bottom,0px));transition:background .3s,color .3s}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;cursor:pointer;background:none;border:0}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:8px}
+img{max-width:100%}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+#prog{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--amber);transform:scaleX(0);transform-origin:0 50%;z-index:90}
 
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "MobilePhoneStore",
-        "name": "OK Mobile อู่ทอง",
-        "image": "https://i.imgur.com/nvYSgCM.jpeg",
-        "url": "https://okmobile-suphanburi.com/",
-        "telephone": "+66946613961",
-        "priceRange": "฿฿",
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "อู่ทอง",
-            "addressRegion": "สุพรรณบุรี",
-            "addressCountry": "TH"
-        },
-        "openingHoursSpecification": [
-            {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-                "opens": "08:00",
-                "closes": "20:00"
-            },
-            {
-                "@type": "OpeningHoursSpecification",
-                "dayOfWeek": ["Sunday"],
-                "opens": "08:00",
-                "closes": "17:00"
-            }
-        ],
-        "sameAs": [
-            "https://www.facebook.com/profile.php?id=61566120762780",
-            "https://lin.ee/bQSzNzC"
-        ]
-    }
-    </script>
+/* header */
+.hd{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:0;right:0;z-index:60;padding:0 12px}
+.bar{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px 8px 12px;border-radius:999px;background:color-mix(in srgb,var(--sf) 82%,transparent);backdrop-filter:blur(16px) saturate(1.4);border:1px solid var(--line);box-shadow:0 8px 30px rgba(11,18,36,.12)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 auto}.brand>span{min-width:0}
+.brand img{width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid var(--sf)}
+.brand b{display:block;font-size:1.05rem;line-height:1.2;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand b i{font-style:normal;color:var(--amber-d)}
+#st{display:flex;align-items:center;gap:6px;font-size:.72rem;font-weight:500;color:var(--mute);white-space:nowrap}
+.dot{position:relative;width:9px;height:9px;border-radius:50%;background:var(--mute);flex:none}
+.on .dot,.off .dot{background:var(--ok)}.off .dot{background:var(--no)}
+.on .dot::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--ok);animation:ping 2.4s infinite}
+@keyframes ping{75%,100%{transform:scale(2.6);opacity:0}}
+.on{color:#059669!important}.off{color:var(--no)!important}
+.dn{display:none;align-items:center;gap:2px}
+.nl{padding:8px 13px;border-radius:999px;font-size:.88rem;font-weight:500;transition:background .2s}
+.nl:hover,.nl[aria-expanded=true]{background:color-mix(in srgb,var(--amber) 22%,transparent)}
+.tools{display:flex;align-items:center;gap:6px;flex:none}
+.ib{height:40px;min-width:40px;padding:0 10px;border-radius:999px;background:color-mix(in srgb,var(--ink) 7%,transparent);display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem;transition:transform .2s,background .2s}
+.ib:hover{background:color-mix(in srgb,var(--amber) 30%,transparent)}.ib:active{transform:scale(.93)}
+.ib kbd{display:none;font:500 .7rem Prompt;border:1px solid var(--line);border-radius:6px;padding:0 6px;color:var(--mute)}
+.login{display:none;background:var(--ink);color:var(--bg);font-weight:600}
+.login:hover{background:var(--amber);color:#1a1200}
 
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="OK Mobile">
-    <link rel="apple-touch-icon" href="https://i.imgur.com/nvYSgCM.jpeg">
-    <link rel="icon" type="image/jpeg" href="https://i.imgur.com/nvYSgCM.jpeg">
+/* mega + drawer */
+#mega{position:absolute;left:12px;right:12px;top:calc(100% + 8px);max-width:1000px;margin:0 auto;background:var(--sf);border:1px solid var(--line);border-radius:24px;padding:22px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px;box-shadow:0 24px 60px rgba(11,18,36,.25);opacity:0;transform:translateY(-8px) scale(.98);pointer-events:none;transition:.22s}
+#mega.open{opacity:1;transform:none;pointer-events:auto}
+.grp h3{font-size:.8rem;font-weight:600;color:var(--mute);margin:0 8px 6px}
+.mi{display:flex;gap:10px;align-items:center;padding:9px 8px;border-radius:12px;transition:background .2s,transform .2s}
+.mi:hover{background:color-mix(in srgb,var(--amber) 20%,transparent);transform:translateX(3px)}
+.mi b{display:block;font-size:.92rem;font-weight:600;line-height:1.3}.mi small{display:block;font-size:.75rem;color:var(--mute);line-height:1.35}
+.ic{flex:none;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:1.2rem;background:color-mix(in srgb,var(--amber) 22%,var(--sf))}
+#drawer{position:fixed;inset:0 auto 0 0;width:min(86vw,340px);background:var(--sf);z-index:80;transform:translateX(-102%);transition:transform .35s cubic-bezier(.2,.8,.2,1);padding:calc(18px + env(safe-area-inset-top,0px)) 14px 20px;overflow-y:auto;box-shadow:12px 0 40px rgba(0,0,0,.25)}
+#drawer.open{transform:none}
+#drawer .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding:0 6px}
+#drawer .grp{margin-bottom:10px}
+#scrim{position:fixed;inset:0;background:rgba(7,11,23,.55);backdrop-filter:blur(4px);z-index:70;opacity:0;pointer-events:none;transition:opacity .3s}
+#scrim.open{opacity:1;pointer-events:auto}
 
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        // Google Analytics จะถูกโหลดจริงหลังผู้ใช้กด "ยอมรับ" คุกกี้เท่านั้น (ดูฟังก์ชัน loadGoogleAnalytics ด้านล่าง)
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-    </script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                fontFamily: {
-                    sans: ['Prompt', 'sans-serif'],
-                },
-                extend: {
-                    colors: {
-                        primary: {
-                            50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1',
-                            400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155',
-                            800: '#1e293b', 900: '#0f172a', 950: '#020617',
-                        },
-                        accent: {
-                            50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
-                            400: '#fbbf24', 500: '#f59e0b', 600: '#d97706', 700: '#b45309',
-                            800: '#92400e', 900: '#78350f', 950: '#451a03',
-                        },
-                        success: '#10b981',
-                        error: '#ef4444',
-                        line_green: '#00B900',
-                    },
-                    boxShadow: {
-                        'pro': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                    }
-                },
-            },
-        }
-    </script>
-    <style>
-        @keyframes ping-soft {
-            75%, 100% { transform: scale(1.8); opacity: 0; }
-        }
-        .animate-ping-soft {
-            animation: ping-soft 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
-        }
+/* hero */
+.hero{position:relative;overflow:hidden;background:var(--navy);color:#eef1f8;padding:132px 0 72px;min-height:92vh;display:flex;align-items:center}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(600px 400px at 85% 30%,rgba(255,176,32,.28),transparent 70%),radial-gradient(500px 500px at 0% 100%,rgba(59,91,219,.35),transparent 70%);animation:drift 14s ease-in-out infinite alternate}
+.hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse at 60% 40%,#000 20%,transparent 75%)}
+@keyframes drift{to{transform:translate3d(-3%,2%,0) scale(1.08)}}
+.hero .wrap{position:relative;z-index:1;display:grid;gap:48px;align-items:center;width:100%}
+.hero h1{font-size:clamp(2.3rem,6vw,4.2rem);font-weight:800;line-height:1.15;letter-spacing:-.01em}
+.hero p{margin:20px 0 30px;max-width:34rem;color:#b8c2d8;font-size:1.06rem}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 26px;border-radius:999px;font-weight:600;transition:transform .25s,box-shadow .25s,background .25s}
+.btn:hover{transform:translateY(-3px)}
+.btn.p{background:var(--amber);color:#1a1200;box-shadow:0 10px 30px rgba(255,176,32,.35)}
+.btn.g{border:1.5px solid rgba(255,255,255,.4);color:#fff}.btn.g:hover{background:#fff;color:var(--navy)}
+.soc{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.soc a{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-size:.85rem;transition:background .2s}
+.soc a:hover{background:rgba(255,255,255,.18)}
+.soc i{width:8px;height:8px;border-radius:50%}
+.stage{perspective:1100px;display:grid;place-items:center}
+.phone{--rx:0deg;--ry:0deg;width:min(290px,72vw);aspect-ratio:9/18.5;border-radius:44px;padding:11px;background:linear-gradient(145deg,#2a3556,#0d1427);border:1px solid rgba(255,255,255,.18);box-shadow:0 40px 80px rgba(0,0,0,.55),0 0 90px rgba(255,176,32,.18);transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .15s ease-out;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(40px) rotateX(10deg)}}
+.scr{height:100%;border-radius:34px;background:linear-gradient(180deg,#141d38,#0b1224);padding:14px 14px 16px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
+.scr::before{content:"";position:absolute;top:8px;left:50%;width:78px;height:20px;border-radius:99px;background:#000;transform:translateX(-50%)}
+.sb{display:flex;justify-content:space-between;font-size:.72rem;font-weight:600;padding:0 8px}
+.sh{margin-top:14px}.sh small{color:#93a0ba;font-size:.72rem}.sh b{display:block;font-size:1.05rem}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:9px;flex:1;align-content:start}
+.tiles a{display:flex;flex-direction:column;gap:2px;padding:12px 10px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.08);font-size:.76rem;font-weight:500;line-height:1.3;transition:transform .2s,background .2s}
+.tiles a span{font-size:1.4rem}.tiles a:hover{background:rgba(255,176,32,.25);transform:translateY(-3px) scale(1.03)}
+.scr #st2{justify-content:center;padding:9px;border-radius:14px;background:rgba(255,255,255,.07);color:#cbd5e6}
 
-        .hero-contact-icons a {
-            width: 50px; 
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9999px;
-            transition: all 0.3s;
-            position: relative;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        .hero-contact-icons a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-        
-        .hero-contact-icons .tooltip {
-            position: absolute;
-            top: 100%; 
-            left: 50%;
-            transform: translateX(-50%) translateY(5px); 
-            background-color: #333;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            z-index: 10;
-        }
-        .hero-contact-icons a:hover .tooltip {
-            opacity: 1;
-        }
-        
-        .hero-overlay {
-            background: linear-gradient(to right, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.4));
-        }
-    </style>
+/* sections */
+.sec{padding:84px 0}
+.sec h2{font-size:clamp(1.7rem,4vw,2.5rem);font-weight:700;line-height:1.25}
+.sec .sub{color:var(--mute);margin-top:8px;max-width:36rem}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 22px}
+.chip{padding:8px 18px;border-radius:999px;border:1px solid var(--line);background:var(--sf);font-size:.88rem;font-weight:500;transition:.2s}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{position:relative;display:flex;flex-direction:column;gap:6px;padding:20px;border-radius:var(--r);background:var(--sf);border:1px solid var(--line);overflow:hidden;transition:transform .3s,border-color .3s}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(240px circle at var(--mx,50%) var(--my,0%),color-mix(in srgb,var(--amber) 32%,transparent),transparent 70%);opacity:0;transition:opacity .3s}
+.card:hover{transform:translateY(-4px);border-color:var(--amber)}.card:hover::before{opacity:1}
+.card>*{position:relative}
+.card .ic{width:48px;height:48px;font-size:1.5rem;border-radius:14px;margin-bottom:8px;transition:transform .3s}
+.card:hover .ic{transform:rotate(-8deg) scale(1.1)}
+.card b{font-size:1.02rem;font-weight:600;line-height:1.35}.card small{color:var(--mute);font-size:.84rem;line-height:1.45}
+.card .go{margin-top:auto;padding-top:10px;font-size:.82rem;font-weight:600;color:var(--amber-d);display:flex;gap:6px;align-items:center}
+.card .go::after{content:"→";transition:transform .25s}.card:hover .go::after{transform:translateX(6px)}
+.card[hidden]{display:none}
+.why{background:var(--sf);border-block:1px solid var(--line)}
+.why .row{display:grid;gap:26px;margin-top:34px}
+.why .it{display:flex;gap:16px}.why .it b{display:block;font-weight:600}.why .it p{color:var(--mute);font-size:.92rem}
+.why .ic{width:52px;height:52px;font-size:1.5rem;border-radius:50%}
+.visit{display:grid;gap:30px;align-items:center}
+.info{list-style:none;padding:0;margin:22px 0;display:grid;gap:8px}
+.info li{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:14px;background:var(--sf);border:1px solid var(--line)}
+.info li.now{border-color:var(--amber);background:color-mix(in srgb,var(--amber) 16%,var(--sf))}
+.info em{margin-left:auto;font-style:normal;font-size:.72rem;font-weight:600;background:var(--amber);color:#1a1200;padding:1px 10px;border-radius:99px}
+.info a:hover{color:var(--amber-d)}
+.map{border-radius:26px;overflow:hidden;border:1px solid var(--line);aspect-ratio:4/3;box-shadow:0 20px 50px rgba(11,18,36,.15)}
+.map iframe{width:100%;height:100%;border:0}
+.btn.d{background:var(--ink);color:var(--bg)}.btn.o{border:1.5px solid var(--line)}.btn.o:hover{background:var(--sf)}
+.row2{display:flex;gap:10px;flex-wrap:wrap}
+
+/* footer */
+footer{background:#050810;color:#93a0ba;padding:54px 0 28px;font-size:.9rem}
+footer .fg{display:grid;gap:30px}
+footer h3{color:#fff;font-size:1rem;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+footer h3 img{width:30px;height:30px;border-radius:50%}
+footer li{list-style:none;margin:4px 0}footer ul{padding:0}
+footer a:hover{color:var(--amber)}
+.fb{margin-top:34px;padding-top:20px;border-top:1px solid #1a2440;text-align:center;font-size:.82rem}
+.fb img{display:block;margin:10px auto 0;min-height:20px}
+
+/* mobile action bar */
+.dock{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:55;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px;border-radius:999px;background:color-mix(in srgb,var(--sf) 85%,transparent);backdrop-filter:blur(16px);border:1px solid var(--line);box-shadow:0 10px 30px rgba(11,18,36,.25)}
+.dock a{padding:10px;border-radius:999px;text-align:center;font-size:.86rem;font-weight:600}
+.dock a:nth-child(1){background:var(--amber);color:#1a1200}.dock a:nth-child(2){background:#06c755;color:#fff}.dock a:nth-child(3){background:color-mix(in srgb,var(--ink) 9%,transparent)}
+
+/* overlays */
+dialog{border:0;padding:0;background:none;color:inherit;max-width:none;max-height:none}
+dialog::backdrop{background:rgba(7,11,23,.6);backdrop-filter:blur(6px)}
+#pal{margin:12vh auto 0;width:min(560px,92vw);background:var(--sf);border-radius:22px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.4);overflow:hidden}
+#q{width:100%;padding:18px 22px;font:500 1.05rem Prompt;background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);outline:0}
+#res{max-height:50vh;overflow-y:auto;padding:8px}
+#res .mi:first-child{background:color-mix(in srgb,var(--amber) 20%,transparent)}
+#res p{padding:18px;color:var(--mute);text-align:center}
+#wel{margin:auto;width:min(420px,92vw);background:var(--sf);border-radius:24px;overflow:hidden;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+#wel[open]{animation:pop .4s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{opacity:0;transform:scale(.9) translateY(20px)}}
+#wel img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--line)}
+#wel div{padding:18px 22px 24px;text-align:center}#wel p{color:var(--mute);font-size:.9rem}
+#wel .x{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff}
+#ck,#ins{position:fixed;left:12px;right:12px;z-index:85;background:#0b1224;color:#e6ebf5;border:1px solid #22304d;border-radius:20px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,.4);display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+#ck{bottom:calc(84px + env(safe-area-inset-bottom,0px));max-width:760px;margin:auto;font-size:.85rem}
+#ck a{text-decoration:underline}
+#ins{bottom:calc(150px + env(safe-area-inset-bottom,0px));max-width:420px;margin:auto}
+#ck[hidden],#ins[hidden]{display:none}
+.bs{padding:9px 20px;border-radius:99px;font-weight:600;font-size:.85rem;border:1px solid #3a4870}.bs.y{background:var(--amber);color:#1a1200;border-color:var(--amber)}
+
+@media(min-width:640px){.grid{grid-template-columns:repeat(3,1fr);gap:16px}.why .row{grid-template-columns:repeat(3,1fr)}footer .fg{grid-template-columns:1.4fr 1fr 1fr}}
+@media(min-width:1120px){.dn,.login{display:flex}.ib kbd{display:inline-block}#bg{display:none}}
+@media(min-width:900px){
+.hero .wrap{grid-template-columns:1.1fr .9fr}
+.grid{grid-template-columns:repeat(4,1fr)}
+.visit{grid-template-columns:1fr 1.05fr}
+body{padding-bottom:0}.dock{display:none}#ck{bottom:16px}#ins{display:none}}
+/* ask form + faq + page transition */
+@media(prefers-reduced-motion:no-preference){@view-transition{navigation:auto}::view-transition-old(root),::view-transition-new(root){animation-duration:.28s}}
+.ask{display:grid;gap:30px;align-items:start}
+.chat{margin-top:26px;padding:18px;border-radius:24px;background:color-mix(in srgb,var(--ink) 6%,var(--sf));max-width:420px}
+.chat small{display:block;color:var(--mute);font-size:.78rem;margin-bottom:10px}
+.bubble{background:#06c755;color:#fff;padding:14px 16px;border-radius:20px 20px 4px 20px;white-space:pre-wrap;word-break:break-word;font-size:.92rem;line-height:1.6;margin-left:auto;width:fit-content;max-width:100%;animation:fin .25s}
+.form{display:grid;gap:14px;padding:22px;border-radius:24px;background:var(--sf);border:1px solid var(--line);box-shadow:0 20px 50px rgba(11,18,36,.08)}
+.form label{display:grid;gap:6px;font-size:.86rem;font-weight:500}
+.form input,.form select,.form textarea{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:400 1rem Prompt,sans-serif;transition:border-color .2s,box-shadow .2s}
+.form textarea{min-height:96px;resize:vertical}
+.form input:focus,.form select:focus,.form textarea:focus{outline:0;border-color:var(--amber);box-shadow:0 0 0 4px color-mix(in srgb,var(--amber) 28%,transparent)}
+.form .btn{justify-content:center;background:#06c755;color:#fff;box-shadow:0 10px 30px rgba(6,199,85,.3)}
+.form .btn:disabled{opacity:.45;transform:none;box-shadow:none;cursor:not-allowed}
+.form .hint{font-size:.8rem;color:var(--mute);min-height:1.4em}
+.faq{max-width:820px;margin-top:28px;display:grid;gap:10px}
+.faq details{border:1px solid var(--line);background:var(--bg);border-radius:16px;transition:border-color .25s}
+.faq details[open]{border-color:var(--amber)}
+.faq summary{list-style:none;cursor:pointer;padding:16px 20px;font-weight:600;display:flex;justify-content:space-between;gap:14px;align-items:center;line-height:1.45}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--amber) 28%,transparent);transition:transform .3s}
+.faq details[open] summary::after{transform:rotate(135deg)}
+.faq .a{padding:0 20px 18px;color:var(--mute);animation:fin .3s}
+.faq .a a{color:var(--amber-d);text-decoration:underline}
+@keyframes fin{from{opacity:0;transform:translateY(-6px)}}
+@media(min-width:900px){.ask{grid-template-columns:1fr 1fr;gap:56px}}
+@media(max-width:420px){.wrap{padding:0 16px}.hd{padding:0 8px}.bar{padding:6px 8px;gap:8px}.brand img{width:34px;height:34px}.brand b{font-size:.95rem}#st .hr{display:none}.ib{height:36px;min-width:36px;padding:0 8px}.tools{gap:4px}.card{padding:16px}.card .ic{width:42px;height:42px}.sec{padding:60px 0}.hero{padding:112px 0 56px}}
+body{overflow-x:clip}
+@media(prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
 </head>
-<body class="bg-primary-50 text-primary-900 dark:bg-primary-950 dark:text-primary-100 transition-colors duration-300 font-sans leading-relaxed">
+<body>
+<div id="prog"></div>
 
-    <header class="bg-white/90 dark:bg-primary-900/90 backdrop-blur-md fixed top-0 w-full z-50 border-b border-primary-200 dark:border-primary-800 transition-colors duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center gap-4">
-            <div class="flex items-center space-x-3 shrink-0">
-                <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-11 h-11 object-cover rounded-full shadow-sm border-2 border-white dark:border-primary-800" />
-                <div>
-                    <h1 class="text-xl md:text-2xl font-bold tracking-tight text-primary-900 dark:text-white">OK Mobile <span class="text-accent-600 dark:text-accent-400">อู่ทอง</span></h1>
-                    <div id="store-status" class="text-sm mt-0.5 font-medium flex items-center text-primary-600 dark:text-primary-400">
-                        <span class="inline-block w-2 h-2 rounded-full bg-gray-400 mr-2"></span> กำลังโหลด...
-                    </div>
-                </div>
-            </div>
-
-            <button id="menu-toggle" aria-label="เปิดเมนู" class="md:hidden p-2 rounded-md text-primary-600 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors focus:outline-none">
-                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                </svg>
-            </button>
-
-            <nav class="hidden md:flex items-center gap-0.5 flex-nowrap overflow-x-auto">
-                <a href="used.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all whitespace-nowrap">สินค้ามือ 2</a>
-                <a href="others.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all whitespace-nowrap">สินค้าอื่นๆ</a>
-                <a href="transfer.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all whitespace-nowrap">แจ้งโอนเงิน</a>
-                <a href="sg-payment.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all whitespace-nowrap">ชำระSG-Capital</a>
-                <a href="embedded.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all whitespace-nowrap">ชำระไฟแนนซ์</a>
-                <a href="check.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all whitespace-nowrap">เช็คประกันศูนย์</a>
-                <a href="TH-Plus.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all whitespace-nowrap">60/40</a>
-                <a href="map.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all whitespace-nowrap">แผนที่ร้าน</a>
-                <a href="review.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 hover:bg-primary-50 dark:hover:bg-primary-800/50 transition-all flex items-center whitespace-nowrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5 mr-1"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
-                    รีวิว
-                </a>
-                
-                <div class="h-5 w-px bg-primary-200 dark:bg-primary-700 mx-1 shrink-0"></div> 
-                <a href="login.html" class="px-2 py-1.5 rounded-md text-xs font-medium text-primary-700 dark:text-primary-200 hover:text-accent-600 dark:hover:text-accent-400 transition-all flex items-center whitespace-nowrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5 mr-1"><path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 10h-12z" clip-rule="evenodd" /></svg>
-                    เข้าสู่ระบบ
-                </a>
-                
-                <button id="theme-toggle" class="ml-3 p-2 rounded-full bg-primary-100 dark:bg-primary-800 text-primary-600 dark:text-primary-300 hover:bg-accent-100 dark:hover:bg-accent-900/30 hover:text-accent-600 dark:hover:text-accent-400 transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500">
-                    <span class="dark:hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
-                    </span>
-                    <span class="hidden dark:inline">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
-                    </span>
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <div id="mobile-menu" class="fixed top-0 left-0 h-full w-72 bg-white dark:bg-primary-900 shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out z-[60]">
-        <div class="p-6 flex flex-col h-full overflow-y-auto">
-            <div class="flex items-center justify-between mb-8">
-                <div class="flex items-center space-x-3">
-                    <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" class="w-10 h-10 rounded-full shadow-sm" />
-                    <h2 class="text-xl font-bold text-primary-900 dark:text-white">เมนูหลัก</h2>
-                </div>
-                 <button id="close-mobile-menu" class="p-2 rounded-full text-primary-600 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                </button>
-            </div>
-            <nav class="flex-1 space-y-2">
-                <a href="used.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">📱</span> สินค้ามือ 2</a>
-                <a href="others.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">🛍️</span> สินค้าอื่นๆ</a>
-                <a href="transfer.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">💸</span> แจ้งโอนเงิน</a>
-                <a href="sg-payment.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">📃</span> ชำระSG-Capital</a>
-                <a href="embedded.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">📃</span> ชำระเงินไฟแนนซ์</a>
-                <a href="TH-Plus.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">💸</span> 60/40</a>
-                <a href="map.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">🗺️</span> แผนที่ร้าน</a>
-                <a href="check.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">🛡️</span> เช็คประกันศูนย์</a>
-                <a href="review.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium">
-                    <span class="mr-3">⭐</span> รีวิว
-                </a>
-                <a href="bankcheck.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">📱</span> เช็คเวอร์ชั่น</a>
-
-                <div class="my-4 border-t border-primary-100 dark:border-primary-800"></div>
-                <a href="login.html" class="flex items-center p-3 rounded-lg text-primary-700 dark:text-primary-200 hover:bg-primary-100 dark:hover:bg-primary-800 transition-colors font-medium"><span class="mr-3">🔒</span> เข้าสู่ระบบ</a>
-            </nav>
-            <button id="theme-toggle-sidebar" class="mt-auto w-full py-3 px-4 rounded-lg border border-primary-300 dark:border-primary-700 text-primary-700 dark:text-primary-300 hover:bg-primary-100 dark:hover:bg-primary-800 flex items-center justify-center transition-colors">
-                <span class="dark:hidden flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" /></svg>
-                    โหมดกลางคืน
-                </span>
-                <span class="hidden dark:flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
-                    โหมดกลางวัน
-                </span>
-            </button>
-        </div>
+<header class="hd">
+  <div class="bar">
+    <a class="brand" href="./" aria-label="OK Mobile อู่ทอง หน้าแรก">
+      <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile">
+      <span><b>OK Mobile <i>อู่ทอง</i></b><span id="st"><span class="dot"></span>กำลังโหลด...</span></span>
+    </a>
+    <nav class="dn" aria-label="เมนูหลัก">
+      <a class="nl" href="used.html">สินค้ามือ 2</a>
+      <a class="nl" href="check.html">เช็คประกัน</a>
+      <a class="nl" href="map.html">แผนที่ร้าน</a>
+      <a class="nl" href="review.html">รีวิว</a>
+      <button class="nl" id="mg" aria-expanded="false" aria-controls="mega">เมนูทั้งหมด ▾</button>
+    </nav>
+    <div class="tools">
+      <button class="ib" id="sb" aria-label="ค้นหาเมนู">🔎 <kbd>Ctrl K</kbd></button>
+      <button class="ib" id="th" aria-label="สลับโหมดกลางวัน/กลางคืน">🌙</button>
+      <a class="ib login" href="login.html">🔒 เข้าสู่ระบบ</a>
+      <button class="ib" id="bg" aria-label="เปิดเมนู">☰</button>
     </div>
-    <div id="overlay" class="fixed inset-0 bg-primary-950 bg-opacity-50 backdrop-blur-sm hidden z-[55] transition-opacity"></div>
+  </div>
+  <div id="mega" role="menu"></div>
+</header>
 
-    <section class="relative pt-24 min-h-[90vh] flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1556742049-0c63d7006cc4?auto=format,compress&fit=crop&w=1600&q=60');">
-        <div class="absolute inset-0 hero-overlay"></div> 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-left">
-            <div class="max-w-2xl">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-tight mb-6 drop-shadow-sm">
-                    ร้านมือถือครบวงจร <br class="hidden md:block"> ที่คุณวางใจได้
-                </h1>
-                <p class="text-lg md:text-xl text-primary-100 mb-10 leading-relaxed max-w-xl">
-                    OK Mobile ตลาดอู่ทอง ศูนย์รวมบริการ ซ่อม-ขาย-แลกเปลี่ยน พร้อมบริการตรวจสอบประกันและชำระเงินไฟแนนซ์ สะดวก รวดเร็ว 
-                </p>
-                
-                <div class="flex flex-wrap items-center gap-4">
-                    <a href="warranty.html" class="inline-flex justify-center items-center px-6 md:px-8 py-3 md:py-4 border border-transparent text-base md:text-lg font-semibold rounded-lg text-primary-900 bg-accent-400 hover:bg-accent-500 transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-accent-600/30 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 dark:text-white dark:bg-accent-600 dark:hover:bg-accent-700">
-                        เช็คประกันสินค้า
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </a>
-                    
-                    <a href="map.html" class="inline-flex justify-center items-center px-6 md:px-8 py-3 md:py-4 border-2 border-white text-base md:text-lg font-semibold rounded-lg text-white hover:bg-white hover:text-primary-900 transition-all transform hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white">
-                        ดูแผนที่ร้าน
-                    </a>
+<aside id="drawer" aria-label="เมนู">
+  <div class="top"><b>เมนูทั้งหมด</b><button class="ib" id="cl" aria-label="ปิดเมนู">✕</button></div>
+  <div id="dm"></div>
+</aside>
+<div id="scrim"></div>
 
-                    <div class="hero-contact-icons flex space-x-3 mt-4 sm:mt-0">
-                        <a href="https://www.facebook.com/profile.php?id=61566120762780" target="_blank" rel="noopener noreferrer" class="bg-[#1877F2] hover:bg-[#0d65d9] text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                                <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.325v21.351C0 23.403.597 24 1.325 24h11.495v-9.294H9.691v-3.622h3.129V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.764v2.312h3.587l-.467 3.622h-3.12V24h6.116C23.403 24 24 23.403 24 22.676V1.325C24 .597 23.403 0 22.675 0z"/>
-                            </svg>
-                            <span class="tooltip">Facebook</span>
-                        </a>
-                
-                        <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer" class="bg-[#00B900] hover:bg-[#009900] text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                                <path d="M11.95 2.05c-5.518 0-9.95 3.924-9.95 8.783 0 2.913 1.666 5.515 4.241 7.222l-1.247 4.156 4.304-2.51c.282.105.56.196.843.272.296.079.598.143.905.195 5.514 0 9.95-3.924 9.95-8.783S17.464 2.05 11.95 2.05zM17.152 17.05c-.21 0-.42.045-.615.13l-1.65.96.466-1.55c.203-.674.195-1.39-.026-2.05-.22-.66-.624-1.21-.05-1.71.575-.5 1.05-.59 1.6-.29.55.3 1.1.86 1.1 1.5 0 .7-.4 1.29-.9 1.5-.5.2-1.07.2-1.6-.01zm-5.2-2.9c-.21 0-.42.045-.615.13l-1.65.96.466-1.55c.203-.674.195-1.39-.026-2.05-.22-.66-.624-1.21-.05-1.71.575-.5 1.05-.59 1.6-.29.55.3 1.1.86 1.1 1.5 0 .7-.4 1.29-.9 1.5-.5.2-1.07.2-1.6-.01z"/>
-                            </svg>
-                            <span class="tooltip">LINE</span>
-                        </a>
-                
-                        <a href="tel:0946613961" class="bg-accent-600 hover:bg-accent-700 text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
-                                <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1C10.07 21 3 13.93 3 5c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.46.57 3.58.14.34.06.73-.24 1.01l-2.2 2.2z"/>
-                            </svg>
-                            <span class="tooltip">โทร</span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="services" class="py-16 md:py-20 bg-primary-50 dark:bg-primary-950">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-primary-900 dark:text-white mb-3">บริการของเรา</h2>
-                <p class="text-primary-600 dark:text-primary-400">ครบทุกเรื่องมือถือในที่เดียว เลือกบริการที่ต้องการได้เลย</p>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-                <a href="used.html" class="group bg-white dark:bg-primary-900 rounded-xl p-5 md:p-6 shadow-pro hover:shadow-lg hover:-translate-y-1 transition-all border border-primary-100 dark:border-primary-800">
-                    <span class="text-3xl mb-3 block">📱</span>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-1">สินค้ามือ 2</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">มือถือมือสองคัดคุณภาพ ราคาคุ้มค่า</p>
-                </a>
-                <a href="others.html" class="group bg-white dark:bg-primary-900 rounded-xl p-5 md:p-6 shadow-pro hover:shadow-lg hover:-translate-y-1 transition-all border border-primary-100 dark:border-primary-800">
-                    <span class="text-3xl mb-3 block">🛍️</span>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-1">สินค้าอื่นๆ</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">อุปกรณ์เสริมและสินค้าไอทีครบครัน</p>
-                </a>
-                <a href="check.html" class="group bg-white dark:bg-primary-900 rounded-xl p-5 md:p-6 shadow-pro hover:shadow-lg hover:-translate-y-1 transition-all border border-primary-100 dark:border-primary-800">
-                    <span class="text-3xl mb-3 block">🛡️</span>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-1">เช็คประกันศูนย์</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">ตรวจสอบสถานะประกันก่อนตัดสินใจซื้อ</p>
-                </a>
-                <a href="embedded.html" class="group bg-white dark:bg-primary-900 rounded-xl p-5 md:p-6 shadow-pro hover:shadow-lg hover:-translate-y-1 transition-all border border-primary-100 dark:border-primary-800">
-                    <span class="text-3xl mb-3 block">📃</span>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-1">ผ่อนไฟแนนซ์</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">ชำระค่างวดไฟแนนซ์ออนไลน์ สะดวก</p>
-                </a>
-                <a href="transfer.html" class="group bg-white dark:bg-primary-900 rounded-xl p-5 md:p-6 shadow-pro hover:shadow-lg hover:-translate-y-1 transition-all border border-primary-100 dark:border-primary-800">
-                    <span class="text-3xl mb-3 block">💸</span>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-1">แจ้งโอนเงิน</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">แจ้งสลิปโอนเงินง่ายๆ ไม่ต้องรอคิว</p>
-                </a>
-                <a href="sg-payment.html" class="group bg-white dark:bg-primary-900 rounded-xl p-5 md:p-6 shadow-pro hover:shadow-lg hover:-translate-y-1 transition-all border border-primary-100 dark:border-primary-800">
-                    <span class="text-3xl mb-3 block">📃</span>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-1">ชำระ SG-Capital</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">ชำระค่างวด SG-Capital ได้ที่นี่</p>
-                </a>
-                <a href="TH-Plus.html" class="group bg-white dark:bg-primary-900 rounded-xl p-5 md:p-6 shadow-pro hover:shadow-lg hover:-translate-y-1 transition-all border border-primary-100 dark:border-primary-800">
-                    <span class="text-3xl mb-3 block">💳</span>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-1">60/40</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">บริการชำระแบบ 60/40 ที่รองรับ</p>
-                </a>
-                <a href="review.html" class="group bg-white dark:bg-primary-900 rounded-xl p-5 md:p-6 shadow-pro hover:shadow-lg hover:-translate-y-1 transition-all border border-primary-100 dark:border-primary-800">
-                    <span class="text-3xl mb-3 block">⭐</span>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-1">รีวิวจากลูกค้า</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">อ่านความคิดเห็นจากลูกค้าจริง</p>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-20 bg-white dark:bg-primary-900 border-y border-primary-100 dark:border-primary-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-primary-900 dark:text-white mb-3">ทำไมต้องเลือก OK Mobile</h2>
-                <p class="text-primary-600 dark:text-primary-400">ตลาดอู่ทอง จ.สุพรรณบุรี ศูนย์รวมบริการมือถือที่ลูกค้าไว้วางใจ</p>
-            </div>
-
-            <div class="grid sm:grid-cols-3 gap-6 md:gap-8">
-                <div class="text-center px-4">
-                    <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-accent-100 dark:bg-accent-900/30 flex items-center justify-center text-2xl">⚡</div>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-2">บริการรวดเร็ว</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">ตรวจสอบและดำเนินการให้ทันทีหน้าร้าน ไม่ต้องรอนาน</p>
-                </div>
-                <div class="text-center px-4">
-                    <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-accent-100 dark:bg-accent-900/30 flex items-center justify-center text-2xl">🏷️</div>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-2">ราคาชัดเจน</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">แจ้งราคาตรงไปตรงมา ไม่มีค่าใช้จ่ายแอบแฝง</p>
-                </div>
-                <div class="text-center px-4">
-                    <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-accent-100 dark:bg-accent-900/30 flex items-center justify-center text-2xl">🤝</div>
-                    <h3 class="font-semibold text-primary-900 dark:text-white mb-2">พร้อมให้คำปรึกษา</h3>
-                    <p class="text-sm text-primary-500 dark:text-primary-400">ทีมงานให้คำแนะนำทุกขั้นตอน ทั้งซื้อ ซ่อม และแลกเปลี่ยน</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-16 md:py-20 bg-primary-50 dark:bg-primary-950">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-8 items-center">
-            <div>
-                <h2 class="text-3xl md:text-4xl font-bold text-primary-900 dark:text-white mb-4">แวะมาที่ร้านได้เลย</h2>
-                <p class="text-primary-600 dark:text-primary-400 mb-6">OK Mobile ตลาดอู่ทอง จ.สุพรรณบุรี จอดรถสะดวก เดินทางง่าย</p>
-                <ul class="space-y-3 mb-6 text-primary-700 dark:text-primary-300">
-                    <li class="flex items-start"><span class="mr-3">📍</span><span>ตลาดอู่ทอง อ.อู่ทอง จ.สุพรรณบุรี</span></li>
-                    <li class="flex items-start"><span class="mr-3">🕗</span><span>จันทร์-เสาร์ 08:00-20:00 น. / อาทิตย์ 08:00-17:00 น.</span></li>
-                    <li class="flex items-start"><span class="mr-3">📞</span><a href="tel:0946613961" class="hover:text-accent-600 dark:hover:text-accent-400 transition-colors">094-661-3961</a></li>
-                    <li class="flex items-start"><span class="mr-3">💬</span><a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer" class="hover:text-accent-600 dark:hover:text-accent-400 transition-colors">Line: @661qazoc</a></li>
-                </ul>
-                <div class="flex flex-wrap gap-3">
-                    <a href="https://maps.app.goo.gl/zEr4ySQc8b8HsD3C9" target="_blank" rel="noopener noreferrer" class="inline-flex items-center px-5 py-3 rounded-lg font-semibold text-primary-900 bg-accent-400 hover:bg-accent-500 dark:text-white dark:bg-accent-600 dark:hover:bg-accent-700 transition-all">
-                        นำทางด้วย Google Maps
-                    </a>
-                    <a href="map.html" class="inline-flex items-center px-5 py-3 rounded-lg font-semibold text-primary-700 dark:text-primary-200 border border-primary-300 dark:border-primary-700 hover:bg-primary-100 dark:hover:bg-primary-800 transition-all">
-                        ดูรายละเอียดเพิ่มเติม
-                    </a>
-                </div>
-            </div>
-            <div class="rounded-xl overflow-hidden shadow-pro border border-primary-200 dark:border-primary-800 aspect-video">
-                <iframe
-                    src="https://www.google.com/maps?q=14.3763668,99.898358(OK+Mobile+อู่ทอง)&z=17&output=embed"
-                    class="w-full h-full"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    title="แผนที่ OK Mobile อู่ทอง">
-                </iframe>
-            </div>
-        </div>
-    </section>
-
-    <div id="popup-alert" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-primary-800 rounded-xl shadow-2xl z-50 opacity-0 pointer-events-none transition-all duration-500 w-[90%] max-w-md overflow-hidden border border-primary-100 dark:border-primary-700">
-        <div class="relative">
-            <div class="relative w-full bg-primary-200 dark:bg-primary-700" style="padding-top: 56.25%;">
-                <img src="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/main/images/pagnew.jpg" alt="Welcome Banner" loading="lazy" class="absolute inset-0 object-cover w-full h-full"/>
-            </div>
-            <button id="close-popup" class="absolute top-3 right-3 p-1.5 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors backdrop-blur-sm focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-        <div class="p-5 text-center">
-            <h3 class="text-xl font-bold text-primary-900 dark:text-white mb-2 flex justify-center items-center">
-                <span class="mr-2">🎉</span> ยินดีต้อนรับสู่ OK MOBILE
-            </h3>
-            <p class="text-primary-600 dark:text-primary-300 text-sm">
-                เช็คสถานะร้านและบริการต่างๆ ได้ที่เมนูด้านบน <br>เราพร้อมให้บริการคุณด้วยความเป็นมืออาชีพ
-            </p>
-        </div>
+<main>
+<section class="hero">
+  <div class="wrap" id="hero">
+    <div>
+      <h1>ร้านมือถือครบวงจร ที่คุณวางใจได้</h1>
+      <p>OK Mobile ตลาดอู่ทอง ศูนย์รวมบริการ ซ่อม-ขาย-แลกเปลี่ยน พร้อมบริการตรวจสอบประกันและชำระเงินไฟแนนซ์ สะดวก รวดเร็ว</p>
+      <div class="cta">
+        <a class="btn p" href="warranty.html">เช็คประกันสินค้า</a>
+        <a class="btn g" href="map.html">ดูแผนที่ร้าน</a>
+      </div>
+      <div class="soc">
+        <a href="https://www.facebook.com/profile.php?id=61566120762780" target="_blank" rel="noopener noreferrer"><i style="background:#1877f2"></i>Facebook</a>
+        <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer"><i style="background:#06c755"></i>LINE @661qazoc</a>
+        <a href="tel:0946613961"><i style="background:var(--amber)"></i>094-661-3961</a>
+      </div>
     </div>
-    
-    <footer class="bg-primary-900 dark:bg-black text-primary-400 py-10 border-t border-primary-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <div>
-                <h3 class="text-white text-lg font-bold mb-4 flex items-center justify-center sm:justify-start"><img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" loading="lazy" class="w-8 h-8 rounded-full mr-2 border border-primary-700"> OK Mobile</h3>
-                <p class="text-sm">ตลาดอู่ทอง จ.สุพรรณบุรี<br>ให้บริการซ่อมมือถือครบวงจร สะดวก รวดเร็ว</p>
-            </div>
-            <div class="text-center">
-                <h3 class="text-white text-lg font-bold mb-4">เมนูลัด</h3>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="used.html" class="hover:text-accent-400 transition-colors">สินค้ามือ 2</a></li>
-                    <li><a href="warranty.html" class="hover:text-accent-400 transition-colors">เช็คประกัน</a></li>
-                    <li><a href="map.html" class="hover:text-accent-400 transition-colors">แผนที่ร้าน</a></li>
-                    <li><a href="privacy.html" class="hover:text-accent-400 transition-colors">นโยบายความเป็นส่วนตัว</a></li>
-                </ul>
-            </div>
-            <div class="text-center sm:text-right">
-                <h3 class="text-white text-lg font-bold mb-4">ติดต่อเรา</h3>
-                <p class="text-sm mb-2">โทร: <a href="tel:0946613961" class="hover:text-accent-400 transition-colors font-medium">094-661-3961</a></p>
-                <p class="text-sm">Line: <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer" class="text-line_green hover:underline font-medium">@661qazoc</a></p>
-            </div>
+    <div class="stage">
+      <div class="phone" id="phone" aria-hidden="false">
+        <div class="scr">
+          <div class="sb"><span id="clk">9:41</span><span>OK Mobile</span></div>
+          <div class="sh"><small>สวัสดี ต้องการทำอะไร?</small><b>บริการยอดนิยม</b></div>
+          <div class="tiles">
+            <a href="used.html"><span>📱</span>สินค้ามือ 2</a>
+            <a href="check.html"><span>🛡️</span>เช็คประกันศูนย์</a>
+            <a href="transfer.html"><span>💸</span>แจ้งโอนเงิน</a>
+            <a href="embedded.html"><span>📃</span>ชำระไฟแนนซ์</a>
+            <a href="map.html"><span>🗺️</span>แผนที่ร้าน</a>
+            <a href="review.html"><span>⭐</span>รีวิว</a>
+          </div>
+          <div id="st2"><span class="dot"></span>กำลังโหลด...</div>
         </div>
-
-        <div class="max-w-7xl mx-auto px-4 mt-8 flex flex-col items-center border-t border-primary-800/30 pt-6">
-            <p class="text-primary-400 text-sm mb-2 font-medium">จำนวนผู้เข้าชมเว็บไซต์</p>
-            <div class="min-h-[20px] flex items-center justify-center">
-                <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fokmobile-suphanburi.com&count_bg=%23fbbf24&title_bg=%231e293b&title=Views&edge_flat=true" alt="Visitor Counter" onerror="this.style.display='none'">
-            </div>
-        </div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 text-center text-sm text-primary-500">
-            <p>© <span id="current-year">2025</span> OK Mobile อู่ทอง. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <div id="cookie-consent" class="fixed bottom-0 left-0 right-0 bg-primary-900 dark:bg-black text-primary-100 p-4 sm:p-5 shadow-2xl z-[80] border-t border-primary-700 hidden">
-        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center gap-4">
-            <p class="text-sm text-primary-200 flex-1 text-center sm:text-left">
-                เว็บไซต์นี้ใช้คุกกี้เพื่อเก็บสถิติการเข้าชมและปรับปรุงประสบการณ์การใช้งาน อ่านรายละเอียดเพิ่มเติมได้ที่
-                <a href="privacy.html" class="underline hover:text-accent-400 transition-colors">นโยบายความเป็นส่วนตัว</a>
-            </p>
-            <div class="flex gap-3 shrink-0">
-                <button id="cookie-decline" class="px-4 py-2 rounded-lg text-sm font-medium border border-primary-600 text-primary-200 hover:bg-primary-800 transition-colors">
-                    ปฏิเสธ
-                </button>
-                <button id="cookie-accept" class="px-5 py-2 rounded-lg text-sm font-bold bg-accent-500 hover:bg-accent-600 text-primary-900 transition-colors">
-                    ยอมรับ
-                </button>
-            </div>
-        </div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div id="install-banner" class="fixed bottom-6 left-4 right-4 bg-primary-900 text-white p-4 rounded-2xl shadow-2xl z-[70] flex items-center justify-between transform translate-y-48 transition-transform duration-500 border border-primary-700 md:hidden">
-        <div class="flex items-center">
-            <img src="https://i.imgur.com/nvYSgCM.jpeg" alt="OK Mobile Logo" loading="lazy" class="w-12 h-12 rounded-xl mr-3 border border-primary-700">
-            <div>
-                <p class="font-bold text-sm">ติดตั้งแอป OK Mobile</p>
-                <p class="text-xs text-primary-300">เข้าใช้งานง่ายจากหน้าจอโฮม</p>
-            </div>
-        </div>
-        <button id="install-button" class="bg-accent-500 hover:bg-accent-600 text-primary-900 px-5 py-2.5 rounded-xl font-bold text-sm transition-all active:scale-95">
-            ติดตั้ง
-        </button>
+<section class="sec" id="services">
+  <div class="wrap">
+    <h2>บริการของเรา</h2>
+    <p class="sub">ครบทุกเรื่องมือถือในที่เดียว เลือกหมวดที่ต้องการได้เลย</p>
+    <div class="chips" id="chips" role="group" aria-label="กรองบริการ"></div>
+    <div class="grid" id="cards"></div>
+  </div>
+</section>
+
+<section class="sec why">
+  <div class="wrap">
+    <h2>ทำไมต้องเลือก OK Mobile</h2>
+    <p class="sub">ตลาดอู่ทอง จ.สุพรรณบุรี ศูนย์รวมบริการมือถือที่ลูกค้าไว้วางใจ</p>
+    <div class="row">
+      <div class="it"><span class="ic">⚡</span><div><b>บริการรวดเร็ว</b><p>ตรวจสอบและดำเนินการให้ทันทีหน้าร้าน ไม่ต้องรอนาน</p></div></div>
+      <div class="it"><span class="ic">🏷️</span><div><b>ราคาชัดเจน</b><p>แจ้งราคาตรงไปตรงมา ไม่มีค่าใช้จ่ายแอบแฝง</p></div></div>
+      <div class="it"><span class="ic">🤝</span><div><b>พร้อมให้คำปรึกษา</b><p>ทีมงานแนะนำทุกขั้นตอน ทั้งซื้อ ซ่อม และแลกเปลี่ยน</p></div></div>
     </div>
+  </div>
+</section>
 
-    <script>
-        const menuToggle = document.getElementById('menu-toggle');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const overlay = document.getElementById('overlay');
-        const closeMobileMenu = document.getElementById('close-mobile-menu'); 
-        const themeToggle = document.getElementById('theme-toggle');
-        const themeToggleSidebar = document.getElementById('theme-toggle-sidebar');
-        const html = document.documentElement;
+<section class="sec" id="ask">
+  <div class="wrap ask">
+    <div>
+      <h2>สอบถามร้านผ่าน LINE</h2>
+      <p class="sub">บอกรุ่นเครื่องและอาการ เราเตรียมข้อความให้แล้ว กดส่งใน LINE ได้เลย ไม่ต้องพิมพ์ใหม่</p>
+      <div class="chat"><small>ข้อความที่จะส่งไปที่ร้าน</small><div class="bubble" id="pv"></div></div>
+    </div>
+    <form class="form" id="askf" autocomplete="off">
+      <label>เรื่องที่สนใจ
+        <select id="as"><option>ซ่อมมือถือ</option><option>เทิร์น/แลกเปลี่ยนเครื่อง</option><option>ซื้อมือถือมือ 2</option><option>ผ่อน/ไฟแนนซ์</option><option>อื่นๆ</option></select>
+      </label>
+      <label>รุ่นเครื่อง<input id="am" type="text" placeholder="เช่น iPhone 13, Galaxy A54"></label>
+      <label>รายละเอียด<textarea id="ad" placeholder="เช่น จอแตก แบตเสื่อม อยากเทิร์นเป็นรุ่นใหม่"></textarea></label>
+      <label>ชื่อที่ให้เรียก (ไม่บังคับ)<input id="an" type="text" placeholder="ชื่อเล่นก็ได้"></label>
+      <button class="btn" id="ab" type="submit" disabled>ส่งข้อความไปที่ LINE</button>
+      <p class="hint" id="ah">กรอกรุ่นเครื่องหรือรายละเอียดอย่างน้อย 1 ช่อง</p>
+    </form>
+  </div>
+</section>
 
-        function toggleMenu() {
-            const isOpen = !mobileMenu.classList.contains('-translate-x-full');
-            if (isOpen) {
-                mobileMenu.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-                overlay.classList.remove('opacity-100');
-                document.body.style.overflow = '';
-            } else {
-                mobileMenu.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-                setTimeout(() => overlay.classList.add('opacity-100'), 10);
-                document.body.style.overflow = 'hidden';
-            }
-        }
+<section class="sec why" id="faq">
+  <div class="wrap">
+    <h2>คำถามที่พบบ่อย</h2>
+    <p class="sub">ไม่เจอคำตอบที่ต้องการ? ทักมาทาง LINE ได้เลย</p>
+    <div class="faq" id="faql"></div>
+  </div>
+</section>
 
-        menuToggle.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', toggleMenu);
-        closeMobileMenu.addEventListener('click', toggleMenu);
+<section class="sec">
+  <div class="wrap visit">
+    <div>
+      <h2>แวะมาที่ร้านได้เลย</h2>
+      <p class="sub">OK Mobile ตลาดอู่ทอง จ.สุพรรณบุรี จอดรถสะดวก เดินทางง่าย</p>
+      <ul class="info">
+        <li>📍 ตลาดอู่ทอง อ.อู่ทอง จ.สุพรรณบุรี</li>
+        <li id="h1">🕗 จันทร์-เสาร์ 08:00-20:00 น.</li>
+        <li id="h0">🕗 อาทิตย์ 08:00-17:00 น.</li>
+        <li>📞 <a href="tel:0946613961">094-661-3961</a></li>
+        <li>💬 <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer">Line: @661qazoc</a></li>
+      </ul>
+      <div class="row2">
+        <a class="btn p" href="https://maps.app.goo.gl/zEr4ySQc8b8HsD3C9" target="_blank" rel="noopener noreferrer">นำทางด้วย Google Maps</a>
+        <a class="btn o" href="map.html">ดูรายละเอียดเพิ่มเติม</a>
+      </div>
+    </div>
+    <div class="map"><iframe src="https://www.google.com/maps?q=14.3763668,99.898358(OK+Mobile+อู่ทอง)&z=17&output=embed" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" title="แผนที่ OK Mobile อู่ทอง"></iframe></div>
+  </div>
+</section>
+</main>
 
-        // ปิด sidebar เมื่อกดลิงก์ในเมนูมือถือ
-        document.querySelectorAll('#mobile-menu nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                if (!mobileMenu.classList.contains('-translate-x-full')) {
-                    toggleMenu();
-                }
-            });
-        });
+<footer>
+  <div class="wrap">
+    <div class="fg">
+      <div><h3><img src="https://i.imgur.com/nvYSgCM.jpeg" alt="" loading="lazy">OK Mobile</h3><p>ตลาดอู่ทอง จ.สุพรรณบุรี<br>ให้บริการซ่อมมือถือครบวงจร สะดวก รวดเร็ว</p></div>
+      <div><h3>เมนูลัด</h3><ul><li><a href="used.html">สินค้ามือ 2</a></li><li><a href="warranty.html">เช็คประกัน</a></li><li><a href="map.html">แผนที่ร้าน</a></li><li><a href="privacy.html">นโยบายความเป็นส่วนตัว</a></li></ul></div>
+      <div><h3>ติดต่อเรา</h3><p>โทร: <a href="tel:0946613961">094-661-3961</a></p><p>Line: <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer">@661qazoc</a></p></div>
+    </div>
+    <div class="fb">
+      จำนวนผู้เข้าชมเว็บไซต์
+      <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fokmobile-suphanburi.com&count_bg=%23fbbf24&title_bg=%231e293b&title=Views&edge_flat=true" alt="Visitor Counter" onerror="this.style.display='none'">
+      <p style="margin-top:12px">© <span id="yr">2026</span> OK Mobile อู่ทอง. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
 
-        const setTheme = (dark) => {
-            if (dark) {
-                html.classList.add('dark');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                html.classList.remove('dark');
-                localStorage.setItem('theme', 'light');
-            }
-        }
+<nav class="dock" aria-label="ติดต่อด่วน">
+  <a href="tel:0946613961">📞 โทร</a>
+  <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer">LINE</a>
+  <a href="map.html">🗺️ แผนที่</a>
+</nav>
 
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark') {
-            setTheme(true);
-        } else if (savedTheme === 'light') {
-            setTheme(false);
-        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setTheme(true);
-        }
+<dialog id="pal" aria-label="ค้นหาเมนู">
+  <input id="q" type="search" placeholder="ค้นหาบริการ เช่น ประกัน, โอนเงิน, มือ 2" autocomplete="off">
+  <div id="res"></div>
+</dialog>
 
-        themeToggle.addEventListener('click', () => setTheme(!html.classList.contains('dark')));
-        themeToggleSidebar.addEventListener('click', () => setTheme(!html.classList.contains('dark')));
+<dialog id="wel">
+  <img src="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/main/images/pagnew.jpg" alt="ยินดีต้อนรับ" loading="lazy">
+  <button class="x" id="wx" aria-label="ปิด">✕</button>
+  <div><h3>🎉 ยินดีต้อนรับสู่ OK MOBILE</h3><p>เช็คสถานะร้านและบริการต่างๆ ได้ที่เมนูด้านบน<br>เราพร้อมให้บริการคุณด้วยความเป็นมืออาชีพ</p></div>
+</dialog>
 
-        function updateStoreStatus() {
-            const statusEl = document.getElementById('store-status');
-            const now = new Date();
-            const day = now.getDay();
-            let openHour = 8;
-            let closeHour = (day === 0 ? 17 : 20); 
+<div id="ck" hidden>
+  <p style="flex:1;min-width:220px">เว็บไซต์นี้ใช้คุกกี้เพื่อเก็บสถิติการเข้าชมและปรับปรุงประสบการณ์การใช้งาน <a href="privacy.html">นโยบายความเป็นส่วนตัว</a></p>
+  <div style="display:flex;gap:8px"><button class="bs" id="ckn">ปฏิเสธ</button><button class="bs y" id="cky">ยอมรับ</button></div>
+</div>
+<div id="ins" hidden>
+  <div><b>ติดตั้งแอป OK Mobile</b><br><small style="color:#93a0ba">เข้าใช้งานง่ายจากหน้าจอโฮม</small></div>
+  <button class="bs y" id="insb">ติดตั้ง</button>
+</div>
 
-            const openTime = new Date(now);
-            openTime.setHours(openHour, 0, 0, 0);
-            const closeTime = new Date(now);
-            closeTime.setHours(closeHour, 0, 0, 0);
+<script>
+const $=s=>document.querySelector(s),root=document.documentElement;
+const G=['ซื้อ-ขาย','ชำระเงิน','ตรวจสอบ','ร้านค้า'];
+const M=[
+['used.html','📱','สินค้ามือ 2','มือถือมือสองคัดคุณภาพ ราคาคุ้มค่า',0],
+['others.html','🛍️','สินค้าอื่นๆ','อุปกรณ์เสริมและสินค้าไอทีครบครัน',0],
+['transfer.html','💸','แจ้งโอนเงิน','แจ้งสลิปโอนเงินง่ายๆ ไม่ต้องรอคิว',1],
+['sg-payment.html','🧾','ชำระ SG-Capital','ชำระค่างวด SG-Capital ได้ที่นี่',1],
+['embedded.html','📃','ชำระไฟแนนซ์','ชำระค่างวดไฟแนนซ์ออนไลน์ สะดวก',1],
+['TH-Plus.html','💳','60/40','บริการชำระแบบ 60/40',1],
+['check.html','🛡️','เช็คประกันศูนย์','ตรวจสอบสถานะประกันก่อนตัดสินใจซื้อ',2],
+['warranty.html','✅','เช็คประกันสินค้า','ตรวจสอบประกันสินค้าที่ซื้อจากร้าน',2],
+['bankcheck.html','🔍','เช็คเวอร์ชั่น','ตรวจสอบเวอร์ชั่นเครื่อง',2],
+['map.html','🗺️','แผนที่ร้าน','เส้นทางและรายละเอียดหน้าร้าน',3],
+['review.html','⭐','รีวิวจากลูกค้า','อ่านความคิดเห็นจากลูกค้าจริง',3],
+['#ask','💬','สอบถามทาง LINE','กรอกรุ่นและอาการ ส่งเข้า LINE ทันที',3],
+['login.html','🔒','เข้าสู่ระบบ','สำหรับสมาชิกและเจ้าหน้าที่',3]];
+const item=m=>`<a class="mi" href="${m[0]}"><span class="ic">${m[1]}</span><span><b>${m[2]}</b><small>${m[3]}</small></span></a>`;
+const groups=G.map((g,i)=>`<div class="grp"><h3>${g}</h3>${M.filter(m=>m[4]==i).map(item).join('')}</div>`).join('');
+$('#mega').innerHTML=groups;$('#dm').innerHTML=groups;
 
-            const isOpen = now >= openTime && now < closeTime;
+/* service cards + filter */
+$('#cards').innerHTML=M.filter(m=>m[0]!='login.html').map(m=>`<a class="card" href="${m[0]}" data-g="${m[4]}"><span class="ic">${m[1]}</span><b>${m[2]}</b><small>${m[3]}</small><span class="go">เปิดดู</span></a>`).join('');
+$('#chips').innerHTML=['ทั้งหมด',...G.slice(0,3)].map((g,i)=>`<button class="chip" data-f="${i-1}" aria-pressed="${i==0}">${g}</button>`).join('');
+$('#chips').onclick=e=>{const b=e.target.closest('.chip');if(!b)return;
+  document.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed',c==b));
+  document.querySelectorAll('.card').forEach(c=>c.hidden=b.dataset.f!='-1'&&c.dataset.g!=b.dataset.f)};
+$('#cards').addEventListener('pointermove',e=>{const c=e.target.closest('.card');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',e.clientX-r.left+'px');c.style.setProperty('--my',e.clientY-r.top+'px')});
 
-            let message = '';
-            let dotColorClass = isOpen ? 'bg-emerald-500' : 'bg-red-500';
-            
-            if (isOpen) {
-                message = `ร้านเปิดอยู่ (${openHour}:00 - ${closeHour}:00 น.)`;
-                statusEl.className = "text-sm mt-0.5 font-medium text-emerald-600 dark:text-emerald-400 flex items-center";
-            } else {
-                const isPastClose = now >= closeTime;
-                const nextOpenDay = isPastClose ? 'พรุ่งนี้' : 'วันนี้';
-                message = `ร้านปิดแล้ว (เปิด${nextOpenDay} ${openHour}:00 น.)`;
-                statusEl.className = "text-sm mt-0.5 font-medium text-red-600 dark:text-red-400 flex items-center";
-            }
+/* mega menu + drawer */
+const mg=$('#mega'),mb=$('#mg'),dr=$('#drawer'),sc=$('#scrim');
+const setMega=o=>{mg.classList.toggle('open',o);mb.setAttribute('aria-expanded',o)};
+mb.onclick=e=>{e.stopPropagation();setMega(!mg.classList.contains('open'))};
+document.addEventListener('click',e=>{if(!mg.contains(e.target))setMega(false)});
+mg.addEventListener('click',e=>{if(e.target.closest('a'))setMega(false)});
+const setDr=o=>{dr.classList.toggle('open',o);sc.classList.toggle('open',o);document.body.style.overflow=o?'hidden':''};
+$('#bg').onclick=()=>setDr(true);$('#cl').onclick=sc.onclick=()=>setDr(false);
+dr.addEventListener('click',e=>{if(e.target.closest('a'))setDr(false)});
 
-            statusEl.innerHTML = `<span class="relative flex h-2.5 w-2.5 mr-2">
-                <span class="absolute inline-flex h-full w-full rounded-full opacity-75 ${isOpen ? 'animate-ping-soft' : ''} ${dotColorClass}"></span>
-                <span class="relative inline-flex rounded-full h-2.5 w-2.5 ${dotColorClass}"></span>
-            </span> ` + message;
-        }
+/* search palette */
+const pal=$('#pal'),q=$('#q'),res=$('#res');
+const draw=()=>{const t=q.value.trim().toLowerCase();const r=M.filter(m=>!t||(m[2]+m[3]+m[0]).toLowerCase().includes(t));res.innerHTML=r.length?r.map(item).join(''):'<p>ไม่พบเมนูที่ค้นหา ลองพิมพ์คำอื่น</p>'};
+const openPal=()=>{setMega(false);q.value='';draw();pal.showModal();q.focus()};
+$('#sb').onclick=openPal;q.oninput=draw;
+q.onkeydown=e=>{if(e.key=='Enter'){const a=res.querySelector('a');if(a)location.href=a.href}};
+pal.addEventListener('click',e=>{if(e.target==pal)pal.close()});
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()=='k'){e.preventDefault();pal.open?pal.close():openPal()}
+  if(e.key=='Escape'){setMega(false);setDr(false)}});
 
-        function showPopup() {
-            // ถ้าผู้ใช้เคยปิด popup ไปแล้วใน session นี้ ไม่ต้องโชว์ซ้ำ
-            if (sessionStorage.getItem('welcomePopupClosed') === 'true') {
-                return;
-            }
+/* theme */
+const setTheme=d=>{root.dataset.theme=d?'dark':'light';$('#th').textContent=d?'☀️':'🌙';try{localStorage.setItem('theme',d?'dark':'light')}catch(e){}};
+let sv=null;try{sv=localStorage.getItem('theme')}catch(e){}
+setTheme(sv?sv=='dark':matchMedia('(prefers-color-scheme:dark)').matches);
+$('#th').onclick=()=>setTheme(root.dataset.theme!='dark');
 
-            const popup = document.getElementById('popup-alert');
-            const closeButton = document.getElementById('close-popup');
-            
-            setTimeout(() => {
-                popup.classList.remove('opacity-0', 'pointer-events-none');
-                popup.classList.add('opacity-100');
-            }, 1000);
+/* store status + clock + today's hours */
+function status(){
+  const n=new Date(),d=n.getDay(),c=d==0?17:20,h=n.getHours()+n.getMinutes()/60,open=h>=8&&h<c;
+  const msg=open?`ร้านเปิดอยู่<span class="hr"> (08:00-${c}:00 น.)</span>`:`ร้านปิดแล้ว<span class="hr"> (เปิด${h>=c?'พรุ่งนี้':'วันนี้'} 08:00 น.)</span>`;
+  ['#st','#st2'].forEach(s=>{const el=$(s);el.className=open?'on':'off';el.innerHTML=`<span class="dot"></span>${msg}`;if(s=='#st2')el.style.cssText='display:flex;align-items:center;gap:8px;font-size:.74rem'});
+  $('#clk').textContent=n.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
+  ['h0','h1'].forEach(i=>{const li=$('#'+i);const now=(i=='h0')==(d==0);li.classList.toggle('now',now);li.querySelector('em')?.remove();if(now)li.insertAdjacentHTML('beforeend','<em>วันนี้</em>')});
+}
+status();setInterval(status,30000);
 
-            const timeoutId = setTimeout(hidePopup, 8000);
+/* hero phone tilt */
+const ph=$('#phone');
+if(!matchMedia('(prefers-reduced-motion:reduce)').matches&&matchMedia('(hover:hover)').matches){
+  $('#hero').addEventListener('pointermove',e=>{const r=$('#hero').getBoundingClientRect();
+    ph.style.setProperty('--ry',((e.clientX-r.left)/r.width-.5)*22+'deg');ph.style.setProperty('--rx',(-((e.clientY-r.top)/r.height-.5))*16+'deg')});
+  $('#hero').addEventListener('pointerleave',()=>{ph.style.setProperty('--ry','0deg');ph.style.setProperty('--rx','0deg')});
+}
 
-            closeButton.onclick = () => {
-                clearTimeout(timeoutId);
-                sessionStorage.setItem('welcomePopupClosed', 'true');
-                hidePopup();
-            };
-        }
+/* scroll progress */
+addEventListener('scroll',()=>{const h=root.scrollHeight-innerHeight;$('#prog').style.transform=`scaleX(${h>0?scrollY/h:0})`},{passive:true});
 
-        function hidePopup() {
-            const popup = document.getElementById('popup-alert');
-            popup.classList.remove('opacity-100');
-            popup.classList.add('opacity-0');
-            sessionStorage.setItem('welcomePopupClosed', 'true');
-            setTimeout(() => popup.classList.add('pointer-events-none'), 500);
-        }
+/* welcome popup */
+const wel=$('#wel');
+try{if(sessionStorage.getItem('welcomeClosed')!='1'){
+  setTimeout(()=>{wel.showModal();const t=setTimeout(()=>wel.close(),8000);wel.onclose=()=>{clearTimeout(t);sessionStorage.setItem('welcomeClosed','1')}},1200)}}catch(e){}
+$('#wx').onclick=()=>wel.close();wel.addEventListener('click',e=>{if(e.target==wel)wel.close()});
 
-        // เพิ่มสคริปต์สำหรับ PWA
-        let deferredPrompt;
-        const installBanner = document.getElementById('install-banner');
-        const installButton = document.getElementById('install-button');
+/* PWA install */
+let dp;const ins=$('#ins');
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();dp=e;if(innerWidth<900)ins.hidden=false});
+$('#insb').onclick=async()=>{if(dp){dp.prompt();await dp.userChoice;dp=null;ins.hidden=true}};
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            // แสดงแบนเนอร์ติดตั้งบนมือถือ
-            if (window.innerWidth < 768) {
-                installBanner.classList.remove('translate-y-48');
-            }
-        });
+/* cookie consent + GA (loads only after accept) */
+function loadGA(){if(window.gaLoaded)return;window.gaLoaded=true;const s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=G-2WT79LK89W';document.head.appendChild(s);gtag('js',new Date());gtag('config','G-2WT79LK89W')}
+let cc=null;try{cc=localStorage.getItem('cookieConsent')}catch(e){}
+const ck=$('#ck');if(cc=='accepted')loadGA();else if(cc!='declined')ck.hidden=false;
+$('#cky').onclick=()=>{try{localStorage.setItem('cookieConsent','accepted')}catch(e){}ck.hidden=true;loadGA()};
+$('#ckn').onclick=()=>{try{localStorage.setItem('cookieConsent','declined')}catch(e){}ck.hidden=true};
+/* LINE inquiry form */
+const as=$('#as'),am=$('#am'),ad=$('#ad'),an=$('#an'),pv=$('#pv'),ab=$('#ab');
+const msg=()=>{const n=an.value.trim(),m=am.value.trim(),d=ad.value.trim();
+  return `สวัสดีครับ/ค่ะ${n?' ชื่อ'+n:''}\nสนใจเรื่อง: ${as.value}${m?'\nรุ่นเครื่อง: '+m:''}${d?'\nรายละเอียด: '+d:''}\n(ส่งจากเว็บ OK Mobile)`};
+const upd=()=>{pv.textContent=msg();ab.disabled=!(am.value.trim()||ad.value.trim())};
+[as,am,ad,an].forEach(e=>e.addEventListener('input',upd));upd();
+$('#askf').onsubmit=e=>{e.preventDefault();const t=msg();
+  try{navigator.clipboard.writeText(t)}catch(x){}
+  $('#ah').textContent='กำลังเปิด LINE... คัดลอกข้อความไว้แล้ว หากช่องแชตว่าง กดวางได้เลย';
+  window.open('https://line.me/R/oaMessage/@661qazoc/?'+encodeURIComponent(t),'_blank','noopener')};
 
-        installButton.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-                installBanner.classList.add('translate-y-48');
-            }
-        });
-
-        function loadGoogleAnalytics() {
-            if (window.gaLoaded) return;
-            window.gaLoaded = true;
-            const script = document.createElement('script');
-            script.async = true;
-            script.src = 'https://www.googletagmanager.com/gtag/js?id=G-2WT79LK89W';
-            document.head.appendChild(script);
-            gtag('js', new Date());
-            gtag('config', 'G-2WT79LK89W');
-        }
-
-        function initCookieConsent() {
-            const consentBanner = document.getElementById('cookie-consent');
-            const acceptBtn = document.getElementById('cookie-accept');
-            const declineBtn = document.getElementById('cookie-decline');
-            const consent = localStorage.getItem('cookieConsent');
-
-            if (consent === 'accepted') {
-                loadGoogleAnalytics();
-            } else if (consent !== 'declined') {
-                // ยังไม่เคยตอบ ให้แสดง banner
-                consentBanner.classList.remove('hidden');
-            }
-
-            acceptBtn.addEventListener('click', () => {
-                localStorage.setItem('cookieConsent', 'accepted');
-                consentBanner.classList.add('hidden');
-                loadGoogleAnalytics();
-            });
-
-            declineBtn.addEventListener('click', () => {
-                localStorage.setItem('cookieConsent', 'declined');
-                consentBanner.classList.add('hidden');
-            });
-        }
-
-        window.onload = function () {
-            updateStoreStatus();
-            showPopup();
-            initCookieConsent();
-            const yearEl = document.getElementById('current-year');
-            if (yearEl) yearEl.textContent = new Date().getFullYear();
-        }
-
-        setInterval(updateStoreStatus, 60000);
-    </script>
+/* FAQ (also written into FAQPage JSON-LD for search engines) */
+const F=[
+['ร้านเปิดกี่โมง?','เปิดจันทร์–เสาร์ 08:00–20:00 น. และวันอาทิตย์ 08:00–17:00 น.'],
+['ร้านอยู่ที่ไหน จอดรถสะดวกไหม?','อยู่ที่ตลาดอู่ทอง อ.อู่ทอง จ.สุพรรณบุรี จอดรถสะดวก เดินทางง่าย <a href="https://maps.app.goo.gl/zEr4ySQc8b8HsD3C9" target="_blank" rel="noopener noreferrer">เปิดนำทางใน Google Maps</a>'],
+['ชำระค่างวดไฟแนนซ์หรือ SG-Capital ออนไลน์ได้ไหม?','ได้ ไปที่หน้า <a href="embedded.html">ชำระไฟแนนซ์</a> หรือ <a href="sg-payment.html">ชำระ SG-Capital</a> ตามผู้ให้บริการของคุณ หากโอนเงินแล้วสามารถแจ้งสลิปได้ที่หน้า <a href="transfer.html">แจ้งโอนเงิน</a>'],
+['เช็คประกันศูนย์ก่อนซื้อเครื่องมือสองได้อย่างไร?','เปิดหน้า <a href="check.html">เช็คประกันศูนย์</a> แล้วทำตามขั้นตอนบนหน้า เพื่อตรวจสอบสถานะประกันก่อนตัดสินใจซื้อ หากไม่แน่ใจ ส่งรุ่นเครื่องมาสอบถามทาง LINE ได้'],
+['ซ่อมหรือเทิร์นเครื่อง ต้องเริ่มอย่างไร?','กรอกรุ่นเครื่องและอาการในฟอร์ม <a href="#ask">สอบถามผ่าน LINE</a> หรือแวะหน้าร้านได้เลย ทางร้านแจ้งราคาตรงไปตรงมา ไม่มีค่าใช้จ่ายแอบแฝง'],
+['ติดต่อร้านได้ทางไหนบ้าง?','โทร <a href="tel:0946613961">094-661-3961</a> หรือ LINE <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer">@661qazoc</a> หรือ <a href="https://www.facebook.com/profile.php?id=61566120762780" target="_blank" rel="noopener noreferrer">Facebook</a>']];
+$('#faql').innerHTML=F.map(([q,a],i)=>`<details name="faq"${i?'':' open'}><summary>${q}</summary><div class="a">${a}</div></details>`).join('');
+const jl=document.createElement('script');jl.type='application/ld+json';
+jl.textContent=JSON.stringify({'@context':'https://schema.org','@type':'FAQPage',mainEntity:F.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a.replace(/<[^>]+>/g,'')}}))});
+document.head.appendChild(jl);
+$('#yr').textContent=new Date().getFullYear();
+</script>
 </body>
 </html>
