@@ -3,220 +3,266 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OK Mobile - Login</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<title>OK Mobile - เข้าสู่ระบบ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-body { background: linear-gradient(to right,#6a11cb,#2575fc); font-family:'Prompt',sans-serif; }
-.fade-in { animation: fadeIn 0.8s ease forwards; }
-@keyframes fadeIn { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-.spinner { border:3px solid #f3f3f3; border-top:3px solid #3498db; border-radius:50%; width:18px; height:18px; animation:spin 1s linear infinite; display:inline-block; vertical-align:middle; margin-right:5px;}
-@keyframes spin { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
-.btn-glow { transition:all 0.3s ease; }
-.btn-glow:hover { box-shadow:0 0 15px rgba(255,255,255,0.6); transform:translateY(-2px);}
-.check-icon { position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:1rem;}
-.error-msg { color:red; font-size:0.85rem; margin-top:-0.5rem; margin-bottom:0.5rem; }
-.success-msg { color:green; font-size:0.85rem; margin-top:-0.5rem; margin-bottom:0.5rem; }
+:root{
+  --bg:#2b2de0; --ink:#14143a; --muted:#6b6b8d; --line:#e3e3f0; --paper:#fff;
+  --coral:#ff4d6d; --coral-d:#e63757; --mint:#0fb98f; --sun:#ffd23f; --field:#f5f5fb;
+  --r:13px;
+}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'IBM Plex Sans Thai',system-ui,sans-serif;
+  display:grid; place-items:center; padding:24px 16px; min-height:100vh;
+  background-image:radial-gradient(rgba(255,255,255,.14) 1.2px,transparent 1.4px);
+  background-size:22px 22px;
+}
+button,input{font:inherit;color:inherit}
+.home{position:fixed;top:16px;left:16px;display:inline-flex;align-items:center;gap:6px;color:#fff;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);padding:8px 14px;border-radius:99px;cursor:pointer;font-weight:500;backdrop-filter:blur(6px);transition:background .2s}
+.home:hover{background:rgba(255,255,255,.28)}
+
+/* ticket */
+.ticket{width:100%;max-width:410px;filter:drop-shadow(0 24px 40px rgba(10,10,80,.45));animation:drop .9s cubic-bezier(.2,.9,.3,1.15) both}
+@keyframes drop{from{opacity:0;transform:translateY(-40px) rotate(-3deg)}to{opacity:1;transform:none}}
+.stub,.body{background:var(--paper);-webkit-mask:radial-gradient(circle 13px at 0 var(--y),#0000 97%,#000),radial-gradient(circle 13px at 100% var(--y),#0000 97%,#000);-webkit-mask-composite:source-in;mask:radial-gradient(circle 13px at 0 var(--y),#0000 97%,#000),radial-gradient(circle 13px at 100% var(--y),#0000 97%,#000);mask-composite:intersect}
+.stub{--y:100%;border-radius:24px 24px 0 0;padding:28px 28px 26px;text-align:center;position:relative;overflow:hidden}
+.body{--y:0;border-radius:0 0 24px 24px;padding:26px 28px 28px;position:relative}
+.body::before{content:"";position:absolute;top:0;left:20px;right:20px;border-top:2px dashed var(--line)}
+.logo{width:76px;height:76px;border-radius:22px;object-fit:cover;display:block;margin:0 auto 12px;box-shadow:0 6px 18px rgba(43,45,224,.3);background:var(--bg);color:#fff;font:700 26px/76px 'Bai Jamjuree',sans-serif}
+h1{font:700 26px 'Bai Jamjuree',sans-serif;letter-spacing:.5px}
+.promo{display:inline-block;margin-top:10px;padding:6px 14px;border-radius:99px;font-weight:600;font-size:14px;color:#fff;background:linear-gradient(100deg,var(--coral) 30%,#ff8a5c 50%,var(--coral) 70%);background-size:250% 100%;animation:shine 3.2s ease-in-out infinite}
+@keyframes shine{0%,40%{background-position:100% 0}100%{background-position:-100% 0}}
+
+/* tabs */
+.tabs{position:relative;display:grid;grid-template-columns:repeat(3,1fr);background:var(--field);border-radius:14px;padding:4px;margin-bottom:22px}
+.tabs button{position:relative;z-index:1;background:none;border:0;padding:10px 4px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;border-radius:10px;transition:color .25s}
+.tabs button[aria-selected=true]{color:var(--ink);font-weight:600}
+.pill{position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(20,20,58,.12);transition:transform .35s cubic-bezier(.4,1.3,.5,1)}
+
+/* fields */
+.panel[hidden]{display:none}
+.panel{animation:in .35s ease both}
+@keyframes in{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+.field{position:relative;margin-bottom:14px}
+.field input{width:100%;height:54px;padding:22px 44px 6px 16px;background:var(--field);border:2px solid transparent;border-radius:var(--r);outline:0;transition:border-color .2s,background .2s}
+.field input:focus{background:#fff;border-color:var(--bg)}
+.field input.bad{border-color:var(--coral)}
+.field input.good{border-color:var(--mint)}
+.field label{position:absolute;left:16px;top:17px;color:var(--muted);pointer-events:none;transition:all .18s;font-size:15px}
+.field input:focus+label,.field input:not(:placeholder-shown)+label{top:7px;font-size:11.5px;color:var(--bg);font-weight:500}
+.eye,.tick{position:absolute;right:8px;top:8px;width:38px;height:38px;border:0;background:none;border-radius:10px;cursor:pointer;display:grid;place-items:center;color:var(--muted)}
+.eye:hover{background:rgba(43,45,224,.08);color:var(--bg)}
+.tick{pointer-events:none;font-weight:700}
+.meter{display:flex;gap:5px;margin:-4px 0 14px}
+.meter i{flex:1;height:5px;border-radius:9px;background:var(--line);transition:background .3s}
+.hint{font-size:12.5px;color:var(--muted);margin:-6px 0 14px}
+
+/* buttons */
+.btn{width:100%;height:52px;border:0;border-radius:var(--r);font-weight:600;font-size:16px;color:#fff;cursor:pointer;background:var(--bg);box-shadow:0 6px 0 #1b1db0;transition:transform .12s,box-shadow .12s,filter .2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn:hover{filter:brightness(1.08)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 #1b1db0}
+.btn.go{background:var(--mint);box-shadow:0 6px 0 #0a8a69}.btn.go:active{box-shadow:0 1px 0 #0a8a69}
+.btn.warn{background:var(--coral);box-shadow:0 6px 0 var(--coral-d)}.btn.warn:active{box-shadow:0 1px 0 var(--coral-d)}
+.btn.ghost{background:var(--field);color:var(--ink);box-shadow:none;height:46px}.btn.ghost:active{transform:scale(.98)}
+.btn:disabled{opacity:.7;cursor:wait}
+.btn.load::before{content:"";width:18px;height:18px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite}
+.ghost.load::before{border-color:rgba(20,20,58,.2);border-top-color:var(--ink)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.msg{min-height:20px;font-size:13.5px;margin:-2px 0 12px;font-weight:500}
+.msg.err{color:var(--coral-d)}.msg.ok{color:#0a8a69}
+.msg.err:not(:empty){animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.code{display:block;margin-top:8px;padding:10px;border-radius:10px;background:#fff8d6;border:2px dashed var(--sun);color:var(--ink);font:700 22px 'Bai Jamjuree',sans-serif;letter-spacing:4px;text-align:center}
+.step2{margin-top:16px;padding-top:16px;border-top:2px dashed var(--line)}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,120px);background:var(--ink);color:#fff;padding:13px 20px;border-radius:99px;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,.35);transition:transform .45s cubic-bezier(.3,1.4,.5,1);z-index:9;max-width:90vw}
+.toast.show{transform:translate(-50%,0)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+@media (max-width:420px){.stub,.body{padding-left:20px;padding-right:20px}.home{top:10px;left:10px}}
+@media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
 </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body>
 
-<div class="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-md p-8 fade-in relative">
+<button class="home" type="button" onclick="location.href='index.html'">← หน้าแรก</button>
 
-  <!-- ปุ่มกลับหน้าแรกเด่นขึ้น -->
-  <button onclick="goHome()" 
-    class="absolute top-4 left-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
-    ← หน้าแรก
-  </button>
+<main class="ticket">
+  <header class="stub">
+    <img class="logo" alt="OK Mobile" src="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/main/images/ok-mobile-logo.jpg" onerror="this.outerHTML='<div class=\'logo\'>OK</div>'">
+    <h1>OK MOBILE</h1>
+    <span class="promo">คูปองส่วนลดพิเศษ สำหรับสมาชิกเท่านั้น</span>
+  </header>
 
-  <div class="flex justify-center mb-6">
-    <img src="https://raw.githubusercontent.com/okmobile1-suphanburi/ok-mobile-1/main/images/ok-mobile-logo.jpg" alt="OK Mobile Logo" class="w-24 h-24 rounded-full shadow-lg border-4 border-white object-contain">
-  </div>
-
-  <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">OK MOBILE</h2>
-  <h2 class="text-1xl font-bold text-center text-red-500 mb-6">รับคูปองส่วนลดพิเศษสำหรับสมาชิกเท่านั้น</h2>
-
-  <!-- Tabs -->
-  <div class="flex justify-center mb-6">
-    <button id="loginTab" class="px-4 py-2 font-semibold text-blue-600 border-b-2 border-blue-600">เข้าสู่ระบบ</button>
-    <button id="registerTab" class="px-4 py-2 font-semibold text-gray-500 hover:text-blue-600">สมัครสมาชิกฟรี</button>
-    <button id="forgotTab" class="px-4 py-2 font-semibold text-gray-500 hover:text-blue-600">ลืมรหัสผ่าน</button>
-  </div>
-
-  <!-- Login -->
-  <div id="form-login">
-    <input id="login-username" type="text" placeholder="ชื่อผู้ใช้" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 mb-3">
-    <input id="login-password" type="password" placeholder="รหัสผ่าน" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 mb-2">
-    <div id="login-msg" class="error-msg"></div>
-    <button id="btn-login" onclick="login(event)" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition btn-glow">เข้าสู่ระบบ</button>
-  </div>
-
-  <!-- Register -->
-  <div id="form-register" class="hidden relative">
-    <input id="reg-username" type="text" placeholder="ชื่อผู้ใช้" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 mb-3">
-    <input id="reg-password" type="password" placeholder="รหัสผ่าน" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 mb-3">
-    <div class="relative">
-      <input id="reg-phone" type="tel" placeholder="เบอร์โทร (10 หลัก)" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-500 mb-2 pr-10">
-      <span id="phoneCheck" class="check-icon"></span>
+  <section class="body">
+    <div class="tabs" role="tablist">
+      <span class="pill" id="pill"></span>
+      <button role="tab" id="t-login" aria-selected="true" data-tab="login">เข้าสู่ระบบ</button>
+      <button role="tab" id="t-register" aria-selected="false" data-tab="register">สมัครสมาชิก</button>
+      <button role="tab" id="t-forgot" aria-selected="false" data-tab="forgot">ลืมรหัสผ่าน</button>
     </div>
-    <div id="reg-msg" class="error-msg"></div>
-    <button id="btn-register" onclick="register(event)" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition btn-glow">สมัครสมาชิก</button>
-  </div>
 
-  <!-- Forgot Password -->
-  <div id="form-forgot" class="hidden fade-in">
-    <h3 class="text-lg font-semibold mb-3 text-gray-700">ลืมรหัสผ่าน</h3>
-    <input id="fp-phone" type="tel" placeholder="เบอร์โทร 10 หลัก" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 mb-2">
-    <div id="fp-msg" class="error-msg"></div>
-    <button onclick="requestReset()" class="w-full bg-yellow-500 text-white py-3 rounded-lg font-semibold hover:bg-yellow-600 btn-glow mb-2">ขอรหัสชั่วคราว</button>
+    <!-- Login -->
+    <form class="panel" id="p-login" novalidate>
+      <div class="field"><input id="l-user" placeholder=" " autocomplete="username"><label for="l-user">ชื่อผู้ใช้</label></div>
+      <div class="field"><input id="l-pass" type="password" placeholder=" " autocomplete="current-password"><label for="l-pass">รหัสผ่าน</label>
+        <button type="button" class="eye" aria-label="แสดงรหัสผ่าน" data-eye="l-pass">👁</button></div>
+      <div class="msg" id="l-msg" role="status" aria-live="polite"></div>
+      <button class="btn" id="l-btn">เข้าสู่ระบบ</button>
+    </form>
 
-    <input id="fp-temp" type="text" placeholder="รหัสชั่วคราว" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 mb-2">
-    <input id="fp-newpass" type="password" placeholder="รหัสผ่านใหม่" class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-yellow-500 mb-2">
-    <button onclick="resetPassword()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 btn-glow">ตั้งรหัสผ่านใหม่</button>
-  </div>
+    <!-- Register -->
+    <form class="panel" id="p-register" hidden novalidate>
+      <div class="field"><input id="r-user" placeholder=" " autocomplete="username"><label for="r-user">ชื่อผู้ใช้</label></div>
+      <div class="field"><input id="r-pass" type="password" placeholder=" " autocomplete="new-password"><label for="r-pass">รหัสผ่าน (อย่างน้อย 8 ตัว)</label>
+        <button type="button" class="eye" aria-label="แสดงรหัสผ่าน" data-eye="r-pass">👁</button></div>
+      <div class="meter" id="meter"><i></i><i></i><i></i><i></i></div>
+      <div class="field"><input id="r-phone" type="tel" inputmode="numeric" maxlength="10" placeholder=" " autocomplete="tel"><label for="r-phone">เบอร์โทร 10 หลัก</label><span class="tick" id="r-tick"></span></div>
+      <div class="msg" id="r-msg" role="status" aria-live="polite"></div>
+      <button class="btn go" id="r-btn">สมัครสมาชิกฟรี</button>
+    </form>
 
-</div>
+    <!-- Forgot -->
+    <form class="panel" id="p-forgot" hidden novalidate>
+      <div class="field"><input id="f-phone" type="tel" inputmode="numeric" maxlength="10" placeholder=" " autocomplete="tel"><label for="f-phone">เบอร์โทรที่สมัครไว้</label></div>
+      <div class="msg" id="f-msg" role="status" aria-live="polite"></div>
+      <button type="button" class="btn ghost" id="f-req">ขอรีเซ็ตรหัสผ่าน</button>
+      <div class="step2">
+        <div class="field"><input id="f-code" placeholder=" " autocomplete="one-time-code"><label for="f-code">รหัสชั่วคราวจากร้าน</label></div>
+        <div class="field"><input id="f-new" type="password" placeholder=" " autocomplete="new-password"><label for="f-new">รหัสผ่านใหม่ (อย่างน้อย 8 ตัว)</label>
+          <button type="button" class="eye" aria-label="แสดงรหัสผ่าน" data-eye="f-new">👁</button></div>
+        <button class="btn warn" id="f-btn">ตั้งรหัสผ่านใหม่</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbwDTtJ0AGh7Ox276FrrUKHE_Gzbbe7WLqjkSyDy2HJcdjDQRvrR_FxQZK2xlM3WHnlT/exec";
+const $ = id => document.getElementById(id);
+const TABS = ["login","register","forgot"];
 
-// ฟังก์ชันกลับหน้าแรก
-function goHome(){ window.location.href = "index.html"; }
-
-// Tabs
-const loginTab = document.getElementById("loginTab");
-const registerTab = document.getElementById("registerTab");
-const forgotTab = document.getElementById("forgotTab");
-const formLogin = document.getElementById("form-login");
-const formRegister = document.getElementById("form-register");
-const formForgot = document.getElementById("form-forgot");
-const loginMsg = document.getElementById("login-msg");
-const regMsg = document.getElementById("reg-msg");
-const fpMsg = document.getElementById("fp-msg");
-const phoneInput = document.getElementById("reg-phone");
-const phoneCheck = document.getElementById("phoneCheck");
-
-function showTab(tab){
-  formLogin.classList.add("hidden");
-  formRegister.classList.add("hidden");
-  formForgot.classList.add("hidden");
-  loginTab.classList.remove("text-blue-600","border-b-2","border-blue-600"); loginTab.classList.add("text-gray-500");
-  registerTab.classList.remove("text-blue-600","border-b-2","border-blue-600"); registerTab.classList.add("text-gray-500");
-  forgotTab.classList.remove("text-blue-600","border-b-2","border-blue-600"); forgotTab.classList.add("text-gray-500");
-
-  if(tab==="login"){ formLogin.classList.remove("hidden"); loginTab.classList.add("text-blue-600","border-b-2","border-blue-600"); }
-  else if(tab==="register"){ formRegister.classList.remove("hidden"); registerTab.classList.add("text-blue-600","border-b-2","border-blue-600"); }
-  else if(tab==="forgot"){ formForgot.classList.remove("hidden"); forgotTab.classList.add("text-blue-600","border-b-2","border-blue-600"); }
-
-  loginMsg.textContent=""; regMsg.textContent=""; fpMsg.textContent="";
+/* ---------- tabs ---------- */
+function showTab(name){
+  TABS.forEach((t,i)=>{
+    $("p-"+t).hidden = t!==name;
+    $("t-"+t).setAttribute("aria-selected", t===name);
+    if(t===name) $("pill").style.transform = `translateX(${i*100}%)`;
+  });
+  ["l-msg","r-msg","f-msg"].forEach(id=>{$(id).textContent="";});
 }
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 
-loginTab.addEventListener("click", ()=>showTab("login"));
-registerTab.addEventListener("click", ()=>showTab("register"));
-forgotTab.addEventListener("click", ()=>showTab("forgot"));
+/* ---------- helpers ---------- */
+function say(id, text, ok){ const m=$(id); m.className="msg "+(ok?"ok":"err"); m.textContent=""; void m.offsetWidth; m.textContent=text; }
+function busy(btn, on){ btn.disabled=on; btn.classList.toggle("load",on); }
+function toast(t){ const el=$("toast"); el.textContent=t; el.classList.add("show"); clearTimeout(el._t); el._t=setTimeout(()=>el.classList.remove("show"),2600); }
+async function hashPassword(p){
+  if(!crypto.subtle) throw new Error("no-crypto");
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(p));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,"0")).join("");
+}
+async function api(payload){
+  const res = await fetch(API_URL,{method:"POST",body:JSON.stringify(payload)});
+  return res.json();
+}
+const isPhone = v => /^[0-9]{10}$/.test(v);
+const netErr = e => e.message==="no-crypto" ? "ต้องเปิดเว็บผ่าน https:// เท่านั้น" : "เชื่อมต่อไม่ได้ ลองใหม่อีกครั้ง";
 
-// Real-time phone check
-phoneInput.addEventListener("input", ()=>{
-  const regex = /^[0-9]{10}$/;
-  if(phoneInput.value==="") phoneCheck.textContent="";
-  else if(regex.test(phoneInput.value)){ phoneCheck.textContent="✔"; phoneCheck.style.color="green"; }
-  else{ phoneCheck.textContent="✖"; phoneCheck.style.color="red"; }
+document.querySelectorAll("[data-eye]").forEach(b=>b.addEventListener("click",()=>{
+  const i=$(b.dataset.eye), show=i.type==="password";
+  i.type=show?"text":"password"; b.textContent=show?"🙈":"👁";
+  b.setAttribute("aria-label", show?"ซ่อนรหัสผ่าน":"แสดงรหัสผ่าน");
+}));
+
+/* ---------- live validation ---------- */
+$("r-phone").addEventListener("input",e=>{
+  const i=e.target; i.value=i.value.replace(/\D/g,""); const t=$("r-tick");
+  i.classList.remove("good","bad");
+  if(!i.value){t.textContent="";return;}
+  if(isPhone(i.value)){t.textContent="✔";t.style.color="var(--mint)";i.classList.add("good");}
+  else{t.textContent="";}
+});
+$("f-phone").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"");});
+$("r-pass").addEventListener("input",e=>{
+  const v=e.target.value; let s=0;
+  if(v.length>=8)s++; if(/[a-z]/.test(v)&&/[A-Z]/.test(v))s++; if(/\d/.test(v))s++; if(/[^A-Za-z0-9]/.test(v)||v.length>=12)s++;
+  const col=["#e3e3f0","#ff4d6d","#ffb020","#7ed957","#0fb98f"][v?Math.max(s,1):0];
+  [...$("meter").children].forEach((el,i)=>el.style.background=i<s||(v&&i===0)?col:"#e3e3f0");
 });
 
-// Hash password
-function hashPassword(pass){ return CryptoJS.SHA256(pass).toString(); }
-
-// ----- Login -----
-async function login(e){
+/* ---------- login ---------- */
+$("p-login").addEventListener("submit",async e=>{
   e.preventDefault();
-  const username = document.getElementById("login-username").value.trim();
-  const password = document.getElementById("login-password").value.trim();
-  if(!username || !password){ loginMsg.textContent="กรอกข้อมูลให้ครบ"; return; }
+  const username=$("l-user").value.trim(), password=$("l-pass").value;
+  if(!username||!password) return say("l-msg","กรอกชื่อผู้ใช้และรหัสผ่านให้ครบ");
+  const btn=$("l-btn"); busy(btn,true); $("l-msg").textContent="";
+  try{
+    const d=await api({action:"login",username,password:await hashPassword(password)});
+    if(d.status==="success"){ try{sessionStorage.setItem("okm_token",d.token||"");}catch(_){} say("l-msg",d.message||"เข้าสู่ระบบสำเร็จ",true); toast("ยินดีต้อนรับ 🎉 กำลังพาไปหน้าคูปอง"); setTimeout(()=>location.href="discount.html",1100); return; }
+    say("l-msg",d.message||"ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง");
+  }catch(err){ say("l-msg",netErr(err)); }
+  busy(btn,false);
+});
 
-  loginMsg.innerHTML = '<span class="spinner"></span>กำลังตรวจสอบ...';
-
-  try {
-    const res = await fetch(API_URL, {
-      method:"POST",
-      body: JSON.stringify({action:"login", username, password:hashPassword(password)})
-    });
-    const data = await res.json();
-    if(data.status==="success"){ 
-      loginMsg.className="success-msg"; 
-      loginMsg.textContent=data.message; 
-      // เด้งไปหน้าเว็บหลังล็อกอินสำเร็จ
-      setTimeout(()=>{ window.location.href="discount.html"; }, 1000);
-    }
-    else{ loginMsg.className="error-msg"; loginMsg.textContent=data.message; }
-  } catch(err){
-    loginMsg.className="error-msg"; loginMsg.textContent="เกิดข้อผิดพลาด";
-  }
-}
-
-// ----- Register -----
-async function register(e){
+/* ---------- register ---------- */
+$("p-register").addEventListener("submit",async e=>{
   e.preventDefault();
-  const username = document.getElementById("reg-username").value.trim();
-  const password = document.getElementById("reg-password").value.trim();
-  const phone = document.getElementById("reg-phone").value.trim();
-  if(!username || !password || !phone){ regMsg.textContent="กรอกข้อมูลให้ครบ"; return; }
+  const username=$("r-user").value.trim(), password=$("r-pass").value, phone=$("r-phone").value.trim();
+  if(!username||!password||!phone) return say("r-msg","กรอกข้อมูลให้ครบทุกช่อง");
+  if(password.length<8) return say("r-msg","รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร");
+  if(!isPhone(phone)) return say("r-msg","เบอร์โทรต้องเป็นตัวเลข 10 หลัก");
+  const btn=$("r-btn"); busy(btn,true); $("r-msg").textContent="";
+  try{
+    const d=await api({action:"register",username,password:await hashPassword(password),phone});
+    if(d.status==="success"){ toast("สมัครสำเร็จ เข้าสู่ระบบได้เลย ✅"); $("l-user").value=username; showTab("login"); $("l-pass").focus(); e.target.reset(); $("r-tick").textContent=""; return busy(btn,false); }
+    say("r-msg",d.message||"สมัครไม่สำเร็จ ลองใหม่อีกครั้ง");
+  }catch(err){ say("r-msg",netErr(err)); }
+  busy(btn,false);
+});
 
-  regMsg.innerHTML = '<span class="spinner"></span>กำลังสมัคร...';
+/* ---------- forgot: request code ---------- */
+$("f-req").addEventListener("click",async()=>{
+  const phone=$("f-phone").value.trim();
+  if(!isPhone(phone)) return say("f-msg","กรอกเบอร์โทร 10 หลัก");
+  const btn=$("f-req"); busy(btn,true); $("f-msg").textContent="";
+  try{
+    const d=await api({action:"requestReset",phone});
+    if(d.status==="success"){
+      const m=$("f-msg"); m.className="msg ok";
+      m.textContent=d.message||"ส่งรหัสชั่วคราวแล้ว";
+      // หมายเหตุ: ถ้าเซิร์ฟเวอร์ยังส่ง tempCode กลับมา จะแสดงให้เห็น (ควรเปลี่ยนเป็นส่ง SMS แล้วเลิกส่งกลับมา)
+      if(d.tempCode){ const c=document.createElement("span"); c.className="code"; c.textContent=d.tempCode; m.appendChild(c); }
+      $("f-code").focus();
+    } else say("f-msg",d.message||"ไม่พบเบอร์นี้ในระบบ");
+  }catch(err){ say("f-msg",netErr(err)); }
+  busy(btn,false);
+});
 
-  try {
-    const res = await fetch(API_URL, {
-      method:"POST",
-      body: JSON.stringify({action:"register", username, password:hashPassword(password), phone})
-    });
-    const data = await res.json();
-    if(data.status==="success"){ 
-      regMsg.className="success-msg"; 
-      regMsg.textContent=data.message; 
-      setTimeout(()=>{ showTab("login"); }, 1000);
-    }
-    else{ regMsg.className="error-msg"; regMsg.textContent=data.message; }
-  } catch(err){
-    regMsg.className="error-msg"; regMsg.textContent="เกิดข้อผิดพลาด";
-  }
-}
+/* ---------- forgot: set new password ---------- */
+$("p-forgot").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const phone=$("f-phone").value.trim(), tempCode=$("f-code").value.trim(), np=$("f-new").value;
+  if(!isPhone(phone)) return say("f-msg","กรอกเบอร์โทร 10 หลัก");
+  if(!tempCode) return say("f-msg","กรอกรหัสชั่วคราวที่ได้รับ");
+  if(np.length<8) return say("f-msg","รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร");
+  const btn=$("f-btn"); busy(btn,true); $("f-msg").textContent="";
+  try{
+    const d=await api({action:"resetPassword",phone,tempCode,newPassword:await hashPassword(np)});
+    if(d.status==="success"){ toast("ตั้งรหัสผ่านใหม่แล้ว เข้าสู่ระบบได้เลย ✅"); e.target.reset(); showTab("login"); return busy(btn,false); }
+    say("f-msg",d.message||"รหัสชั่วคราวไม่ถูกต้องหรือหมดอายุ");
+  }catch(err){ say("f-msg",netErr(err)); }
+  busy(btn,false);
+});
 
-// ----- Request Reset Password -----
-async function requestReset(){
-  const phone = document.getElementById("fp-phone").value.trim();
-  fpMsg.textContent="กำลังสร้างรหัสชั่วคราว...";
-  fpMsg.className="error-msg";
-
-  if(!/^[0-9]{10}$/.test(phone)){ fpMsg.textContent="กรุณากรอกเบอร์โทร 10 หลัก"; return; }
-
-  try {
-    const res = await fetch(API_URL,{
-      method:"POST",
-      body: JSON.stringify({action:"requestReset", phone})
-    });
-    const data = await res.json();
-    if(data.status==="success"){ fpMsg.className="success-msg"; fpMsg.textContent="รหัสชั่วคราวของคุณคือ: "+data.tempCode; }
-    else{ fpMsg.className="error-msg"; fpMsg.textContent=data.message; }
-  } catch(err){ fpMsg.className="error-msg"; fpMsg.textContent="เกิดข้อผิดพลาด"; }
-}
-
-// ----- Reset Password -----
-async function resetPassword(){
-  const phone = document.getElementById("fp-phone").value.trim();
-  const tempCode = document.getElementById("fp-temp").value.trim();
-  const newPass = document.getElementById("fp-newpass").value.trim();
-  fpMsg.textContent="กำลังตั้งรหัสใหม่..."; fpMsg.className="error-msg";
-  if(!phone || !tempCode || !newPass){ fpMsg.textContent="กรอกข้อมูลให้ครบ"; return; }
-
-  try {
-    const res = await fetch(API_URL,{
-      method:"POST",
-      body: JSON.stringify({action:"resetPassword", phone, tempCode, newPassword:hashPassword(newPass)})
-    });
-    const data = await res.json();
-    if(data.status==="success"){ fpMsg.className="success-msg"; fpMsg.textContent="ตั้งรหัสผ่านใหม่สำเร็จ!"; }
-    else{ fpMsg.className="error-msg"; fpMsg.textContent=data.message; }
-  } catch(err){ fpMsg.className="error-msg"; fpMsg.textContent="เกิดข้อผิดพลาด"; }
-}
+showTab("login");
 </script>
 </body>
 </html>
