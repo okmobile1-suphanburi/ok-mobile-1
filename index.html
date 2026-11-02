@@ -206,6 +206,12 @@ body{padding-bottom:0}.dock{display:none}#ck{bottom:16px}#ins{display:none}}
 @keyframes fin{from{opacity:0;transform:translateY(-6px)}}
 @media(min-width:900px){.ask{grid-template-columns:1fr 1fr;gap:56px}}
 @media(max-width:420px){.wrap{padding:0 16px}.hd{padding:0 8px}.bar{padding:6px 8px;gap:8px}.brand img{width:34px;height:34px}.brand b{font-size:.95rem}#st .hr{display:none}.ib{height:36px;min-width:36px;padding:0 8px}.tools{gap:4px}.card{padding:16px}.card .ic{width:42px;height:42px}.sec{padding:60px 0}.hero{padding:112px 0 56px}}
+#vc{display:inline-flex;align-items:center;justify-content:center;gap:6px 14px;flex-wrap:wrap;padding:8px 18px;border:1px solid #22304d;border-radius:999px;background:#0b1224;color:#93a0ba;font-size:.9rem}
+#vc b{color:var(--amber);font-weight:600}
+#vo{display:inline-flex;align-items:center;gap:7px}
+#vo[hidden]{display:none}
+.vd{width:9px;height:9px;border-radius:50%;background:#10b981;animation:vp 2s infinite}
+@keyframes vp{0%{box-shadow:0 0 0 0 rgba(16,185,129,.6)}70%,100%{box-shadow:0 0 0 9px transparent}}
 body{overflow-x:clip}
 @media(prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
@@ -357,8 +363,7 @@ body{overflow-x:clip}
       <div><h3>ติดต่อเรา</h3><p>โทร: <a href="tel:0946613961">094-661-3961</a></p><p>Line: <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer">@661qazoc</a></p></div>
     </div>
     <div class="fb">
-      จำนวนผู้เข้าชมเว็บไซต์
-      <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fokmobile-suphanburi.com&count_bg=%23fbbf24&title_bg=%231e293b&title=Views&edge_flat=true" alt="Visitor Counter" onerror="this.style.display='none'">
+      <div id="vc" aria-live="polite">👥 ผู้เข้าชมทั้งหมด <b id="vt">–</b> คน<span id="vo" hidden><i class="vd"></i>ออนไลน์ตอนนี้ <b id="vn"></b> คน</span></div>
       <p style="margin-top:12px">© <span id="yr">2026</span> OK Mobile อู่ทอง. All rights reserved.</p>
     </div>
   </div>
@@ -508,6 +513,24 @@ const jl=document.createElement('script');jl.type='application/ld+json';
 jl.textContent=JSON.stringify({'@context':'https://schema.org','@type':'FAQPage',mainEntity:F.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a.replace(/<[^>]+>/g,'')}}))});
 document.head.appendChild(jl);
 $('#yr').textContent=new Date().getFullYear();
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ตัวนับผู้เข้าชม (Firebase) */
+try{
+firebase.initializeApp({
+  apiKey:"AIzaSyDMqJ8ANPG7EEHv7p8lKVIO4xPcOwPvyy0",
+  databaseURL:"https://okmobile-counter-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"okmobile-counter"
+});
+const db=firebase.database(),tot=db.ref("stats/total");
+try{if(!localStorage.getItem("okm_counted")){tot.transaction(n=>(n||0)+1).then(()=>localStorage.setItem("okm_counted","1"))}}catch(e){}
+tot.on("value",x=>{$("#vt").textContent=(x.val()||0).toLocaleString("th-TH")});
+const me=db.ref("presence/"+crypto.randomUUID());
+db.ref(".info/connected").on("value",x=>{if(x.val()){me.onDisconnect().remove();me.set(true)}});
+db.ref("presence").on("value",x=>{const n=x.numChildren();$("#vn").textContent=n;$("#vo").hidden=n<3});
+}catch(e){$("#vc").style.display="none"}
 </script>
 </body>
 </html>
