@@ -206,11 +206,19 @@ body{padding-bottom:0}.dock{display:none}#ck{bottom:16px}#ins{display:none}}
 @keyframes fin{from{opacity:0;transform:translateY(-6px)}}
 @media(min-width:900px){.ask{grid-template-columns:1fr 1fr;gap:56px}}
 @media(max-width:420px){.wrap{padding:0 16px}.hd{padding:0 8px}.bar{padding:6px 8px;gap:8px}.brand img{width:34px;height:34px}.brand b{font-size:.95rem}#st .hr{display:none}.ib{height:36px;min-width:36px;padding:0 8px}.tools{gap:4px}.card{padding:16px}.card .ic{width:42px;height:42px}.sec{padding:60px 0}.hero{padding:112px 0 56px}}
-#vc{display:inline-flex;align-items:center;justify-content:center;gap:6px 14px;flex-wrap:wrap;padding:8px 18px;border:1px solid #22304d;border-radius:999px;background:#0b1224;color:#93a0ba;font-size:.9rem}
-#vc b{color:var(--amber);font-weight:600}
-#vo{display:inline-flex;align-items:center;gap:7px}
+#vc{display:inline-flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:18px;padding:12px 22px;border:1px solid rgba(255,255,255,.14);border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.03));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.12);color:#c3cce0}
+#vc .vs{display:flex;align-items:center;gap:12px}
+#vc .vi{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:1.15rem;background:rgba(255,176,32,.16);border:1px solid rgba(255,176,32,.3)}
+#vc small{display:block;font-size:.72rem;letter-spacing:.02em;color:#93a0ba;margin-bottom:1px}
+#vc b{font-size:1.45rem;font-weight:700;line-height:1.1;color:var(--amber);text-shadow:0 0 18px rgba(255,176,32,.45);font-variant-numeric:tabular-nums}
+#vc em{font-style:normal;font-size:.82rem;color:#93a0ba}
+#vc .vsep{width:1px;align-self:stretch;background:rgba(255,255,255,.14)}
+#vo{display:flex}
 #vo[hidden]{display:none}
-.vd{width:9px;height:9px;border-radius:50%;background:#10b981;animation:vp 2s infinite}
+#vc .vsep:has(+#vo[hidden]){display:none}
+#vo .vi{background:rgba(16,185,129,.14);border-color:rgba(16,185,129,.35)}
+#vo b{color:#34d399;text-shadow:0 0 18px rgba(16,185,129,.5)}
+.vd{width:11px;height:11px;border-radius:50%;background:#10b981;animation:vp 2s infinite}
 @keyframes vp{0%{box-shadow:0 0 0 0 rgba(16,185,129,.6)}70%,100%{box-shadow:0 0 0 9px transparent}}
 body{overflow-x:clip}
 @media(prefers-reduced-motion:reduce){*,::before,::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
@@ -262,6 +270,11 @@ body{overflow-x:clip}
         <a href="https://www.facebook.com/profile.php?id=61566120762780" target="_blank" rel="noopener noreferrer"><i style="background:#1877f2"></i>Facebook</a>
         <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer"><i style="background:#06c755"></i>LINE @661qazoc</a>
         <a href="tel:0946613961"><i style="background:var(--amber)"></i>094-661-3961</a>
+      </div>
+      <div id="vc" aria-live="polite">
+        <div class="vs"><span class="vi">👥</span><div><small>ผู้เข้าชมทั้งหมด</small><div><b id="vt">–</b> <em>คน</em></div></div></div>
+        <span class="vsep" aria-hidden="true"></span>
+        <div class="vs" id="vo" hidden><span class="vi"><i class="vd"></i></span><div><small>ออนไลน์ตอนนี้</small><div><b id="vn"></b> <em>คน</em></div></div></div>
       </div>
     </div>
     <div class="stage">
@@ -363,8 +376,7 @@ body{overflow-x:clip}
       <div><h3>ติดต่อเรา</h3><p>โทร: <a href="tel:0946613961">094-661-3961</a></p><p>Line: <a href="https://lin.ee/bQSzNzC" target="_blank" rel="noopener noreferrer">@661qazoc</a></p></div>
     </div>
     <div class="fb">
-      <div id="vc" aria-live="polite">👥 ผู้เข้าชมทั้งหมด <b id="vt">–</b> คน<span id="vo" hidden><i class="vd"></i>ออนไลน์ตอนนี้ <b id="vn"></b> คน</span></div>
-      <p style="margin-top:12px">© <span id="yr">2026</span> OK Mobile อู่ทอง. All rights reserved.</p>
+      <p>© <span id="yr">2026</span> OK Mobile อู่ทอง. All rights reserved.</p>
     </div>
   </div>
 </footer>
@@ -529,7 +541,7 @@ try{if(!localStorage.getItem("okm_counted")){tot.transaction(n=>(n||0)+1).then((
 tot.on("value",x=>{$("#vt").textContent=(x.val()||0).toLocaleString("th-TH")});
 const me=db.ref("presence/"+crypto.randomUUID());
 db.ref(".info/connected").on("value",x=>{if(x.val()){me.onDisconnect().remove();me.set(true)}});
-db.ref("presence").on("value",x=>{const n=x.numChildren();$("#vn").textContent=n;$("#vo").hidden=n<3});
+db.ref("presence").on("value",x=>{const n=x.numChildren();$("#vn").textContent=n;$("#vo").hidden=n<1});
 }catch(e){$("#vc").style.display="none"}
 </script>
 </body>
